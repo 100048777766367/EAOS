@@ -1,14 +1,19 @@
 [project]
 name = "eaos"
 version = "0.1.0"
-description = "Add your description here"
+description = "Enterprise Architecture Operating System"
 readme = "README.md"
 requires-python = ">=3.14"
+authors = [{ name = "EAOS Engineering Team", email = "arch@eaos.internal" }]
 dependencies = [
     "fastapi>=0.139.0",
     "pydantic>=2.13.4",
     "typer>=0.26.8",
 ]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [dependency-groups]
 dev = [
@@ -16,3 +21,27 @@ dev = [
     "pytest>=9.1.1",
     "ruff>=0.15.21",
 ]
+
+[tool.hatch.build.targets.wheel]
+# Định nghĩa packages = [] để chỉ định rằng thư mục gốc không chứa gói nguồn nào cần build
+packages = []
+
+[tool.uv]
+managed = true
+workspace = { members = ["services/*", "libs/*"] }
+
+[tool.ruff]
+line-length = 88
+target-version = "py314"
+lint.select = ["E", "F", "I", "UP", "B", "SIM"] # Các quy tắc kiểm tra khắt khe
+lint.ignore = []
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.mypy]
+python_version = "3.14"
+strict = true
+show_error_codes = true
+enable_error_code = ["ignore-without-code", "redundant-expr", "truthy-bool"]

@@ -1,0 +1,36 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: eaos-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: eaos
+      POSTGRES_PASSWORD: eaos
+      POSTGRES_DB: eaos
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+
+  redis:
+    image: redis:8-alpine
+    container_name: eaos-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./data/redis:/data
+
+  minio:
+    image: minio/minio:latest
+    container_name: eaos-minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: eaos
+      MINIO_ROOT_PASSWORD: eaos123456
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - ./data/minio:/data

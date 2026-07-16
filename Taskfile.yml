@@ -1,0 +1,31 @@
+version: '3'
+
+tasks:
+  lint:
+    desc: "Chạy kiểm tra code và kiến trúc"
+    cmds:
+      - uv run ruff check .
+      - uv run lint-imports # import-linter
+  
+  typecheck:
+    desc: "Kiểm tra kiểu dữ liệu nghiêm ngặt"
+    cmds:
+      - uv run mypy .
+
+  test:
+    desc: "Chạy unit test"
+    cmds:
+      - uv run pytest --cov=packages --cov-report=term-missing
+
+  doctor:
+    desc: "Kiểm tra sức khỏe môi trường"
+    cmds:
+      - uv sync
+      - echo "Environment synchronized"
+
+  ci:
+    desc: "Chạy toàn bộ pipeline (Dùng cho CI/CD)"
+    cmds:
+      - task: lint
+      - task: typecheck
+      - task: test

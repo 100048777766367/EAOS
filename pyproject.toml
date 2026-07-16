@@ -1,47 +1,25 @@
 [project]
-name = "eaos"
+name = "eaos-monorepo"
 version = "0.1.0"
-description = "Enterprise Architecture Operating System"
-readme = "README.md"
+description = "Enterprise Architecture Operating System - Root Orchestrator"
 requires-python = ">=3.14"
-authors = [{ name = "EAOS Engineering Team", email = "arch@eaos.internal" }]
-dependencies = [
-    "fastapi>=0.139.0",
-    "pydantic>=2.13.4",
-    "typer>=0.26.8",
-]
+dependencies = [] # Root không chứa business logic
 
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling>=1.28"]
 build-backend = "hatchling.build"
-
-[dependency-groups]
-dev = [
-    "mypy>=2.3.0",
-    "pytest>=9.1.1",
-    "ruff>=0.15.21",
-]
-
-[tool.hatch.build.targets.wheel]
-# Định nghĩa packages = [] để chỉ định rằng thư mục gốc không chứa gói nguồn nào cần build
-packages = []
 
 [tool.uv]
 managed = true
-workspace = { members = ["services/*", "libs/*"] }
+workspace = { members = ["apps/*", "services/*", "packages/*"] }
 
-[tool.ruff]
-line-length = 88
-target-version = "py314"
-lint.select = ["E", "F", "I", "UP", "B", "SIM"] # Các quy tắc kiểm tra khắt khe
-lint.ignore = []
-
-[tool.ruff.format]
-quote-style = "double"
-indent-style = "space"
-
-[tool.mypy]
-python_version = "3.14"
-strict = true
-show_error_codes = true
-enable_error_code = ["ignore-without-code", "redundant-expr", "truthy-bool"]
+# Dependency groups tập trung vào Tooling
+[dependency-groups]
+dev = [
+    "ruff>=0.15",
+    "mypy>=2",
+    "pytest>=9",
+    "pre-commit>=4",
+    "import-linter>=2",
+    "taskipy>=1.14",
+]

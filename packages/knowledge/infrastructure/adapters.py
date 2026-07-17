@@ -1,21 +1,25 @@
+from datetime import datetime
+
+from sqlalchemy import DateTime, String, Text, create_engine
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, sessionmaker
+
 from packages.knowledge.domain.models import KnowledgeArtifact
 from packages.knowledge.domain.ports import KnowledgeRepository
-from sqlalchemy import Column, DateTime, String, Text, create_engine
-from sqlalchemy.orm import declarative_base, sessionmaker
 
-Base = declarative_base()
 
+class Base(DeclarativeBase):
+    pass
 
 class PostgresKnowledgeModel(Base):
-    """SQLAlchemy model để ánh xạ xuống cơ sở dữ liệu."""
-
     __tablename__ = "knowledge_artifacts"
 
-    id = Column(String, primary_key=True)
-    title = Column(String, nullable=False)
-    content = Column(Text, nullable=False)
-    author = Column(String, nullable=False)
-    created_at = Column(DateTime, nullable=False)
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    title: Mapped[str] = mapped_column(String, nullable=False)
+    content: Mapped[str] = mapped_column(Text, nullable=False)
+    author: Mapped[str] = mapped_column(String, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+
+# Repository giữ nguyên logic như bạn đã viết
 
 
 class PostgresKnowledgeRepository(KnowledgeRepository):

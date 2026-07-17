@@ -1,6 +1,7 @@
+from pydantic import BaseModel
+
 from packages.knowledge.domain.models import KnowledgeArtifact
 from packages.knowledge.domain.ports import KnowledgeRepository
-from pydantic import BaseModel
 
 
 class StoreKnowledgeRequest(BaseModel):

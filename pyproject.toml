@@ -16,6 +16,7 @@ dependencies = [
     "rich>=14.0.0",
     "eaos-api",          # Thêm dòng này
     "eaos-knowledge",    # Thêm dòng này
+    "eaos-identity", # <-- THÊM DÒNG NÀY
 ]
 
 [build-system]
@@ -29,7 +30,7 @@ packages = []
 managed = true
 package = false
 default-groups = ["dev"]
-workspace = { members = ["apps/api", "packages/knowledge"] }
+workspace = { members = ["apps/api", "packages/knowledge", "packages/identity"] }
 
 [dependency-groups]
 dev = [
@@ -101,3 +102,4 @@ run = "python -m kernel.runtime.main"
 [tool.uv.sources]
 eaos-api = { workspace = true }
 eaos-knowledge = { workspace = true }
+eaos-identity = { workspace = true } # <-- THÊM DÒNG NÀY

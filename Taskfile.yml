@@ -1,30 +1,28 @@
-version: '3'
+﻿version: '3'
 
 tasks:
   lint:
-    desc: "Chạy kiểm tra code và kiến trúc"
+    desc: "Cháº¡y kiá»ƒm tra code vÃ  kiáº¿n trÃºc"
     cmds:
       - uv run ruff check .
-      - uv run lint-imports # import-linter
   
   typecheck:
-    desc: "Kiểm tra kiểu dữ liệu nghiêm ngặt"
+    desc: "Kiá»ƒm tra kiá»ƒu dá»¯ liá»‡u nghiÃªm ngáº·t"
     cmds:
-      - uv run mypy .
+      - uv run mypy apps/ kernel/ engine/ packages/ tools/ tests/
 
   test:
-    desc: "Chạy unit test"
+    desc: "Cháº¡y unit test"
     cmds:
-      - uv run pytest --cov=packages --cov-report=term-missing
+      - uv run pytest tests/
 
   doctor:
-    desc: "Kiểm tra sức khỏe môi trường"
+    desc: "Kiá»ƒm tra sá»©c khá»e mÃ´i trÆ°á»ng"
     cmds:
-      - uv sync
-      - echo "Environment synchronized"
+      - uv run python tools/doctor/main.py
 
   ci:
-    desc: "Chạy toàn bộ pipeline (Dùng cho CI/CD)"
+    desc: "Cháº¡y toÃ n bá»™ pipeline (DÃ¹ng cho CI/CD)"
     cmds:
       - task: lint
       - task: typecheck

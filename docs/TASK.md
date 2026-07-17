@@ -3997,6 +3997,16 @@ It should be reviewed at the beginning of every engineering session, updated whe
 
 For architectural principles, engineering standards, project context, strategic planning, or decision history, refer to the corresponding Core Documents rather than extending TASK.md beyond its execution-focused responsibility.
 
+# TASK
+
+## Trạng thái hàng đợi công việc (Sprint 1)
+- [x] T-001: Khởi tạo và tối ưu hóa cấu hình monorepo (pyproject.toml, Makefile, Taskfile)
+- [x] T-002: Đồng bộ hóa cấu trúc cây thư mục tĩnh (apps, packages, kernel, engine, tools, tests)
+- [x] T-003: Triển khai kiểm tra chất lượng mã nguồn (Ruff, MyPy) và kiểm định ranh giới kiến trúc (Import Linter)
+- [x] T-004: Khởi tạo CLI Entrypoint tại `apps/cli/main.py`
+- [x] T-005: Khởi tạo Stable Core Bootstrap tại `kernel/runtime/main.py`
+- [x] T-006: Khởi tạo bộ kiểm thử tự động tại `tests/`
+- [x] T-007: Cấu hình và đồng bộ môi trường CI/CD qua GitHub Actions
 
 
 

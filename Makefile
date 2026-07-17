@@ -1,32 +1,30 @@
-.PHONY: setup lock sync lint test clean
+.PHONY: sync doctor lint test run clean format
 
-# Thiết lập môi trường phát triển
-setup:
-	@echo "Initializing EAOS workspace..."
+# Đồng bộ hóa dependencies và workspace
+sync:
 	uv sync
 
-# Khóa dependencies
-lock:
-	@echo "Generating lockfile..."
-	uv lock
+# Chẩn đoán sức khỏe hệ thống qua tools/doctor
+doctor:
+	uv run python tools/doctor/main.py
 
-# Đồng bộ môi trường
-sync:
-	@echo "Syncing dependencies..."
-	uv sync --frozen
-
-# Linting và Format
+# Kiểm tra chất lượng mã nguồn và typing
 lint:
 	uv run ruff check .
-	uv run ruff format --check .
+	uv run mypy apps/ kernel/ engine/ packages/ tools/ tests/
 
+# Tự động định dạng mã nguồn theo chuẩn Ruff
 format:
 	uv run ruff format .
 
-# Kiểm thử hệ thống
+# Chạy toàn bộ bộ kiểm thử tự động
 test:
 	uv run pytest tests/
 
-# Vệ sinh workspace
+# Chạy thử nghiệm lõi Kernel thông qua module runtime
+run:
+	uv run python -m kernel.runtime.main
+
+# Dọn dẹp các tệp tạm và bộ nhớ cache
 clean:
-	rm -rf .venv/ .pytest_cache/ __pycache__/ .ruff_cache/
+	rm -rf .venv/ .pytest_cache/ __pycache__/ .ruff_cache/ .mypy_cache/

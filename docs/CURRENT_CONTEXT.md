@@ -3616,7 +3616,13 @@ It should be reviewed regularly, updated continuously, and maintained as the pri
 
 For architectural principles, engineering standards, strategic direction, or historical decisions, consult the corresponding Core Documents rather than extending this document beyond its operational scope.
 
+# Current Context
 
+## Trạng thái hiện tại
+- **Sprint**: Sprint 1 — EAOS Core Foundation (Hoàn thành)
+- **Kiến trúc**: Phân lớp Monorepo khớp chính xác 100% với cây thư mục `D:\EAOS`.
+- **Cấu hình**: `pyproject.toml` tại gốc chạy ở chế độ ảo (`package = false`) tránh hoàn toàn lỗi đóng gói của Hatchling.
+- **Hạ tầng**: Docker Services hoạt động đúng như thiết lập trong `docker-compose.yml`.
 
 
 

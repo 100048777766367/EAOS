@@ -1,4 +1,4 @@
-repos:
+﻿repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.9.0
     hooks:
@@ -9,4 +9,4 @@ repos:
     rev: v1.14.0
     hooks:
       - id: mypy
-        additional_dependencies: [pydantic, fastapi]
+        additional_dependencies: [pydantic, fastapi, typer]

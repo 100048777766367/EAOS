@@ -2,24 +2,102 @@
 name = "eaos-monorepo"
 version = "0.1.0"
 description = "Enterprise Architecture Operating System - Root Orchestrator"
+readme = "README.md"
 requires-python = ">=3.14"
-dependencies = [] # Root không chứa business logic
+license = { text = "Proprietary" }
+authors = [
+    { name = "EAOS Engineering Team", email = "arch@eaos.internal" }
+]
+dependencies = [
+    "fastapi>=0.139.0",
+    "pydantic>=2.13.4",
+    "typer>=0.26.8",
+    "structlog>=25.1.0",
+    "rich>=14.0.0",
+    "eaos-api",          # Thêm dòng này
+    "eaos-knowledge",    # Thêm dòng này
+]
 
 [build-system]
 requires = ["hatchling>=1.28"]
 build-backend = "hatchling.build"
 
+[tool.hatch.build.targets.wheel]
+packages = []
+
 [tool.uv]
 managed = true
-workspace = { members = ["apps/*", "services/*", "packages/*"] }
+package = false
+default-groups = ["dev"]
+workspace = { members = ["apps/api", "packages/knowledge"] }
 
-# Dependency groups tập trung vào Tooling
 [dependency-groups]
 dev = [
-    "ruff>=0.15",
-    "mypy>=2",
-    "pytest>=9",
-    "pre-commit>=4",
-    "import-linter>=2",
-    "taskipy>=1.14",
+    "pytest>=9.1.1",
+    "pytest-cov>=7.0.0",
+    "pytest-mock>=3.14.0",
+    "ruff>=0.15.21",
+    "mypy>=2.3.0",
+    "pre-commit>=4.0.0",
+    "import-linter>=2.0",
+    "taskipy>=1.14.1",
+    "httpx2>=2.7.0",
+    "httpx>=0.28.1",
 ]
+
+[tool.ruff]
+target-version = "py314"
+line-length = 88
+fix = true
+show-fixes = true
+output-format = "concise"
+src = ["apps", "packages", "kernel", "engine", "tools"]
+exclude = [".venv", "build", "dist", "generated"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "C4", "RET", "RUF", "PIE", "PERF"]
+ignore = []
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
+docstring-code-format = true
+
+[tool.mypy]
+python_version = "3.14"
+strict = true
+warn_unused_configs = true
+warn_unused_ignores = true
+warn_return_any = true
+warn_redundant_casts = true
+warn_unreachable = true
+disallow_any_generics = true
+disallow_subclassing_any = true
+no_implicit_optional = true
+strict_equality = true
+check_untyped_defs = true
+show_error_codes = true
+pretty = true
+exclude = [
+    "\\.venv",
+    "build",
+    "dist",
+    "generated"
+]
+
+###########################################################
+# Taskipy (Cross-platform Task Runner for Windows/Linux)
+###########################################################
+
+[tool.taskipy.tasks]
+doctor = "python tools/doctor/main.py"
+lint = "python -m ruff check . && python -m mypy apps/ kernel/ engine/ packages/ tools/ tests/"
+format = "python -m ruff format ."
+test = "python -m pytest tests/"
+run = "python -m kernel.runtime.main"
+
+# Thêm Block này vào cuối file pyproject.toml
+[tool.uv.sources]
+eaos-api = { workspace = true }
+eaos-knowledge = { workspace = true }

@@ -1,0 +1,14 @@
+digraph G {
+    rankdir=TB;
+    node [shape=box, style=filled, color=lightblue];
+    simulation [label="simulation"];
+    self_rewrite [label="self_rewrite"];
+    reflection [label="reflection"];
+    prediction [label="prediction"];
+    learning [label="learning"];
+    learning -> reflection;
+    knowledge [label="knowledge"];
+    identity [label="identity"];
+    evolution [label="evolution"];
+    autonomous [label="autonomous"];
+}

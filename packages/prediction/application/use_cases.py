@@ -1,5 +1,6 @@
 import uuid
 from datetime import UTC, datetime, timedelta
+
 from pydantic import BaseModel
 
 from packages.prediction.domain.models import Forecast, Prediction, Risk, Trend
@@ -41,7 +42,7 @@ class RunPredictionUseCase:
         avg_val = sum(d.value for d in datapoints) / len(datapoints)
         is_latency = "latency" in payload.metric_name.lower()
 
-        # Xác định hướng dịch chuyển
+        # Xác định hướng dịch chuyển chỉ số
         if diff == 0:
             direction = "STABLE"
         elif (diff > 0 and is_latency) or (diff < 0 and not is_latency):

@@ -21,7 +21,11 @@ dependencies = [
     "eaos-reflection",  # <-- THÊM DÒNG NÀY
     "eaos-learning",
     "eaos-prediction",  # <-- THÊM DÒNG NÀY
+    "eaos-simulation",  # <-- THÊM DÒNG NÀY
+    "eaos-self-rewrite",  # <-- THÊM DÒNG NÀY
+    "eaos-autonomous",  # <-- THÊM DÒNG NÀY
 ]
+
 
 [build-system]
 requires = ["hatchling>=1.28"]
@@ -34,7 +38,16 @@ packages = []
 managed = true
 package = false
 default-groups = ["dev"]
-workspace = { members = ["apps/api", "packages/knowledge", "packages/identity", "packages/evolution", "packages/reflection", "packages/learning", "packages/prediction"] } # <-- THÊM "packages/prediction"
+workspace = { members = ["apps/api", 
+                         "packages/knowledge", 
+                         "packages/identity", 
+                         "packages/evolution", 
+                         "packages/reflection", 
+                         "packages/learning", 
+                         "packages/prediction",
+                         "packages/simulation",
+                         "packages/self_rewrite",
+                         "packages/autonomous"] } # <-- THÊM "packages/autonomous" VÀO ĐÂY
 
 
 [dependency-groups]
@@ -107,3 +120,6 @@ eaos-evolution = { workspace = true }
 eaos-reflection = { workspace = true }
 eaos-learning = { workspace = true } # <-- THÊM DÒNG NÀY
 eaos-prediction = { workspace = true } # <-- THÊM DÒNG NÀY
+eaos-simulation = { workspace = true } # <-- THÊM DÒNG NÀY
+eaos-self-rewrite = { workspace = true } # <-- THÊM DÒNG NÀY
+eaos-autonomous = { workspace = true }

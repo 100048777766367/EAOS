@@ -1,11 +1,39 @@
 import os
-from typing import Annotated, Any, Dict, List
-from fastapi import Body, FastAPI, HTTPException
-from pydantic import BaseModel
+from typing import Annotated, Any
 
+from fastapi import Body, FastAPI, HTTPException
 from kernel.governance.assembly import (
     ArchitectureAssembly,
     ConsensusVote,
+)
+from packages.autonomous.application.use_cases import (
+    LoopCycleRequest,
+    RunAutonomousLoopUseCase,
+)
+from packages.autonomous.domain.models import LoopCycle
+from packages.autonomous.infrastructure.adapters import (
+    InMemoryAutonomousRepository,
+)
+from packages.evolution.domain.governance import (
+    CouncilVote,
+    EvolutionGovernanceCouncil,
+)
+from packages.evolution.domain.models import (
+    Evidence,
+    EvolutionObject,
+    check_backwards_compatibility,
+    migrate_payload,
+)
+from packages.evolution.domain.rules_engine import (
+    CriticalityEnvironmentRule,
+    FitnessEngine,
+    PolicyEngine,
+    VersionHeaderRule,
+)
+from packages.evolution.domain.self_evolution import SelfEvolutionEngine
+from packages.evolution.domain.semantic import SemanticLayer
+from packages.evolution.infrastructure.adapters import (
+    PostgresEvolutionRepository,
 )
 from packages.identity.application.use_cases import (
     RegisterUserRequest,
@@ -23,47 +51,43 @@ from packages.knowledge.infrastructure.adapters import (
     PostgresKnowledgeRepository,
     SplayCacheKnowledgeRepository,
 )
-from packages.evolution.domain.models import (
-    check_backwards_compatibility,
-    migrate_payload,
-    Evidence,
-    EvolutionObject,
-)
-from packages.evolution.infrastructure.adapters import (
-    PostgresEvolutionRepository,
-)
-from packages.evolution.domain.rules_engine import (
-    VersionHeaderRule,
-    CriticalityEnvironmentRule,
-    PolicyEngine,
-    FitnessEngine,
-)
-from packages.evolution.domain.governance import (
-    CouncilVote,
-    EvolutionGovernanceCouncil,
-)
-from packages.evolution.domain.semantic import SemanticLayer
-from packages.evolution.domain.self_evolution import SelfEvolutionEngine
-from packages.reflection.domain.models import ReflectionReport
-from packages.reflection.infrastructure.adapters import (
-    InMemoryReflectionRepository,
-)
-from packages.reflection.application.use_cases import (
-    AnalyzeReflectionUseCase,
-)
+from packages.learning.application.use_cases import IngestLearningUseCase
 from packages.learning.domain.models import Experience
 from packages.learning.infrastructure.adapters import (
     InMemoryExperienceRepository,
-)
-from packages.learning.application.use_cases import IngestLearningUseCase
-from packages.prediction.domain.models import Prediction
-from packages.prediction.infrastructure.adapters import (
-    InMemoryPredictionRepository,
 )
 from packages.prediction.application.use_cases import (
     HistoricalMetricsPayload,
     RunPredictionUseCase,
 )
+from packages.prediction.domain.models import Prediction
+from packages.prediction.infrastructure.adapters import (
+    InMemoryPredictionRepository,
+)
+from packages.reflection.application.use_cases import (
+    AnalyzeReflectionUseCase,
+)
+from packages.reflection.domain.models import ReflectionReport
+from packages.reflection.infrastructure.adapters import (
+    InMemoryReflectionRepository,
+)
+from packages.self_rewrite.application.use_cases import (
+    RunSelfRewriteUseCase,
+    SelfRewriteRequest,
+)
+from packages.self_rewrite.domain.models import SelfRewriteJob
+from packages.self_rewrite.infrastructure.adapters import (
+    InMemorySelfRewriteRepository,
+)
+from packages.simulation.application.use_cases import (
+    RunSimulationUseCase,
+    SimulationRequest,
+)
+from packages.simulation.domain.models import Simulation
+from packages.simulation.infrastructure.adapters import (
+    InMemorySimulationRepository,
+)
+from pydantic import BaseModel
 
 app = FastAPI(title="EAOS API Gateway", version="0.1.0")
 
@@ -82,6 +106,9 @@ evo_council = EvolutionGovernanceCouncil()
 reflection_repo = InMemoryReflectionRepository()
 learning_repo = InMemoryExperienceRepository()
 prediction_repo = InMemoryPredictionRepository()
+simulation_repo = InMemorySimulationRepository()
+self_rewrite_repo = InMemorySelfRewriteRepository()
+autonomous_repo = InMemoryAutonomousRepository()
 
 
 class HealthResponse(BaseModel):
@@ -495,3 +522,39 @@ async def run_prediction_engine(
         return use_case.execute(payload)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e)) from e
+
+
+# --- ENDPOINTS MÔ PHỎNG GIẢ LẬP SANDBOX (SPRINT 10) ---
+
+
+@app.post("/simulation/run", response_model=Simulation, status_code=201)
+async def run_simulation_engine(
+    request: SimulationRequest,
+) -> Simulation:
+    """Khởi chạy mô phỏng Dry-Run kiểm thử cấu hình trên Sandbox ảo."""
+    use_case = RunSimulationUseCase(simulation_repo)
+    return use_case.execute(request)
+
+
+# --- ENDPOINTS TỰ LẬP TRÌNH VÀ SỬA ĐỔI MÃ NGUỒN (SPRINT 11) ---
+
+
+@app.post("/self-rewrite/run", response_model=SelfRewriteJob, status_code=201)
+async def run_self_rewrite_engine(
+    request: SelfRewriteRequest,
+) -> SelfRewriteJob:
+    """Kích hoạt chuỗi tác vụ AI Agent tự lập trình và tạo Pull Request."""
+    use_case = RunSelfRewriteUseCase(self_rewrite_repo)
+    return use_case.execute(request)
+
+
+# --- ENDPOINT VÒNG LẶP TIẾN HÓA VÔ HẠN TỰ TRỊ (SPRINT 12 - CHUNG KẾT) ---
+
+
+@app.post("/autonomous/run-cycle", response_model=LoopCycle, status_code=201)
+async def run_autonomous_loop_cycle(
+    request: LoopCycleRequest,
+) -> LoopCycle:
+    """Khởi chạy toàn bộ vòng lặp tiến hóa đóng kín trong một chu kỳ tự trị."""
+    use_case = RunAutonomousLoopUseCase(autonomous_repo)
+    return use_case.execute(request)

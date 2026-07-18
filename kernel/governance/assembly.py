@@ -43,7 +43,7 @@ class ArchitectureAssembly:
         """Kiểm duyệt đề xuất thay đổi tri thức dựa trên sự biểu quyết."""
         import uuid
 
-        # Biến đổi dòng 68 cũ thành 2 dòng ngắn hơn để vượt ải Ruff E501
+        # Biến đổi dòng dài thành các dòng ngắn hơn vượt ải Ruff E501
         approved_voters = [v for v in votes if v.decision == "APPROVED"]
         passed = len(approved_voters) >= (len(votes) / 2)
 
@@ -62,24 +62,22 @@ class ArchitectureAssembly:
         with open(self.ledger_path, "a", encoding="utf-8") as ledger:
             ledger.write(tx.model_dump_json() + "\n")
 
-        # Sau khi ghi log, tự động kích hoạt nén log định kỳ nếu tệp quá lớn
+        # Kích hoạt dọn dẹp nén dữ liệu nếu vượt ngưỡng
         self.compact_ledger_if_needed()
 
         return tx
 
     def compact_ledger_if_needed(self, max_lines: int = 10000) -> None:
-        """Tự động nén và dọn dẹp các tệp log nháp trung gian của AI."""
+        """Tự động dọn dẹp log rác trung gian."""
         if not os.path.exists(self.ledger_path):
             return
 
-        # Đếm số dòng thô hiện tại
         with open(self.ledger_path, encoding="utf-8") as f:
             lines = f.readlines()
 
         if len(lines) < max_lines:
             return
 
-        # Nén log: Chỉ giữ lại các phiên bản giao dịch được "COMMITTED" thực tế
         compacted_txs = []
         for line in lines:
             if line.strip():
@@ -87,7 +85,6 @@ class ArchitectureAssembly:
                 if tx_data.get("status") == "COMMITTED":
                     compacted_txs.append(tx_data)
 
-        # Ghi đè lại tệp log sạch (đã loại bỏ hàng nghìn log REJECTED hoặc nháp của AI)
         with open(self.ledger_path, "w", encoding="utf-8") as f:
             for tx in compacted_txs:
                 f.write(json.dumps(tx) + "\n")

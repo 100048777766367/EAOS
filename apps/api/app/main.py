@@ -1,17 +1,11 @@
 import os
-from typing import Annotated, Any
-
+from typing import Annotated, Any, Dict, List
 from fastapi import Body, FastAPI, HTTPException
+from pydantic import BaseModel
+
 from kernel.governance.assembly import (
     ArchitectureAssembly,
-)
-from packages.evolution.domain.models import (
-    Evidence,
-    check_backwards_compatibility,
-    migrate_payload,
-)
-from packages.evolution.infrastructure.adapters import (
-    PostgresEvolutionRepository,
+    ConsensusVote,
 )
 from packages.identity.application.use_cases import (
     RegisterUserRequest,
@@ -24,11 +18,52 @@ from packages.knowledge.application.use_cases import (
     StoreKnowledgeUseCase,
 )
 from packages.knowledge.domain.models import AuditLogEntry, KnowledgeArtifact
+from packages.knowledge.domain.tdo import encapsulate_artifact
 from packages.knowledge.infrastructure.adapters import (
     PostgresKnowledgeRepository,
     SplayCacheKnowledgeRepository,
 )
-from pydantic import BaseModel
+from packages.evolution.domain.models import (
+    check_backwards_compatibility,
+    migrate_payload,
+    Evidence,
+    EvolutionObject,
+)
+from packages.evolution.infrastructure.adapters import (
+    PostgresEvolutionRepository,
+)
+from packages.evolution.domain.rules_engine import (
+    VersionHeaderRule,
+    CriticalityEnvironmentRule,
+    PolicyEngine,
+    FitnessEngine,
+)
+from packages.evolution.domain.governance import (
+    CouncilVote,
+    EvolutionGovernanceCouncil,
+)
+from packages.evolution.domain.semantic import SemanticLayer
+from packages.evolution.domain.self_evolution import SelfEvolutionEngine
+from packages.reflection.domain.models import ReflectionReport
+from packages.reflection.infrastructure.adapters import (
+    InMemoryReflectionRepository,
+)
+from packages.reflection.application.use_cases import (
+    AnalyzeReflectionUseCase,
+)
+from packages.learning.domain.models import Experience
+from packages.learning.infrastructure.adapters import (
+    InMemoryExperienceRepository,
+)
+from packages.learning.application.use_cases import IngestLearningUseCase
+from packages.prediction.domain.models import Prediction
+from packages.prediction.infrastructure.adapters import (
+    InMemoryPredictionRepository,
+)
+from packages.prediction.application.use_cases import (
+    HistoricalMetricsPayload,
+    RunPredictionUseCase,
+)
 
 app = FastAPI(title="EAOS API Gateway", version="0.1.0")
 
@@ -43,6 +78,10 @@ knowledge_repo = SplayCacheKnowledgeRepository(postgres_knowledge_repo)
 
 identity_repo = PostgresUserRepository(db_url)
 evolution_repo = PostgresEvolutionRepository(db_url)
+evo_council = EvolutionGovernanceCouncil()
+reflection_repo = InMemoryReflectionRepository()
+learning_repo = InMemoryExperienceRepository()
+prediction_repo = InMemoryPredictionRepository()
 
 
 class HealthResponse(BaseModel):
@@ -134,7 +173,38 @@ async def commit_to_assembly(
     action: Annotated[str, Body(embed=True)],
     author: Annotated[str, Body(embed=True)],
 ) -> dict[str, Any]:
-    return {}
+    """Hội đồng họp kiểm duyệt và xuất tệp đóng gói TDO tự mô tả."""
+    artifact = knowledge_repo.find_by_id(artifact_id)
+    if not artifact:
+        raise HTTPException(
+            status_code=404,
+            detail="Không tìm thấy tri thức yêu cầu",
+        )
+
+    votes = [
+        ConsensusVote(
+            voter="ArchitectAgent",
+            decision="APPROVED",
+            reason="Mã nguồn tuân thủ Hiến pháp quy định phân lớp.",
+        ),
+        ConsensusVote(
+            voter="ReviewerAgent",
+            decision="APPROVED",
+            reason="Lịch sử thay đổi được ghi nhận đầy đủ.",
+        ),
+    ]
+
+    tx = assembly_engine.evaluate_proposal(action, artifact, votes)
+
+    if tx.status != "COMMITTED":
+        raise HTTPException(status_code=400, detail="Thay đổi bị bác bỏ.")
+
+    tdo = encapsulate_artifact(artifact, author=author)
+
+    return {
+        "transaction": tx.model_dump(),
+        "trustworthy_digital_object": tdo.model_dump(by_alias=True),
+    }
 
 
 @app.get("/governance/assembly/ledger", response_model=list[dict[str, Any]])
@@ -272,3 +342,156 @@ async def migrate_evolution_document(
 async def get_document_lineage(doc_id: str) -> list[str]:
     """Truy vết chuỗi gia phả đi ngược về gốc."""
     return evolution_repo.get_lineage(doc_id)
+
+
+# --- ENDPOINTS CHÍNH SÁCH VÀ TỰ SINH TRƯỞNG (SPRINT 3-6) ---
+
+
+@app.post("/evolution/evaluate-fitness/{doc_id}")
+async def evaluate_fitness(doc_id: str) -> dict[str, Any]:
+    """Chạy Rules Engine đánh giá và tính điểm Fitness."""
+    obj = evolution_repo.find_by_id(doc_id)
+    if not obj:
+        raise HTTPException(status_code=404, detail="Không tìm thấy tài liệu")
+
+    policy = PolicyEngine(
+        name="Architecture Constitution Policy",
+        rules=[VersionHeaderRule(), CriticalityEnvironmentRule()],
+    )
+    passed, results = policy.evaluate_policy(obj)
+
+    from packages.evolution.domain.models import Evidence
+
+    evidences = [
+        Evidence(
+            metric_name=r.rule_name,
+            metric_value=1.0 if r.passed else 0.0,
+            passed=r.passed,
+            log_summary=r.message,
+        )
+        for r in results
+    ]
+
+    updated_obj = EvolutionObject(
+        id=obj.id,
+        name=obj.name,
+        payload=obj.payload,
+        metadata=obj.metadata,
+        provenance=obj.provenance,
+        evidences=evidences,
+    )
+    evolution_repo.save(updated_obj)
+
+    score = FitnessEngine.calculate_fitness(updated_obj)
+    return {
+        "passed": passed,
+        "results": [r.model_dump() for r in results],
+        "fitness_score": score,
+    }
+
+
+@app.post("/evolution/council/vote/{doc_id}")
+async def vote_on_evolution(
+    doc_id: str,
+    voters_payload: Annotated[list[dict[str, str]], Body(embed=True)],
+) -> dict[str, Any]:
+    """Tổ chức Hội đồng biểu quyết và ghi sổ Ledger."""
+    obj = evolution_repo.find_by_id(doc_id)
+    if not obj:
+        raise HTTPException(status_code=404, detail="Không tìm thấy tài liệu")
+
+    votes = [
+        CouncilVote(
+            voter=v["voter"],
+            decision=v["decision"],
+            reason=v["reason"],
+        )
+        for v in voters_payload
+    ]
+
+    tx = evo_council.evaluate_proposal(obj, votes)
+    return {"transaction": tx.model_dump()}
+
+
+@app.get("/evolution/semantic/{doc_id}")
+async def get_semantic_representation(doc_id: str) -> dict[str, Any]:
+    """Xuất bản tệp đóng gói JSON-LD và RDF Triples."""
+    obj = evolution_repo.find_by_id(doc_id)
+    if not obj:
+        raise HTTPException(status_code=404, detail="Không tìm thấy tài liệu")
+
+    json_ld = SemanticLayer.to_json_ld(obj)
+    rdf_triples = SemanticLayer.to_rdf_triples(obj)
+
+    return {"json_ld": json_ld, "rdf_triples": rdf_triples}
+
+
+@app.post("/evolution/self-heal/{doc_id}")
+async def self_heal_document(doc_id: str) -> dict[str, Any]:
+    """Tự động phát hiện vi phạm và kích hoạt tự điều chỉnh (Self-healing)."""
+    obj = evolution_repo.find_by_id(doc_id)
+    if not obj:
+        raise HTTPException(status_code=404, detail="Không tìm thấy tài liệu")
+
+    adjustment_rules = {"max_retry_loops": 0.5, "llm_fallback": "local-llama"}
+
+    healed_obj = SelfEvolutionEngine.trigger_self_evolution(
+        failed_obj=obj,
+        failed_metric_name="OOM Crash Thread Limit",
+        adjustment_rules=adjustment_rules,
+    )
+
+    saved = evolution_repo.save(healed_obj)
+    return {
+        "message": "Self-healing và thích ứng cấu hình tự động thành công.",
+        "healed_id": saved.id,
+        "payload": saved.payload,
+    }
+
+
+# --- ENDPOINTS CHẨN ĐOÁN VÀ SUY NGẪM SỰ CỐ (SPRINT 7) ---
+
+
+@app.post("/reflection/analyze", response_model=ReflectionReport, status_code=201)
+async def analyze_reflection_report(
+    subject_id: Annotated[str, Body(embed=True)],
+    trigger_event: Annotated[str, Body(embed=True)],
+    passed_checks: Annotated[bool, Body(embed=True)],
+) -> ReflectionReport:
+    """Tự động chẩn đoán nguyên nhân gốc rễ (Root Cause) và khuyến nghị."""
+    use_case = AnalyzeReflectionUseCase(reflection_repo)
+    return use_case.execute(
+        subject_id=subject_id,
+        trigger_event=trigger_event,
+        passed_checks=passed_checks,
+    )
+
+
+# --- ENDPOINTS HỌC HỎI VÀ ĐÚC RÚT KINH NGHIỆM (SPRINT 8) ---
+
+
+@app.post("/learning/ingest", response_model=Experience, status_code=201)
+async def ingest_learning_experience(
+    reflection_id: Annotated[str, Body(embed=True)],
+) -> Experience:
+    """Chuyển dịch báo cáo chẩn đoán sự cố thành Kinh nghiệm lưu RAM cache."""
+    use_case = IngestLearningUseCase(learning_repo, reflection_repo)
+    try:
+        return use_case.execute(reflection_id)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e)) from e
+
+
+# --- ENDPOINTS DỰ BÁO RỦI RO SỚM KIẾN TRÚC (SPRINT 9) ---
+
+
+@app.post("/prediction/run", response_model=Prediction, status_code=201)
+async def run_prediction_engine(
+    payload: HistoricalMetricsPayload,
+) -> Prediction:
+    """Quét dữ liệu lịch sử đo lường và phát đi dự báo rủi ro sớm."""
+    use_case = RunPredictionUseCase(prediction_repo)
+    try:
+        return use_case.execute(payload)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e)) from e

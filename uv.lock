@@ -12,7 +12,10 @@ members = [
     "eaos-evolution",
     "eaos-identity",
     "eaos-knowledge",
+    "eaos-learning",
     "eaos-monorepo",
+    "eaos-prediction",
+    "eaos-reflection",
 ]
 
 [[package]]
@@ -298,6 +301,17 @@ requires-dist = [
 ]
 
 [[package]]
+name = "eaos-learning"
+version = "0.1.0"
+source = { editable = "packages/learning" }
+dependencies = [
+    { name = "pydantic" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "pydantic", specifier = ">=2.13.4" }]
+
+[[package]]
 name = "eaos-monorepo"
 version = "0.1.0"
 source = { virtual = "." }
@@ -306,6 +320,9 @@ dependencies = [
     { name = "eaos-evolution" },
     { name = "eaos-identity" },
     { name = "eaos-knowledge" },
+    { name = "eaos-learning" },
+    { name = "eaos-prediction" },
+    { name = "eaos-reflection" },
     { name = "fastapi" },
     { name = "pydantic" },
     { name = "rich" },
@@ -333,6 +350,9 @@ requires-dist = [
     { name = "eaos-evolution", editable = "packages/evolution" },
     { name = "eaos-identity", editable = "packages/identity" },
     { name = "eaos-knowledge", editable = "packages/knowledge" },
+    { name = "eaos-learning", editable = "packages/learning" },
+    { name = "eaos-prediction", editable = "packages/prediction" },
+    { name = "eaos-reflection", editable = "packages/reflection" },
     { name = "fastapi", specifier = ">=0.139.0" },
     { name = "pydantic", specifier = ">=2.13.4" },
     { name = "rich", specifier = ">=14.0.0" },
@@ -353,6 +373,28 @@ dev = [
     { name = "ruff", specifier = ">=0.15.21" },
     { name = "taskipy", specifier = ">=1.14.1" },
 ]
+
+[[package]]
+name = "eaos-prediction"
+version = "0.1.0"
+source = { editable = "packages/prediction" }
+dependencies = [
+    { name = "pydantic" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "pydantic", specifier = ">=2.13.4" }]
+
+[[package]]
+name = "eaos-reflection"
+version = "0.1.0"
+source = { editable = "packages/reflection" }
+dependencies = [
+    { name = "pydantic" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "pydantic", specifier = ">=2.13.4" }]
 
 [[package]]
 name = "email-validator"

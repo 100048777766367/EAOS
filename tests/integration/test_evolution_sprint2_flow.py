@@ -24,9 +24,9 @@ def test_architecture_evolution_migration_and_lineage_flow(
     doc_1 = response_1.json()
     assert doc_1["version"] == 1
 
-    # 2. Thực hiện một tương thích ngược hợp lệ (Migration thành công)
+    # 2. Thực hiện một tương thích ngược hợp lệ (Thêm trường mới bằng "default:")
     migration_payload = {
-        "rules": {"db_user": "rename:postgres_user"},
+        "rules": {"db_schema": "default:public"},
         "author": "MigrationAgent",
     }
     response_migrate = client.post(
@@ -35,8 +35,8 @@ def test_architecture_evolution_migration_and_lineage_flow(
     assert response_migrate.status_code == 200
     migrated_doc = response_migrate.json()
     assert migrated_doc["version"] == 2
-    assert "postgres_user" in migrated_doc["payload"]
-    assert "db_user" not in migrated_doc["payload"]
+    assert migrated_doc["payload"]["db_schema"] == "public"
+    assert migrated_doc["payload"]["db_user"] == "eaos"  # Trường cũ giữ nguyên
 
     # 3. Thử nghiệm một vi phạm tương thích ngược
     # db_port thay đổi kiểu từ int sang string -> Bắt buộc bị chặn

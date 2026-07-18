@@ -18,6 +18,9 @@ dependencies = [
     "eaos-knowledge",
     "eaos-identity",
     "eaos-evolution",  # <-- THÊM DÒNG NÀY
+    "eaos-reflection",  # <-- THÊM DÒNG NÀY
+    "eaos-learning",
+    "eaos-prediction",  # <-- THÊM DÒNG NÀY
 ]
 
 [build-system]
@@ -31,7 +34,8 @@ packages = []
 managed = true
 package = false
 default-groups = ["dev"]
-workspace = { members = ["apps/api", "packages/knowledge", "packages/identity", "packages/evolution"] } # <-- THÊM "packages/evolution" VÀO ĐÂY
+workspace = { members = ["apps/api", "packages/knowledge", "packages/identity", "packages/evolution", "packages/reflection", "packages/learning", "packages/prediction"] } # <-- THÊM "packages/prediction"
+
 
 [dependency-groups]
 dev = [
@@ -99,4 +103,7 @@ run = "python -m kernel.runtime.main"
 eaos-api = { workspace = true }
 eaos-knowledge = { workspace = true }
 eaos-identity = { workspace = true }
-eaos-evolution = { workspace = true } # <-- THÊM DÒNG NÀY
+eaos-evolution = { workspace = true }
+eaos-reflection = { workspace = true }
+eaos-learning = { workspace = true } # <-- THÊM DÒNG NÀY
+eaos-prediction = { workspace = true } # <-- THÊM DÒNG NÀY

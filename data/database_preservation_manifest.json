@@ -1,0 +1,21 @@
+{
+  "specification": "EAOS Data Preservation Standard",
+  "version": "1.0.0",
+  "target_lifespan_years": 100,
+  "data_format_standard": "UTF-8 Plaintext JSON-LD",
+  "relational_database": {
+    "engine": "PostgreSQL v16+",
+    "schemas": {
+      "knowledge_artifacts": {
+        "columns": {
+          "id": "TEXT PRIMARY KEY (UUID / Custom ID)",
+          "title": "TEXT (Max 255 chars, UTF-8)",
+          "content": "TEXT (Unbounded, Markdown or UTF-8 Plaintext)",
+          "author": "TEXT (Author name or AI Agent Role)",
+          "created_at": "TIMESTAMP WITH TIMEZONE (ISO 8601 UTC)"
+        }
+      }
+    }
+  },
+  "archival_instructions": "Nếu PostgreSQL bị lỗi thời, hãy đọc trực tiếp tệp runtime/traces/audit_ledger.jsonl bằng các công cụ đọc văn bản thô (plaintext reader) để tái cấu trúc lại dữ liệu."
+}

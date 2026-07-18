@@ -14,9 +14,10 @@ dependencies = [
     "typer>=0.26.8",
     "structlog>=25.1.0",
     "rich>=14.0.0",
-    "eaos-api",          # Thêm dòng này
-    "eaos-knowledge",    # Thêm dòng này
-    "eaos-identity", # <-- THÊM DÒNG NÀY
+    "eaos-api",
+    "eaos-knowledge",
+    "eaos-identity",
+    "eaos-evolution",  # <-- THÊM DÒNG NÀY
 ]
 
 [build-system]
@@ -30,7 +31,7 @@ packages = []
 managed = true
 package = false
 default-groups = ["dev"]
-workspace = { members = ["apps/api", "packages/knowledge", "packages/identity"] }
+workspace = { members = ["apps/api", "packages/knowledge", "packages/identity", "packages/evolution"] } # <-- THÊM "packages/evolution" VÀO ĐÂY
 
 [dependency-groups]
 dev = [
@@ -87,10 +88,6 @@ exclude = [
     "generated"
 ]
 
-###########################################################
-# Taskipy (Cross-platform Task Runner for Windows/Linux)
-###########################################################
-
 [tool.taskipy.tasks]
 doctor = "python tools/doctor/main.py"
 lint = "python -m ruff check . && python -m mypy apps/ kernel/ engine/ packages/ tools/ tests/"
@@ -98,8 +95,8 @@ format = "python -m ruff format ."
 test = "python -m pytest tests/"
 run = "python -m kernel.runtime.main"
 
-# Thêm Block này vào cuối file pyproject.toml
 [tool.uv.sources]
 eaos-api = { workspace = true }
 eaos-knowledge = { workspace = true }
-eaos-identity = { workspace = true } # <-- THÊM DÒNG NÀY
+eaos-identity = { workspace = true }
+eaos-evolution = { workspace = true } # <-- THÊM DÒNG NÀY

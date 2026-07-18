@@ -1,0 +1,19 @@
+policy_id: P-001
+name: Data Retention and Log Compaction Rule
+target: EAOS Knowledge Base and Metadata Stores
+lifespan: 100-years-survival
+
+constraints:
+  splay_tree_cache:
+    max_active_nodes: 1000       # Chỉ giữ tối đa 1000 tài liệu hot trong RAM
+    eviction_policy: LRU         # Trục xuất nút ít được truy cập nhất khi tràn
+
+  audit_ledger:
+    max_logs_per_document: 50    # Nếu 1 tài liệu có hơn 50 logs nháp, kích hoạt Compaction
+    compaction_mode: Consolidate # Gộp các log nháp trung gian của AI thành 1 log tổng hợp
+    retain_versions: [1, "latest"] # Chỉ giữ bản khởi tạo v1 và bản phát hành mới nhất
+
+  storage_tiering:
+    local_disk_retention_days: 30 # Log local thô trên ổ cứng chỉ giữ 30 ngày
+    cold_storage_destination: "minio://archive/governance-logs/"
+    compression_format: "tar.gz"

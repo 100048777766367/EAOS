@@ -1,4 +1,4 @@
-from datetime import UTC, datetime  # <-- Thêm timezone vào đây
+from datetime import UTC, datetime
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -13,3 +13,12 @@ class KnowledgeArtifact(BaseModel):
     created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
     model_config = ConfigDict(frozen=True)  # Entity là bất biến (Immutable)
+
+
+class AuditLogEntry(BaseModel):
+    """Bản ghi lưu lại nhật ký thay đổi phục vụ lưu vết thêm/sửa/xóa."""
+
+    action: str  # "ADD", "EDIT", "DELETE"
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(UTC))
+    author: str
+    details: str

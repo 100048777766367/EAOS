@@ -3,7 +3,7 @@ from datetime import UTC, datetime
 
 from pydantic import BaseModel
 
-from packages.memory.domain.models import MemoryRecord
+from packages.memory.domain.entities import MemoryRecord  # Sửa đường dẫn sang entities
 from packages.memory.domain.ports import MemoryRepositoryPort
 
 

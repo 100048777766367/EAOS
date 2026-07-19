@@ -4,9 +4,8 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Annotated, Any
 
+from engine.compiler.architecture_compiler import ArchitectureCompiler
 from fastapi import Body, FastAPI, HTTPException
-from pydantic import BaseModel
-
 from kernel.common.resilience import IdempotencyManager
 from kernel.events.event_bus import (
     EventBus,
@@ -16,20 +15,31 @@ from kernel.events.event_bus import (
     PredictionRunEvent,
     ReflectionAnalyzedEvent,
 )
-from kernel.governance.assembly import ArchitectureAssembly, ConsensusVote
-from kernel.governance.loop_engine import LoopCycleRequest
-from kernel.registry.enterprise_registry import EnterpriseRegistry, RegistryResource
+from kernel.governance.assembly import (
+    ArchitectureAssembly,
+    ConsensusVote,
+)
+from kernel.registry.enterprise_registry import (
+    EnterpriseRegistry,
+    RegistryResource,
+)
 from packages.agent.application.use_cases import (
     ExecuteAgentLifecycleUseCase,
     TransitionLifecycleRequest,
 )
-from packages.agent.domain.models import AIAgent, AgentConfig
+from packages.agent.domain.models import AgentConfig, AIAgent
 from packages.agent.infrastructure.adapters import InMemoryAgentRegistry
+from packages.autonomous.application.use_cases import (
+    LoopCycleRequest,
+    RunAutonomousLoopUseCase,
+)
 from packages.autonomous.domain.models import LoopCycle
-from packages.autonomous.infrastructure.adapters import InMemoryAutonomousRepository
-from packages.autonomous.application.use_cases import RunAutonomousLoopUseCase
-from packages.capability.domain.models import BusinessCapability
-from packages.capability.infrastructure.adapters import InMemoryCapabilityRegistry
+from packages.autonomous.infrastructure.adapters import (
+    InMemoryAutonomousRepository,
+)
+from packages.capability.infrastructure.adapters import (
+    InMemoryCapabilityRegistry,
+)
 from packages.civilization.application.use_cases import (
     ConsensusRequest,
     ExecuteCivilizationCivilianUseCase,
@@ -43,12 +53,13 @@ from packages.civilization.domain.models import (
 from packages.civilization.infrastructure.adapters import (
     InMemoryCivilizationRegistry,
 )
-from packages.evolution.domain.governance import CouncilVote, EvolutionGovernanceCouncil
+from packages.evolution.domain.governance import (
+    CouncilVote,
+    EvolutionGovernanceCouncil,
+)
 from packages.evolution.domain.models import (
     Evidence,
     EvolutionObject,
-    check_backwards_compatibility,
-    migrate_payload,
 )
 from packages.evolution.domain.rules_engine import (
     CriticalityEnvironmentRule,
@@ -56,11 +67,21 @@ from packages.evolution.domain.rules_engine import (
     PolicyEngine,
     VersionHeaderRule,
 )
-from packages.evolution.domain.semantic import SemanticLayer
 from packages.evolution.domain.self_evolution import SelfEvolutionEngine
-from packages.evolution.infrastructure.adapters import PostgresEvolutionRepository
-from packages.exchange.domain.models import SharedEcosystemEvent
-from packages.exchange.infrastructure.adapters import InMemoryEcosystemEventMesh
+from packages.evolution.domain.semantic import SemanticLayer
+from packages.evolution.infrastructure.adapters import (
+    PostgresEvolutionRepository,
+)
+from packages.exchange.domain.models import (
+    SharedEcosystemEvent,
+)
+from packages.exchange.infrastructure.adapters import (
+    InMemoryEcosystemEventMesh,
+)
+from packages.federation.application.use_cases import (
+    CollectiveEvolutionUseCase,
+    ExecuteFederatedGovernanceUseCase,
+)
 from packages.federation.domain.models import (
     CollectiveEvolutionReport,
     EcosystemMember,
@@ -68,17 +89,28 @@ from packages.federation.domain.models import (
     FederatedTransaction,
     SharedKnowledgePacket,
 )
-from packages.federation.infrastructure.adapters import InMemoryFederationRegistry
-from packages.federation.application.use_cases import (
-    CollectiveEvolutionUseCase,
-    ExecuteFederatedGovernanceUseCase,
-    HeartbeatUseCase,
+from packages.federation.infrastructure.adapters import (
+    InMemoryFederationRegistry,
 )
-from packages.identity.domain.models import User
-from packages.identity.infrastructure.adapters import PostgresUserRepository
 from packages.identity.application.use_cases import (
     RegisterUserRequest,
     RegisterUserUseCase,
+)
+from packages.identity.domain.models import User
+from packages.identity.infrastructure.adapters import PostgresUserRepository
+from packages.intelligence.application.use_cases import (
+    OptimizationRequest,
+    PlanRequest,
+    ReasoningRequest,
+    RunEcosystemIntelligenceUseCase,
+)
+from packages.intelligence.domain.models import (
+    EcosystemPlan,
+    OptimizationGoal,
+    SemanticDecision,
+)
+from packages.intelligence.infrastructure.adapters import (
+    InMemoryIntelligenceRegistry,
 )
 from packages.knowledge.application.use_cases import (
     StoreKnowledgeRequest,
@@ -90,58 +122,62 @@ from packages.knowledge.infrastructure.adapters import (
     PostgresKnowledgeRepository,
     SplayCacheKnowledgeRepository,
 )
-from packages.learning.domain.models import Experience
-from packages.learning.infrastructure.adapters import InMemoryExperienceRepository
 from packages.learning.application.use_cases import IngestLearningUseCase
+from packages.learning.infrastructure.adapters import (
+    InMemoryExperienceRepository,
+)
 from packages.marketplace.domain.models import MarketplaceAsset
 from packages.marketplace.infrastructure.adapters import InMemoryMarketplace
 from packages.memory.application.dto import MemoryResponse, StoreMemoryCommand
-from packages.memory.application.handlers import RecallMemoryHandler, StoreMemoryHandler
+from packages.memory.application.handlers import (
+    RecallMemoryHandler,
+    StoreMemoryHandler,
+)
 from packages.memory.domain.entities import MemoryRecord
 from packages.memory.infrastructure.repository import InMemoryMemoryRepository
-from packages.prediction.domain.models import Prediction
-from packages.prediction.infrastructure.adapters import InMemoryPredictionRepository
 from packages.prediction.application.use_cases import (
     HistoricalMetricsPayload,
     MetricDatapoint,
     RunPredictionUseCase,
 )
+from packages.prediction.infrastructure.adapters import (
+    InMemoryPredictionRepository,
+)
+from packages.reflection.application.use_cases import (
+    AnalyzeReflectionUseCase,
+)
 from packages.reflection.domain.models import ReflectionReport
-from packages.reflection.infrastructure.adapters import InMemoryReflectionRepository
-from packages.reflection.application.use_cases import AnalyzeReflectionUseCase
-from packages.simulation.domain.models import Simulation
-from packages.simulation.infrastructure.adapters import InMemorySimulationRepository
-from packages.simulation.application.use_cases import (
-    RunSimulationUseCase,
-    SimulationRequest,
+from packages.reflection.infrastructure.adapters import (
+    InMemoryReflectionRepository,
 )
-from packages.self_rewrite.domain.models import SelfRewriteJob
-from packages.self_rewrite.infrastructure.adapters import InMemorySelfRewriteRepository
-from packages.self_rewrite.application.use_cases import (
-    RunSelfRewriteUseCase,
-    SelfRewriteRequest,
+from packages.self_rewrite.infrastructure.adapters import (
+    InMemorySelfRewriteRepository,
 )
-from packages.specification.domain.models import EnterpriseSpecification, EvaluatePayloadResult
-from packages.specification.infrastructure.adapters import InMemorySpecificationRegistry
-from packages.specification.application.use_cases import (
-    EvaluatePayloadRequest,
-    ValidateAndIngestSpecificationUseCase,
+from packages.simulation.infrastructure.adapters import (
+    InMemorySimulationRepository,
 )
-from packages.tenancy.domain.models import TenantContext
-from packages.tenancy.infrastructure.adapters import InMemoryTenantRegistry
+from packages.specification.infrastructure.adapters import (
+    InMemorySpecificationRegistry,
+)
 from packages.tenancy.application.use_cases import (
     CreateTenantRequest,
     RegisterTenantUseCase,
 )
-from packages.workflow.domain.models import WorkflowDefinition, WorkflowInstance
-from packages.workflow.infrastructure.adapters import InMemoryWorkflowRegistry
+from packages.tenancy.domain.models import TenantContext
+from packages.tenancy.infrastructure.adapters import InMemoryTenantRegistry
 from packages.workflow.application.use_cases import (
     ExecuteWorkflowUseCase,
     StartWorkflowRequest,
     TransitionWorkflowRequest,
 )
+from packages.workflow.domain.models import (
+    WorkflowDefinition,
+    WorkflowInstance,
+)
+from packages.workflow.infrastructure.adapters import InMemoryWorkflowRegistry
 from platform_services.resilience.engine import IdempotencyService, ResilienceEngine
 from platform_services.telemetry.observability import TelemetryService
+from pydantic import BaseModel
 
 app = FastAPI(title="EAOS API Gateway", version="0.1.0")
 
@@ -151,7 +187,7 @@ db_url = os.getenv(
     "postgresql://eaos:eaos@localhost:5432/eaos",
 )
 
-# KHỞI TẠO SINGLETONS TOÀN CỤC (Để tránh lỗi Undefined khi import chéo)
+# Khai báo Service Discovery toàn cục (Global) trước YAML loaders
 enterprise_registry = EnterpriseRegistry()
 federation_registry = InMemoryFederationRegistry()
 tenant_registry = InMemoryTenantRegistry()
@@ -186,6 +222,9 @@ resilience_engine = ResilienceEngine()
 
 # Trục điều phối lưới sự kiện trung tâm (Event Mesh)
 event_bus = EventBus()
+
+# TIÊU CHUẨN VÀNG ASYNCIO (RUF006): Neo giữ task chạy ngầm toàn cục tránh bị GC dọn
+background_tasks = set()
 
 # Tự động nạp cấu hình Capabilities, Specs, Workflows khi boot hệ thống
 ROOT_PATH = Path(__file__).resolve().parent.parent.parent
@@ -257,14 +296,6 @@ historical_memory = MemoryRecord(
     ],
 )
 memory_repo.save(historical_memory)
-enterprise_registry.register(
-    RegistryResource(
-        id=historical_memory.id,
-        type="MEMORY",
-        name="Historical Memory: PR-999 Failure",
-        metadata=historical_memory.model_dump(),
-    )
-)
 
 # Tự động nạp (Boot) 2 thành viên liên bang của Phase 4 (Sprint 1)
 member_a = EcosystemMember(
@@ -350,8 +381,11 @@ async def create_knowledge(
         content=artifact.content,
         author=artifact.author,
     )
-    # Sửa lỗi RUF006 lưu tham chiếu task chạy ngầm tránh bị GC dọn dẹp
-    _task = asyncio.create_task(event_bus.publish(event))
+    
+    # Giải quyết RUF006: Đăng ký task chạy ngầm an toàn tránh bị GC dọn dẹp
+    task = asyncio.create_task(event_bus.publish(event))
+    background_tasks.add(task)
+    task.add_done_callback(background_tasks.discard)
 
     return artifact
 
@@ -479,7 +513,6 @@ async def propose_evolution(
         ProposeEvolutionRequest,
         ProposeEvolutionUseCase,
     )
-    from engine.compiler.architecture_compiler import ArchitectureCompiler
 
     req = ProposeEvolutionRequest(
         id=obj_id,
@@ -588,7 +621,6 @@ async def evaluate_fitness(doc_id: str) -> dict[str, Any]:
     )
     passed, results = policy.evaluate_policy(obj)
 
-    from packages.evolution.domain.models import Evidence
 
     evidences = [
         Evidence(
@@ -626,8 +658,7 @@ async def vote_on_evolution(
     voters_payload: Annotated[list[dict[str, str]], Body(embed=True)],
 ) -> dict[str, Any]:
     """Tổ chức Hội đồng biểu quyết và ghi sổ Ledger."""
-    # SỬA LỖI ĐÁNH MÁY: Tìm chính xác theo tham số doc_id của API thay vì obj_id thừa
-    obj = evolution_repo.find_by_id(doc_id)
+    obj = evolution_repo.find_by_id(doc_id)  # Sửa lỗi: Đổi obj_id thành doc_id
     if not obj:
         raise HTTPException(status_code=404, detail="Không tìm thấy tài liệu")
 
@@ -710,12 +741,10 @@ async def v1_store_new_memory(
     handler = StoreMemoryHandler(memory_repo)
 
     if idempotency_key:
-        # Kiểm duyệt Idempotency giao phó hoàn toàn cho dịch vụ của Platform
         return idempotency_service.process(
             idempotency_key, handler.handle, request
         )
 
-    # Đo lường giám sát Telemetry giao phó hoàn toàn cho Platform
     return TelemetryService.measure_duration(handler.handle)(request)
 
 
@@ -747,8 +776,7 @@ async def v1_transition_agent_lifecycle(
     """Cập nhật trạng thái vòng đời của AI Agent có Exponential Backoff."""
     use_case = ExecuteAgentLifecycleUseCase(agent_registry)
     try:
-        updated = use_case.transition_state(request)
-        return updated
+        return use_case.transition_state(request)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e)) from e
 
@@ -881,11 +909,10 @@ async def v1_list_collective_evolution_reports() -> list[
 )
 async def v1_vote_on_federated_governance(
     target_ontology_id: Annotated[str, Body(embed=True)],
-    votes_payload: Annotated[list[dict[str, str]] | None, Body(embed=True)] = None,
+    votes_payload: list[dict[str, str]] = Body(..., embed=True),
 ) -> FederatedTransaction:
     """Hội đồng liên bang họp biểu quyết."""
     use_case = ExecuteFederatedGovernanceUseCase(federation_registry)
-    payload_list = votes_payload or []
     votes = [
         FederatedCouncilVote(
             voter_member_id=v["voter_member_id"],
@@ -893,7 +920,7 @@ async def v1_vote_on_federated_governance(
             decision=v["decision"],
             reason=v["reason"],
         )
-        for v in payload_list
+        for v in votes_payload
     ]
     return use_case.vote_on_shared_ontology(target_ontology_id, votes)
 
@@ -1091,7 +1118,6 @@ async def handle_reflection_analyzed(event: ReflectionAnalyzedEvent) -> None:
 
 
 async def handle_experience_ingested(event: ExperienceIngestedEvent) -> None:
-    from datetime import timedelta
     now_dt = datetime.now(UTC)
     payload = HistoricalMetricsPayload(
         metric_name="API Response Latency (ms)",

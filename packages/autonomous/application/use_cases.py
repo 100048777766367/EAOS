@@ -2,14 +2,10 @@ import uuid
 from datetime import UTC, datetime
 from typing import Any
 
-from pydantic import BaseModel  # Nhập khẩu BaseModel
+from pydantic import BaseModel  # Thêm import thiếu
 
 from packages.autonomous.domain.models import LoopCycle
 from packages.autonomous.domain.ports import AutonomousRepository
-from packages.evolution.application.use_cases import (
-    ProposeEvolutionRequest,  # Nhập khẩu ProposeEvolutionRequest
-    ProposeEvolutionUseCase,
-)
 
 
 class LoopCycleRequest(BaseModel):
@@ -103,8 +99,13 @@ class RunAutonomousLoopUseCase:
         exp = learn_uc.execute(report.id)
         stage_executions["Learning"] = f"Ingested Experience: {exp.id}"
 
-        # 9. EVOLUTION
-        from packages.evolution.application.use_cases import MigrateEvolutionUseCase
+        # 9. EVOLUTION (Import đầy đủ lớp ProposeEvolutionRequest)
+        from packages.evolution.application.use_cases import (
+            MigrateEvolutionUseCase,
+            ProposeEvolutionRequest,
+            ProposeEvolutionUseCase,
+        )
+        from packages.evolution.domain.governance import EvolutionGovernanceCouncil
         evolution_repo = self.services["evolution_repo"]
         evolve_uc = MigrateEvolutionUseCase(evolution_repo)
         evo_council = self.services["evo_council"]
@@ -128,7 +129,7 @@ class RunAutonomousLoopUseCase:
         )
         stage_executions["Evolution"] = f"Committed: {migrated.version.to_string()}"
 
-        # 10. FEDERATION (Dọn dẹp biến thừa)
+        # 10. FEDERATION
         stage_executions["Federation"] = "Federation Member: Enterprise-B"
 
         # 11. NEGOTIATION

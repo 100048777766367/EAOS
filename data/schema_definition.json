@@ -1,0 +1,32 @@
+﻿{
+  "system_name": "EAOS Operational System",
+  "components": [
+    {
+      "name": "libs.core.domain",
+      "layer": "domain",
+      "dependencies": []
+    },
+    {
+      "name": "services.validator.rules",
+      "layer": "application",
+      "dependencies": [
+        "libs.core.domain"
+      ]
+    },
+    {
+      "name": "services.validator.adapters",
+      "layer": "infrastructure",
+      "dependencies": [
+        "services.validator.rules",
+        "libs.core.domain"
+      ]
+    },
+    {
+      "name": "libs.illegal_boundary_component",
+      "layer": "domain",
+      "dependencies": [
+        "services.validator.adapters"
+      ]
+    }
+  ]
+}

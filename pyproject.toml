@@ -32,9 +32,10 @@ dependencies = [
     "eaos-federation",
     "eaos-tenancy",
     "eaos-exchange",
-    "eaos-marketplace",  # Đã loại bỏ dòng trùng lặp ở đây
+    "eaos-marketplace",
     "eaos-intelligence",
     "eaos-civilization",
+    "eaos-platform-services", # <-- Đồng bộ hóa tên gói mới của platform_services
 ]
 
 [build-system]
@@ -69,7 +70,7 @@ workspace = { members = ["apps/api",
                          "packages/marketplace",
                          "packages/intelligence",
                          "packages/civilization",
-                         "platform_services"      # <-- SỬA DÒNG NÀY THÀNH PLATFORM_SERVICES
+                         "platform_services"      # <-- Đổi tên từ platform sang platform_services tránh xung đột thư viện chuẩn
                          ] }
 
 [dependency-groups]
@@ -92,7 +93,7 @@ line-length = 120
 fix = true
 show-fixes = true
 output-format = "concise"
-src = ["apps", "packages", "kernel", "engine", "tools"]
+src = ["apps", "packages", "kernel", "engine", "tools", "platform_services"]
 exclude = [".venv", "build", "dist", "generated"]
 
 [tool.ruff.lint]
@@ -129,7 +130,7 @@ exclude = [
 
 [tool.taskipy.tasks]
 doctor = "python tools/doctor/main.py"
-lint = "python -m ruff check . && python -m mypy apps/ kernel/ engine/ packages/ tools/ tests/"
+lint = "python -m ruff check . && python -m mypy apps/ kernel/ engine/ packages/ tools/ tests/ platform_services/"
 format = "python -m ruff format ."
 test = "python -m pytest tests/"
 run = "python -m kernel.runtime.main"
@@ -140,7 +141,7 @@ time-machine = "python -m apps.cli.main time-machine"
 twin = "python -m apps.cli.main twin"
 compile = "python -m apps.cli.main compile-spec"
 loop = "python -m apps.cli.main loop"
-dlm = "python -m apps.cli.main dlm" # <-- THÊM DÒNG NÀY
+dlm = "python -m apps.cli.main dlm"
 
 
 [tool.uv.sources]
@@ -165,4 +166,4 @@ eaos-exchange = { workspace = true }
 eaos-marketplace = { workspace = true }
 eaos-intelligence = { workspace = true }
 eaos-civilization = { workspace = true } 
-eaos-platform-services = { workspace = true } # <-- THÊM DÒNG NÀY
+eaos-platform-services = { workspace = true } # <-- Ánh xạ đúng tên gói mới

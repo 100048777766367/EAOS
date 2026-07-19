@@ -1,4 +1,4 @@
-from packages.memory.domain.entities import MemoryRecord
+from packages.memory.domain.entities import MemoryRecord  # Sửa đường dẫn sang entities
 from packages.memory.domain.ports import MemoryRepositoryPort
 
 
@@ -31,7 +31,9 @@ class InMemoryMemoryRepository(MemoryRepositoryPort):
                 results.append(record)
         return results
 
-    def vector_search(self, query_text: str, limit: int = 5) -> list[MemoryRecord]:
+    def vector_search(
+        self, query_text: str, limit: int = 5
+    ) -> list[MemoryRecord]:
         """Thuật toán Jaccard mô phỏng tìm kiếm Vector lọc nhiễu."""
         query_words = set(query_text.lower().split())
         scored_records = []
@@ -49,8 +51,14 @@ class InMemoryMemoryRepository(MemoryRepositoryPort):
 
             scored_records.append((similarity, record))
 
-        sorted_records = sorted(scored_records, key=lambda x: x[0], reverse=True)
-        return [record for score, record in sorted_records[:limit] if score >= 0.15]
+        sorted_records = sorted(
+            scored_records, key=lambda x: x[0], reverse=True
+        )
+        return [
+            record
+            for score, record in sorted_records[:limit]
+            if score >= 0.15
+        ]
 
     def list_all(self) -> list[MemoryRecord]:
         return list(self.long_term_memory.values())

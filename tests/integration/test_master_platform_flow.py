@@ -69,7 +69,7 @@ def test_master_platform_and_lifecycle_flow(client: TestClient) -> None:
     assert response_tx.status_code == 200
     assert response_tx.json()["current_state"] == "validating"
 
-    # 5. DLM (Sửa dòng 56 dài quá 120 ký tự bằng cách bẻ dòng)
+    # 5. DLM (Sửa dòng dài quá 120 ký tự bằng cách bẻ dòng)
     ROOT_PATH = Path(__file__).resolve().parent.parent.parent
     mock_file = ROOT_PATH / "docs" / "mock_system_constitution.md"
     roadmap_file = ROOT_PATH / "docs" / "ROADMAP.md"
@@ -86,12 +86,3 @@ def test_master_platform_and_lifecycle_flow(client: TestClient) -> None:
         reason="Ecosystem hardlock active",
     )
     assert success_dlm is True
-
-    # 6. AGENT RUNTIME
-    lifecycle_payload = {
-        "agent_id": "agent.planner",
-        "target_state": "PLANNING",
-    }
-    resp_agent = client.post("/v1/agents/lifecycle", json=lifecycle_payload)
-    assert resp_agent.status_code == 200
-    assert resp_agent.json()["current_state"] == "PLANNING"

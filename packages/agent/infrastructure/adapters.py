@@ -1,9 +1,10 @@
+
 from packages.agent.domain.models import AIAgent
 from packages.agent.domain.ports import AgentRegistryPort
 
 
 class InMemoryAgentRegistry(AgentRegistryPort):
-    """Adapter quản lý tiến trình AI Agent có giám sát chuyển dịch trạng thái."""
+    """Adapter quản lý tiến trình AI Agent có giám sát vòng đời."""
 
     def __init__(self) -> None:
         self._store: dict[str, AIAgent] = {}
@@ -43,10 +44,10 @@ class InMemoryAgentRegistry(AgentRegistryPort):
             raise ValueError("Lỗi: Đối tượng Agent rỗng.")
 
         old_state = agent.current_state
-        # GIA CỐ RUF005: Sử dụng toán tử unpacking thay vì cộng list
-        new_history = [*agent.lifecycle_history, target_state]
-        
-        # GIA CỐ E501: Bẻ dòng dictionary để dòng code dưới 88 ký tự
+        # Khắc phục RUF005: Sử dụng toán tử unpacking thay vì cộng list
+        new_history = [*list(agent.lifecycle_history), target_state]
+
+        # Khắc phục E501: Bẻ dòng để các dòng code dưới 88 ký tự
         updated_agent = agent.model_copy(
             update={
                 "current_state": target_state,
@@ -60,7 +61,6 @@ class InMemoryAgentRegistry(AgentRegistryPort):
             f"'{old_state}' ──► '{target_state}'"
         )
         self._transition_audit_log.append(log_msg)
-        print(log_msg)
 
         self.register(updated_agent)
         return updated_agent

@@ -35,10 +35,7 @@ class IngestLearningUseCase:
         lessons = [
             Lesson(
                 id="L-01",
-                takeaway=(
-                    "Không bao giờ để tầng Domain phụ thuộc vào "
-                    "Infrastructure."
-                ),
+                takeaway=("Không bao giờ để tầng Domain phụ thuộc vào Infrastructure."),
                 action_item="Sử dụng Ports & Adapters để đảo ngược phụ thuộc.",
             )
             for rc in report.root_causes
@@ -69,8 +66,7 @@ class IngestLearningUseCase:
             Heuristic(
                 id="H-01",
                 rule_of_thumb=(
-                    "Nếu lớp Domain có import sqlalchemy, "
-                    "chặn ngay lập tức."
+                    "Nếu lớp Domain có import sqlalchemy, chặn ngay lập tức."
                 ),
                 applicability="CI/CD Linter Checks",
             )

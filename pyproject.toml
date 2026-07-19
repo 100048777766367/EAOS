@@ -17,15 +17,25 @@ dependencies = [
     "eaos-api",
     "eaos-knowledge",
     "eaos-identity",
-    "eaos-evolution",  # <-- THÊM DÒNG NÀY
-    "eaos-reflection",  # <-- THÊM DÒNG NÀY
+    "eaos-evolution",
+    "eaos-reflection",
     "eaos-learning",
-    "eaos-prediction",  # <-- THÊM DÒNG NÀY
-    "eaos-simulation",  # <-- THÊM DÒNG NÀY
-    "eaos-self-rewrite",  # <-- THÊM DÒNG NÀY
-    "eaos-autonomous",  # <-- THÊM DÒNG NÀY
+    "eaos-prediction",
+    "eaos-simulation",
+    "eaos-self-rewrite",
+    "eaos-autonomous",
+    "eaos-capability",
+    "eaos-specification",
+    "eaos-workflow",
+    "eaos-agent",
+    "eaos-memory",
+    "eaos-federation",
+    "eaos-tenancy",
+    "eaos-exchange",
+    "eaos-marketplace",  # Đã loại bỏ dòng trùng lặp ở đây
+    "eaos-intelligence",
+    "eaos-civilization",
 ]
-
 
 [build-system]
 requires = ["hatchling>=1.28"]
@@ -47,8 +57,20 @@ workspace = { members = ["apps/api",
                          "packages/prediction",
                          "packages/simulation",
                          "packages/self_rewrite",
-                         "packages/autonomous"] } # <-- THÊM "packages/autonomous" VÀO ĐÂY
-
+                         "packages/autonomous",
+                         "packages/capability",
+                         "packages/specification",
+                         "packages/workflow",
+                         "packages/agent",
+                         "packages/memory",
+                         "packages/federation",
+                         "packages/tenancy", 
+                         "packages/exchange", 
+                         "packages/marketplace",
+                         "packages/intelligence",
+                         "packages/civilization",
+                         "platform_services"      # <-- SỬA DÒNG NÀY THÀNH PLATFORM_SERVICES
+                         ] }
 
 [dependency-groups]
 dev = [
@@ -66,7 +88,7 @@ dev = [
 
 [tool.ruff]
 target-version = "py314"
-line-length = 88
+line-length = 120
 fix = true
 show-fixes = true
 output-format = "concise"
@@ -111,9 +133,15 @@ lint = "python -m ruff check . && python -m mypy apps/ kernel/ engine/ packages/
 format = "python -m ruff format ."
 test = "python -m pytest tests/"
 run = "python -m kernel.runtime.main"
-validate = "python -m apps.cli.main validate" # <-- SỬA ĐÚNG DÒNG NÀY (Bỏ chữ architecture)
-graph = "python -m apps.cli.main graph" # <-- THÊM DÒNG NÀY
-metrics = "python -m apps.cli.main metrics" # <-- THÊM DÒNG NÀY
+validate = "python -m apps.cli.main validate"
+graph = "python -m apps.cli.main graph"
+metrics = "python -m apps.cli.main metrics"
+time-machine = "python -m apps.cli.main time-machine"
+twin = "python -m apps.cli.main twin"
+compile = "python -m apps.cli.main compile-spec"
+loop = "python -m apps.cli.main loop"
+dlm = "python -m apps.cli.main dlm" # <-- THÊM DÒNG NÀY
+
 
 [tool.uv.sources]
 eaos-api = { workspace = true }
@@ -121,8 +149,20 @@ eaos-knowledge = { workspace = true }
 eaos-identity = { workspace = true }
 eaos-evolution = { workspace = true }
 eaos-reflection = { workspace = true }
-eaos-learning = { workspace = true } # <-- THÊM DÒNG NÀY
-eaos-prediction = { workspace = true } # <-- THÊM DÒNG NÀY
-eaos-simulation = { workspace = true } # <-- THÊM DÒNG NÀY
-eaos-self-rewrite = { workspace = true } # <-- THÊM DÒNG NÀY
+eaos-learning = { workspace = true }
+eaos-prediction = { workspace = true }
+eaos-simulation = { workspace = true }
+eaos-self-rewrite = { workspace = true }
 eaos-autonomous = { workspace = true }
+eaos-capability = { workspace = true }
+eaos-specification = { workspace = true }
+eaos-workflow = { workspace = true }
+eaos-agent = { workspace = true }
+eaos-memory = { workspace = true } 
+eaos-federation = { workspace = true }
+eaos-tenancy = { workspace = true }
+eaos-exchange = { workspace = true }
+eaos-marketplace = { workspace = true }
+eaos-intelligence = { workspace = true }
+eaos-civilization = { workspace = true } 
+eaos-platform-services = { workspace = true } # <-- THÊM DÒNG NÀY

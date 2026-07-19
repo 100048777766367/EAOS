@@ -24,10 +24,8 @@ class DependencyGraphGenerator:
                 continue
             self._parse_file_imports(py_file)
 
-        # Sắp xếp và làm sạch đồ thị
-        self.graph = {
-            pkg: sorted(list(deps)) for pkg, deps in self.graph.items()
-        }
+        # Sắp xếp và làm sạch đồ thị (Sửa lỗi C414 bằng cách xóa list lồng trong sorted)
+        self.graph = {pkg: sorted(deps) for pkg, deps in self.graph.items()}
 
         # 2. Tạo thư mục output generated/
         self.output_dir.mkdir(parents=True, exist_ok=True)

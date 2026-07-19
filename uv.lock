@@ -8,17 +8,29 @@ resolution-markers = [
 
 [manifest]
 members = [
+    "eaos-agent",
     "eaos-api",
     "eaos-autonomous",
+    "eaos-capability",
+    "eaos-civilization",
     "eaos-evolution",
+    "eaos-exchange",
+    "eaos-federation",
     "eaos-identity",
+    "eaos-intelligence",
     "eaos-knowledge",
     "eaos-learning",
+    "eaos-marketplace",
+    "eaos-memory",
     "eaos-monorepo",
+    "eaos-platform-services",
     "eaos-prediction",
     "eaos-reflection",
     "eaos-self-rewrite",
     "eaos-simulation",
+    "eaos-specification",
+    "eaos-tenancy",
+    "eaos-workflow",
 ]
 
 [[package]]
@@ -240,6 +252,17 @@ wheels = [
 ]
 
 [[package]]
+name = "eaos-agent"
+version = "0.1.0"
+source = { editable = "packages/agent" }
+dependencies = [
+    { name = "pydantic" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "pydantic", specifier = ">=2.13.4" }]
+
+[[package]]
 name = "eaos-api"
 version = "0.1.0"
 source = { editable = "apps/api" }
@@ -268,9 +291,57 @@ dependencies = [
 requires-dist = [{ name = "pydantic", specifier = ">=2.13.4" }]
 
 [[package]]
+name = "eaos-capability"
+version = "0.1.0"
+source = { editable = "packages/capability" }
+dependencies = [
+    { name = "pydantic" },
+    { name = "pyyaml" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "pydantic", specifier = ">=2.13.4" },
+    { name = "pyyaml", specifier = ">=6.0.3" },
+]
+
+[[package]]
+name = "eaos-civilization"
+version = "0.1.0"
+source = { editable = "packages/civilization" }
+dependencies = [
+    { name = "pydantic" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "pydantic", specifier = ">=2.13.4" }]
+
+[[package]]
 name = "eaos-evolution"
 version = "0.1.0"
 source = { editable = "packages/evolution" }
+dependencies = [
+    { name = "pydantic" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "pydantic", specifier = ">=2.13.4" }]
+
+[[package]]
+name = "eaos-exchange"
+version = "0.1.0"
+source = { editable = "packages/exchange" }
+dependencies = [
+    { name = "pydantic" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "pydantic", specifier = ">=2.13.4" }]
+
+[[package]]
+name = "eaos-federation"
+version = "0.1.0"
+source = { editable = "packages/federation" }
 dependencies = [
     { name = "pydantic" },
 ]
@@ -296,6 +367,17 @@ requires-dist = [
     { name = "pydantic", specifier = ">=2.13.4" },
     { name = "sqlalchemy", specifier = ">=2.0.0" },
 ]
+
+[[package]]
+name = "eaos-intelligence"
+version = "0.1.0"
+source = { editable = "packages/intelligence" }
+dependencies = [
+    { name = "pydantic" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "pydantic", specifier = ">=2.13.4" }]
 
 [[package]]
 name = "eaos-knowledge"
@@ -326,20 +408,53 @@ dependencies = [
 requires-dist = [{ name = "pydantic", specifier = ">=2.13.4" }]
 
 [[package]]
+name = "eaos-marketplace"
+version = "0.1.0"
+source = { editable = "packages/marketplace" }
+dependencies = [
+    { name = "pydantic" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "pydantic", specifier = ">=2.13.4" }]
+
+[[package]]
+name = "eaos-memory"
+version = "0.1.0"
+source = { editable = "packages/memory" }
+dependencies = [
+    { name = "pydantic" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "pydantic", specifier = ">=2.13.4" }]
+
+[[package]]
 name = "eaos-monorepo"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "eaos-agent" },
     { name = "eaos-api" },
     { name = "eaos-autonomous" },
+    { name = "eaos-capability" },
+    { name = "eaos-civilization" },
     { name = "eaos-evolution" },
+    { name = "eaos-exchange" },
+    { name = "eaos-federation" },
     { name = "eaos-identity" },
+    { name = "eaos-intelligence" },
     { name = "eaos-knowledge" },
     { name = "eaos-learning" },
+    { name = "eaos-marketplace" },
+    { name = "eaos-memory" },
     { name = "eaos-prediction" },
     { name = "eaos-reflection" },
     { name = "eaos-self-rewrite" },
     { name = "eaos-simulation" },
+    { name = "eaos-specification" },
+    { name = "eaos-tenancy" },
+    { name = "eaos-workflow" },
     { name = "fastapi" },
     { name = "pydantic" },
     { name = "rich" },
@@ -363,16 +478,27 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "eaos-agent", editable = "packages/agent" },
     { name = "eaos-api", editable = "apps/api" },
     { name = "eaos-autonomous", editable = "packages/autonomous" },
+    { name = "eaos-capability", editable = "packages/capability" },
+    { name = "eaos-civilization", editable = "packages/civilization" },
     { name = "eaos-evolution", editable = "packages/evolution" },
+    { name = "eaos-exchange", editable = "packages/exchange" },
+    { name = "eaos-federation", editable = "packages/federation" },
     { name = "eaos-identity", editable = "packages/identity" },
+    { name = "eaos-intelligence", editable = "packages/intelligence" },
     { name = "eaos-knowledge", editable = "packages/knowledge" },
     { name = "eaos-learning", editable = "packages/learning" },
+    { name = "eaos-marketplace", editable = "packages/marketplace" },
+    { name = "eaos-memory", editable = "packages/memory" },
     { name = "eaos-prediction", editable = "packages/prediction" },
     { name = "eaos-reflection", editable = "packages/reflection" },
     { name = "eaos-self-rewrite", editable = "packages/self_rewrite" },
     { name = "eaos-simulation", editable = "packages/simulation" },
+    { name = "eaos-specification", editable = "packages/specification" },
+    { name = "eaos-tenancy", editable = "packages/tenancy" },
+    { name = "eaos-workflow", editable = "packages/workflow" },
     { name = "fastapi", specifier = ">=0.139.0" },
     { name = "pydantic", specifier = ">=2.13.4" },
     { name = "rich", specifier = ">=14.0.0" },
@@ -393,6 +519,17 @@ dev = [
     { name = "ruff", specifier = ">=0.15.21" },
     { name = "taskipy", specifier = ">=1.14.1" },
 ]
+
+[[package]]
+name = "eaos-platform-services"
+version = "0.1.0"
+source = { editable = "platform_services" }
+dependencies = [
+    { name = "pydantic" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "pydantic", specifier = ">=2.13.4" }]
 
 [[package]]
 name = "eaos-prediction"
@@ -437,6 +574,47 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [{ name = "pydantic", specifier = ">=2.13.4" }]
+
+[[package]]
+name = "eaos-specification"
+version = "0.1.0"
+source = { editable = "packages/specification" }
+dependencies = [
+    { name = "pydantic" },
+    { name = "pyyaml" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "pydantic", specifier = ">=2.13.4" },
+    { name = "pyyaml", specifier = ">=6.0.3" },
+]
+
+[[package]]
+name = "eaos-tenancy"
+version = "0.1.0"
+source = { editable = "packages/tenancy" }
+dependencies = [
+    { name = "pydantic" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "pydantic", specifier = ">=2.13.4" }]
+
+[[package]]
+name = "eaos-workflow"
+version = "0.1.0"
+source = { editable = "packages/workflow" }
+dependencies = [
+    { name = "pydantic" },
+    { name = "pyyaml" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "pydantic", specifier = ">=2.13.4" },
+    { name = "pyyaml", specifier = ">=6.0.3" },
+]
 
 [[package]]
 name = "email-validator"

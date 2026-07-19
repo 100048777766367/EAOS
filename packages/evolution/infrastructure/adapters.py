@@ -10,6 +10,8 @@ from packages.evolution.domain.models import (
     EvolutionObject,
     Metadata,
     Provenance,
+    RollbackSnapshot,
+    SemanticVersion,
 )
 from packages.evolution.domain.ports import EvolutionRepository
 
@@ -23,11 +25,11 @@ class PostgresEvolutionModel(Base):
 
     id: Mapped[str] = mapped_column(String, primary_key=True)
     name: Mapped[str] = mapped_column(String, nullable=False)
+    version_json: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False)
     payload: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False)
     metadata_json: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False)
     provenance_json: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False)
     evidences_json: Mapped[list[dict[str, Any]]] = mapped_column(JSONB, nullable=False)
-    version: Mapped[int] = mapped_column(nullable=False, default=1)
     parent_id: Mapped[str | None] = mapped_column(String, nullable=True)
 
 
@@ -36,10 +38,11 @@ class PostgresEvolutionRepository(EvolutionRepository):
 
     def __init__(self, db_url: str) -> None:
         self.engine = create_engine(db_url)
-        Base.metadata.create_all(self.engine)  # Sửa lỗi gõ trùng metadata
+        Base.metadata.create_all(self.engine)
         self.SessionLocal = sessionmaker(
             autocommit=False, autoflush=False, bind=self.engine
         )
+        self._snapshots: dict[str, RollbackSnapshot] = {}
 
     def save(self, obj: EvolutionObject) -> EvolutionObject:
         db_session = self.SessionLocal()
@@ -47,6 +50,7 @@ class PostgresEvolutionRepository(EvolutionRepository):
         metadata_dict = obj.metadata.model_dump()
         provenance_dict = obj.provenance.model_dump()
         provenance_dict["timestamp"] = obj.provenance.timestamp.isoformat()
+        version_dict = obj.version.model_dump()
 
         evidences_list = []
         for ev in obj.evidences:
@@ -55,16 +59,15 @@ class PostgresEvolutionRepository(EvolutionRepository):
             evidences_list.append(ev_dict)
 
         parent_id = obj.provenance.parent_id
-        version = obj.payload.get("__version", 1)
 
         db_model = PostgresEvolutionModel(
             id=obj.id,
             name=obj.name,
+            version_json=version_dict,
             payload=obj.payload,
             metadata_json=metadata_dict,
             provenance_json=provenance_dict,
             evidences_json=evidences_list,
-            version=version,
             parent_id=parent_id,
         )
         try:
@@ -85,6 +88,7 @@ class PostgresEvolutionRepository(EvolutionRepository):
             if not db_model:
                 return None
 
+            version = SemanticVersion(**db_model.version_json)
             meta_data = Metadata(**db_model.metadata_json)
             prov_data = db_model.provenance_json
             prov_data["timestamp"] = datetime.fromisoformat(prov_data["timestamp"])
@@ -98,6 +102,7 @@ class PostgresEvolutionRepository(EvolutionRepository):
             return EvolutionObject(
                 id=db_model.id,
                 name=db_model.name,
+                version=version,
                 payload=db_model.payload,
                 metadata=meta_data,
                 provenance=provenance,
@@ -107,7 +112,6 @@ class PostgresEvolutionRepository(EvolutionRepository):
             db_session.close()
 
     def get_lineage(self, start_id: str) -> list[str]:
-        """Truy vết chuỗi gia phả (lineage tree) đi ngược về nút gốc."""
         db_session = self.SessionLocal()
         lineage = []
         curr_id: str | None = start_id
@@ -126,12 +130,20 @@ class PostgresEvolutionRepository(EvolutionRepository):
         finally:
             db_session.close()
 
+    def save_snapshot(self, snapshot: RollbackSnapshot) -> RollbackSnapshot:
+        self._snapshots[snapshot.snapshot_id] = snapshot
+        return snapshot
+
+    def find_snapshot(self, snapshot_id: str) -> RollbackSnapshot | None:
+        return self._snapshots.get(snapshot_id)
+
 
 class InMemoryEvolutionRepository(EvolutionRepository):
-    """Bộ lưu trữ tiến hóa tạm thời trong bộ nhớ đệm RAM phục vụ testing."""
+    """Adapter bộ nhớ RAM phục vụ testing."""
 
     def __init__(self) -> None:
         self._store: dict[str, EvolutionObject] = {}
+        self._snapshots: dict[str, RollbackSnapshot] = {}
 
     def save(self, obj: EvolutionObject) -> EvolutionObject:
         self._store[obj.id] = obj
@@ -150,3 +162,10 @@ class InMemoryEvolutionRepository(EvolutionRepository):
             lineage.append(curr_id)
             curr_id = obj.provenance.parent_id
         return lineage
+
+    def save_snapshot(self, snapshot: RollbackSnapshot) -> RollbackSnapshot:
+        self._snapshots[snapshot.snapshot_id] = snapshot
+        return snapshot
+
+    def find_snapshot(self, snapshot_id: str) -> RollbackSnapshot | None:
+        return self._snapshots.get(snapshot_id)

@@ -4,6 +4,20 @@ from typing import Any
 from pydantic import BaseModel, ConfigDict, Field
 
 
+class SemanticVersion(BaseModel):
+    """Value Object định nghĩa phiên bản bất biến (Immutable Versioning)."""
+
+    major: int = Field(default=1)
+    minor: int = Field(default=0)
+    patch: int = Field(default=0)
+    revision: str = Field(..., description="Mã băm revision duy nhất")
+
+    model_config = ConfigDict(frozen=True)
+
+    def to_string(self) -> str:
+        return f"v{self.major}.{self.minor}.{self.patch}-{self.revision[:6]}"
+
+
 class Metadata(BaseModel):
     """Value Object quản lý thuộc tính định danh môi trường vận hành."""
 
@@ -37,17 +51,31 @@ class Evidence(BaseModel):
     model_config = ConfigDict(frozen=True)
 
 
+class RollbackSnapshot(BaseModel):
+    """Snapshot bản sao lưu trữ trạng thái trước khi di chuyển (Pre-Migration)."""
+
+    snapshot_id: str
+    target_id: str
+    original_payload: dict[str, Any]
+    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
+
+    model_config = ConfigDict(frozen=True)
+
+
 class EvolutionObject(BaseModel):
-    """Aggregate Root đại diện cho đối tượng tiến hóa."""
+    """Aggregate Root đại diện cho đối tượng tiến hóa bất biến."""
 
     id: str = Field(..., description="Mã đối tượng tiến hóa")
     name: str = Field(..., description="Tên đối tượng hệ thống")
-    payload: dict[str, Any] = Field(..., description="Cấu trúc dữ liệu hiện tại")
+    version: SemanticVersion = Field(..., description="Phiên bản bất biến")
+    payload: dict[str, Any] = Field(..., description="Cấu trúc dữ liệu")
     metadata: Metadata = Field(default_factory=Metadata)
     provenance: Provenance
     evidences: list[Evidence] = Field(default_factory=list)
+    children_ids: list[str] = Field(default_factory=list)
+    lineage_path: list[str] = Field(default_factory=list)
 
-    model_config = ConfigDict(arbitrary_types_allowed=True)
+    model_config = ConfigDict(frozen=True)
 
 
 def check_backwards_compatibility(
@@ -56,8 +84,6 @@ def check_backwards_compatibility(
     """Kiểm tra tính tương thích ngược cấu trúc dữ liệu mới so với dữ liệu cũ."""
     errors = []
     for key, old_val in old_payload.items():
-        if key == "__version":
-            continue
         if key not in new_payload:
             errors.append(f"Lỗi tương thích ngược: Khóa '{key}' bị thiếu.")
         else:

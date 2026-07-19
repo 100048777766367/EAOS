@@ -1,0 +1,16 @@
+id: capability.knowledge
+name: Knowledge
+version: 1.0.0
+owner: Architecture Council
+status: active
+description: Enterprise Architecture Knowledge Base Capability
+dependencies: []
+policies:
+  - knowledge_policy.yaml
+contracts:
+  - id: rest-api
+    type: REST
+    definition_path: apps/api/openapi.json
+events:
+  - ArtifactCreated
+  - ArtifactEvolved

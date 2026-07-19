@@ -1,0 +1,21 @@
+id: spec.invoice
+name: Invoice Specification
+version: 1.0.0
+fields:
+  - name: id
+    type: str
+    required: true
+  - name: amount
+    type: float
+    required: true
+  - name: customer_id
+    type: str
+    required: true
+policies:
+  - billing_policy
+rules:
+  - id: RULE-INV-01
+    expression: amount > 0
+    error_message: Số tiền hóa đơn bắt buộc phải lớn hơn 0.
+workflows:
+  - invoice_approval

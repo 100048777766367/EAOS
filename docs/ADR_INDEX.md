@@ -537,6 +537,7 @@ Every ADR entry records:
 | ADR-003 | Core Documentation System | Documentation | Accepted |
 | ADR-004 | EAOS Documentation Meta-Architecture | Documentation | Accepted |
 | ADR-005 | Architecture as Code | Architecture | Accepted |
+| ADR-006 | Executable Governance Protocol | Governance | Accepted | # <-- THÊM DÒNG NÀY
 
 These ADRs establish the governance baseline of EAOS.
 

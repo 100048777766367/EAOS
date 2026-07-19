@@ -44,11 +44,8 @@ class SemanticLayer:
             ),
         ]
         if obj.provenance.parent_id:
-            parent_uri = (
-                f"<https://eaos.internal/objects/{obj.provenance.parent_id}>"
-            )
+            parent_uri = f"<https://eaos.internal/objects/{obj.provenance.parent_id}>"
             rdf_triples.append(
-                f"{subject} <https://eaos.internal/vocab#hasParent> "
-                f"{parent_uri} ."
+                f"{subject} <https://eaos.internal/vocab#hasParent> {parent_uri} ."
             )
         return rdf_triples

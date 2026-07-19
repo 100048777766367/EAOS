@@ -79,10 +79,7 @@ class RunPredictionUseCase:
             risks.append(
                 Risk(
                     id="RSK-01",
-                    title=(
-                        "Nguy cơ sụt giảm chất lượng chỉ số "
-                        f"{payload.metric_name}"
-                    ),
+                    title=(f"Nguy cơ sụt giảm chất lượng chỉ số {payload.metric_name}"),
                     probability=0.85,
                     timeframe_days=90,
                     severity="HIGH" if is_latency else "MEDIUM",

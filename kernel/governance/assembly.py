@@ -95,8 +95,4 @@ class ArchitectureAssembly:
             return []
 
         with open(self.ledger_path, encoding="utf-8") as f:
-            return [
-                json.loads(line.strip())
-                for line in f
-                if line.strip()
-            ]
+            return [json.loads(line.strip()) for line in f if line.strip()]

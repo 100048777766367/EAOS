@@ -1,19 +1,44 @@
-﻿name: CI
+﻿name: EAOS Platform Architecture CI
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
-  validate:
+  quality-gate:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # Đảm bảo tương thích ngược trên nhiều phiên bản Python
+        python-version: ["3.12", "3.13", "3.14"]
+
     steps:
-      - uses: actions/checkout@v4
-      - name: Install uv
-        uses: astral-sh/setup-uv@v3
-      - name: Sync
-        run: uv sync
-      - name: Lint
-        run: uv run ruff check .
-      - name: Type Check
-        run: uv run mypy apps/ kernel/ engine/ packages/ tools/ tests/
-      - name: Test
-        run: uv run pytest tests/
+    - uses: actions/checkout@v4
+
+    - name: Install Astral uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: "latest"
+
+    - name: Set up Python ${{ matrix.python-version }}
+      run: uv python pin ${{ matrix.python-version }}
+
+    - name: Sync dependencies with locked versions
+      run: uv sync
+
+    - name: Run Ruff Linter & Formatting Checks
+      run: uv run taskipy lint
+
+    - name: Run Pytest Suite with Coverage Verification
+      run: uv run taskipy test
+
+    - name: Run Executable Architecture Linter
+      run: uv run taskipy validate
+
+    - name: Run Automatic Architecture Compiler Dry-Run
+      run: uv run taskipy compile
+
+    - name: Run Digital Twin & Simulation Dry-Run
+      run: uv run taskipy twin

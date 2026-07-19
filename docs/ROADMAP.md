@@ -1,3 +1,11 @@
+---
+title: Roadmap
+status: SUSPENDED
+reason_suspended: Evolving to Phase 5 in progress
+last_updated: 2026-07-19
+fixity_hash: 8fe8fefb7f2d2d0a3680473f1da2dbbbd443e86ae649c73abff1fdde69f7f306
+---
+
 # Part 1 — Front Matter
 
 ## Document Metadata

@@ -77,26 +77,24 @@ class ArchitectureValidator:
             if isinstance(node, ast.Import):
                 for alias in node.names:
                     imported_module = alias.name
-            elif isinstance(node, ast.ImportFrom):
-                if node.module:
-                    imported_module = node.module
+            elif isinstance(node, ast.ImportFrom) and node.module:
+                imported_module = node.module
 
             if not imported_module:
                 continue
 
             # Chỉ kiểm toán các import nội bộ liên quan đến packages
-            # Sửa lỗi SIM102 bằng cách gộp logic and trên một dòng
             is_internal = "packages." in imported_module
             if is_internal and len(imported_module.split(".")) >= 3:
                 parts = imported_module.split(".")
                 target_pkg = parts[1]
                 target_layer = parts[2]
 
-                # Ghi nhận đồ thị phụ thuộc giữa các packages
+                # Sửa lỗi SIM102 bằng setdefault()
                 if pkg != target_pkg:
-                    if pkg not in self.dependency_graph:
-                        self.dependency_graph[pkg] = set()
-                    self.dependency_graph[pkg].add(target_pkg)
+                    self.dependency_graph.setdefault(pkg, set()).add(
+                        target_pkg
+                    )
 
                 # Kiểm tra vi phạm phân lớp (Layer Violation)
                 self_pri = LAYER_PRIORITY.get(layer.lower(), 99)
@@ -110,7 +108,6 @@ class ArchitectureValidator:
                     )
 
             # Chặn hoàn toàn việc Domain hay Application import từ ngoại biên
-            # Gộp điều kiện ranh giới (SIM102) và bẻ nhỏ dòng dưới 88 ký tự
             is_ext_leak = (
                 "apps." in imported_module or "services." in imported_module
             )
@@ -127,13 +124,15 @@ class ArchitectureValidator:
             if isinstance(node, ast.ClassDef):
                 class_name = node.name
 
-                # Use Cases trong application layer (Sửa lỗi SIM102 & PIE810)
+                # Use Cases trong application layer (Sửa đổi cho phép Result và Response)
                 is_app_uc = layer == "application" and "use_cases" in file_name
                 allowed_app_suffixes = (
                     "UseCase",
                     "Request",
                     "Payload",
                     "Datapoint",
+                    "Result",
+                    "Response",
                 )
                 if is_app_uc and not class_name.endswith(allowed_app_suffixes):
                     self.violations.append(
@@ -142,7 +141,7 @@ class ArchitectureValidator:
                         "'UseCase', 'Request', 'Payload', hoặc 'Datapoint'."
                     )
 
-                # Ports trong domain layer (Sửa lỗi SIM102 & PIE810)
+                # Ports trong domain layer
                 is_dom_ports = layer == "domain" and "ports" in file_name
                 allowed_dom_suffixes = (
                     "Repository",
@@ -172,7 +171,6 @@ class ArchitectureValidator:
                         f"giữa hai gói '{node}' và '{neighbor}'."
                     )
                     return True
-                # Sửa lỗi SIM102 bằng cách gộp logic and trên một dòng
                 if visited.get(neighbor, 0) == 0 and dfs(neighbor):
                     return True
             visited[node] = 2

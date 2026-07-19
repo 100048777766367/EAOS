@@ -11,6 +11,7 @@ from packages.identity.domain.ports import UserRepository
 class Base(DeclarativeBase):
     pass
 
+
 class PostgresUserModel(Base):
     __tablename__ = "identity_users"
 
@@ -20,6 +21,7 @@ class PostgresUserModel(Base):
     hashed_password: Mapped[str] = mapped_column(String, nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+
 
 # Repository giữ nguyên logic như bạn đã viết
 

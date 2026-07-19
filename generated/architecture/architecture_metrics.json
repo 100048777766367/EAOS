@@ -1,0 +1,225 @@
+{
+  "architecture_score": 83,
+  "packages": {
+    "analytics": {
+      "afferent_coupling_ca": 0,
+      "efferent_coupling_ce": 0,
+      "instability_i": 0.0,
+      "abstractness_a": 0.0,
+      "distance_d": 0.0,
+      "classes": {
+        "abstract": 0,
+        "concrete": 0
+      }
+    },
+    "application": {
+      "afferent_coupling_ca": 0,
+      "efferent_coupling_ce": 0,
+      "instability_i": 0.0,
+      "abstractness_a": 0.0,
+      "distance_d": 0.0,
+      "classes": {
+        "abstract": 0,
+        "concrete": 0
+      }
+    },
+    "automation": {
+      "afferent_coupling_ca": 0,
+      "efferent_coupling_ce": 0,
+      "instability_i": 0.0,
+      "abstractness_a": 0.0,
+      "distance_d": 0.0,
+      "classes": {
+        "abstract": 0,
+        "concrete": 0
+      }
+    },
+    "autonomous": {
+      "afferent_coupling_ca": 0,
+      "efferent_coupling_ce": 0,
+      "instability_i": 0.0,
+      "abstractness_a": 0.1667,
+      "distance_d": 0.8333,
+      "classes": {
+        "abstract": 1,
+        "concrete": 5
+      }
+    },
+    "content": {
+      "afferent_coupling_ca": 0,
+      "efferent_coupling_ce": 0,
+      "instability_i": 0.0,
+      "abstractness_a": 0.0,
+      "distance_d": 0.0,
+      "classes": {
+        "abstract": 0,
+        "concrete": 0
+      }
+    },
+    "domain": {
+      "afferent_coupling_ca": 0,
+      "efferent_coupling_ce": 0,
+      "instability_i": 0.0,
+      "abstractness_a": 0.0,
+      "distance_d": 0.0,
+      "classes": {
+        "abstract": 0,
+        "concrete": 0
+      }
+    },
+    "evolution": {
+      "afferent_coupling_ca": 0,
+      "efferent_coupling_ce": 0,
+      "instability_i": 0.0,
+      "abstractness_a": 0.0909,
+      "distance_d": 0.9091,
+      "classes": {
+        "abstract": 2,
+        "concrete": 20
+      }
+    },
+    "finance": {
+      "afferent_coupling_ca": 0,
+      "efferent_coupling_ce": 0,
+      "instability_i": 0.0,
+      "abstractness_a": 0.0,
+      "distance_d": 0.0,
+      "classes": {
+        "abstract": 0,
+        "concrete": 0
+      }
+    },
+    "identity": {
+      "afferent_coupling_ca": 0,
+      "efferent_coupling_ce": 0,
+      "instability_i": 0.0,
+      "abstractness_a": 0.1429,
+      "distance_d": 0.8571,
+      "classes": {
+        "abstract": 1,
+        "concrete": 6
+      }
+    },
+    "infrastructure": {
+      "afferent_coupling_ca": 0,
+      "efferent_coupling_ce": 0,
+      "instability_i": 0.0,
+      "abstractness_a": 0.0,
+      "distance_d": 0.0,
+      "classes": {
+        "abstract": 0,
+        "concrete": 0
+      }
+    },
+    "integration": {
+      "afferent_coupling_ca": 0,
+      "efferent_coupling_ce": 0,
+      "instability_i": 0.0,
+      "abstractness_a": 0.0,
+      "distance_d": 0.0,
+      "classes": {
+        "abstract": 0,
+        "concrete": 0
+      }
+    },
+    "knowledge": {
+      "afferent_coupling_ca": 0,
+      "efferent_coupling_ce": 0,
+      "instability_i": 0.0,
+      "abstractness_a": 0.0714,
+      "distance_d": 0.9286,
+      "classes": {
+        "abstract": 1,
+        "concrete": 13
+      }
+    },
+    "learning": {
+      "afferent_coupling_ca": 0,
+      "efferent_coupling_ce": 1,
+      "instability_i": 1.0,
+      "abstractness_a": 0.125,
+      "distance_d": 0.125,
+      "classes": {
+        "abstract": 1,
+        "concrete": 7
+      }
+    },
+    "prediction": {
+      "afferent_coupling_ca": 0,
+      "efferent_coupling_ce": 0,
+      "instability_i": 0.0,
+      "abstractness_a": 0.1111,
+      "distance_d": 0.8889,
+      "classes": {
+        "abstract": 1,
+        "concrete": 8
+      }
+    },
+    "reflection": {
+      "afferent_coupling_ca": 1,
+      "efferent_coupling_ce": 0,
+      "instability_i": 0.0,
+      "abstractness_a": 0.1667,
+      "distance_d": 0.8333,
+      "classes": {
+        "abstract": 1,
+        "concrete": 5
+      }
+    },
+    "security": {
+      "afferent_coupling_ca": 0,
+      "efferent_coupling_ce": 0,
+      "instability_i": 0.0,
+      "abstractness_a": 0.0,
+      "distance_d": 0.0,
+      "classes": {
+        "abstract": 0,
+        "concrete": 0
+      }
+    },
+    "self_rewrite": {
+      "afferent_coupling_ca": 0,
+      "efferent_coupling_ce": 0,
+      "instability_i": 0.0,
+      "abstractness_a": 0.125,
+      "distance_d": 0.875,
+      "classes": {
+        "abstract": 1,
+        "concrete": 7
+      }
+    },
+    "shared": {
+      "afferent_coupling_ca": 0,
+      "efferent_coupling_ce": 0,
+      "instability_i": 0.0,
+      "abstractness_a": 0.0,
+      "distance_d": 0.0,
+      "classes": {
+        "abstract": 0,
+        "concrete": 0
+      }
+    },
+    "simulation": {
+      "afferent_coupling_ca": 0,
+      "efferent_coupling_ce": 0,
+      "instability_i": 0.0,
+      "abstractness_a": 0.125,
+      "distance_d": 0.875,
+      "classes": {
+        "abstract": 1,
+        "concrete": 7
+      }
+    },
+    "workflow": {
+      "afferent_coupling_ca": 0,
+      "efferent_coupling_ce": 0,
+      "instability_i": 0.0,
+      "abstractness_a": 0.0,
+      "distance_d": 0.0,
+      "classes": {
+        "abstract": 0,
+        "concrete": 0
+      }
+    }
+  }
+}

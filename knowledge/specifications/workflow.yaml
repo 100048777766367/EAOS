@@ -1,0 +1,24 @@
+id: workflow.invoice_approval
+name: Invoice Approval Workflow
+initial_state: drafted
+states:
+  - name: drafted
+    transitions:
+      - trigger: submit
+        target: validating
+  - name: validating
+    transitions:
+      - trigger: fail_validation
+        target: rejected
+      - trigger: pass_validation
+        target: manager_reviewing
+  - name: manager_reviewing
+    transitions:
+      - trigger: approve
+        target: approved
+      - trigger: reject
+        target: rejected
+  - name: approved
+    transitions: []
+  - name: rejected
+    transitions: []

@@ -7,6 +7,7 @@ def check_command(cmd: str) -> bool:
     """Kiểm tra CLI command."""
     return shutil.which(cmd) is not None
 
+
 def check_docker_container(container_name: str) -> bool:
     """Kiểm tra container Docker tương ứng."""
     try:
@@ -21,17 +22,18 @@ def check_docker_container(container_name: str) -> bool:
             ],
             capture_output=True,
             text=True,
-            check=True
+            check=True,
         )
         return container_name in result.stdout
     except Exception:
         return False
 
+
 def run_diagnostics() -> int:
     print("==========================================")
     print("      EAOS ENVIRONMENT HEALTH CHECK       ")
     print("==========================================")
-    
+
     requirements: dict[str, bool] = {
         "Python Runtime": check_command("python"),
         "uv (Package Manager)": check_command("uv"),
@@ -50,10 +52,11 @@ def run_diagnostics() -> int:
         print(f"{container:<25} {status}")
 
     print("==========================================")
-    
+
     if not (requirements["Python Runtime"] and requirements["uv (Package Manager)"]):
         return 1
     return 0
+
 
 if __name__ == "__main__":
     sys.exit(run_diagnostics())

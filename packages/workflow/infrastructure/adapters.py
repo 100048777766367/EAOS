@@ -1,6 +1,7 @@
-import yaml
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
+
+import yaml
 
 from packages.workflow.domain.models import (
     State,
@@ -26,7 +27,7 @@ class InMemoryWorkflowRegistry(WorkflowRegistryPort):
 
     def find_definition_by_id(
         self, workflow_id: str
-    ) -> Optional[WorkflowDefinition]:
+    ) -> WorkflowDefinition | None:
         return self._definitions.get(workflow_id)
 
     def list_definitions(self) -> list[WorkflowDefinition]:
@@ -36,7 +37,7 @@ class InMemoryWorkflowRegistry(WorkflowRegistryPort):
         self._instances[instance.instance_id] = instance
         return instance
 
-    def find_instance_by_id(self, instance_id: str) -> Optional[WorkflowInstance]:
+    def find_instance_by_id(self, instance_id: str) -> WorkflowInstance | None:
         return self._instances.get(instance_id)
 
     def load_from_yaml(self, file_path: Path) -> WorkflowDefinition:

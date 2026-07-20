@@ -105,7 +105,6 @@ class RunAutonomousLoopUseCase:
             ProposeEvolutionRequest,
             ProposeEvolutionUseCase,
         )
-        from packages.evolution.domain.governance import EvolutionGovernanceCouncil
         evolution_repo = self.services["evolution_repo"]
         evolve_uc = MigrateEvolutionUseCase(evolution_repo)
         evo_council = self.services["evo_council"]

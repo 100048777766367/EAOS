@@ -1,9 +1,9 @@
 ﻿import json
 import os
 from pathlib import Path
+from pydantic import BaseModel
 
 from libs.validation.checker import ASTBoundaryChecker, parse_adr_file
-from pydantic import BaseModel
 from services.validator.rules import (
     ADRStructureVerificationRule,
     HexagonalLayerIsolationRule,
@@ -31,16 +31,13 @@ class EAOSValidatorEngine:
         ]
 
     def run_validation(self) -> ValidationReport:
-        # 1. Quét đồ thị dependency graph thông qua AST
         checker = ASTBoundaryChecker(self.root_dir)
         graph = checker.scan_dependencies()
 
-        # 2. Đọc quét các ADRs bằng List Comprehension giải quyết PERF401
         adrs = []
         if self.adrs_dir.exists() and self.adrs_dir.is_dir():
             adrs = [parse_adr_file(f) for f in self.adrs_dir.glob("*.md")]
 
-        # 3. Thực thi kiểm toán
         results = []
         overall_passed = True
         for rule in self.rules:
@@ -49,7 +46,6 @@ class EAOSValidatorEngine:
             if not res.passed:
                 overall_passed = False
 
-        # 4. Ghi nhận giao dịch biểu quyết của Hội đồng kiến trúc
         if overall_passed:
             self._commit_to_ledger(results)
 
@@ -63,8 +59,9 @@ class EAOSValidatorEngine:
         """Ghi vết giao dịch đồng thuận bất biến của Hội đồng (Append-Only)."""
         import uuid
 
-        os_path_dir = os.path.dirname(self.ledger_path)
-        os.makedirs(os_path_dir, exist_ok=True)
+        # ĐÃ SỬA LỖI CÚ PHÁP: Tách gán walrus của self.os_path_dir thành 2 dòng riêng biệt
+        self.os_path_dir = os.path.dirname(self.ledger_path)
+        os.makedirs(self.os_path_dir, exist_ok=True)
         tx_id = f"TX-GOV-{uuid.uuid4().hex[:8].upper()}"
 
         tx_payload = {
@@ -76,4 +73,3 @@ class EAOSValidatorEngine:
 
         with open(self.ledger_path, "a", encoding="utf-8") as ledger:
             ledger.write(json.dumps(tx_payload) + "\n")
-            

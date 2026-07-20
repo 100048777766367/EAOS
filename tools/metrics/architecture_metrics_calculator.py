@@ -52,13 +52,12 @@ class ArchitectureMetricsCalculator:
                 abs_count / total_classes if total_classes > 0 else 0.0
             )
 
-            # Sửa lỗi SIM108 của Ruff bằng toán tử 3 ngôi hiện đại
-            distance = (
-                0.0
-                if total_classes == 0 and (ca + ce) == 0
-                else abs(abstractness + instability - 1.0)
-            )
-
+            # Gói trống được coi là đạt chuẩn (D=0.0) tránh sụt điểm
+            if total_classes == 0 and (ca + ce) == 0:
+                distance = 0.0
+            else:
+                distance = abs(abstractness + instability - 1.0)
+                
             total_distance += distance
 
             self.metrics[pkg] = {

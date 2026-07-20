@@ -1,7 +1,6 @@
 ﻿import hashlib
 from datetime import UTC, datetime
 from typing import Any
-
 from pydantic import BaseModel, ConfigDict, Field
 
 
@@ -57,7 +56,6 @@ def encapsulate_artifact(
     provenance = TDOPromptProvenance(author=author)
     fixity = TDOFixity(value=sha256_hash)
 
-    # Đóng gói dữ liệu nghiệp vụ mỏng gọn
     data_payload = {"id": artifact_id, "title": title, "content": content}
 
     return TrustworthyDigitalObject(

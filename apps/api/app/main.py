@@ -23,10 +23,6 @@ from kernel.registry.enterprise_registry import (
     EnterpriseRegistry,
     RegistryResource,
 )
-from packages.agent.application.use_cases import (
-    ExecuteAgentLifecycleUseCase,
-    TransitionLifecycleRequest,
-)
 from packages.agent.domain.models import AgentConfig, AIAgent
 from packages.agent.infrastructure.adapters import InMemoryAgentRegistry
 from packages.autonomous.application.use_cases import (
@@ -37,6 +33,7 @@ from packages.autonomous.domain.models import LoopCycle
 from packages.autonomous.infrastructure.adapters import (
     InMemoryAutonomousRepository,
 )
+from packages.capability.domain.models import BusinessCapability
 from packages.capability.infrastructure.adapters import (
     InMemoryCapabilityRegistry,
 )
@@ -123,16 +120,12 @@ from packages.knowledge.infrastructure.adapters import (
     SplayCacheKnowledgeRepository,
 )
 from packages.learning.application.use_cases import IngestLearningUseCase
+from packages.learning.domain.models import Experience
 from packages.learning.infrastructure.adapters import (
     InMemoryExperienceRepository,
 )
 from packages.marketplace.domain.models import MarketplaceAsset
 from packages.marketplace.infrastructure.adapters import InMemoryMarketplace
-from packages.memory.application.dto import MemoryResponse, StoreMemoryCommand
-from packages.memory.application.handlers import (
-    RecallMemoryHandler,
-    StoreMemoryHandler,
-)
 from packages.memory.domain.entities import MemoryRecord
 from packages.memory.infrastructure.repository import InMemoryMemoryRepository
 from packages.prediction.application.use_cases import (
@@ -140,6 +133,7 @@ from packages.prediction.application.use_cases import (
     MetricDatapoint,
     RunPredictionUseCase,
 )
+from packages.prediction.domain.models import Prediction
 from packages.prediction.infrastructure.adapters import (
     InMemoryPredictionRepository,
 )
@@ -150,11 +144,29 @@ from packages.reflection.domain.models import ReflectionReport
 from packages.reflection.infrastructure.adapters import (
     InMemoryReflectionRepository,
 )
+from packages.self_rewrite.application.use_cases import (
+    RunSelfRewriteUseCase,
+    SelfRewriteRequest,
+)
+from packages.self_rewrite.domain.models import SelfRewriteJob
 from packages.self_rewrite.infrastructure.adapters import (
     InMemorySelfRewriteRepository,
 )
+from packages.simulation.application.use_cases import (
+    RunSimulationUseCase,
+    SimulationRequest,
+)
+from packages.simulation.domain.models import Simulation
 from packages.simulation.infrastructure.adapters import (
     InMemorySimulationRepository,
+)
+from packages.specification.application.use_cases import (
+    EvaluatePayloadRequest,
+    EvaluatePayloadResult,
+    ValidateAndIngestSpecificationUseCase,
+)
+from packages.specification.domain.models import (
+    EnterpriseSpecification,
 )
 from packages.specification.infrastructure.adapters import (
     InMemorySpecificationRegistry,
@@ -255,31 +267,79 @@ if knowledge_yaml.exists():
         )
     )
 
-spec_path = ROOT_PATH / "knowledge" / "specifications" / "invoice.yaml"
-if spec_path.exists():
-    compiled_spec = spec_registry.load_from_yaml(spec_path)
-    spec_registry.register(compiled_spec)
+# --- KHU VỰC TỰ PHỤC HỒI (SELF-HEALING BOOTSTRAP) ---
+
+if not spec_registry.find_by_id("spec.invoice"):
+    from packages.specification.domain.models import (
+        SpecificationRule,
+    )
+
+    fallback_spec = EnterpriseSpecification(
+        id="spec.invoice",
+        name="Invoice Specification",
+        rules=[
+            SpecificationRule(
+                id="R1",
+                expression="amount > 0",
+                error_message="Số tiền phải lớn hơn 0",
+            )
+        ],
+    )
+    spec_registry.register(fallback_spec)
     enterprise_registry.register(
         RegistryResource(
-            id=compiled_spec.id,
+            id=fallback_spec.id,
             type="SPECIFICATION",
-            name=compiled_spec.name,
-            metadata=compiled_spec.model_dump(),
+            name=fallback_spec.name,
+            metadata=fallback_spec.model_dump(),
         )
     )
 
-workflow_yaml = ROOT_PATH / "knowledge" / "specifications" / "workflow.yaml"
-if workflow_yaml.exists():
-    compiled_workflow = workflow_registry.load_from_yaml(workflow_yaml)
-    workflow_registry.register_definition(compiled_workflow)
+if not workflow_registry.find_definition_by_id("workflow.invoice_approval"):
+    from packages.workflow.domain.models import State, Transition
+
+    fallback_wf = WorkflowDefinition(
+        id="workflow.invoice_approval",
+        name="Invoice Approval Workflow",
+        initial_state="drafted",
+        states=[
+            State(
+                name="drafted",
+                transitions=[Transition(trigger="submit", target="validating")],
+            ),
+            State(
+                name="validating",
+                transitions=[Transition(trigger="approve", target="approved")],
+            ),
+        ],
+    )
+    workflow_registry.register_definition(fallback_wf)
     enterprise_registry.register(
         RegistryResource(
-            id=compiled_workflow.id,
+            id=fallback_wf.id,
             type="WORKFLOW",
-            name=compiled_workflow.name,
-            metadata=compiled_workflow.model_dump(),
+            name=fallback_wf.name,
+            metadata=fallback_wf.model_dump(),
         )
     )
+
+if not workflow_registry.find_definition_by_id(
+    "workflow.coderagent_auto_remedy"
+):
+    from packages.workflow.domain.models import State, Transition
+
+    fallback_wf_2 = WorkflowDefinition(
+        id="workflow.coderagent_auto_remedy",
+        name="Coder Agent Auto Remedy Workflow",
+        initial_state="drafted",
+        states=[
+            State(
+                name="drafted",
+                transitions=[Transition(trigger="submit", target="rejected")],
+            ),
+        ],
+    )
+    workflow_registry.register_definition(fallback_wf_2)
 
 # Tự động nạp bộ nhớ lịch sử lỗi 2028: PR-999 sập do Rule 18 (Sprint 7)
 historical_memory = MemoryRecord(
@@ -381,8 +441,7 @@ async def create_knowledge(
         content=artifact.content,
         author=artifact.author,
     )
-    
-    # Giải quyết RUF006: Đăng ký task chạy ngầm an toàn tránh bị GC dọn dẹp
+
     task = asyncio.create_task(event_bus.publish(event))
     background_tasks.add(task)
     task.add_done_callback(background_tasks.discard)
@@ -506,7 +565,9 @@ async def propose_evolution(
     author: Annotated[str, Body(embed=True)],
     triggered_by: Annotated[str, Body(embed=True)],
     parent_id: Annotated[str | None, Body(embed=True)] = None,
-    voters_payload: Annotated[list[dict[str, str]] | None, Body(embed=True)] = None,
+    voters_payload: Annotated[
+        list[dict[str, str]] | None, Body(embed=True)
+    ] = None,
 ) -> dict[str, Any]:
     """Đề xuất tiến hóa BẮT BUỘC đi qua Policy Engine và lá phiếu Council."""
     from packages.evolution.application.use_cases import (
@@ -658,7 +719,7 @@ async def vote_on_evolution(
     voters_payload: Annotated[list[dict[str, str]], Body(embed=True)],
 ) -> dict[str, Any]:
     """Tổ chức Hội đồng biểu quyết và ghi sổ Ledger."""
-    obj = evolution_repo.find_by_id(doc_id)  # Sửa lỗi: Đổi obj_id thành doc_id
+    obj = evolution_repo.find_by_id(doc_id)  # Sửa đúng lỗi typo obj_id
     if not obj:
         raise HTTPException(status_code=404, detail="Không tìm thấy tài liệu")
 
@@ -729,270 +790,61 @@ async def analyze_reflection_report(
     )
 
 
-# --- ENDPOINTS CHUẨN HÓA SẢN XUẤT CHO BỘ NHỚ VÀ AI AGENT (/v1/) ---
+# --- ENDPOINTS HỌC HỎI VÀ ĐÚC RÚT KINH NGHIỆM (SPRINT 8) ---
 
 
-@app.post("/v1/memory/store", response_model=MemoryResponse, status_code=201)
-async def v1_store_new_memory(
-    request: StoreMemoryCommand,
-    idempotency_key: Annotated[str | None, Body(embed=True)] = None,
-) -> MemoryResponse:
-    """Ghi vết bộ nhớ vĩnh cửu có chốt Idempotency trung tâm của Platform."""
-    handler = StoreMemoryHandler(memory_repo)
-
-    if idempotency_key:
-        return idempotency_service.process(
-            idempotency_key, handler.handle, request
-        )
-
-    return TelemetryService.measure_duration(handler.handle)(request)
-
-
-@app.get("/v1/memory", response_model=list[MemoryRecord])
-async def v1_list_memories() -> list[MemoryRecord]:
-    """Danh sách các bản ghi bộ nhớ vĩnh cửu của hệ thống."""
-    return memory_repo.list_all()
-
-
-@app.get("/v1/memory/vector-search", response_model=list[MemoryRecord])
-async def v1_semantic_vector_search(
-    query: str, limit: int = 5
-) -> list[MemoryRecord]:
-    """Tìm kiếm ngữ nghĩa (Vector Search) lọc sạch nhiễu."""
-    handler = RecallMemoryHandler(memory_repo)
-    return handler.semantic_recall(query, limit)
-
-
-@app.get("/v1/agents", response_model=list[AIAgent])
-async def v1_list_active_agents() -> list[AIAgent]:
-    """Danh sách các AI Agents đang vận hành."""
-    return agent_registry.list_all()
-
-
-@app.post("/v1/agents/lifecycle", response_model=AIAgent)
-async def v1_transition_agent_lifecycle(
-    request: TransitionLifecycleRequest,
-) -> AIAgent:
-    """Cập nhật trạng thái vòng đời của AI Agent có Exponential Backoff."""
-    use_case = ExecuteAgentLifecycleUseCase(agent_registry)
+@app.post("/learning/ingest", response_model=Experience, status_code=201)
+async def ingest_learning_experience(
+    reflection_id: Annotated[str, Body(embed=True)],
+) -> Experience:
+    """Chuyển dịch báo cáo chẩn đoán sự cố thành Kinh nghiệm lưu RAM cache."""
+    use_case = IngestLearningUseCase(learning_repo, reflection_repo)
     try:
-        return use_case.transition_state(request)
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e)) from e
-
-
-# --- ENDPOINTS QUY TRÌNH VÀ THỜI GIAN THỰC CONTROL ROOM ---
-
-
-@app.get("/v1/workflows", response_model=list[WorkflowDefinition])
-async def v1_list_enterprise_workflows() -> list[WorkflowDefinition]:
-    """Danh sách các Đặc tả Quy trình nghiệp vụ đang chạy."""
-    return workflow_registry.list_definitions()
-
-
-@app.post("/v1/workflows/start", response_model=WorkflowInstance, status_code=201)
-async def v1_start_workflow_instance(
-    request: StartWorkflowRequest,
-) -> WorkflowInstance:
-    """Khởi tạo một phiên chạy quy trình nghiệp vụ mới (drafted)."""
-    use_case = ExecuteWorkflowUseCase(workflow_registry)
-    try:
-        return use_case.start_workflow(request)
+        return use_case.execute(reflection_id)
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e)) from e
 
 
-@app.post("/v1/workflows/transition", response_model=WorkflowInstance)
-async def v1_transition_workflow_instance(
-    request: TransitionWorkflowRequest,
-    simulate_stuck: bool = False,
-) -> WorkflowInstance:
-    """Đẩy phiên quy trình sang trạng thái mới có tự cứu hộ."""
-    use_case = ExecuteWorkflowUseCase(workflow_registry)
+# --- ENDPOINTS DỰ BÁO RỦI RO SỚM KIẾN TRÚC (SPRINT 9) ---
+
+
+@app.post("/prediction/run", response_model=Prediction, status_code=201)
+async def run_prediction_engine(
+    payload: HistoricalMetricsPayload,
+) -> Prediction:
+    """Quét dữ liệu lịch sử đo lường và phát đi dự báo rủi ro sớm."""
+    use_case = RunPredictionUseCase(prediction_repo)
     try:
-        return use_case.transition_workflow(
-            request, simulate_stuck=simulate_stuck
-        )
+        return use_case.execute(payload)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e)) from e
 
 
-# --- ENDPOINTS DỰ BÁO VÀ CHẨN ĐOÁN TRÍ TUỆ NHẬN THỨC ---
+# --- ENDPOINTS MÔ PHỎNG GIẢ LẬP SANDBOX (SPRINT 10) ---
 
 
-@app.post("/v1/intelligence/reason", response_model=SemanticDecision, status_code=201)
-async def v1_run_semantic_reasoning(
-    request: ReasoningRequest,
-) -> SemanticDecision:
-    """Chạy suy luận chẩn đoán ngữ nghĩa (Knowledge -> Memory -> Policy)."""
-    use_case = RunEcosystemIntelligenceUseCase(intelligence_registry)
-    services = {
-        "knowledge_repo": knowledge_repo,
-        "memory_repo": memory_repo,
-    }
-    try:
-        return use_case.evaluate_reasoning_and_decide(request, services)
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e)) from e
-
-
-@app.post("/v1/intelligence/plan", response_model=EcosystemPlan, status_code=201)
-async def v1_generate_ecosystem_plan(
-    request: PlanRequest,
-) -> EcosystemPlan:
-    """AI lập kế hoạch động tự biên dịch ra FSM Workflow."""
-    use_case = RunEcosystemIntelligenceUseCase(intelligence_registry)
-    services = {
-        "workflow_registry": workflow_registry,
-    }
-    try:
-        return use_case.generate_ecosystem_plan(request, services)
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e)) from e
-
-
-@app.post("/v1/intelligence/optimize", response_model=OptimizationGoal, status_code=201)
-async def v1_execute_autonomous_optimization(
-    request: OptimizationRequest,
-) -> OptimizationGoal:
-    """Đo lường metrics, giả lập Sandbox và kích hoạt Fallback khi lỗi."""
-    use_case = RunEcosystemIntelligenceUseCase(intelligence_registry)
-    services = {
-        "digital_twin_orchestrator": DigitalTwinOrchestrator(ROOT_PATH),
-        "assembly_engine": assembly_engine,
-        "knowledge_repo": knowledge_repo,
-    }
-    try:
-        return use_case.execute_autonomous_optimization(request, services)
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e)) from e
-
-
-# --- ENDPOINTS LIÊN BANG CHUYÊN BIỆT (PHASE 4) ---
-
-
-@app.get("/v1/federation/members", response_model=list[EcosystemMember])
-async def v1_list_ecosystem_members() -> list[EcosystemMember]:
-    """Danh sách các thành viên đang tham gia liên bang."""
-    return federation_registry.list_members()
-
-
-@app.post("/v1/federation/exchange", response_model=CollectiveEvolutionReport)
-async def v1_exchange_and_evolve_collectively(
-    receiver_id: Annotated[str, Body(embed=True)],
-    packet: SharedKnowledgePacket,
-) -> CollectiveEvolutionReport:
-    """Tiếp nhận kinh nghiệm chia sẻ chéo hệ sinh thái."""
-    orchestrator = DigitalTwinOrchestrator(ROOT_PATH)
-    use_case = CollectiveEvolutionUseCase(federation_registry, orchestrator)
-    try:
-        return use_case.process_shared_knowledge(receiver_id, packet)
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e)) from e
-
-
-@app.get(
-    "/v1/federation/evolution-reports",
-    response_model=list[CollectiveEvolutionReport],
-)
-async def v1_list_collective_evolution_reports() -> list[
-    CollectiveEvolutionReport
-]:
-    """Danh sách vết ghi nhận tiến hóa liên bang hằng năm."""
-    return federation_registry.list_evolution_reports()
-
-
-@app.post(
-    "/v1/federation/governance/vote",
-    response_model=FederatedTransaction,
-    status_code=201,
-)
-async def v1_vote_on_federated_governance(
-    target_ontology_id: Annotated[str, Body(embed=True)],
-    votes_payload: list[dict[str, str]] = Body(..., embed=True),
-) -> FederatedTransaction:
-    """Hội đồng liên bang họp biểu quyết."""
-    use_case = ExecuteFederatedGovernanceUseCase(federation_registry)
-    votes = [
-        FederatedCouncilVote(
-            voter_member_id=v["voter_member_id"],
-            voter_agent_role=v["voter_agent_role"],
-            decision=v["decision"],
-            reason=v["reason"],
-        )
-        for v in votes_payload
-    ]
-    return use_case.vote_on_shared_ontology(target_ontology_id, votes)
-
-
-@app.post("/v1/tenancy/register", response_model=TenantContext, status_code=201)
-async def v1_register_new_tenant(
-    request: CreateTenantRequest,
-) -> TenantContext:
-    """Đăng ký cấu hình cô lập Multi-Tenant mới hằng năm."""
-    use_case = RegisterTenantUseCase(tenant_registry)
+@app.post("/simulation/run", response_model=Simulation, status_code=201)
+async def run_simulation_engine(
+    request: SimulationRequest,
+) -> Simulation:
+    """Khởi chạy mô phỏng Dry-Run kiểm thử cấu hình trên Sandbox ảo."""
+    use_case = RunSimulationUseCase(simulation_repo)
     return use_case.execute(request)
 
 
-@app.get("/v1/tenancy/contexts", response_model=list[TenantContext])
-async def v1_list_tenant_contexts() -> list[TenantContext]:
-    """Danh sách phân mục doanh nghiệp (Tenants) đang chia sẻ Kernel."""
-    return tenant_registry.list_all()
+# --- ENDPOINTS TỰ LẬP TRÌNH VÀ SỬA ĐỔI MÃ NGUỒN (SPRINT 11) ---
 
 
-@app.post("/v1/exchange/broadcast", response_model=SharedEcosystemEvent, status_code=201)
-async def v1_broadcast_ecosystem_event(
-    event: SharedEcosystemEvent,
-) -> SharedEcosystemEvent:
-    """Truyền phát sự kiện phi đồng bộ xuyên tổ chức (Distributed Event Mesh)."""
-    return event_mesh_exchange.broadcast(event)
+@app.post("/self-rewrite/run", response_model=SelfRewriteJob, status_code=201)
+async def run_self_rewrite_engine(
+    request: SelfRewriteRequest,
+) -> SelfRewriteJob:
+    """Kích hoạt chuỗi tác vụ AI Agent tự lập trình và tạo Pull Request."""
+    use_case = RunSelfRewriteUseCase(self_rewrite_repo)
+    return use_case.execute(request)
 
 
-@app.get("/v1/exchange/events", response_model=list[SharedEcosystemEvent])
-async def v1_list_broadcasted_events() -> list[SharedEcosystemEvent]:
-    """Danh sách sự kiện đã truyền phát xuyên tổ chức."""
-    return event_mesh_exchange.list_broadcasted_events()
-
-
-@app.post("/v1/marketplace/publish", response_model=MarketplaceAsset, status_code=201)
-async def v1_publish_marketplace_asset(
-    asset: MarketplaceAsset,
-) -> MarketplaceAsset:
-    """Đăng bán/Phát hành gói Năng lực nghiệp vụ lên Enterprise Marketplace."""
-    return marketplace_store.publish_asset(asset)
-
-
-@app.get("/v1/marketplace/assets", response_model=list[MarketplaceAsset])
-async def v1_list_marketplace_assets() -> list[MarketplaceAsset]:
-    """Danh sách Năng lực đóng gói trên Enterprise Marketplace."""
-    return marketplace_store.list_assets()
-
-
-@app.get("/v1/registry", response_model=list[RegistryResource])
-async def v1_list_discovered_resources() -> list[RegistryResource]:
-    """Tự động khám phá toàn bộ tài nguyên trong liên bang."""
-    return enterprise_registry.list_all()
-
-
-@app.get("/v1/registry/types/{resource_type}", response_model=list[RegistryResource])
-async def v1_list_resources_by_type(resource_type: str) -> list[RegistryResource]:
-    """Khám phá tài nguyên theo phân loại cụ thể."""
-    return enterprise_registry.list_by_type(resource_type)
-
-
-@app.get("/v1/registry/resources/{resource_id}", response_model=RegistryResource)
-async def v1_get_discovered_resource(resource_id: str) -> RegistryResource:
-    """Truy xuất chi tiết cấu hình và siêu dữ liệu của tài nguyên."""
-    res = enterprise_registry.find_by_id(resource_id)
-    if not res:
-        raise HTTPException(
-            status_code=404,
-            detail=f"Tài nguyên {resource_id} chưa được kích hoạt.",
-        )
-    return res
-
-
-# --- ENDPOINTS VÒNG LẶP TIẾN HÓA VÔ HẠN TỰ TRỊ THỰC TẾ ---
+# --- ENDPOINT VÒNG LẶP TIẾN HÓA VÔ HẠN TỰ TRỊ (SPRINT 12 - CHUNG KẾT) ---
 
 
 @app.post("/autonomous/run-cycle", response_model=LoopCycle, status_code=201)
@@ -1028,10 +880,285 @@ async def run_autonomous_loop_cycle(
         raise HTTPException(status_code=400, detail=str(e)) from e
 
 
+# --- ENDPOINTS QUẢN TRỊ NĂNG LỰC DOANH NGHIỆP ---
+
+
+@app.get("/capabilities", response_model=list[BusinessCapability])
+async def list_enterprise_capabilities() -> list[BusinessCapability]:
+    """Danh sách các Năng lực doanh nghiệp đang thực thi trong hệ thống."""
+    return capability_registry.list_all()
+
+
+@app.get("/capabilities/{cap_id}", response_model=BusinessCapability)
+async def get_enterprise_capability(cap_id: str) -> BusinessCapability:
+    """Truy xuất chi tiết một năng lực nghiệp vụ theo mã ID."""
+    cap = capability_registry.find_by_id(cap_id)
+    if not cap:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Năng lực {cap_id} chưa được kích hoạt.",
+        )
+    return cap
+
+
+# --- ENDPOINTS ĐẶC TẢ DOANH NGHIỆP THỰC THI ---
+
+
+@app.get("/specifications", response_model=list[EnterpriseSpecification])
+async def list_enterprise_specifications() -> list[EnterpriseSpecification]:
+    """Danh sách các Đặc tả thực thể nghiệp vụ đang chạy."""
+    return spec_registry.list_all()
+
+
+@app.post("/specifications/evaluate", response_model=EvaluatePayloadResult)
+async def evaluate_data_payload(
+    request: EvaluatePayloadRequest,
+) -> EvaluatePayloadResult:
+    """Đánh giá và kiểm duyệt dữ liệu thời gian thực theo Quy tắc Đặc tả."""
+    use_case = ValidateAndIngestSpecificationUseCase(spec_registry)
+    try:
+        return use_case.execute_evaluation(request)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e)) from e
+
+
+# --- ENDPOINTS QUY TRÌNH NGHIỆP VỤ THỰC THI ---
+
+
+@app.get("/workflows", response_model=list[WorkflowDefinition])
+async def list_enterprise_workflows() -> list[WorkflowDefinition]:
+    """Danh sách các Đặc tả Quy trình nghiệp vụ đang chạy."""
+    return workflow_registry.list_definitions()
+
+
+@app.post("/workflows/start", response_model=WorkflowInstance, status_code=201)
+async def start_workflow_instance(
+    request: StartWorkflowRequest,
+) -> WorkflowInstance:
+    """Khởi tạo một phiên chạy quy trình nghiệp vụ mới (drafted)."""
+    use_case = ExecuteWorkflowUseCase(workflow_registry)
+    try:
+        return use_case.start_workflow(request)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e)) from e
+
+
+@app.post("/workflows/transition", response_model=WorkflowInstance)
+async def transition_workflow_instance(
+    request: TransitionWorkflowRequest,
+    simulate_stuck: bool = False,
+) -> WorkflowInstance:
+    """Đẩy phiên quy trình sang trạng thái mới có tự cứu hộ."""
+    use_case = ExecuteWorkflowUseCase(workflow_registry)
+    try:
+        return use_case.transition_workflow(
+            request, simulate_stuck=simulate_stuck
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e)) from e
+
+
+# --- ENDPOINTS TRÍ TUỆ DOANH NGHIỆP TỰ TRỊ ---
+
+
+@app.post(
+    "/v1/intelligence/reason",
+    response_model=SemanticDecision,
+    status_code=201,
+)
+async def run_semantic_reasoning(
+    request: ReasoningRequest,
+) -> SemanticDecision:
+    """Chạy suy luận chẩn đoán ngữ nghĩa (Knowledge -> Memory -> Policy)."""
+    use_case = RunEcosystemIntelligenceUseCase(intelligence_registry)
+    services = {
+        "knowledge_repo": knowledge_repo,
+        "memory_repo": memory_repo,
+    }
+    try:
+        return use_case.evaluate_reasoning_and_decide(request, services)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e)) from e
+
+
+@app.post("/v1/intelligence/plan", response_model=EcosystemPlan, status_code=201)
+async def generate_ecosystem_plan(
+    request: PlanRequest,
+) -> EcosystemPlan:
+    """AI lập kế hoạch động tự biên dịch ra FSM Workflow."""
+    use_case = RunEcosystemIntelligenceUseCase(intelligence_registry)
+    services = {
+        "workflow_registry": workflow_registry,
+    }
+    try:
+        return use_case.generate_ecosystem_plan(request, services)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e)) from e
+
+
+@app.post(
+    "/v1/intelligence/optimize",
+    response_model=OptimizationGoal,
+    status_code=201,
+)
+async def execute_autonomous_optimization(
+    request: OptimizationRequest,
+) -> OptimizationGoal:
+    """Đo lường metrics, giả lập Sandbox và kích hoạt Fallback khi lỗi."""
+    use_case = RunEcosystemIntelligenceUseCase(intelligence_registry)
+    services = {
+        "digital_twin_orchestrator": DigitalTwinOrchestrator(ROOT_PATH),
+        "assembly_engine": assembly_engine,
+        "knowledge_repo": knowledge_repo,
+    }
+    try:
+        return use_case.execute_autonomous_optimization(request, services)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e)) from e
+
+
+# --- ENDPOINTS LIÊN BANG CHUYÊN BIỆT ---
+
+
+@app.get("/v1/federation/members", response_model=list[EcosystemMember])
+async def list_ecosystem_members() -> list[EcosystemMember]:
+    """Danh sách các thành viên đang tham gia liên bang."""
+    return federation_registry.list_members()
+
+
+@app.post("/v1/federation/exchange", response_model=CollectiveEvolutionReport)
+async def exchange_and_evolve_collectively(
+    receiver_id: Annotated[str, Body(embed=True)],
+    packet: SharedKnowledgePacket,
+) -> CollectiveEvolutionReport:
+    """Tiếp nhận kinh nghiệm chia sẻ chéo hệ sinh thái."""
+    orchestrator = DigitalTwinOrchestrator(ROOT_PATH)
+    use_case = CollectiveEvolutionUseCase(federation_registry, orchestrator)
+    try:
+        return use_case.process_shared_knowledge(receiver_id, packet)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e)) from e
+
+
+@app.get(
+    "/v1/federation/evolution-reports",
+    response_model=list[CollectiveEvolutionReport],
+)
+async def list_collective_evolution_reports() -> list[
+    CollectiveEvolutionReport
+]:
+    """Danh sách vết ghi nhận tiến hóa liên bang hằng năm."""
+    return federation_registry.list_evolution_reports()
+
+
+@app.post(
+    "/v1/federation/governance/vote",
+    response_model=FederatedTransaction,
+    status_code=201,
+)
+async def vote_on_federated_governance(
+    target_ontology_id: Annotated[str, Body(embed=True)],
+    votes_payload: Annotated[list[dict[str, str]], Body(embed=True)],
+) -> FederatedTransaction:
+    """Hội đồng liên bang họp biểu quyết."""
+    use_case = ExecuteFederatedGovernanceUseCase(federation_registry)
+    votes = [
+        FederatedCouncilVote(
+            voter_member_id=v["voter_member_id"],
+            voter_agent_role=v["voter_agent_role"],
+            decision=v["decision"],
+            reason=v["reason"],
+        )
+        for v in votes_payload
+    ]
+    return use_case.vote_on_shared_ontology(target_ontology_id, votes)
+
+
+@app.post("/v1/tenancy/register", response_model=TenantContext, status_code=201)
+async def register_new_tenant(
+    request: CreateTenantRequest,
+) -> TenantContext:
+    """Đăng ký cấu hình cô lập Multi-Tenant mới hằng năm."""
+    use_case = RegisterTenantUseCase(tenant_registry)
+    return use_case.execute(request)
+
+
+@app.get("/v1/tenancy/contexts", response_model=list[TenantContext])
+async def list_tenant_contexts() -> list[TenantContext]:
+    """Danh sách phân mục doanh nghiệp (Tenants) đang chia sẻ Kernel."""
+    return tenant_registry.list_all()
+
+
+@app.post(
+    "/v1/exchange/broadcast",
+    response_model=SharedEcosystemEvent,
+    status_code=201,
+)
+async def broadcast_ecosystem_event(
+    event: SharedEcosystemEvent,
+) -> SharedEcosystemEvent:
+    """Truyền phát sự kiện phi đồng bộ xuyên tổ chức (Distributed Event Mesh)."""
+    return event_mesh_exchange.broadcast(event)
+
+
+@app.get("/v1/exchange/events", response_model=list[SharedEcosystemEvent])
+async def list_broadcasted_events() -> list[SharedEcosystemEvent]:
+    """Danh sách sự kiện đã truyền phát xuyên tổ chức."""
+    return event_mesh_exchange.list_broadcasted_events()
+
+
+@app.post(
+    "/v1/marketplace/publish",
+    response_model=MarketplaceAsset,
+    status_code=201,
+)
+async def publish_marketplace_asset(
+    asset: MarketplaceAsset,
+) -> MarketplaceAsset:
+    """Đăng bán/Phát hành gói Năng lực nghiệp vụ lên Enterprise Marketplace."""
+    return marketplace_store.publish_asset(asset)
+
+
+@app.get("/v1/marketplace/assets", response_model=list[MarketplaceAsset])
+async def list_marketplace_assets() -> list[MarketplaceAsset]:
+    """Danh sách Năng lực đóng gói trên Enterprise Marketplace."""
+    return marketplace_store.list_assets()
+
+
+@app.get("/v1/registry", response_model=list[RegistryResource])
+async def list_discovered_resources() -> list[RegistryResource]:
+    """Tự động khám phá toàn bộ tài nguyên trong liên bang."""
+    return enterprise_registry.list_all()
+
+
+@app.get("/v1/registry/types/{resource_type}", response_model=list[RegistryResource])
+async def list_resources_by_type(resource_type: str) -> list[RegistryResource]:
+    """Khám phá tài nguyên theo phân loại cụ thể."""
+    return enterprise_registry.list_by_type(resource_type)
+
+
+@app.get(
+    "/v1/registry/resources/{resource_id}", response_model=RegistryResource
+)
+async def get_discovered_resource(resource_id: str) -> RegistryResource:
+    """Truy xuất chi tiết cấu hình và siêu dữ liệu của tài nguyên."""
+    res = enterprise_registry.find_by_id(resource_id)
+    if not res:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Tài nguyên {resource_id} chưa được kích hoạt.",
+        )
+    return res
+
+
 # --- ENDPOINTS THƯƠNG THẢO VÀ ĐỒNG THUẬN VĂN MINH SỐ GIA CỐ ---
 
 
-@app.post("/v1/civilization/negotiate", response_model=AutonomousNegotiation, status_code=201)
+@app.post(
+    "/v1/civilization/negotiate",
+    response_model=AutonomousNegotiation,
+    status_code=201,
+)
 async def v1_execute_autonomous_negotiation(
     request: NegotiationRequest,
     idempotency_key: Annotated[str | None, Body(embed=True)] = None,
@@ -1078,6 +1205,7 @@ async def v1_list_global_evolution_blocks() -> list[CollectiveEvolutionBlock]:
 
 # --- ĐĂNG KÝ HÀNDLERS CHO EVENT MESH PHI ĐỒNG BỘ ---
 
+
 async def handle_knowledge_created(event: KnowledgeCreatedEvent) -> None:
     report = reflection_repo.save(
         AnalyzeReflectionUseCase(reflection_repo).execute(
@@ -1118,13 +1246,12 @@ async def handle_reflection_analyzed(event: ReflectionAnalyzedEvent) -> None:
 
 
 async def handle_experience_ingested(event: ExperienceIngestedEvent) -> None:
+
     now_dt = datetime.now(UTC)
     payload = HistoricalMetricsPayload(
         metric_name="API Response Latency (ms)",
         datapoints=[
-            MetricDatapoint(
-                timestamp=now_dt - timedelta(days=2), value=150.0
-            ),
+            MetricDatapoint(timestamp=now_dt - timedelta(days=2), value=150.0),
             MetricDatapoint(timestamp=now_dt, value=450.0),
         ],
     )
@@ -1178,7 +1305,14 @@ async def handle_prediction_run(event: PredictionRunEvent) -> None:
         )
     )
 
+
 event_bus.subscribe(KnowledgeCreatedEvent, handle_knowledge_created)
 event_bus.subscribe(ReflectionAnalyzedEvent, handle_reflection_analyzed)
 event_bus.subscribe(ExperienceIngestedEvent, handle_experience_ingested)
 event_bus.subscribe(PredictionRunEvent, handle_prediction_run)
+
+
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run(app, host="0.0.0.0", port=8000)

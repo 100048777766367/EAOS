@@ -1,7 +1,6 @@
 from typing import Protocol
 
 from packages.marketplace.domain.models import MarketplaceAsset
-from packages.memory.domain.entities import MemoryRecord  # Sửa đúng dòng này
 
 
 class MarketplacePort(Protocol):

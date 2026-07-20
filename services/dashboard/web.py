@@ -1,7 +1,7 @@
 ﻿from pathlib import Path
-
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
+
 from services.validator.engine import EAOSValidatorEngine
 
 app = FastAPI(title="EAOS Web Dashboard")

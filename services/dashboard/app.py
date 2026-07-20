@@ -1,11 +1,11 @@
 ﻿import json
-from pathlib import Path
-
 import typer
+from pathlib import Path
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 from rich.text import Text
+
 from services.validator.engine import EAOSValidatorEngine
 
 app = typer.Typer(help="EAOS - Enterprise Architecture Operating System CLI")
@@ -38,7 +38,7 @@ def validate() -> None:
             border_style="green",
         )
     else:
-        title = Text("✘ PHÁT HIỆN VI PHẠM HIẾN PHÁP", style="bold red")
+        title = Text("✘ PHÁT HIỆN VI PHẠN KIẾN PHÁP", style="bold red")
         panel = Panel(
             "Phát hiện lỗi không tuân thủ. Vui lòng kiểm duyệt chẩn đoán.",
             title=title,

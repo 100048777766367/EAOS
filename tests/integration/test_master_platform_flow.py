@@ -1,5 +1,5 @@
 import uuid
-from pathlib import Path  # Sửa lỗi F821 thiếu Path
+from pathlib import Path
 
 import pytest
 from apps.api.app.main import app
@@ -69,7 +69,7 @@ def test_master_platform_and_lifecycle_flow(client: TestClient) -> None:
     assert response_tx.status_code == 200
     assert response_tx.json()["current_state"] == "validating"
 
-    # 5. DLM (Sửa dòng dài quá 120 ký tự bằng cách bẻ dòng)
+    # 5. DLM (Sửa dòng dài vượt ải E501)
     ROOT_PATH = Path(__file__).resolve().parent.parent.parent
     mock_file = ROOT_PATH / "docs" / "mock_system_constitution.md"
     roadmap_file = ROOT_PATH / "docs" / "ROADMAP.md"

@@ -12,9 +12,7 @@ class RegistryResource(BaseModel):
         description="Phân loại: CAPABILITY, SPECIFICATION, WORKFLOW, AGENT...",
     )
     name: str = Field(..., description="Tên tài nguyên hiển thị")
-    metadata: dict[str, Any] = Field(
-        default_factory=dict, description="Siêu dữ liệu chi tiết đi kèm"
-    )
+    metadata: dict[str, Any] = Field(default_factory=dict, description="Siêu dữ liệu chi tiết đi kèm")
 
     model_config = ConfigDict(frozen=True)
 
@@ -36,11 +34,7 @@ class EnterpriseRegistry:
 
     def list_by_type(self, resource_type: str) -> list[RegistryResource]:
 
-        return [
-            r
-            for r in self._resources.values()
-            if r.type.upper() == resource_type.upper()
-        ]
+        return [r for r in self._resources.values() if r.type.upper() == resource_type.upper()]
 
     def list_all(self) -> list[RegistryResource]:
 

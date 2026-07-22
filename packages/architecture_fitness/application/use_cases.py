@@ -30,9 +30,7 @@ class EvaluateFitnessSuiteUseCase:
             incident_id=command.incident_id,
         )
 
-        suite = FitnessSuiteAggregate(
-            suite_id=command.suite_id, graph_link=link
-        )
+        suite = FitnessSuiteAggregate(suite_id=command.suite_id, graph_link=link)
 
         for item in command.evaluations:
             suite.add_evaluation(
@@ -59,8 +57,6 @@ class QueryADRIncidentImpactUseCase:
         raw_results = self._graph_query.find_most_incident_prone_adrs()
 
         return [
-            ADRIncidentImpactResponse(
-                adr_id=adr_id, incident_count=count, rank=index + 1
-            )
+            ADRIncidentImpactResponse(adr_id=adr_id, incident_count=count, rank=index + 1)
             for index, (adr_id, count) in enumerate(raw_results)
         ]

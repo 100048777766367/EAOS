@@ -19,9 +19,7 @@ async def get_dashboard() -> HTMLResponse:
         if report.overall_passed
         else "bg-red-100 text-red-800 border-red-200"
     )
-    status_label = (
-        "HIẾN PHÁP HỢP CHUẨN" if report.overall_passed else "CÓ VI PHẠM"
-    )
+    status_label = "HIẾN PHÁP HỢP CHUẨN" if report.overall_passed else "CÓ VI PHẠM"
 
     rules_html = ""
     for res in report.results:

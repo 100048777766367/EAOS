@@ -1,6 +1,5 @@
 """Unit tests for Architecture Memory context."""
 
-
 from packages.architecture_memory.application.dto import (
     RecallMemoryQuery,
     StoreMemoryCommand,
@@ -56,9 +55,7 @@ def test_store_and_recall_architecture_memory() -> None:
     )
 
     # 3. Recall memory: "Why shouldn't domain import database SQLAlchemy?"
-    query = RecallMemoryQuery(
-        query_text="domain import database SQLAlchemy coupling", limit=5
-    )
+    query = RecallMemoryQuery(query_text="domain import database SQLAlchemy coupling", limit=5)
     recalled_results = recall_uc.execute(query)
 
     assert len(recalled_results) >= 1

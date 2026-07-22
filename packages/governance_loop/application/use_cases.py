@@ -29,9 +29,7 @@ class ExecuteGovernanceCycleUseCase:
         self._evaluator = evaluator
         self._ledger = ledger
 
-    def execute(
-        self, command: StartGovernanceCycleCommand
-    ) -> GovernanceCycleResult:
+    def execute(self, command: StartGovernanceCycleCommand) -> GovernanceCycleResult:
         cycle = GovernanceCycleAggregate(
             cycle_id=command.cycle_id,
             cadence=command.cadence,

@@ -19,9 +19,7 @@ class ValidateAndIngestSpecificationUseCase:
     def __init__(self, registry: SpecificationRegistryPort) -> None:
         self.registry = registry
 
-    def execute_evaluation(
-        self, request: EvaluatePayloadRequest
-    ) -> EvaluatePayloadResult:
+    def execute_evaluation(self, request: EvaluatePayloadRequest) -> EvaluatePayloadResult:
         spec = self.registry.find_by_id(request.spec_id)
         if not spec:
             raise ValueError(f"Không tìm thấy đặc tả: {request.spec_id}")
@@ -36,22 +34,11 @@ class ValidateAndIngestSpecificationUseCase:
             elif field.name in payload:
                 val = payload[field.name]
                 if field.type == "str" and not isinstance(val, str):
-                    errors.append(
-                        f"Lỗi kiểu dữ liệu: Trường '{field.name}' "
-                        "phải là chuỗi (string)."
-                    )
-                elif field.type == "float" and not isinstance(
-                    val, (int, float)
-                ):
-                    errors.append(
-                        f"Lỗi kiểu dữ liệu: Trường '{field.name}' "
-                        "phải là số thực (float)."
-                    )
+                    errors.append(f"Lỗi kiểu dữ liệu: Trường '{field.name}' phải là chuỗi (string).")
+                elif field.type == "float" and not isinstance(val, (int, float)):
+                    errors.append(f"Lỗi kiểu dữ liệu: Trường '{field.name}' phải là số thực (float).")
                 elif field.type == "int" and not isinstance(val, int):
-                    errors.append(
-                        f"Lỗi kiểu dữ liệu: Trường '{field.name}' "
-                        "phải là số nguyên (integer)."
-                    )
+                    errors.append(f"Lỗi kiểu dữ liệu: Trường '{field.name}' phải là số nguyên (integer).")
 
         # 2. Thẩm định quy tắc nghiệp vụ thời gian thực (Rules Evaluation)
         for rule in spec.rules:

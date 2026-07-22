@@ -45,4 +45,3 @@ class InMemoryIntelligenceRegistry(IntelligenceRegistryPort):
         if self._total_decisions_count == 0:
             return 1.0
         return self._success_decisions_count / self._total_decisions_count
-

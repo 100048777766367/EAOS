@@ -36,9 +36,7 @@ class TrustworthyDigitalObject(BaseModel):
     model_config = {"populate_by_name": True}
 
 
-def encapsulate_artifact(
-    artifact: KnowledgeArtifact, author: str
-) -> TrustworthyDigitalObject:
+def encapsulate_artifact(artifact: KnowledgeArtifact, author: str) -> TrustworthyDigitalObject:
     """ÄÃ³ng gÃ³i dá»¯ liá»‡u tri thá»©c thÃ´ thÃ nh TDO tá»± mÃ´ táº£ chuáº©n má»±c."""
     # Táº¡o mÃ£ Ä‘á»‹nh danh ngá»¯ nghÄ©a duy nháº¥t
     raw_payload = f"{artifact.title}|{artifact.content}|{artifact.author}"
@@ -52,4 +50,3 @@ def encapsulate_artifact(
         data=artifact,
         fixity=fixity,
     )
-

@@ -11,9 +11,7 @@ class InMemoryMetricsRepository(MetricsRepositoryPort):
     def save(self, aggregate: ArchitectureHealthAggregate) -> None:
         self._store[aggregate.system_id] = aggregate
 
-    def find_by_system_id(
-        self, system_id: str
-    ) -> ArchitectureHealthAggregate | None:
+    def find_by_system_id(self, system_id: str) -> ArchitectureHealthAggregate | None:
         return self._store.get(system_id)
 
 
@@ -24,9 +22,7 @@ class PrometheusMetricsExporterAdapter:
         system_id = getattr(dashboard_data, "system_id", "EAOS-CORE")
         overall_score = getattr(dashboard_data, "overall_health_score", 0.0)
         mttr = getattr(dashboard_data, "mttr_minutes", 0.0)
-        ai_success = getattr(
-            dashboard_data, "ai_success_rate_percentage", 0.0
-        )
+        ai_success = getattr(dashboard_data, "ai_success_rate_percentage", 0.0)
         drift_index = getattr(dashboard_data, "architecture_drift_index", 0.0)
         cap_list = getattr(dashboard_data, "capability_health_list", [])
 
@@ -74,9 +70,7 @@ class PrometheusMetricsExporterAdapter:
             for cap in cap_list:
                 cap_id = getattr(cap, "capability_id", "unknown")
                 violations = getattr(cap, "active_violations", 0)
-                lines.append(
-                    f'eaos_capability_active_violations{{capability_id="{cap_id}"}} {violations}'
-                )
+                lines.append(f'eaos_capability_active_violations{{capability_id="{cap_id}"}} {violations}')
             lines.append("")
 
             lines.extend(
@@ -88,9 +82,7 @@ class PrometheusMetricsExporterAdapter:
             for cap in cap_list:
                 cap_id = getattr(cap, "capability_id", "unknown")
                 incidents = getattr(cap, "active_incidents", 0)
-                lines.append(
-                    f'eaos_capability_active_incidents{{capability_id="{cap_id}"}} {incidents}'
-                )
+                lines.append(f'eaos_capability_active_incidents{{capability_id="{cap_id}"}} {incidents}')
             lines.append("")
 
         return chr(10).join(lines) + chr(10)

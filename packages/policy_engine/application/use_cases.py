@@ -50,9 +50,7 @@ class EvaluatePolicyUseCase:
     def __init__(self, repository: PolicyRepositoryPort) -> None:
         self._repository = repository
 
-    def execute(
-        self, command: EvaluatePolicyCommand
-    ) -> PolicyEvaluationResultDTO:
+    def execute(self, command: EvaluatePolicyCommand) -> PolicyEvaluationResultDTO:
         policy = self._repository.find_by_id(command.policy_id)
         if policy is None:
             raise ValueError(f"Policy {command.policy_id} không tồn tại.")

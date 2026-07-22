@@ -8,9 +8,7 @@ class LoopCycle(BaseModel):
 
     cycle_id: str = Field(..., description="MÃ£ chu ká»³")
     status: str = Field(..., description="Tráº¡ng thÃ¡i (SUCCESS/FAILED)")
-    stage_executions: dict[str, str] = Field(
-        default_factory=dict, description="Báº£n Ä‘á»“ liÃªn káº¿t tráº¡ng thÃ¡i"
-    )
+    stage_executions: dict[str, str] = Field(default_factory=dict, description="Báº£n Ä‘á»“ liÃªn káº¿t tráº¡ng thÃ¡i")
     timestamp: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
     model_config = ConfigDict(frozen=True)
@@ -24,4 +22,3 @@ class AutonomousLoopState(BaseModel):
     last_run_at: datetime | None = Field(default=None)
 
     model_config = ConfigDict(frozen=True)
-

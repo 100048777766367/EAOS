@@ -23,7 +23,8 @@ class DigitalTwinOrchestrator:
         proposed_pri = LAYER_PRIORITY.get(proposed_layer.lower(), 99)
         extra_violations = [
             f"Layer Violation (Simulated): '{proposed_pkg}' (domain) illegally depends on infrastructure."
-            for dep in proposed_deps if proposed_pri == 0 and dep == "infrastructure"
+            for dep in proposed_deps
+            if proposed_pri == 0 and dep == "infrastructure"
         ]
         simulated_violations.extend(extra_violations)
         simulated_score = current_score

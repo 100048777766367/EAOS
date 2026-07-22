@@ -13,25 +13,17 @@ class RuleResult(BaseModel):
 
 
 class ValidationRule(ABC):
-
     @abstractmethod
-    def evaluate(
-        self, dependency_graph: dict[str, set[str]], adrs: list[ADRDocument]
-    ) -> RuleResult: ...
+    def evaluate(self, dependency_graph: dict[str, set[str]], adrs: list[ADRDocument]) -> RuleResult: ...
 
 
 class HexagonalLayerIsolationRule(ValidationRule):
     """Đảm bảo các tầng nghiệp vụ tuân thủ ranh giới Hexagonal."""
 
-    def evaluate(
-        self, dependency_graph: dict[str, set[str]], adrs: list[ADRDocument]
-    ) -> RuleResult:
+    def evaluate(self, dependency_graph: dict[str, set[str]], adrs: list[ADRDocument]) -> RuleResult:
         # Sửa lỗi PERF401 bằng cách sử dụng List Comprehension tối ưu
         violations = [
-            (
-                f"Layer Violation: '{pkg}' không được phụ thuộc ngược "
-                f"vào lớp hạ tầng '{dep}'."
-            )
+            (f"Layer Violation: '{pkg}' không được phụ thuộc ngược vào lớp hạ tầng '{dep}'.")
             for pkg, deps in dependency_graph.items()
             for dep in deps
             if "domain" in pkg.lower() and "infrastructure" in dep.lower()
@@ -54,9 +46,7 @@ class HexagonalLayerIsolationRule(ValidationRule):
 class ADRStructureVerificationRule(ValidationRule):
     """Ép buộc mọi quyết định kỹ thuật phải tuân thủ Hiến pháp cấu trúc."""
 
-    def evaluate(
-        self, dependency_graph: dict[str, set[str]], adrs: list[ADRDocument]
-    ) -> RuleResult:
+    def evaluate(self, dependency_graph: dict[str, set[str]], adrs: list[ADRDocument]) -> RuleResult:
         failures = []
         for adr in adrs:
             missing = []
@@ -71,8 +61,7 @@ class ADRStructureVerificationRule(ValidationRule):
 
             if missing:
                 failures.append(
-                    f"ADR '{adr.title}' ({Path(adr.file_path).name}) "
-                    f"thiếu các mục bắt buộc: {', '.join(missing)}."
+                    f"ADR '{adr.title}' ({Path(adr.file_path).name}) thiếu các mục bắt buộc: {', '.join(missing)}."
                 )
 
         if failures:

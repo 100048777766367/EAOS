@@ -63,9 +63,7 @@ class EventBus:
         self._history: list[DomainEvent] = []  # Phục vụ cho Replay
         self._dlq: list[DomainEvent] = []  # Dead Letter Queue (DLQ)
 
-    def subscribe(
-        self, event_type: type[DomainEvent], handler: Callable[[Any], Any]
-    ) -> None:
+    def subscribe(self, event_type: type[DomainEvent], handler: Callable[[Any], Any]) -> None:
         """Đăng ký một handler nhận tin khi sự kiện được phát hành."""
         event_name = event_type.__name__
         self._handlers.setdefault(event_name, []).append(handler)
@@ -89,10 +87,7 @@ class EventBus:
                     break
                 except Exception as e:
                     retries += 1
-                    print(
-                        f"Retry {retries}/{max_retries} thất bại "
-                        f"cho handler {handler.__name__}: {e}"
-                    )
+                    print(f"Retry {retries}/{max_retries} thất bại cho handler {handler.__name__}: {e}")
 
             if not success:
                 # Nếu tất cả các lần thử thất bại, đưa vào Dead Letter Queue (DLQ)

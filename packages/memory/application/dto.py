@@ -17,4 +17,3 @@ class MemoryResponse(BaseModel):
     id: str
     outcome: str
     lesson_learned: str
-

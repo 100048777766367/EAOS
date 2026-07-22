@@ -1,6 +1,5 @@
 """Unit tests for Continuous Improvement (Kaizen) context."""
 
-
 from packages.continuous_improvement.application.dto import (
     IdentifyOpportunitiesCommand,
     VerifyInitiativeCommand,

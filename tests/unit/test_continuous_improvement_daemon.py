@@ -55,9 +55,7 @@ def test_continuous_improvement_daemon_single_cycle(tmp_path: Path) -> None:
     # Setup Feedback Engine
     feedback_repo = InMemoryFeedbackRepository()
     adaptation_handler = MockAdaptationHandler()
-    process_feedback_uc = ProcessFeedbackUseCase(
-        repository=feedback_repo, adaptation_handler=adaptation_handler
-    )
+    process_feedback_uc = ProcessFeedbackUseCase(repository=feedback_repo, adaptation_handler=adaptation_handler)
 
     # Instantiate Engine
     engine = ContinuousImprovementEngine(

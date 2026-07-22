@@ -17,15 +17,11 @@ class InMemoryWorkflowRegistry(WorkflowRegistryPort):
         self._definitions: dict[str, WorkflowDefinition] = {}
         self._instances: dict[str, WorkflowInstance] = {}
 
-    def register_definition(
-        self, definition: WorkflowDefinition
-    ) -> WorkflowDefinition:
+    def register_definition(self, definition: WorkflowDefinition) -> WorkflowDefinition:
         self._definitions[definition.id] = definition
         return definition
 
-    def find_definition_by_id(
-        self, workflow_id: str
-    ) -> WorkflowDefinition | None:
+    def find_definition_by_id(self, workflow_id: str) -> WorkflowDefinition | None:
         return self._definitions.get(workflow_id)
 
     def list_definitions(self) -> list[WorkflowDefinition]:

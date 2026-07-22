@@ -34,4 +34,3 @@ class BusinessCapability(BaseModel):
     events: list[str] = Field(default_factory=list)
 
     model_config = ConfigDict(frozen=True)
-

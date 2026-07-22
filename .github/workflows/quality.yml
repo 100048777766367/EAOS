@@ -1,0 +1,43 @@
+﻿name: Quality Gates & Fitness Functions
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    - cron: "0 0 * * *" # Daily audit
+
+permissions:
+  contents: read
+
+jobs:
+  quality-gate:
+    name: Code Quality & Health Score
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install uv & Python 3.14
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "latest"
+          python-version: "3.14"
+          enable-cache: true
+
+      - name: Install Dependencies
+        run: uv sync --all-groups
+
+      - name: Ruff Format Check
+        run: uv run ruff format --check .
+
+      - name: Ruff Linter Verification
+        run: uv run ruff check .
+
+      - name: Strict MyPy Type Checking
+        run: uv run mypy apps/ kernel/ engine/ packages/ tools/ platform_services/
+
+      - name: Compute Architecture Metrics & Health Score
+        run: uv run task metrics

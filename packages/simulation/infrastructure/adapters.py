@@ -17,4 +17,3 @@ class InMemorySimulationRepository(SimulationRepository):
 
     def list_all(self) -> list[Simulation]:
         return list(self._store.values())
-

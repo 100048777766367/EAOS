@@ -60,4 +60,3 @@ class InMemoryCapabilityRegistry(CapabilityRegistryPort):
             contracts=contracts,
             events=data.get("events", []),
         )
-

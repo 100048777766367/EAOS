@@ -34,15 +34,11 @@ class ProposeEvolutionRequest:
 
 
 class ProposeEvolutionUseCase:
-    def __init__(
-        self, repo: EvolutionRepository, council: EvolutionGovernanceCouncil
-    ) -> None:
+    def __init__(self, repo: EvolutionRepository, council: EvolutionGovernanceCouncil) -> None:
         self.repo = repo
         self.council = council
 
-    def execute(
-        self, request: ProposeEvolutionRequest, votes: list[CouncilVote]
-    ) -> EvolutionObject:
+    def execute(self, request: ProposeEvolutionRequest, votes: list[CouncilVote]) -> EvolutionObject:
         from packages.evolution.domain.models import (
             Metadata,
             Provenance,
@@ -52,13 +48,9 @@ class ProposeEvolutionUseCase:
         if request.parent_id:
             parent = self.repo.find_by_id(request.parent_id)
             if parent:
-                comp, errs = check_backwards_compatibility(
-                    parent.payload, request.payload
-                )
+                comp, errs = check_backwards_compatibility(parent.payload, request.payload)
                 if not comp:
-                    raise ValueError(
-                        f"Evolution proposal violates compatibility: {errs}"
-                    )
+                    raise ValueError(f"Evolution proposal violates compatibility: {errs}")
                 version_num = parent.version.major + 1
 
         approved_count = sum(1 for v in votes if v.decision == "APPROVED")
@@ -75,9 +67,7 @@ class ProposeEvolutionUseCase:
             parent_id=request.parent_id,
         )
 
-        sem_ver = SemanticVersion(
-            major=version_num, minor=0, patch=0, revision="REV-AUTO"
-        )
+        sem_ver = SemanticVersion(major=version_num, minor=0, patch=0, revision="REV-AUTO")
         obj = EvolutionObject(
             id=request.id,
             name=request.name,
@@ -97,9 +87,7 @@ class MigrateEvolutionUseCase:
     def __init__(self, repo: EvolutionRepository) -> None:
         self.repo = repo
 
-    def execute_migration(
-        self, doc_id: str, rules: dict[str, Any], author: str
-    ) -> EvolutionObject:
+    def execute_migration(self, doc_id: str, rules: dict[str, Any], author: str) -> EvolutionObject:
         parent_obj = self.repo.find_by_id(doc_id)
         if not parent_obj:
             raise ValueError("Không tìm thấy tài liệu cha")
@@ -119,9 +107,7 @@ class MigrateEvolutionUseCase:
         new_version = parent_obj.version.major + 1
         new_payload["__version"] = new_version
 
-        comp, errs = check_backwards_compatibility(
-            parent_obj.payload, new_payload
-        )
+        comp, errs = check_backwards_compatibility(parent_obj.payload, new_payload)
         if not comp:
             raise ValueError(f"Vi phạm tương thích ngược: {errs}")
 
@@ -144,9 +130,7 @@ class MigrateEvolutionUseCase:
             passed=True,
             log_summary="Migration check passed",
         )
-        sem_ver = SemanticVersion(
-            major=new_version, minor=0, patch=0, revision="REV-MIG"
-        )
+        sem_ver = SemanticVersion(major=new_version, minor=0, patch=0, revision="REV-MIG")
         obj = EvolutionObject(
             id=new_id,
             name=f"Migrated from {parent_obj.name}",

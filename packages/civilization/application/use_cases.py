@@ -31,9 +31,7 @@ class ExecuteCivilizationCivilianUseCase:
     def __init__(self, repo: CivilizationRegistryPort) -> None:
         self.repo = repo
 
-    def negotiate_capability_exchange(
-        self, request: NegotiationRequest
-    ) -> AutonomousNegotiation:
+    def negotiate_capability_exchange(self, request: NegotiationRequest) -> AutonomousNegotiation:
         neg_id = f"NEG-{uuid.uuid4().hex[:6].upper()}"
         neg = AutonomousNegotiation(
             id=neg_id,
@@ -49,9 +47,7 @@ class ExecuteCivilizationCivilianUseCase:
         )
         return self.repo.save_negotiation(neg)
 
-    def commit_global_consensus(
-        self, request: ConsensusRequest
-    ) -> GlobalConsensusTransaction:
+    def commit_global_consensus(self, request: ConsensusRequest) -> GlobalConsensusTransaction:
         proposal = self.repo.find_negotiation_by_id(request.proposal_id)
         if not proposal:
             raise ValueError(f"Không tìm thấy đề xuất: {request.proposal_id}")
@@ -71,9 +67,7 @@ class ExecuteCivilizationCivilianUseCase:
         prev_hash = latest_block.hash if latest_block else "GENESIS_HASH"
         prev_index = latest_block.index if latest_block else 0
 
-        block_hash = hashlib.sha256(
-            f"{prev_index+1}{prev_hash}{proposal.id}".encode()
-        ).hexdigest()
+        block_hash = hashlib.sha256(f"{prev_index + 1}{prev_hash}{proposal.id}".encode()).hexdigest()
 
         new_block = CollectiveEvolutionBlock(
             index=prev_index + 1,

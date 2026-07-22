@@ -23,8 +23,6 @@ class InMemoryAgentRegistry(AgentRegistryPort):
         if not agent:
             raise ValueError(f"Agent {agent_id} không tồn tại")
         new_history = [*list(agent.lifecycle_history), state]
-        updated = agent.model_copy(
-            update={"current_state": state, "lifecycle_history": new_history}
-        )
+        updated = agent.model_copy(update={"current_state": state, "lifecycle_history": new_history})
         self.register(updated)
         return updated

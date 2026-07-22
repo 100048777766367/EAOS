@@ -1,44 +1,79 @@
-﻿name: EAOS Platform Architecture CI
+﻿name: CI Pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [main, develop]
   pull_request:
-    branches: [ "main" ]
+    branches: [main, develop]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
 
 jobs:
-  quality-gate:
+  test:
+    name: Test & Validate
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        # Đảm bảo tương thích ngược trên nhiều phiên bản Python
-        python-version: ["3.12", "3.13", "3.14"]
+
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_DB: eaos
+          POSTGRES_USER: eaos
+          POSTGRES_PASSWORD: eaos
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
-    - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-    - name: Install Astral uv
-      uses: astral-sh/setup-uv@v3
-      with:
-        version: "latest"
+      - name: Install uv & Python 3.14
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "latest"
+          python-version: "3.14"
+          enable-cache: true
+          cache-dependency-glob: "**/pyproject.toml"
 
-    - name: Set up Python ${{ matrix.python-version }}
-      run: uv python pin ${{ matrix.python-version }}
+      - name: Install Dependencies
+        run: uv sync --all-groups
 
-    - name: Sync dependencies with locked versions
-      run: uv sync
+      - name: Run Linter & Type Check
+        run: uv run task lint
 
-    - name: Run Ruff Linter & Formatting Checks
-      run: uv run taskipy lint
+      - name: Run AST Architecture Validation
+        run: uv run task validate
 
-    - name: Run Pytest Suite with Coverage Verification
-      run: uv run taskipy test
+      - name: Execute Pytest Suite with Coverage
+        env:
+          DATABASE_URL: postgresql://eaos:eaos@localhost:5432/eaos
+          REDIS_URL: redis://localhost:6379/0
+        run: uv run pytest --cov=packages --cov=kernel --cov-report=xml --cov-report=term-missing tests/
 
-    - name: Run Executable Architecture Linter
-      run: uv run taskipy validate
-
-    - name: Run Automatic Architecture Compiler Dry-Run
-      run: uv run taskipy compile
-
-    - name: Run Digital Twin & Simulation Dry-Run
-      run: uv run taskipy twin
+      - name: Upload Test Coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage.xml

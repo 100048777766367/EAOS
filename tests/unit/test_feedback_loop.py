@@ -32,9 +32,7 @@ def test_feedback_signal_violation_detection() -> None:
 
 
 def test_feedback_loop_cooldown_suppression() -> None:
-    aggregate = FeedbackLoopAggregate(
-        loop_id="LOOP-01", cooldown_seconds=60.0
-    )
+    aggregate = FeedbackLoopAggregate(loop_id="LOOP-01", cooldown_seconds=60.0)
     signal = FeedbackSignal(
         signal_id="SIG-002",
         source=FeedbackSource.TELEMETRY,
@@ -45,24 +43,18 @@ def test_feedback_loop_cooldown_suppression() -> None:
         message="High latency detected",
     )
 
-    decision1 = aggregate.evaluate_signal(
-        signal, decision_id="DEC-1"
-    )
+    decision1 = aggregate.evaluate_signal(signal, decision_id="DEC-1")
     assert decision1 is not None
     assert decision1.action_type == "SCALE_RESOURCES"
 
-    decision2 = aggregate.evaluate_signal(
-        signal, decision_id="DEC-2"
-    )
+    decision2 = aggregate.evaluate_signal(signal, decision_id="DEC-2")
     assert decision2 is None
 
 
 def test_process_feedback_use_case_execution() -> None:
     repo = InMemoryFeedbackRepository()
     handler = MockAdaptationHandler()
-    use_case = ProcessFeedbackUseCase(
-        repository=repo, adaptation_handler=handler
-    )
+    use_case = ProcessFeedbackUseCase(repository=repo, adaptation_handler=handler)
 
     cmd = IngestionSignalCommand(
         signal_id="SIG-100",
@@ -83,7 +75,4 @@ def test_process_feedback_use_case_execution() -> None:
     assert result.requires_approval is False
 
     assert len(handler.handled_decisions) == 1
-    assert (
-        handler.handled_decisions[0].parameters["observed"]
-        == 3.0
-    )
+    assert handler.handled_decisions[0].parameters["observed"] == 3.0

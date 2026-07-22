@@ -22,4 +22,3 @@ class AuditLogEntry(BaseModel):
     timestamp: datetime = Field(default_factory=lambda: datetime.now(UTC))
     author: str
     details: str
-

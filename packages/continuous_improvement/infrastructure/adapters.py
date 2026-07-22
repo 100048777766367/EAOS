@@ -15,9 +15,7 @@ class InMemoryImprovementRepository(ImprovementRepositoryPort):
     def save(self, initiative: ImprovementInitiativeAggregate) -> None:
         self._store[initiative.initiative_id] = initiative
 
-    def find_by_id(
-        self, initiative_id: str
-    ) -> ImprovementInitiativeAggregate | None:
+    def find_by_id(self, initiative_id: str) -> ImprovementInitiativeAggregate | None:
         return self._store.get(initiative_id)
 
     def list_all(self) -> list[ImprovementInitiativeAggregate]:

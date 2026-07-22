@@ -17,4 +17,3 @@ class InMemoryPredictionRepository(PredictionRepository):
 
     def list_all(self) -> list[Prediction]:
         return list(self._store.values())
-

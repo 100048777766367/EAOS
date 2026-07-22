@@ -104,9 +104,7 @@ class PhysicalGitAutoPRAdapter(GitPullRequestPublisherPort):
                 "branch": branch_name,
             }
 
-    def _create_github_pr(
-        self, branch_name: str, title: str, body: str
-    ) -> bool:
+    def _create_github_pr(self, branch_name: str, title: str, body: str) -> bool:
         """Sends HTTP POST request to GitHub API v3 /repos/{owner}/{repo}/pulls."""
         url = f"https://api.github.com/repos/{self.github_repo}/pulls"
         headers = {
@@ -129,6 +127,6 @@ class PhysicalGitAutoPRAdapter(GitPullRequestPublisherPort):
                 method="POST",
             )
             with urllib.request.urlopen(req) as resp:
-                return bool(getattr(resp, 'status', None) == 201)
+                return bool(getattr(resp, "status", None) == 201)
         except Exception:
             return False

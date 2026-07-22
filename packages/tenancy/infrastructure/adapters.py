@@ -17,4 +17,3 @@ class InMemoryTenantRegistry(TenantRegistryPort):
 
     def list_all(self) -> list[TenantContext]:
         return list(self._store.values())
-

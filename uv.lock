@@ -499,7 +499,7 @@ dependencies = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "pydantic", specifier = ">=2.13.4" }]
+requires-dist = [{ name = "pydantic", specifier = ">=2.6.0" }]
 
 [[package]]
 name = "eaos-prediction"

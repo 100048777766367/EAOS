@@ -25,9 +25,7 @@ class ExecuteWorkflowUseCase:
     def __init__(self, registry: WorkflowRegistryPort) -> None:
         self.registry = registry
 
-    def start_workflow(
-        self, request: StartWorkflowRequest
-    ) -> WorkflowInstance:
+    def start_workflow(self, request: StartWorkflowRequest) -> WorkflowInstance:
         definition = self.registry.find_definition_by_id(request.workflow_id)
         if not definition:
             raise ValueError(f"Workflow {request.workflow_id} không tồn tại.")
@@ -49,9 +47,7 @@ class ExecuteWorkflowUseCase:
         )
         return self.registry.save_instance(instance)
 
-    def transition_workflow(
-        self, request: TransitionWorkflowRequest, simulate_stuck: bool = False
-    ) -> WorkflowInstance:
+    def transition_workflow(self, request: TransitionWorkflowRequest, simulate_stuck: bool = False) -> WorkflowInstance:
         instance = self.registry.find_instance_by_id(request.instance_id)
         if not instance:
             raise ValueError(f"Workflow instance {request.instance_id} không tồn tại.")
@@ -93,9 +89,7 @@ class ExecuteWorkflowUseCase:
                 break
 
         if not target_state:
-            raise ValueError(
-                f"Transition '{request.trigger}' không hợp lệ từ trạng thái '{instance.current_state}'."
-            )
+            raise ValueError(f"Transition '{request.trigger}' không hợp lệ từ trạng thái '{instance.current_state}'.")
 
         updated_instance = WorkflowInstance(
             instance_id=instance.instance_id,

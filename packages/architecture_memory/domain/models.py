@@ -35,15 +35,12 @@ class ArchitectureMemoryRecordAggregate:
     linked_adr_id: str | None = None
     confidence_score: float = 1.0  # 0.0 -> 1.0
     tags: list[SemanticTag] = field(default_factory=list)
-    created_at: datetime = field(
-        default_factory=lambda: datetime.now(UTC)
-    )
+    created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
 
     def calculate_similarity(self, query_tokens: set[str]) -> float:
         """Calculates Jaccard Index similarity against record tokens."""
         content_text = (
-            f"{self.title} {self.context_summary} {self.lesson_learned} "
-            f"{' '.join(t.value for t in self.tags)}"
+            f"{self.title} {self.context_summary} {self.lesson_learned} {' '.join(t.value for t in self.tags)}"
         ).lower()
 
         record_tokens = set(content_text.split())

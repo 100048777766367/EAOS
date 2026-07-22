@@ -84,4 +84,3 @@ class FitnessEngine:
             return 0.0
         passed_evidences = [ev for ev in obj.evidences if ev.passed]
         return len(passed_evidences) / len(obj.evidences)
-

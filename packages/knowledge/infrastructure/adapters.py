@@ -30,9 +30,7 @@ class PostgresKnowledgeRepository(KnowledgeRepository):
     def __init__(self, db_url: str) -> None:
         self.engine = create_engine(db_url)
         Base.metadata.create_all(self.engine)
-        self.SessionLocal = sessionmaker(
-            autocommit=False, autoflush=False, bind=self.engine
-        )
+        self.SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=self.engine)
 
     def save(self, artifact: KnowledgeArtifact) -> KnowledgeArtifact:
         db_session = self.SessionLocal()
@@ -61,11 +59,7 @@ class PostgresKnowledgeRepository(KnowledgeRepository):
     def find_by_id(self, artifact_id: str) -> KnowledgeArtifact | None:
         db_session = self.SessionLocal()
         try:
-            db_model = (
-                db_session.query(PostgresKnowledgeModel)
-                .filter(PostgresKnowledgeModel.id == artifact_id)
-                .first()
-            )
+            db_model = db_session.query(PostgresKnowledgeModel).filter(PostgresKnowledgeModel.id == artifact_id).first()
             if not db_model:
                 return None
             return KnowledgeArtifact(
@@ -188,3 +182,25 @@ class SplayCacheKnowledgeRepository(KnowledgeRepository):
 
     def get_audit_logs(self, artifact_id: str) -> list[AuditLogEntry]:
         return self.audit_history.get(artifact_id, [])
+
+
+class InMemoryKnowledgeRepository(KnowledgeRepository):
+    """Adapter RAM phục vụ kiểm thử offline khi Postgres không bật."""
+
+    def __init__(self) -> None:
+        self._store: dict[str, KnowledgeArtifact] = {}
+
+    def save(self, artifact: KnowledgeArtifact) -> KnowledgeArtifact:
+        art_id = artifact.id or f"ART-{len(self._store) + 1}"
+        updated = KnowledgeArtifact(
+            id=art_id,
+            title=artifact.title,
+            content=artifact.content,
+            author=artifact.author,
+            created_at=artifact.created_at,
+        )
+        self._store[art_id] = updated
+        return updated
+
+    def find_by_id(self, artifact_id: str) -> KnowledgeArtifact | None:
+        return self._store.get(artifact_id)

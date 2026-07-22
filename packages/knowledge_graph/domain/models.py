@@ -20,9 +20,7 @@ class GraphNode:
     node_id: str
     node_type: NodeType
     label: str
-    properties: dict[str, str | float | int | bool] = field(
-        default_factory=dict
-    )
+    properties: dict[str, str | float | int | bool] = field(default_factory=dict)
 
 
 @dataclass(frozen=True, slots=True)
@@ -38,9 +36,7 @@ class KnowledgeGraphAggregate:
     graph_id: str
     nodes: dict[str, GraphNode] = field(default_factory=dict)
     edges: list[GraphEdge] = field(default_factory=list)
-    updated_at: datetime = field(
-        default_factory=lambda: datetime.now(UTC)
-    )
+    updated_at: datetime = field(default_factory=lambda: datetime.now(UTC))
 
     def add_node(self, node: GraphNode) -> None:
         self.nodes[node.node_id] = node

@@ -32,13 +32,6 @@ graph TD
     capability_mapping["capability_mapping"]
     capability["capability"]
     autonomous["autonomous"]
-    autonomous --> evolution
-    autonomous --> learning
-    autonomous --> prediction
-    autonomous --> reflection
-    autonomous --> self_rewrite
-    autonomous --> simulation
-    autonomous --> workflow
     architecture_memory["architecture_memory"]
     architecture_fitness["architecture_fitness"]
     agent["agent"]

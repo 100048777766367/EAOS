@@ -78,9 +78,7 @@ def test_explain_code_change_not_found() -> None:
     repo = InMemoryTraceabilityRepository()
     explain_use_case = ExplainCodeChangeUseCase(repo)
 
-    query = ExplainCodeChangeQuery(
-        file_path=Path("packages/unknown.py"), line_number=10
-    )
+    query = ExplainCodeChangeQuery(file_path=Path("packages/unknown.py"), line_number=10)
     response = explain_use_case.execute(query)
 
     assert response.found is False

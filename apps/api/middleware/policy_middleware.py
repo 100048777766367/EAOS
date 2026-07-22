@@ -32,9 +32,7 @@ class PolicyEnforcementMiddleware(BaseHTTPMiddleware):
         self.evaluate_policy_use_case = evaluate_policy_use_case
         self.policy_id = policy_id
 
-    async def dispatch(
-        self, request: Request, call_next: RequestResponseEndpoint
-    ) -> Response:
+    async def dispatch(self, request: Request, call_next: RequestResponseEndpoint) -> Response:
         if request.url.path in self.EXEMPT_PATHS:
             return await call_next(request)
 

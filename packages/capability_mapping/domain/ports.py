@@ -9,16 +9,11 @@ from packages.capability_mapping.domain.models import (
 
 
 class CapabilityMappingRepositoryPort(Protocol):
-    def save(self, mapping: CapabilityMappingAggregate) -> None:
-        ...
+    def save(self, mapping: CapabilityMappingAggregate) -> None: ...
 
-    def find_by_id(
-        self, capability_id: str
-    ) -> CapabilityMappingAggregate | None:
-        ...
+    def find_by_id(self, capability_id: str) -> CapabilityMappingAggregate | None: ...
 
-    def list_all(self) -> list[CapabilityMappingAggregate]:
-        ...
+    def list_all(self) -> list[CapabilityMappingAggregate]: ...
 
 
 class CodebaseScannerPort(Protocol):

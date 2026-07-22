@@ -19,26 +19,12 @@ def parse_adr_file(path: Path) -> ADRDocument:
     """Quét và phân tích cấu trúc tiêu đề của các tệp tin ADRs."""
     content = path.read_text(encoding="utf-8")
 
-    has_status = (
-        re.search(r"^#+\s+Status", content, re.MULTILINE | re.IGNORECASE)
-        is not None
-    )
-    has_context = (
-        re.search(r"^#+\s+Context", content, re.MULTILINE | re.IGNORECASE)
-        is not None
-    )
-    has_decision = (
-        re.search(r"^#+\s+Decision", content, re.MULTILINE | re.IGNORECASE)
-        is not None
-    )
-    has_consequences = (
-        re.search(r"^#+\s+Consequences", content, re.MULTILINE | re.IGNORECASE)
-        is not None
-    )
+    has_status = re.search(r"^#+\s+Status", content, re.MULTILINE | re.IGNORECASE) is not None
+    has_context = re.search(r"^#+\s+Context", content, re.MULTILINE | re.IGNORECASE) is not None
+    has_decision = re.search(r"^#+\s+Decision", content, re.MULTILINE | re.IGNORECASE) is not None
+    has_consequences = re.search(r"^#+\s+Consequences", content, re.MULTILINE | re.IGNORECASE) is not None
 
-    status_match = re.search(
-        r"Status:\s*\*?([a-zA-Z\-]+)\*?", content, re.IGNORECASE
-    )
+    status_match = re.search(r"Status:\s*\*?([a-zA-Z\-]+)\*?", content, re.IGNORECASE)
     status = status_match.group(1).strip() if status_match else None
 
     title_match = re.search(r"^#\s+(.+)$", content, re.MULTILINE)

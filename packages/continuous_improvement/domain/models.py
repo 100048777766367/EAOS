@@ -55,19 +55,12 @@ class ImprovementInitiativeAggregate:
     metric_delta: MetricDelta
     action_items: list[ActionItem] = field(default_factory=list)
     status: InitiativeStatus = InitiativeStatus.IDENTIFIED
-    created_at: datetime = field(
-        default_factory=lambda: datetime.now(UTC)
-    )
+    created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
 
     def calculate_roi_score(self) -> float:
         """Calculates Expected ROI = Expected Improvement / Total Risk Weight."""
-        expected_gain = abs(
-            self.metric_delta.target_value - self.metric_delta.baseline_value
-        )
-        total_risk = (
-            sum(item.estimated_risk_score for item in self.action_items)
-            or 1.0
-        )
+        expected_gain = abs(self.metric_delta.target_value - self.metric_delta.baseline_value)
+        total_risk = sum(item.estimated_risk_score for item in self.action_items) or 1.0
         return round(expected_gain / total_risk, 2)
 
     def mark_as_proposed(self) -> None:

@@ -21,9 +21,7 @@ class ImprovementCycleRecord:
     architecture_score: int
     policy_passed: bool
     adaptation_action: str | None
-    created_at: datetime = field(
-        default_factory=lambda: datetime.now(UTC)
-    )
+    created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
 
 
 class ContinuousImprovementEngine:

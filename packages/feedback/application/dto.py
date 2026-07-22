@@ -8,12 +8,8 @@ from pydantic import BaseModel, Field
 
 
 class IngestionSignalCommand(BaseModel):
-    signal_id: str = Field(
-        ..., description="Unique ID of the signal"
-    )
-    loop_id: str = Field(
-        ..., description="ID of the feedback loop aggregate"
-    )
+    signal_id: str = Field(..., description="Unique ID of the signal")
+    loop_id: str = Field(..., description="ID of the feedback loop aggregate")
     source: FeedbackSource
     severity: FeedbackSeverity
     metric_name: str

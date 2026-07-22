@@ -47,9 +47,7 @@ class TrustworthyDigitalObject(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
 
-def encapsulate_artifact(
-    artifact_id: str, title: str, content: str, author: str
-) -> TrustworthyDigitalObject:
+def encapsulate_artifact(artifact_id: str, title: str, content: str, author: str) -> TrustworthyDigitalObject:
     """Đóng gói dữ liệu tri thức thô thành TDO tự mô tả [1.1.4]."""
     raw_payload = f"{title}|{content}|{author}"
     sha256_hash = hashlib.sha256(raw_payload.encode("utf-8")).hexdigest()

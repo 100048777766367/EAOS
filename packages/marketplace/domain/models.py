@@ -10,9 +10,7 @@ class MarketplaceAsset(BaseModel):
     name: str = Field(..., description="TÃªn á»©ng dá»¥ng")
     category: str = Field(..., description="PhÃ¢n loáº¡i: CAPABILITY, WORKFLOW")
     version: str = Field(default="1.0.0", description="PhiÃªn báº£n ngá»¯ nghÄ©a")
-    dependencies: list[str] = Field(
-        default_factory=list, description="MÃ£ cÃ¡c NÄƒng lá»±c phá»¥ thuá»™c"
-    )
+    dependencies: list[str] = Field(default_factory=list, description="MÃ£ cÃ¡c NÄƒng lá»±c phá»¥ thuá»™c")
     compatibility_matrix: list[str] = Field(
         default_factory=list, description="Danh sÃ¡ch phiÃªn báº£n EAOS Ä‘Æ°á»£c há»— trá»£"
     )
@@ -24,4 +22,3 @@ class MarketplaceAsset(BaseModel):
     published_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
     model_config = ConfigDict(frozen=True)
-

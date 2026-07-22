@@ -1,0 +1,73 @@
+﻿name: Manual Operational Trigger
+
+on:
+  workflow_dispatch:
+    inputs:
+      operation:
+        description: "Operation to execute"
+        required: true
+        default: "validate"
+        type: choice
+        options:
+          - validate
+          - metrics
+          - time-machine-record
+          - governance-loop
+          - self-heal
+      param_tag:
+        description: "Parameter / Snapshot Tag (Optional)"
+        required: false
+        default: "manual_snapshot"
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  run-operation:
+    name: Execute Operational Task
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install uv & Python 3.14
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "latest"
+          python-version: "3.14"
+          enable-cache: true
+
+      - name: Install Dependencies
+        run: uv sync --all-groups
+
+      - name: Execute Selected Task
+        run: |
+          case "${{ inputs.operation }}" in
+            validate)
+              uv run task validate
+              ;;
+            metrics)
+              uv run task metrics
+              ;;
+            time-machine-record)
+              uv run task time-machine record "${{ inputs.param_tag }}"
+              ;;
+            governance-loop)
+              uv run task loop ARCHITECTURE
+              ;;
+            self-heal)
+              uv run python -c "
+              from apps.api.app.main import app
+              from fastapi.testclient import TestClient
+              client = TestClient(app)
+              resp = client.post('/evolution/self-heal/DOC-001')
+              print(resp.json())
+              "
+              ;;
+            *)
+              echo "Unknown operation: ${{ inputs.operation }}"
+              exit 1
+              ;;
+          esac

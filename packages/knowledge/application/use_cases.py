@@ -24,4 +24,3 @@ class StoreKnowledgeUseCase:
             author=request.author.strip(),
         )
         return self.repository.save(artifact)
-

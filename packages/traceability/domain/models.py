@@ -32,9 +32,7 @@ class CausalNode:
     title: str
     description: str
     evidence_payload: dict[str, str | float | int | bool]
-    created_at: datetime = field(
-        default_factory=lambda: datetime.now(UTC)
-    )
+    created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
 
 
 @dataclass(slots=True)
@@ -49,10 +47,7 @@ class TraceabilityChainAggregate:
     def generate_explanation(self) -> str:
         """Constructs a human-and-AI-readable causal explanation."""
         if not self.nodes:
-            return (
-                f"No traceability data found for "
-                f"{self.target_location.file_path}:{self.target_location.start_line}."
-            )
+            return f"No traceability data found for {self.target_location.file_path}:{self.target_location.start_line}."
 
         lines = [
             f"=== CAUSAL TRACEABILITY REPORT FOR TRACE ID: {self.trace_id} ===",

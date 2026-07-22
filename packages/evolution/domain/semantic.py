@@ -38,15 +38,9 @@ class SemanticLayer:
                 "<https://eaos.internal/vocab#EvolutionObject> ."
             ),
             f'{subject} <https://eaos.internal/vocab#name> "{obj.name}" .',
-            (
-                f"{subject} <https://eaos.internal/vocab#version> "
-                f'"{obj.payload.get("__version", 1)}" .'
-            ),
+            (f'{subject} <https://eaos.internal/vocab#version> "{obj.payload.get("__version", 1)}" .'),
         ]
         if obj.provenance.parent_id:
             parent_uri = f"<https://eaos.internal/objects/{obj.provenance.parent_id}>"
-            rdf_triples.append(
-                f"{subject} <https://eaos.internal/vocab#hasParent> {parent_uri} ."
-            )
+            rdf_triples.append(f"{subject} <https://eaos.internal/vocab#hasParent> {parent_uri} .")
         return rdf_triples
-

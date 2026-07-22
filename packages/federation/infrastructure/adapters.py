@@ -24,21 +24,16 @@ class InMemoryFederationRegistry(FederationRepositoryPort):
     def list_members(self) -> list[EcosystemMember]:
         return list(self._members.values())
 
-    def save_evolution_report(
-        self, report: CollectiveEvolutionReport
-    ) -> CollectiveEvolutionReport:
+    def save_evolution_report(self, report: CollectiveEvolutionReport) -> CollectiveEvolutionReport:
         self._reports.append(report)
         return report
 
     def list_evolution_reports(self) -> list[CollectiveEvolutionReport]:
         return self._reports
 
-    def save_federated_transaction(
-        self, tx: FederatedTransaction
-    ) -> FederatedTransaction:
+    def save_federated_transaction(self, tx: FederatedTransaction) -> FederatedTransaction:
         self._txs.append(tx)
         return tx
 
     def list_federated_transactions(self) -> list[FederatedTransaction]:
         return self._txs
-

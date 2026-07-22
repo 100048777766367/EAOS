@@ -154,10 +154,7 @@ class ArchitectureCompiler:
         if "=== STATUS DASHBOARD ===" in content:
             parts = content.split("=== STATUS DASHBOARD ===")
             sub_parts = parts[1].split("========================", 1)
-            content = (
-                parts[0] + "=== STATUS DASHBOARD ===\n" +
-                status_block + "========================" + sub_parts[1]
-            )
+            content = parts[0] + "=== STATUS DASHBOARD ===\n" + status_block + "========================" + sub_parts[1]
         else:
             content += f"\n\n## === STATUS DASHBOARD ===\n{status_block}========================\n"
         with open(ctx_file, "w", encoding="utf-8") as f:

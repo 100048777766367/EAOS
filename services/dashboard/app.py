@@ -18,9 +18,7 @@ OUTPUT_PATH = ROOT_PATH / "generated" / "report.json"
 @app.command()
 def validate() -> None:
     """Chạy kiểm toán ranh giới và biểu quyết sáp nhập vĩnh cửu."""
-    console.print(
-        "[bold blue]Khởi chạy EAOS Architecture Validator...[/bold blue]\n"
-    )
+    console.print("[bold blue]Khởi chạy EAOS Architecture Validator...[/bold blue]\n")
 
     engine = EAOSValidatorEngine(ROOT_PATH)
     report = engine.run_validation()

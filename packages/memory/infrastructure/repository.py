@@ -16,16 +16,11 @@ class InMemoryMemoryRepository(MemoryRepositoryPort):
     def list_all(self) -> list[MemoryRecord]:
         return list(self._store.values())
 
-    def vector_search(
-        self, query: str, limit: int = 5
-    ) -> list[MemoryRecord]:
+    def vector_search(self, query: str, limit: int = 5) -> list[MemoryRecord]:
         query_tokens = query.lower().split()
         results = []
         for record in self._store.values():
-            text_space = (
-                f"{record.lesson_learned} {record.evidence_summary} "
-                f"{' '.join(record.key_learnings)}"
-            ).lower()
+            text_space = (f"{record.lesson_learned} {record.evidence_summary} {' '.join(record.key_learnings)}").lower()
             overlap = sum(1 for t in query_tokens if t in text_space)
             if overlap > 0:
                 results.append((overlap, record))

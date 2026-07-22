@@ -43,4 +43,3 @@ class RecallMemoryHandler:
 
     def semantic_recall(self, query_text: str, limit: int = 5) -> list[MemoryRecord]:
         return self.repo.vector_search(query_text, limit)
-

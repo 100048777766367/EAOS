@@ -15,18 +15,14 @@ from sqlalchemy import DateTime, Float, String, Text, create_engine, select
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, sessionmaker
 
 
-class InMemoryArchitectureMemoryRepository(
-    ArchitectureMemoryRepositoryPort, SemanticRecallPort
-):
+class InMemoryArchitectureMemoryRepository(ArchitectureMemoryRepositoryPort, SemanticRecallPort):
     def __init__(self) -> None:
         self._store: dict[str, ArchitectureMemoryRecordAggregate] = {}
 
     def save(self, record: ArchitectureMemoryRecordAggregate) -> None:
         self._store[record.memory_id] = record
 
-    def find_by_id(
-        self, memory_id: str
-    ) -> ArchitectureMemoryRecordAggregate | None:
+    def find_by_id(self, memory_id: str) -> ArchitectureMemoryRecordAggregate | None:
         return self._store.get(memory_id)
 
     def list_all(self) -> list[ArchitectureMemoryRecordAggregate]:
@@ -36,9 +32,7 @@ class InMemoryArchitectureMemoryRepository(
         self, query_text: str, limit: int = 5, min_similarity: float = 0.1
     ) -> list[tuple[ArchitectureMemoryRecordAggregate, float]]:
         query_tokens = set(query_text.lower().split())
-        scored_records: list[
-            tuple[ArchitectureMemoryRecordAggregate, float]
-        ] = []
+        scored_records: list[tuple[ArchitectureMemoryRecordAggregate, float]] = []
 
         for record in self._store.values():
             sim = record.calculate_similarity(query_tokens)
@@ -67,17 +61,13 @@ class PgMemoryRecordModel(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
 
 
-class PgVectorArchitectureMemoryAdapter(
-    ArchitectureMemoryRepositoryPort, SemanticRecallPort
-):
+class PgVectorArchitectureMemoryAdapter(ArchitectureMemoryRepositoryPort, SemanticRecallPort):
     """pgvector implementation of Architecture Memory persistence."""
 
     def __init__(self, db_url: str) -> None:
         self.engine = create_engine(db_url)
         Base.metadata.create_all(self.engine)
-        self.SessionLocal = sessionmaker(
-            autocommit=False, autoflush=False, bind=self.engine
-        )
+        self.SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=self.engine)
 
     def save(self, record: ArchitectureMemoryRecordAggregate) -> None:
         session = self.SessionLocal()
@@ -98,14 +88,10 @@ class PgVectorArchitectureMemoryAdapter(
         finally:
             session.close()
 
-    def find_by_id(
-        self, memory_id: str
-    ) -> ArchitectureMemoryRecordAggregate | None:
+    def find_by_id(self, memory_id: str) -> ArchitectureMemoryRecordAggregate | None:
         session = self.SessionLocal()
         try:
-            stmt = select(PgMemoryRecordModel).where(
-                PgMemoryRecordModel.id == memory_id
-            )
+            stmt = select(PgMemoryRecordModel).where(PgMemoryRecordModel.id == memory_id)
             model = session.scalar(stmt)
             if not model:
                 return None
@@ -152,9 +138,7 @@ class PgVectorArchitectureMemoryAdapter(
         all_records = self.list_all()
         query_tokens = set(query_text.lower().split())
 
-        scored_records: list[
-            tuple[ArchitectureMemoryRecordAggregate, float]
-        ] = []
+        scored_records: list[tuple[ArchitectureMemoryRecordAggregate, float]] = []
         for record in all_records:
             sim = record.calculate_similarity(query_tokens)
             if sim >= min_similarity:

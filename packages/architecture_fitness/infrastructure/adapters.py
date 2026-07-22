@@ -11,9 +11,7 @@ from packages.architecture_fitness.domain.ports import (
 )
 
 
-class InMemoryFitnessRepository(
-    FitnessRepositoryPort, GraphTraceabilityQueryPort
-):
+class InMemoryFitnessRepository(FitnessRepositoryPort, GraphTraceabilityQueryPort):
     def __init__(self) -> None:
         self._store: dict[str, FitnessSuiteAggregate] = {}
 

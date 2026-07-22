@@ -106,4 +106,3 @@ class RunPredictionUseCase:
         )
 
         return self.repo.save(prediction)
-

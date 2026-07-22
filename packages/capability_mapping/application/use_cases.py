@@ -50,12 +50,8 @@ class AnalyzeCapabilityGapsUseCase:
         self._repository = repository
         self._scanner = scanner
 
-    def execute(
-        self, query: AnalyzeCapabilityGapsQuery
-    ) -> list[CapabilityGapReport]:
-        existing_components = self._scanner.scan_existing_components(
-            query.workspace_root
-        )
+    def execute(self, query: AnalyzeCapabilityGapsQuery) -> list[CapabilityGapReport]:
+        existing_components = self._scanner.scan_existing_components(query.workspace_root)
         mappings = self._repository.list_all()
 
         reports: list[CapabilityGapReport] = []
@@ -63,11 +59,7 @@ class AnalyzeCapabilityGapsUseCase:
         for m in mappings:
             health = m.calculate_health(existing_components)
 
-            broken = [
-                b.target_ref
-                for b in m.bindings
-                if b.target_ref not in existing_components
-            ]
+            broken = [b.target_ref for b in m.bindings if b.target_ref not in existing_components]
 
             if health.coverage_percentage == 100.0:
                 status = "HEALTHY"

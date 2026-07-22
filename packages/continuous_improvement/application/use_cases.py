@@ -24,9 +24,7 @@ class IdentifyImprovementOpportunitiesUseCase:
     def __init__(self, repository: ImprovementRepositoryPort) -> None:
         self._repository = repository
 
-    def execute(
-        self, command: IdentifyOpportunitiesCommand
-    ) -> ImprovementInitiativeDTO | None:
+    def execute(self, command: IdentifyOpportunitiesCommand) -> ImprovementInitiativeDTO | None:
         # Trigger Rule 1: High Architecture Drift -> Decouple Boundaries
         if command.drift_index > 0.15:
             init_id = f"KAIZEN-{uuid.uuid4().hex[:6].upper()}"
@@ -79,9 +77,7 @@ class IdentifyImprovementOpportunitiesUseCase:
 
         return None
 
-    def _map_to_dto(
-        self, initiative: ImprovementInitiativeAggregate
-    ) -> ImprovementInitiativeDTO:
+    def _map_to_dto(self, initiative: ImprovementInitiativeAggregate) -> ImprovementInitiativeDTO:
         return ImprovementInitiativeDTO(
             initiative_id=initiative.initiative_id,
             title=initiative.title,

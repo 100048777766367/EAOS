@@ -11,9 +11,7 @@ class CausalNodeDTO(BaseModel):
     node_type: CausalNodeType
     title: str
     description: str
-    evidence_payload: dict[str, str | float | int | bool] = Field(
-        default_factory=dict
-    )
+    evidence_payload: dict[str, str | float | int | bool] = Field(default_factory=dict)
 
 
 class RecordTraceCommand(BaseModel):

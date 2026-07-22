@@ -1,6 +1,5 @@
 """Infrastructure adapters for feedback persistence and handling."""
 
-
 from packages.feedback.domain.models import (
     AdaptationDecision,
     FeedbackLoopAggregate,
@@ -26,14 +25,10 @@ class InMemoryFeedbackRepository(FeedbackRepositoryPort):
     def save_decision(self, decision: AdaptationDecision) -> None:
         self.decisions[decision.decision_id] = decision
 
-    def get_aggregate(
-        self, loop_id: str
-    ) -> FeedbackLoopAggregate | None:
+    def get_aggregate(self, loop_id: str) -> FeedbackLoopAggregate | None:
         return self.aggregates.get(loop_id)
 
-    def save_aggregate(
-        self, aggregate: FeedbackLoopAggregate
-    ) -> None:
+    def save_aggregate(self, aggregate: FeedbackLoopAggregate) -> None:
         self.aggregates[aggregate.loop_id] = aggregate
 
 
@@ -43,8 +38,6 @@ class MockAdaptationHandler(AdaptationHandlerPort):
     def __init__(self) -> None:
         self.handled_decisions: list[AdaptationDecision] = []
 
-    def handle_adaptation(
-        self, decision: AdaptationDecision
-    ) -> bool:
+    def handle_adaptation(self, decision: AdaptationDecision) -> bool:
         self.handled_decisions.append(decision)
         return True

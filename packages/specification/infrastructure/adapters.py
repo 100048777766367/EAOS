@@ -17,9 +17,7 @@ class InMemorySpecificationRegistry(SpecificationRegistryPort):
     def __init__(self) -> None:
         self._store: dict[str, EnterpriseSpecification] = {}
 
-    def register(
-        self, spec: EnterpriseSpecification
-    ) -> EnterpriseSpecification:
+    def register(self, spec: EnterpriseSpecification) -> EnterpriseSpecification:
         self._store[spec.id] = spec
         return spec
 

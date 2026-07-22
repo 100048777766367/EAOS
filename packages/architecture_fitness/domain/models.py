@@ -39,9 +39,7 @@ class FitnessSuiteAggregate:
     suite_id: str
     graph_link: KnowledgeGraphLink
     evaluations: list[FitnessEvaluationResult] = field(default_factory=list)
-    evaluated_at: datetime = field(
-        default_factory=lambda: datetime.now(UTC)
-    )
+    evaluated_at: datetime = field(default_factory=lambda: datetime.now(UTC))
 
     def add_evaluation(self, eval_result: FitnessEvaluationResult) -> None:
         self.evaluations.append(eval_result)

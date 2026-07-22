@@ -11,9 +11,7 @@ class DocumentLifecycleController:
         self.archive_dir = root_dir / "generated" / "docs" / "archive"
         self.archive_dir.mkdir(parents=True, exist_ok=True)
 
-    def transition_state(
-        self, doc_path: Path, target_status: str, reason: str | None = None
-    ) -> bool:
+    def transition_state(self, doc_path: Path, target_status: str, reason: str | None = None) -> bool:
         """Thực thi chuyển trạng thái vòng đời, tự động sao lưu lịch sử."""
         if not doc_path.exists():
             return False
@@ -51,11 +49,7 @@ class DocumentLifecycleController:
         if content.startswith("---"):
             parts = content.split("---", 2)
             # Sửa lỗi SIM108 bằng toán tử ba ngôi hiện đại
-            updated_content = (
-                new_front_matter + parts[2]
-                if len(parts) >= 3
-                else new_front_matter + "\n\n" + content
-            )
+            updated_content = new_front_matter + parts[2] if len(parts) >= 3 else new_front_matter + "\n\n" + content
         else:
             updated_content = new_front_matter + "\n\n" + content
 

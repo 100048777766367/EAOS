@@ -14,4 +14,3 @@ class InMemoryEcosystemEventMesh(EcosystemEventMeshPort):
 
     def list_broadcasted_events(self) -> list[SharedEcosystemEvent]:
         return self._events
-

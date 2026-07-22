@@ -61,9 +61,7 @@ def validate() -> None:
     passed = validator.run_all_checks()
 
     if passed:
-        console.print(
-            "[bold green]✔ KIẾN TRÚC ĐẠT CHUẨN KIỂM TOÁN TUYỆT ĐỐI.[/bold green]"
-        )
+        console.print("[bold green]✔ KIẾN TRÚC ĐẠT CHUẨN KIỂM TOÁN TUYỆT ĐỐI.[/bold green]")
     else:
         console.print("[bold red]✘ PHÁT HIỆN VI PHẠM KIẾN TRÚC TỐI CAO:[/bold red]\n")
         for violation in validator.violations:
@@ -77,9 +75,7 @@ def validate() -> None:
 @app.command()
 def graph() -> None:
     """Tự động phân tích mã nguồn và xuất bản đồ đồ thị phụ thuộc."""
-    console.print(
-        "[bold blue]Khởi chạy EAOS Dependency Graph Generator...[/bold blue]\n"
-    )
+    console.print("[bold blue]Khởi chạy EAOS Dependency Graph Generator...[/bold blue]\n")
 
     from pathlib import Path
 
@@ -92,19 +88,10 @@ def graph() -> None:
     success = generator.generate()
 
     if success:
-        console.print(
-            "[bold green]✔ TỰ ĐỘNG XUẤT ĐỒ THỊ PHỤ THUỘC THÀNH CÔNG.[/bold green]"
-        )
-        console.print(
-            "  • Đồ thị JSON: [cyan]generated/architecture/dependency_graph.json[/cyan]"
-        )
-        console.print(
-            "  • Sơ đồ Mermaid: [cyan]generated/architecture/dependency_graph.md[/cyan]"
-        )
-        console.print(
-            "  • Sơ đồ Graphviz: [cyan]"
-            "generated/architecture/dependency_graph.dot[/cyan]"
-        )
+        console.print("[bold green]✔ TỰ ĐỘNG XUẤT ĐỒ THỊ PHỤ THUỘC THÀNH CÔNG.[/bold green]")
+        console.print("  • Đồ thị JSON: [cyan]generated/architecture/dependency_graph.json[/cyan]")
+        console.print("  • Sơ đồ Mermaid: [cyan]generated/architecture/dependency_graph.md[/cyan]")
+        console.print("  • Sơ đồ Graphviz: [cyan]generated/architecture/dependency_graph.dot[/cyan]")
     else:
         console.print("[bold red]✘ LỖI KHI TẠO ĐỒ THỊ PHỤ THUỘC.[/bold red]")
         raise typer.Exit(code=1)
@@ -116,9 +103,7 @@ def graph() -> None:
 @app.command()
 def metrics() -> None:
     """Đo lường và tính toán chỉ số chất lượng kiến trúc hằng ngày."""
-    console.print(
-        "[bold blue]Khởi chạy EAOS Architecture Metrics Calculator...[/bold blue]\n"
-    )
+    console.print("[bold blue]Khởi chạy EAOS Architecture Metrics Calculator...[/bold blue]\n")
 
     from pathlib import Path
 
@@ -131,21 +116,10 @@ def metrics() -> None:
     success = calculator.calculate_all()
 
     if success:
-        console.print(
-            "[bold green]✔ TÍNH TOÁN CHỈ SỐ KIẾN TRÚC THÀNH CÔNG.[/bold green]"
-        )
-        console.print(
-            "  • Điểm chất lượng: "
-            f"[bold cyan]{calculator.architecture_score}/100[/bold cyan]"
-        )
-        console.print(
-            "  • Chỉ số JSON: [cyan]"
-            "generated/architecture/architecture_metrics.json[/cyan]"
-        )
-        console.print(
-            "  • Báo cáo MD: [cyan]"
-            "generated/architecture/architecture_metrics.md[/cyan]"
-        )
+        console.print("[bold green]✔ TÍNH TOÁN CHỈ SỐ KIẾN TRÚC THÀNH CÔNG.[/bold green]")
+        console.print(f"  • Điểm chất lượng: [bold cyan]{calculator.architecture_score}/100[/bold cyan]")
+        console.print("  • Chỉ số JSON: [cyan]generated/architecture/architecture_metrics.json[/cyan]")
+        console.print("  • Báo cáo MD: [cyan]generated/architecture/architecture_metrics.md[/cyan]")
     else:
         console.print("[bold red]✘ LỖI KHI ĐO LƯỜNG CHỈ SỐ KIẾN TRÚC.[/bold red]")
         raise typer.Exit(code=1)
@@ -188,21 +162,11 @@ def time_machine(
             table.add_column("Hạng mục", style="cyan")
             table.add_column("Chi tiết biến đổi", style="yellow")
 
-            diff_score = (
-                f"{diff['score_diff']} điểm"
-                if diff["score_diff"] <= 0
-                else f"+{diff['score_diff']} điểm"
-            )
+            diff_score = f"{diff['score_diff']} điểm" if diff["score_diff"] <= 0 else f"+{diff['score_diff']} điểm"
             table.add_row("Biến động điểm số", diff_score)
-            table.add_row(
-                "Gói bổ sung mới", ", ".join(diff["added_packages"]) or "Không"
-            )
-            table.add_row(
-                "Gói bị loại bỏ", ", ".join(diff["removed_packages"]) or "Không"
-            )
-            table.add_row(
-                "Vi phạm mới rò rỉ", ", ".join(diff["new_violations"]) or "Không"
-            )
+            table.add_row("Gói bổ sung mới", ", ".join(diff["added_packages"]) or "Không")
+            table.add_row("Gói bị loại bỏ", ", ".join(diff["removed_packages"]) or "Không")
+            table.add_row("Vi phạm mới rò rỉ", ", ".join(diff["new_violations"]) or "Không")
             table.add_row(
                 "Vi phạm đã vá lỗi",
                 ", ".join(diff["resolved_violations"]) or "Không",
@@ -243,14 +207,10 @@ def time_machine(
 
 @app.command()
 def twin(
-    proposal_file: str = typer.Argument(
-        None, help="Đường dẫn tới tệp tin đề xuất (JSON)"
-    ),
+    proposal_file: str = typer.Argument(None, help="Đường dẫn tới tệp tin đề xuất (JSON)"),
 ) -> None:
     """Khởi chạy Digital Twin mô phỏng ảnh hưởng của đề xuất trước khi sáp nhập."""
-    console.print(
-        "[bold blue]Khởi chạy EAOS Digital Twin Orchestrator...[/bold blue]\n"
-    )
+    console.print("[bold blue]Khởi chạy EAOS Digital Twin Orchestrator...[/bold blue]\n")
 
     import json
     from pathlib import Path
@@ -263,9 +223,7 @@ def twin(
         with open(proposal_file, encoding="utf-8") as f:
             proposal = json.load(f)
     else:
-        console.print(
-            "[yellow]Cảnh báo: Không truyền tệp đề xuất. Chạy mặc định...[/yellow]"
-        )
+        console.print("[yellow]Cảnh báo: Không truyền tệp đề xuất. Chạy mặc định...[/yellow]")
         proposal = {
             "package_name": "eaos-finance",
             "layer": "infrastructure",
@@ -314,9 +272,7 @@ def compile_spec(
         with open(spec_file, encoding="utf-8") as f:
             spec = json.load(f)
     else:
-        console.print(
-            "[yellow]Cảnh báo: Không truyền tệp đặc tả. Sử dụng 'billing'...[/yellow]"
-        )
+        console.print("[yellow]Cảnh báo: Không truyền tệp đặc tả. Sử dụng 'billing'...[/yellow]")
         spec = {
             "capability_name": "billing",
             "description": "Enterprise Billing Capability",
@@ -342,10 +298,7 @@ def compile_spec(
 
     if success:
         console.print("[bold green]✔ BIÊN DỊCH KIẾN TRÚC THÀNH CÔNG.[/bold green]")
-        console.print(
-            f"  • Thư mục biên dịch: [cyan]"
-            f"generated/compiler/{spec['capability_name']}/[/cyan]"
-        )
+        console.print(f"  • Thư mục biên dịch: [cyan]generated/compiler/{spec['capability_name']}/[/cyan]")
         console.print("    - Domain Models: [cyan].../domain/models.py[/cyan]")
         console.print("    - Domain Ports: [cyan].../domain/ports.py[/cyan]")
         console.print("    - Infrastructure: [cyan].../infrastructure/[/cyan]")
@@ -361,9 +314,7 @@ def compile_spec(
 
 @app.command()
 def loop(
-    type_arg: str = typer.Argument(
-        "execution", help="execution / architecture / strategy"
-    ),
+    type_arg: str = typer.Argument("execution", help="execution / architecture / strategy"),
 ) -> None:
     """Kiểm toán tuân thủ ranh giới của 3 vòng phản hồi lồng nhau."""
     console.print("[bold blue]Khởi chạy EAOS Governance Loop Engine...[/bold blue]\n")
@@ -418,9 +369,7 @@ def dlm(
     reason: str = typer.Option(None, help="Lý do đình bản hoặc chuyển đổi"),
 ) -> None:
     """Quản lý vòng đời tài liệu tự trị có sao lưu mật mã vĩnh cửu."""
-    console.print(
-        "[bold blue]Khởi chạy EAOS Document Lifecycle Controller...[/bold blue]\n"
-    )
+    console.print("[bold blue]Khởi chạy EAOS Document Lifecycle Controller...[/bold blue]\n")
 
     from pathlib import Path
 
@@ -440,15 +389,10 @@ def dlm(
         raise typer.Exit(code=1)
 
     controller = DocumentLifecycleController(root_dir)
-    success = controller.transition_state(
-        doc_path=target_path, target_status=status, reason=reason
-    )
+    success = controller.transition_state(doc_path=target_path, target_status=status, reason=reason)
 
     if success:
-        console.print(
-            f"[bold green]✔ CHUYỂN TRẠNG THÁI VÒNG ĐỜI THÀNH CÔNG: "
-            f"{status.upper()}[/bold green]"
-        )
+        console.print(f"[bold green]✔ CHUYỂN TRẠNG THÁI VÒNG ĐỜI THÀNH CÔNG: {status.upper()}[/bold green]")
         console.print("  • Bản sao lưu lịch sử: [cyan]generated/docs/archive/[/cyan]")
     else:
         console.print("[bold red]✘ THẤT BẠI KHI CẬP NHẬT VÒNG ĐỜI.[/bold red]")

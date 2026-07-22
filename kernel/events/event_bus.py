@@ -13,9 +13,7 @@ class DomainEvent:
     topic: str
     correlation_id: str | None = None
     trace_id: str | None = None
-    timestamp: datetime = field(
-        default_factory=lambda: datetime.now(UTC)
-    )
+    timestamp: datetime = field(default_factory=lambda: datetime.now(UTC))
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
@@ -77,13 +75,9 @@ class EventBus:
     """Asynchronous reactive Event Mesh supporting topic subscriptions."""
 
     def __init__(self) -> None:
-        self._handlers: dict[
-            type[DomainEvent], list[EventHandler[Any]]
-        ] = {}
+        self._handlers: dict[type[DomainEvent], list[EventHandler[Any]]] = {}
 
-    def subscribe(
-        self, event_type: type[E], handler: EventHandler[E]
-    ) -> None:
+    def subscribe(self, event_type: type[E], handler: EventHandler[E]) -> None:
         if event_type not in self._handlers:
             self._handlers[event_type] = []
         self._handlers[event_type].append(handler)

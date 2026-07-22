@@ -16,4 +16,3 @@ class RegisterCapabilityUseCase:
 
     def execute(self, capability: BusinessCapability) -> BusinessCapability:
         return self.registry.register(capability)
-

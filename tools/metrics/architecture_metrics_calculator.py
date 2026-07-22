@@ -20,13 +20,7 @@ class ArchitectureMetricsCalculator:
         if not self.packages_dir.exists():
             return False
 
-        packages = sorted(
-            [
-                p.name
-                for p in self.packages_dir.iterdir()
-                if p.is_dir() and p.name != "__pycache__"
-            ]
-        )
+        packages = sorted([p.name for p in self.packages_dir.iterdir() if p.is_dir() and p.name != "__pycache__"])
 
         import_map: dict[str, set[str]] = {pkg: set() for pkg in packages}
         abstract_map: dict[str, int] = dict.fromkeys(packages, 0)
@@ -34,9 +28,7 @@ class ArchitectureMetricsCalculator:
 
         for pkg in packages:
             pkg_path = self.packages_dir / pkg
-            self._scan_package_classes_and_deps(
-                pkg, pkg_path, import_map, abstract_map, concrete_map
-            )
+            self._scan_package_classes_and_deps(pkg, pkg_path, import_map, abstract_map, concrete_map)
 
         total_distance = 0.0
         for pkg in packages:
@@ -48,15 +40,9 @@ class ArchitectureMetricsCalculator:
             abs_count = abstract_map[pkg]
             con_count = concrete_map[pkg]
             total_classes = abs_count + con_count
-            abstractness = (
-                abs_count / total_classes if total_classes > 0 else 0.0
-            )
+            abstractness = abs_count / total_classes if total_classes > 0 else 0.0
 
-            distance = (
-                0.0
-                if total_classes == 0 and (ca + ce) == 0
-                else abs(abstractness + instability - 1.0)
-            )
+            distance = 0.0 if total_classes == 0 and (ca + ce) == 0 else abs(abstractness + instability - 1.0)
             total_distance += distance
 
             self.metrics[pkg] = {
@@ -101,12 +87,8 @@ class ArchitectureMetricsCalculator:
                 if isinstance(node, ast.ClassDef):
                     is_abstract = False
                     for base in node.bases:
-                        if (
-                            isinstance(base, ast.Name)
-                            and base.id in ("Protocol", "ABC")
-                        ) or (
-                            isinstance(base, ast.Attribute)
-                            and base.attr in ("Protocol", "ABC")
+                        if (isinstance(base, ast.Name) and base.id in ("Protocol", "ABC")) or (
+                            isinstance(base, ast.Attribute) and base.attr in ("Protocol", "ABC")
                         ):
                             is_abstract = True
 

@@ -32,26 +32,18 @@ class InMemoryCivilizationRegistry(CivilizationRegistryPort):
         )
         self._blocks.append(genesis_block)
 
-    def save_negotiation(
-        self, neg: AutonomousNegotiation
-    ) -> AutonomousNegotiation:
+    def save_negotiation(self, neg: AutonomousNegotiation) -> AutonomousNegotiation:
         self._negotiations[neg.id] = neg
         return neg
 
-    def find_negotiation_by_id(
-        self, neg_id: str
-    ) -> AutonomousNegotiation | None:
+    def find_negotiation_by_id(self, neg_id: str) -> AutonomousNegotiation | None:
         return self._negotiations.get(neg_id)
 
-    def save_consensus_transaction(
-        self, tx: GlobalConsensusTransaction
-    ) -> GlobalConsensusTransaction:
+    def save_consensus_transaction(self, tx: GlobalConsensusTransaction) -> GlobalConsensusTransaction:
         self._transactions[tx.tx_id] = tx
         return tx
 
-    def save_block(
-        self, block: CollectiveEvolutionBlock
-    ) -> CollectiveEvolutionBlock:
+    def save_block(self, block: CollectiveEvolutionBlock) -> CollectiveEvolutionBlock:
         self._blocks.append(block)
         return block
 

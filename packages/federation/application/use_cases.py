@@ -24,9 +24,7 @@ class CollectiveEvolutionUseCase:
         self.registry = registry
         self.digital_twin = digital_twin
 
-    def process_shared_knowledge(
-        self, receiver_id: str, packet: SharedKnowledgePacket
-    ) -> CollectiveEvolutionReport:
+    def process_shared_knowledge(self, receiver_id: str, packet: SharedKnowledgePacket) -> CollectiveEvolutionReport:
         member = self.registry.find_member_by_id(receiver_id)
         if not member:
             raise ValueError(f"KhÃ´ng tÃ¬m tháº¥y thÃ nh viÃªn: {receiver_id}")
@@ -113,4 +111,3 @@ class HeartbeatUseCase:
             }
         )
         return self.registry.register_member(updated)
-

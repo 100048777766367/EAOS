@@ -27,9 +27,7 @@ class ProcessFeedbackUseCase:
         self._repository = repository
         self._adaptation_handler = adaptation_handler
 
-    def execute(
-        self, command: IngestionSignalCommand
-    ) -> FeedbackProcessResult:
+    def execute(self, command: IngestionSignalCommand) -> FeedbackProcessResult:
         signal = FeedbackSignal(
             signal_id=command.signal_id,
             source=command.source,
@@ -42,18 +40,12 @@ class ProcessFeedbackUseCase:
 
         self._repository.save_signal(signal)
 
-        aggregate = self._repository.get_aggregate(
-            command.loop_id
-        )
+        aggregate = self._repository.get_aggregate(command.loop_id)
         if aggregate is None:
-            aggregate = FeedbackLoopAggregate(
-                loop_id=command.loop_id
-            )
+            aggregate = FeedbackLoopAggregate(loop_id=command.loop_id)
 
         decision_id = f"DEC-{uuid.uuid4().hex[:8].upper()}"
-        decision = aggregate.evaluate_signal(
-            signal, decision_id=decision_id
-        )
+        decision = aggregate.evaluate_signal(signal, decision_id=decision_id)
 
         self._repository.save_aggregate(aggregate)
 

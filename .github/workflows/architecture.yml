@@ -1,0 +1,51 @@
+﻿name: Architectural Governance & Constitution Verification
+
+on:
+  push:
+    paths:
+      - "docs/ARCHITECTURE_CONSTITUTION.md"
+      - "docs/ADR_INDEX.md"
+      - "docs/decisions/**"
+      - "policies/**"
+      - "kernel/governance/**"
+  pull_request:
+    paths:
+      - "docs/ARCHITECTURE_CONSTITUTION.md"
+      - "docs/ADR_INDEX.md"
+      - "docs/decisions/**"
+      - "policies/**"
+      - "kernel/governance/**"
+
+permissions:
+  contents: read
+
+jobs:
+  governance-check:
+    name: Constitution & Assembly Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install uv & Python 3.14
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "latest"
+          python-version: "3.14"
+          enable-cache: true
+
+      - name: Install Dependencies
+        run: uv sync --all-groups
+
+      - name: Run Architecture Loop Verification
+        run: uv run task loop ARCHITECTURE
+
+      - name: Verify ADR Index Integrity
+        run: |
+          uv run python -c "
+          from pathlib import Path
+          index = Path('docs/ADR_INDEX.md').read_text()
+          assert 'ADR-001' in index, 'Missing ADR-001 in ADR_INDEX.md'
+          print('ADR Index verification PASSED')
+          "

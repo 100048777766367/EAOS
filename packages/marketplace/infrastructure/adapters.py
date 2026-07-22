@@ -17,4 +17,3 @@ class InMemoryMarketplace(MarketplacePort):
 
     def list_assets(self) -> list[MarketplaceAsset]:
         return list(self._store.values())
-

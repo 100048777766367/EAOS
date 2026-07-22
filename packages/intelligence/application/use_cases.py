@@ -36,9 +36,7 @@ class RunEcosystemIntelligenceUseCase:
     def __init__(self, registry: IntelligenceRegistryPort) -> None:
         self.registry = registry
 
-    def evaluate_reasoning_and_decide(
-        self, request: ReasoningRequest, services: dict[str, Any]
-    ) -> SemanticDecision:
+    def evaluate_reasoning_and_decide(self, request: ReasoningRequest, services: dict[str, Any]) -> SemanticDecision:
         dec_id = f"DEC-{uuid.uuid4().hex[:6].upper()}"
 
         node = ReasoningNode(
@@ -63,9 +61,7 @@ class RunEcosystemIntelligenceUseCase:
 
         return self.registry.save_decision(decision)
 
-    def generate_ecosystem_plan(
-        self, request: PlanRequest, services: dict[str, Any]
-    ) -> EcosystemPlan:
+    def generate_ecosystem_plan(self, request: PlanRequest, services: dict[str, Any]) -> EcosystemPlan:
         plan_id = f"PLN-{uuid.uuid4().hex[:6].upper()}"
 
         tasks = [

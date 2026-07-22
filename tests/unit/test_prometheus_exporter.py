@@ -52,12 +52,6 @@ def test_prometheus_metrics_exporter_format() -> None:
     assert 'eaos_architecture_drift_index{system_id="EAOS-PROD-01"} 0.0250' in output
 
     # Verify capability labels
-    assert (
-        'eaos_capability_health_score{capability_id="cap.knowledge",status="HEALTHY"} 95.00'
-        in output
-    )
-    assert (
-        'eaos_capability_health_score{capability_id="cap.identity",status="DEGRADED"} 75.00'
-        in output
-    )
+    assert 'eaos_capability_health_score{capability_id="cap.knowledge",status="HEALTHY"} 95.00' in output
+    assert 'eaos_capability_health_score{capability_id="cap.identity",status="DEGRADED"} 75.00' in output
     assert 'eaos_capability_active_violations{capability_id="cap.identity"} 2' in output

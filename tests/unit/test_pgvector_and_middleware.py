@@ -40,9 +40,7 @@ def test_pgvector_memory_adapter_sqlite_fallback(tmp_path: Any) -> None:
     assert fetched.memory_id == "MEM-PG-01"
     assert fetched.title == "Hexagonal Coupling Protection"
 
-    recalled = adapter.recall_relevant_memories(
-        query_text="infrastructure domain coupling", limit=5
-    )
+    recalled = adapter.recall_relevant_memories(query_text="infrastructure domain coupling", limit=5)
     assert len(recalled) == 1
     assert recalled[0][0].memory_id == "MEM-PG-01"
 

@@ -30,4 +30,3 @@ class RegisterTenantUseCase:
             policy_overrides=[default_override],
         )
         return self.registry.register_tenant(context)
-

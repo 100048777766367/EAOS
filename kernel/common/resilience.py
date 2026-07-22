@@ -76,9 +76,7 @@ class IdempotencyManager:
     def __init__(self) -> None:
         self._cache: dict[str, tuple[float, Any]] = {}
 
-    def check_and_set(
-        self, key: str, payload: Any, ttl_seconds: float = 300.0
-    ) -> tuple[bool, Any]:
+    def check_and_set(self, key: str, payload: Any, ttl_seconds: float = 300.0) -> tuple[bool, Any]:
         """Kiểm tra xem key đã tồn tại chưa. Nếu có, trả về kết quả cũ."""
         now = time.time()
         if key in self._cache:

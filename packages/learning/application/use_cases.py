@@ -65,9 +65,7 @@ class IngestLearningUseCase:
         heuristics = [
             Heuristic(
                 id="H-01",
-                rule_of_thumb=(
-                    "Náº¿u lá»›p Domain cÃ³ import sqlalchemy, cháº·n ngay láº­p tá»©c."
-                ),
+                rule_of_thumb=("Náº¿u lá»›p Domain cÃ³ import sqlalchemy, cháº·n ngay láº­p tá»©c."),
                 applicability="CI/CD Linter Checks",
             )
             for rc in report.root_causes
@@ -87,4 +85,3 @@ class IngestLearningUseCase:
         )
 
         return self.exp_repo.save(exp)
-

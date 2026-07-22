@@ -40,9 +40,7 @@ def test_opa_rego_policy_adapter_mock_response() -> None:
         {
             "result": {
                 "allow": False,
-                "violations": [
-                    "Forbidden infrastructure import in domain layer."
-                ],
+                "violations": ["Forbidden infrastructure import in domain layer."],
             }
         }
     ).encode("utf-8")

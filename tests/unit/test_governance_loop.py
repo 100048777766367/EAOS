@@ -59,9 +59,7 @@ def test_execute_governance_cycle_use_case_success(tmp_path: Path) -> None:
     ledger_file = tmp_path / "audit_ledger.jsonl"
     ledger = FileAuditLedgerAdapter(ledger_file)
 
-    use_case = ExecuteGovernanceCycleUseCase(
-        repository=repo, evaluator=evaluator, ledger=ledger
-    )
+    use_case = ExecuteGovernanceCycleUseCase(repository=repo, evaluator=evaluator, ledger=ledger)
 
     cmd = StartGovernanceCycleCommand(
         cycle_id="CYC-100",

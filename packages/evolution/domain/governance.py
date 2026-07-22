@@ -30,15 +30,11 @@ class EvolutionTransaction(BaseModel):
 class EvolutionGovernanceCouncil:
     """Há»™i Ä‘á»“ng giÃ¡m sÃ¡t biá»ƒu quyáº¿t cho cÃ¡c Ä‘á» xuáº¥t tá»± tiáº¿n hÃ³a."""
 
-    def __init__(
-        self, ledger_path: str = "runtime/traces/evolution_ledger.jsonl"
-    ) -> None:
+    def __init__(self, ledger_path: str = "runtime/traces/evolution_ledger.jsonl") -> None:
         self.ledger_path = ledger_path
         os.makedirs(os.path.dirname(self.ledger_path), exist_ok=True)
 
-    def evaluate_proposal(
-        self, obj: EvolutionObject, votes: list[CouncilVote]
-    ) -> EvolutionTransaction:
+    def evaluate_proposal(self, obj: EvolutionObject, votes: list[CouncilVote]) -> EvolutionTransaction:
         import uuid
 
         approved_voters = [v for v in votes if v.decision == "APPROVED"]
@@ -64,4 +60,3 @@ class EvolutionGovernanceCouncil:
             return []
         with open(self.ledger_path, encoding="utf-8") as f:
             return [json.loads(line.strip()) for line in f if line.strip()]
-

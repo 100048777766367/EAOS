@@ -54,17 +54,13 @@ class ArchitectureValidator:
             content = file_path.read_text(encoding="utf-8")
             tree = ast.parse(content)
         except Exception as e:
-            self.violations.append(
-                f"Syntax Error: Không thể parse AST của {file_path.name}: {e}"
-            )
+            self.violations.append(f"Syntax Error: Không thể parse AST của {file_path.name}: {e}")
             return
 
         self._check_imports(tree, file_path, package_name, layer_name)
         self._check_naming_conventions(tree, file_path, layer_name, file_name)
 
-    def _check_imports(
-        self, tree: ast.AST, file_path: Path, pkg: str, layer: str
-    ) -> None:
+    def _check_imports(self, tree: ast.AST, file_path: Path, pkg: str, layer: str) -> None:
         # Độ ưu tiên ranh giới: Thấp không được phụ thuộc Cao
         LAYER_PRIORITY = {
             "domain": 0,
@@ -92,9 +88,7 @@ class ArchitectureValidator:
 
                 # Sửa lỗi SIM102 bằng setdefault()
                 if pkg != target_pkg:
-                    self.dependency_graph.setdefault(pkg, set()).add(
-                        target_pkg
-                    )
+                    self.dependency_graph.setdefault(pkg, set()).add(target_pkg)
 
                 # Kiểm tra vi phạm phân lớp (Layer Violation)
                 self_pri = LAYER_PRIORITY.get(layer.lower(), 99)
@@ -108,18 +102,14 @@ class ArchitectureValidator:
                     )
 
             # Chặn hoàn toàn việc Domain hay Application import từ ngoại biên
-            is_ext_leak = (
-                "apps." in imported_module or "services." in imported_module
-            )
+            is_ext_leak = "apps." in imported_module or "services." in imported_module
             if is_ext_leak and layer.lower() in ("domain", "application"):
                 self.violations.append(
                     f"Wrong Import: Lớp core '{file_path.name}' ({layer}) "
                     f"không được phép import ngoại biên '{imported_module}'."
                 )
 
-    def _check_naming_conventions(
-        self, tree: ast.AST, file_path: Path, layer: str, file_name: str
-    ) -> None:
+    def _check_naming_conventions(self, tree: ast.AST, file_path: Path, layer: str, file_name: str) -> None:
         for node in ast.walk(tree):
             if isinstance(node, ast.ClassDef):
                 class_name = node.name
@@ -149,9 +139,7 @@ class ArchitectureValidator:
                     "Gateway",
                     "Protocol",
                 )
-                if is_dom_ports and not class_name.endswith(
-                    allowed_dom_suffixes
-                ):
+                if is_dom_ports and not class_name.endswith(allowed_dom_suffixes):
                     self.violations.append(
                         f"Naming Violation: Lớp '{class_name}' trong "
                         f"'{file_name}' bắt buộc phải kết thúc bằng "
@@ -167,8 +155,7 @@ class ArchitectureValidator:
             for neighbor in self.dependency_graph.get(node, []):
                 if visited.get(neighbor, 0) == 1:
                     self.violations.append(
-                        f"Circular Dependency: Phát hiện chu kỳ phụ thuộc vòng "
-                        f"giữa hai gói '{node}' và '{neighbor}'."
+                        f"Circular Dependency: Phát hiện chu kỳ phụ thuộc vòng giữa hai gói '{node}' và '{neighbor}'."
                     )
                     return True
                 if visited.get(neighbor, 0) == 0 and dfs(neighbor):

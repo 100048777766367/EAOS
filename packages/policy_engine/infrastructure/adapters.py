@@ -31,9 +31,7 @@ class OPARegoPolicyAdapter(ExternalPolicyEnginePort):
     def __init__(self, opa_host: str = "http://localhost:8181") -> None:
         self.opa_host = opa_host.rstrip("/")
 
-    def evaluate_opa_rego(
-        self, policy_path: str, input_context: dict[str, Any]
-    ) -> tuple[bool, list[str]]:
+    def evaluate_opa_rego(self, policy_path: str, input_context: dict[str, Any]) -> tuple[bool, list[str]]:
         """Sends POST request to OPA Data API: /v1/data/{policy_path}."""
         url = f"{self.opa_host}/v1/data/{policy_path.strip('/')}"
         headers = {"Content-Type": "application/json"}

@@ -23,4 +23,3 @@ class SharedEcosystemEvent(BaseModel):
     timestamp: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
     model_config = ConfigDict(frozen=True)
-

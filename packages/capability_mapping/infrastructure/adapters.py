@@ -18,9 +18,7 @@ class InMemoryCapabilityMappingRepository(CapabilityMappingRepositoryPort):
     def save(self, mapping: CapabilityMappingAggregate) -> None:
         self._store[mapping.capability_id] = mapping
 
-    def find_by_id(
-        self, capability_id: str
-    ) -> CapabilityMappingAggregate | None:
+    def find_by_id(self, capability_id: str) -> CapabilityMappingAggregate | None:
         return self._store.get(capability_id)
 
     def list_all(self) -> list[CapabilityMappingAggregate]:

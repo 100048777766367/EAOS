@@ -191,4 +191,3 @@ class SplayTree[T]:
 
         _to_mermaid(self.root)
         return "\n".join(lines)
-

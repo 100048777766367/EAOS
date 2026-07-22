@@ -15,9 +15,7 @@ class AnalyzeReflectionUseCase:
     def __init__(self, repository: ReflectionRepository) -> None:
         self.repository = repository
 
-    def execute(
-        self, subject_id: str, trigger_event: str, passed_checks: bool
-    ) -> ReflectionReport:
+    def execute(self, subject_id: str, trigger_event: str, passed_checks: bool) -> ReflectionReport:
         report_id = f"REF-{uuid.uuid4().hex[:6].upper()}"
 
         root_causes = []
@@ -42,10 +40,7 @@ class AnalyzeReflectionUseCase:
                 Recommendation(
                     priority="HIGH",
                     action="Äiá»u hÆ°á»›ng láº¡i ranh giá»›i dependencies.",
-                    reason=(
-                        "Giá»¯ cho nhÃ¢n Kernel sáº¡ch sáº½, khÃ´ng bá»‹ phá»¥ thuá»™c "
-                        "vÃ o lá»›p ngoáº¡i biÃªn."
-                    ),
+                    reason=("Giá»¯ cho nhÃ¢n Kernel sáº¡ch sáº½, khÃ´ng bá»‹ phá»¥ thuá»™c vÃ o lá»›p ngoáº¡i biÃªn."),
                     risk="CÃ³ thá»ƒ tÄƒng nháº¹ thá»i gian refactor code.",
                 )
             )
@@ -73,4 +68,3 @@ class AnalyzeReflectionUseCase:
         )
 
         return self.repository.save(report)
-

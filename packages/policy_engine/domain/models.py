@@ -78,9 +78,7 @@ class PolicyDocumentAggregate:
     def add_rule(self, rule: PolicyRule) -> None:
         self.rules.append(rule)
 
-    def evaluate(
-        self, context: dict[str, Any]
-    ) -> tuple[bool, list[EvaluationViolation]]:
+    def evaluate(self, context: dict[str, Any]) -> tuple[bool, list[EvaluationViolation]]:
         violations: list[EvaluationViolation] = []
 
         for rule in self.rules:

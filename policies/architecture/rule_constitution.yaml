@@ -1,0 +1,21 @@
+﻿policy_id: POL-ARCH-CONSTITUTION
+name: Dynamic Architecture Constitution Policy
+version: 1.0.0
+enabled: true
+
+rules:
+  - id: RULE-01-VERSION-HEADER
+    field: "__version"
+    operator: "EXISTS"
+    error_message: "Payload thiếu thuộc tính bắt buộc __version."
+
+  - id: RULE-02-MIN-VERSION
+    field: "__version"
+    operator: "GREATER_THAN_OR_EQUAL"
+    value: 1
+    error_message: "Phiên bản __version phải lớn hơn hoặc bằng 1."
+
+  - id: RULE-03-FORBIDDEN-KEYS
+    field: "legacy_flags"
+    operator: "NOT_EXISTS"
+    error_message: "Phát hiện thuộc tính chống chỉ định: legacy_flags."

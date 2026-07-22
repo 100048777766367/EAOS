@@ -25,9 +25,7 @@ class RecordCodeChangeTraceUseCase:
             commit_hash=command.commit_hash,
         )
 
-        chain = TraceabilityChainAggregate(
-            trace_id=command.trace_id, target_location=location
-        )
+        chain = TraceabilityChainAggregate(trace_id=command.trace_id, target_location=location)
 
         for dto in command.nodes:
             chain.add_causal_node(
@@ -49,22 +47,15 @@ class ExplainCodeChangeUseCase:
     def __init__(self, repository: TraceabilityRepositoryPort) -> None:
         self._repository = repository
 
-    def execute(
-        self, query: ExplainCodeChangeQuery
-    ) -> CodeChangeExplanationResponse:
-        chain = self._repository.find_by_location(
-            file_path=query.file_path, line_number=query.line_number
-        )
+    def execute(self, query: ExplainCodeChangeQuery) -> CodeChangeExplanationResponse:
+        chain = self._repository.find_by_location(file_path=query.file_path, line_number=query.line_number)
 
         if chain is None:
             return CodeChangeExplanationResponse(
                 trace_id=None,
                 file_path=str(query.file_path),
                 line_number=query.line_number,
-                explanation=(
-                    f"No AI decision trace found for "
-                    f"{query.file_path}:{query.line_number}."
-                ),
+                explanation=(f"No AI decision trace found for {query.file_path}:{query.line_number}."),
                 found=False,
             )
 

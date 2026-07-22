@@ -22,19 +22,12 @@ class ControlRoomDashboard:
         score = metrics_calc.architecture_score
         packages_metrics = metrics_calc.metrics
 
-        mermaid_path = (
-            self.root_dir
-            / "generated"
-            / "architecture"
-            / "dependency_graph.md"
-        )
+        mermaid_path = self.root_dir / "generated" / "architecture" / "dependency_graph.md"
         mermaid_code = "graph TD\n    eaos_core['EAOS Operating System']"
         if mermaid_path.exists():
             content = mermaid_path.read_text(encoding="utf-8")
             if "```mermaid" in content:
-                mermaid_code = (
-                    content.split("```mermaid")[1].split("```")[0].strip()
-                )
+                mermaid_code = content.split("```mermaid")[1].split("```")[0].strip()
 
         # Trích xuất dữ liệu chỉ số đóng gói mỏng với bẻ dòng cực sạch
         metrics_rows = ""
@@ -74,13 +67,11 @@ class ControlRoomDashboard:
             )
 
         status_color = "emerald" if validator_passed else "rose"
-        status_text = (
-            "HEALTHY (PASSED)" if validator_passed else "VIOLATIONS DETECTED"
-        )
+        status_text = "HEALTHY (PASSED)" if validator_passed else "VIOLATIONS DETECTED"
 
         status_badge = (
             f'<span class="px-3 py-1 rounded-full text-xs font-bold '
-            f'bg-{status_color}-500/20 text-{status_color}-400 border '
+            f"bg-{status_color}-500/20 text-{status_color}-400 border "
             f'border-{status_color}-500/30">● {status_text}</span>'
         )
 
@@ -90,118 +81,85 @@ class ControlRoomDashboard:
             '<html lang="vi" class="dark">',
             "<head>",
             '    <meta charset="UTF-8">',
-            '    <meta name="viewport" content="width=device-width, '
-            'initial-scale=1.0">',
+            '    <meta name="viewport" content="width=device-width, initial-scale=1.0">',
             "    <title>EAOS Control Room Dashboard</title>",
             '    <script src="https://cdn.tailwindcss.com"></script>',
             '    <script type="module">',
-            "        import mermaid from "
-            "'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid"
-            ".esm.min.mjs';",
-            "        mermaid.initialize({ startOnLoad: true, theme: "
-            "'dark' });",
+            "        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';",
+            "        mermaid.initialize({ startOnLoad: true, theme: 'dark' });",
             "    </script>",
             "</head>",
-            '<body class="bg-gray-950 text-gray-100 font-sans '
-            'min-h-screen p-6">',
+            '<body class="bg-gray-950 text-gray-100 font-sans min-h-screen p-6">',
             '    <div class="max-w-7xl mx-auto space-y-6">',
-            '        <div class="flex items-center justify-between '
-            'border-b border-gray-800 pb-4">',
+            '        <div class="flex items-center justify-between border-b border-gray-800 pb-4">',
             "            <div>",
             '                <h1 class="text-3xl font-extrabold '
-            'text-transparent bg-clip-text bg-gradient-to-r '
+            "text-transparent bg-clip-text bg-gradient-to-r "
             'from-cyan-400 to-blue-500">',
             "                    EAOS CONTROL ROOM",
             "                </h1>",
-            '                <p class="text-xs text-gray-400 mt-1">'
-            "Enterprise Architecture Operating System</p>",
+            '                <p class="text-xs text-gray-400 mt-1">Enterprise Architecture Operating System</p>',
             "            </div>",
             '            <div class="flex items-center space-x-3">',
             f"                {status_badge}",
-            '                <span class="text-xs text-gray-500 '
-            'font-mono">v0.1.0</span>',
+            '                <span class="text-xs text-gray-500 font-mono">v0.1.0</span>',
             "            </div>",
             "        </div>",
-            '        <div class="grid grid-cols-1 md:grid-cols-4 '
-            'gap-4">',
-            '            <div class="bg-gray-900 p-4 rounded-xl '
-            'border border-gray-800 shadow">',
-            '                <p class="text-xs text-gray-400 '
-            'uppercase font-semibold">Architecture Score</p>',
+            '        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">',
+            '            <div class="bg-gray-900 p-4 rounded-xl border border-gray-800 shadow">',
+            '                <p class="text-xs text-gray-400 uppercase font-semibold">Architecture Score</p>',
             '                <p class="text-3xl font-bold text-cyan-400 '
             f'mt-1">{score}<span class="text-lg text-gray-500">'
             "/100</span></p>",
             "            </div>",
-            '            <div class="bg-gray-900 p-4 rounded-xl '
-            'border border-gray-800 shadow">',
-            '                <p class="text-xs text-gray-400 '
-            'uppercase font-semibold">Active Packages</p>',
-            '                <p class="text-3xl font-bold text-blue-400 '
-            f'mt-1">{len(packages_metrics)}</p>',
+            '            <div class="bg-gray-900 p-4 rounded-xl border border-gray-800 shadow">',
+            '                <p class="text-xs text-gray-400 uppercase font-semibold">Active Packages</p>',
+            f'                <p class="text-3xl font-bold text-blue-400 mt-1">{len(packages_metrics)}</p>',
             "            </div>",
-            '            <div class="bg-gray-900 p-4 rounded-xl '
-            'border border-gray-800 shadow">',
-            '                <p class="text-xs text-gray-400 '
-            'uppercase font-semibold">Violations</p>',
-            '                <p class="text-3xl font-bold text-rose-400 '
-            f'mt-1">{len(violations)}</p>',
+            '            <div class="bg-gray-900 p-4 rounded-xl border border-gray-800 shadow">',
+            '                <p class="text-xs text-gray-400 uppercase font-semibold">Violations</p>',
+            f'                <p class="text-3xl font-bold text-rose-400 mt-1">{len(violations)}</p>',
             "            </div>",
-            '            <div class="bg-gray-900 p-4 rounded-xl '
-            'border border-gray-800 shadow">',
-            '                <p class="text-xs text-gray-400 '
-            'uppercase font-semibold">Splay Cache Status</p>',
-            '                <p class="text-3xl font-bold text-emerald-400 '
-            'mt-1">ACTIVE</p>',
+            '            <div class="bg-gray-900 p-4 rounded-xl border border-gray-800 shadow">',
+            '                <p class="text-xs text-gray-400 uppercase font-semibold">Splay Cache Status</p>',
+            '                <p class="text-3xl font-bold text-emerald-400 mt-1">ACTIVE</p>',
             "            </div>",
             "        </div>",
-            '        <div class="grid grid-cols-1 lg:grid-cols-3 '
-            'gap-6">',
-            '            <div class="bg-gray-900 p-5 rounded-xl '
-            'border border-gray-800 lg:col-span-1">',
+            '        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">',
+            '            <div class="bg-gray-900 p-5 rounded-xl border border-gray-800 lg:col-span-1">',
             '                <h2 class="text-sm font-bold text-gray-200 '
-            'border-b border-gray-800 pb-2 uppercase '
+            "border-b border-gray-800 pb-2 uppercase "
             'tracking-wider">Gác Cổng Ranh Giới</h2>',
             f"                {violations_html}",
             "            </div>",
-            '            <div class="bg-gray-900 p-5 rounded-xl '
-            'border border-gray-800 lg:col-span-2 overflow-x-auto">',
+            '            <div class="bg-gray-900 p-5 rounded-xl border border-gray-800 lg:col-span-2 overflow-x-auto">',
             '                <h2 class="text-sm font-bold text-gray-200 '
-            'border-b border-gray-800 pb-2 mb-3 '
+            "border-b border-gray-800 pb-2 mb-3 "
             'uppercase tracking-wider">Chỉ Số Đóng Gói</h2>',
-            '                <table class="w-full text-xs text-left '
-            'text-gray-300">',
-            '                    <thead class="text-gray-400 uppercase '
-            'bg-gray-950">',
+            '                <table class="w-full text-xs text-left text-gray-300">',
+            '                    <thead class="text-gray-400 uppercase bg-gray-950">',
             "                        <tr>",
-            '                            <th class="px-4 py-2">'
-            "Package</th>",
-            '                            <th class="px-4 py-2 '
-            'text-center">Ca (In)</th>',
-            '                            <th class="px-4 py-2 '
-            'text-center">Ce (Out)</th>',
-            '                            <th class="px-4 py-2 '
-            'text-center">Instability (I)</th>',
-            '                            <th class="px-4 py-2 '
-            'text-center">Abstractness (A)</th>',
-            '                            <th class="px-4 py-2 '
-            'text-center">Distance (D)</th>',
+            '                            <th class="px-4 py-2">Package</th>',
+            '                            <th class="px-4 py-2 text-center">Ca (In)</th>',
+            '                            <th class="px-4 py-2 text-center">Ce (Out)</th>',
+            '                            <th class="px-4 py-2 text-center">Instability (I)</th>',
+            '                            <th class="px-4 py-2 text-center">Abstractness (A)</th>',
+            '                            <th class="px-4 py-2 text-center">Distance (D)</th>',
             "                        </tr>",
             "                    </thead>",
-            '                    <tbody class="divide-y '
-            'divide-gray-800">',
+            '                    <tbody class="divide-y divide-gray-800">',
             f"                        {metrics_rows}",
             "                    </tbody>",
             "                </table>",
             "            </div>",
             "        </div>",
-            '        <div class="bg-gray-900 p-5 rounded-xl '
-            'border border-gray-800">',
+            '        <div class="bg-gray-900 p-5 rounded-xl border border-gray-800">',
             '            <h2 class="text-sm font-bold text-gray-200 '
-            'border-b border-gray-800 pb-3 mb-4 uppercase '
+            "border-b border-gray-800 pb-3 mb-4 uppercase "
             'tracking-wider">Sơ Đồ Đồ Thị Phụ Thuộc '
             "(Dependency Graph)</h2>",
             '            <div class="flex justify-center bg-gray-950 '
-            'p-6 rounded-lg border border-gray-800 '
+            "p-6 rounded-lg border border-gray-800 "
             'overflow-x-auto">',
             '                <pre class="mermaid">',
             f"{mermaid_code}",

@@ -47,4 +47,3 @@ class Prediction(BaseModel):
     risks: list[Risk] = Field(default_factory=list)
 
     model_config = ConfigDict(frozen=True)
-

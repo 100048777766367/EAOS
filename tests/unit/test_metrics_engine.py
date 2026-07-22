@@ -82,20 +82,12 @@ def test_metrics_engine_observation_and_health_computation() -> None:
     assert dashboard.architecture_drift_index == 0.15
 
     # Verify capability-specific health
-    knowledge_cap = next(
-        c
-        for c in dashboard.capability_health_list
-        if c.capability_id == "cap.knowledge"
-    )
+    knowledge_cap = next(c for c in dashboard.capability_health_list if c.capability_id == "cap.knowledge")
     # Penalty = (1 violation * 10) + (0 incidents * 15) + (0.15 drift * 30) = 10 + 4.5 = 14.5
     # Health Score = 100 - 14.5 = 85.5 -> HEALTHY
     assert knowledge_cap.health_score == 85.5
     assert knowledge_cap.status == "HEALTHY"
 
-    identity_cap = next(
-        c
-        for c in dashboard.capability_health_list
-        if c.capability_id == "cap.identity"
-    )
+    identity_cap = next(c for c in dashboard.capability_health_list if c.capability_id == "cap.identity")
     assert identity_cap.health_score == 100.0
     assert identity_cap.status == "HEALTHY"

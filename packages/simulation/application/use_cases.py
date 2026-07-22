@@ -67,4 +67,3 @@ class RunSimulationUseCase:
         )
 
         return self.repo.save(sim)
-

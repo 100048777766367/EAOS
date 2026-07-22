@@ -17,4 +17,3 @@ class InMemoryReflectionRepository(ReflectionRepository):
 
     def find_by_subject(self, subject: str) -> list[ReflectionReport]:
         return [r for r in self._store.values() if r.subject == subject]
-

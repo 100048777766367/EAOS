@@ -28,9 +28,7 @@ class FeedbackSignal:
     observed_value: float
     threshold_value: float
     message: str
-    timestamp: datetime = field(
-        default_factory=lambda: datetime.now(UTC)
-    )
+    timestamp: datetime = field(default_factory=lambda: datetime.now(UTC))
 
     @property
     def is_violation(self) -> bool:
@@ -49,9 +47,7 @@ class AdaptationDecision:
     action_type: str
     parameters: dict[str, str | float | int | bool]
     requires_approval: bool
-    created_at: datetime = field(
-        default_factory=lambda: datetime.now(UTC)
-    )
+    created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
 
 
 @dataclass(slots=True)
@@ -60,25 +56,19 @@ class FeedbackLoopAggregate:
     cooldown_seconds: float = 60.0
     last_adaptation_at: datetime | None = None
 
-    def evaluate_signal(
-        self, signal: FeedbackSignal, decision_id: str
-    ) -> AdaptationDecision | None:
+    def evaluate_signal(self, signal: FeedbackSignal, decision_id: str) -> AdaptationDecision | None:
         """Evaluates signal and determines adaptation requirement."""
         if not signal.is_violation:
             return None
 
         now = datetime.now(UTC)
         if self.last_adaptation_at is not None:
-            elapsed = (
-                now - self.last_adaptation_at
-            ).total_seconds()
+            elapsed = (now - self.last_adaptation_at).total_seconds()
             if elapsed < self.cooldown_seconds:
                 return None
 
         action_type = self._determine_action(signal)
-        requires_approval = (
-            signal.severity == FeedbackSeverity.CRITICAL
-        )
+        requires_approval = signal.severity == FeedbackSeverity.CRITICAL
 
         self.last_adaptation_at = now
         return AdaptationDecision(
@@ -104,4 +94,3 @@ class FeedbackLoopAggregate:
                 return "ADJUST_PROMPT_TEMPERATURE"
             case FeedbackSource.GOVERNANCE_COUNCIL:
                 return "REVERT_MIGRATION"
-

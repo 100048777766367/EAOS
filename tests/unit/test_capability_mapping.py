@@ -87,9 +87,7 @@ def test_capability_mapping_healthy_100_percent(tmp_path: Path) -> None:
     )
     register_uc.execute(cmd)
 
-    reports = analyze_uc.execute(
-        AnalyzeCapabilityGapsQuery(workspace_root=tmp_path)
-    )
+    reports = analyze_uc.execute(AnalyzeCapabilityGapsQuery(workspace_root=tmp_path))
     assert reports[0].coverage_percentage == 100.0
     assert reports[0].status == "HEALTHY"
     assert len(reports[0].broken_bindings) == 0

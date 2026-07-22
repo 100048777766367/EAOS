@@ -68,9 +68,7 @@ class EvolutionObject(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
 
-def check_backwards_compatibility(
-    old_payload: dict[str, Any], new_payload: dict[str, Any]
-) -> tuple[bool, list[str]]:
+def check_backwards_compatibility(old_payload: dict[str, Any], new_payload: dict[str, Any]) -> tuple[bool, list[str]]:
     errors = []
     for key, old_val in old_payload.items():
         if key == "__version":
@@ -87,9 +85,7 @@ def check_backwards_compatibility(
     return len(errors) == 0, errors
 
 
-def migrate_payload(
-    old_payload: dict[str, Any], migration_rules: dict[str, Any]
-) -> dict[str, Any]:
+def migrate_payload(old_payload: dict[str, Any], migration_rules: dict[str, Any]) -> dict[str, Any]:
     new_payload = old_payload.copy()
     for key, action in migration_rules.items():
         if action.startswith("rename:"):

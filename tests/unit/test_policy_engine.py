@@ -1,6 +1,5 @@
 """Unit tests for Policy Engine context."""
 
-
 from packages.policy_engine.application.dto import (
     ConditionDTO,
     EvaluatePolicyCommand,
@@ -59,11 +58,7 @@ def test_policy_evaluation_allow_and_deny_rules() -> None:
         "metadata": {"environment": "production"},
         "payload": {"max_retry_loops": 5},
     }
-    res_valid = evaluate_uc.execute(
-        EvaluatePolicyCommand(
-            policy_id="POL-PROD-GUARD", context_payload=valid_ctx
-        )
-    )
+    res_valid = evaluate_uc.execute(EvaluatePolicyCommand(policy_id="POL-PROD-GUARD", context_payload=valid_ctx))
 
     assert res_valid.is_allowed is True
     assert len(res_valid.violations) == 0
@@ -73,11 +68,7 @@ def test_policy_evaluation_allow_and_deny_rules() -> None:
         "metadata": {"environment": "staging"},
         "payload": {"max_retry_loops": 15},
     }
-    res_invalid = evaluate_uc.execute(
-        EvaluatePolicyCommand(
-            policy_id="POL-PROD-GUARD", context_payload=invalid_ctx
-        )
-    )
+    res_invalid = evaluate_uc.execute(EvaluatePolicyCommand(policy_id="POL-PROD-GUARD", context_payload=invalid_ctx))
 
     assert res_invalid.is_allowed is False
     assert len(res_invalid.violations) == 2

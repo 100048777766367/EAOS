@@ -14,8 +14,10 @@ class StoreMemoryRequest(BaseModel):
     lesson_learned: str
     key_learnings: list[str] = Field(default_factory=list)
 
+
 class QueryMemoryUseCase:
     """Application Service quáº£n trá»‹ náº¡p vÃ  há»“i phÃ²ng tri thá»©c."""
+
     def __init__(self, repo: MemoryRepositoryPort) -> None:
         self.repo = repo
 
@@ -28,7 +30,6 @@ class QueryMemoryUseCase:
             outcome=request.outcome,
             evidence_summary=request.evidence_summary,
             lesson_learned=request.lesson_learned,
-            key_learnings=request.key_learnings
+            key_learnings=request.key_learnings,
         )
         return self.repo.save(record)
-

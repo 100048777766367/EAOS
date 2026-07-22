@@ -17,4 +17,3 @@ class InMemoryExperienceRepository(ExperienceRepository):
 
     def list_all(self) -> list[Experience]:
         return list(self._store.values())
-

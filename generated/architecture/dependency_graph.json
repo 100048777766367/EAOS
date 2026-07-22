@@ -27,15 +27,7 @@
   "civilization": [],
   "capability_mapping": [],
   "capability": [],
-  "autonomous": [
-    "evolution",
-    "learning",
-    "prediction",
-    "reflection",
-    "self_rewrite",
-    "simulation",
-    "workflow"
-  ],
+  "autonomous": [],
   "architecture_memory": [],
   "architecture_fitness": [],
   "agent": []

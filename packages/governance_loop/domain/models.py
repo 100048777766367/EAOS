@@ -24,9 +24,7 @@ class InvariantCheck:
     rule_name: str
     passed: bool
     evidence: str
-    evaluated_at: datetime = field(
-        default_factory=lambda: datetime.now(UTC)
-    )
+    evaluated_at: datetime = field(default_factory=lambda: datetime.now(UTC))
 
 
 @dataclass(frozen=True, slots=True)
@@ -44,9 +42,7 @@ class GovernanceCycleAggregate:
     status: CycleStatus = CycleStatus.INITIATED
     checks: list[InvariantCheck] = field(default_factory=list)
     votes: list[CouncilVoteRecord] = field(default_factory=list)
-    created_at: datetime = field(
-        default_factory=lambda: datetime.now(UTC)
-    )
+    created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
 
     def add_check_result(self, check: InvariantCheck) -> None:
         if self.status != CycleStatus.INITIATED and self.status != CycleStatus.EVALUATING:
@@ -60,11 +56,9 @@ class GovernanceCycleAggregate:
     def evaluate_and_finalize(self) -> CycleStatus:
         """Determines if the cycle is COMMITTED or REJECTED based on invariants and votes."""
         all_checks_passed = all(c.passed for c in self.checks) if self.checks else True
-        
+
         approved_votes = sum(1 for v in self.votes if v.decision == "APPROVED")
-        majority_voted = (
-            approved_votes >= (len(self.votes) / 2) if self.votes else True
-        )
+        majority_voted = approved_votes >= (len(self.votes) / 2) if self.votes else True
 
         if all_checks_passed and majority_voted:
             self.status = CycleStatus.COMMITTED

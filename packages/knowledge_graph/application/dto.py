@@ -10,9 +10,7 @@ class NodeIngestDTO(BaseModel):
     node_type: NodeType
     label: str = ""
     name: str = ""
-    properties: dict[str, str | float | int | bool] = Field(
-        default_factory=dict
-    )
+    properties: dict[str, str | float | int | bool] = Field(default_factory=dict)
 
 
 class EdgeIngestDTO(BaseModel):
@@ -33,9 +31,7 @@ class AddNodeCommand(BaseModel):
     node_id: str
     node_type: NodeType
     label: str
-    properties: dict[str, str | float | int | bool] = Field(
-        default_factory=dict
-    )
+    properties: dict[str, str | float | int | bool] = Field(default_factory=dict)
 
 
 class AddEdgeCommand(BaseModel):

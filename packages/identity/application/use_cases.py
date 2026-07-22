@@ -34,4 +34,3 @@ class RegisterUserUseCase:
             hashed_password=hashed_pw,
         )
         return self.repository.save(user)
-

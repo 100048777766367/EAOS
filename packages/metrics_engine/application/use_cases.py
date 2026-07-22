@@ -21,9 +21,7 @@ class RecordMetricObservationUseCase:
     def execute(self, command: RecordObservationCommand) -> None:
         aggregate = self._repository.find_by_system_id(command.system_id)
         if aggregate is None:
-            aggregate = ArchitectureHealthAggregate(
-                system_id=command.system_id
-            )
+            aggregate = ArchitectureHealthAggregate(system_id=command.system_id)
 
         aggregate.add_observation(
             RawMetricObservation(
@@ -43,9 +41,7 @@ class ComputeArchitectureHealthUseCase:
     def __init__(self, repository: MetricsRepositoryPort) -> None:
         self._repository = repository
 
-    def execute(
-        self, system_id: str, capability_ids: list[str]
-    ) -> ArchitectureHealthDashboardDTO:
+    def execute(self, system_id: str, capability_ids: list[str]) -> ArchitectureHealthDashboardDTO:
         aggregate = self._repository.find_by_system_id(system_id)
         if aggregate is None:
             aggregate = ArchitectureHealthAggregate(system_id=system_id)
@@ -69,9 +65,7 @@ class ComputeArchitectureHealthUseCase:
             overall_health_score=aggregate.compute_overall_system_health(),
             mttr_minutes=aggregate.calculate_mttr(),
             ai_success_rate_percentage=aggregate.calculate_ai_success_rate(),
-            architecture_drift_index=(
-                aggregate.calculate_architecture_drift_index()
-            ),
+            architecture_drift_index=(aggregate.calculate_architecture_drift_index()),
             capability_health_list=cap_reports,
             computed_at=datetime.now(UTC).isoformat(),
         )

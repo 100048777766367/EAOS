@@ -14,9 +14,7 @@ class ArchitectureTimeMachine:
 
     def __init__(self, root_dir: Path) -> None:
         self.root_dir = root_dir
-        self.time_machine_dir = (
-            root_dir / "generated" / "architecture" / "time_machine"
-        )
+        self.time_machine_dir = root_dir / "generated" / "architecture" / "time_machine"
         self.time_machine_dir.mkdir(parents=True, exist_ok=True)
 
     def record_snapshot(self, snapshot_id: str) -> dict[str, Any]:
@@ -55,9 +53,7 @@ class ArchitectureTimeMachine:
                 continue
         return sorted(snapshots, key=lambda x: x["timestamp"])
 
-    def compare_snapshots(
-        self, id_a: str, id_b: str
-    ) -> dict[str, Any]:
+    def compare_snapshots(self, id_a: str, id_b: str) -> dict[str, Any]:
         """Đối chiếu và chẩn đoán sự khác biệt giữa hai Snapshot."""
         file_a = self.time_machine_dir / f"snapshot_{id_a}.json"
         file_b = self.time_machine_dir / f"snapshot_{id_b}.json"
@@ -70,9 +66,7 @@ class ArchitectureTimeMachine:
         with open(file_b, encoding="utf-8") as f:
             snap_b = json.load(f)
 
-        score_diff = (
-            snap_b["architecture_score"] - snap_a["architecture_score"]
-        )
+        score_diff = snap_b["architecture_score"] - snap_a["architecture_score"]
 
         pkgs_a = set(snap_a["active_packages"])
         pkgs_b = set(snap_b["active_packages"])

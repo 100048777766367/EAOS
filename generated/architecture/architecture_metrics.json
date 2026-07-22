@@ -265,6 +265,17 @@
         "concrete": 13
       }
     },
+    "knowledge_graph": {
+      "afferent_coupling_ca": 0,
+      "efferent_coupling_ce": 0,
+      "instability_i": 0.0,
+      "abstractness_a": 0.0714,
+      "distance_d": 0.9286,
+      "classes": {
+        "abstract": 1,
+        "concrete": 13
+      }
+    },
     "learning": {
       "afferent_coupling_ca": 1,
       "efferent_coupling_ce": 1,

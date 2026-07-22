@@ -18,6 +18,7 @@ graph TD
     marketplace["marketplace"]
     learning["learning"]
     learning --> reflection
+    knowledge_graph["knowledge_graph"]
     knowledge["knowledge"]
     intelligence["intelligence"]
     identity["identity"]

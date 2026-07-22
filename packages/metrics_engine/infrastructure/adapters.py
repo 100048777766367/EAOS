@@ -50,10 +50,12 @@ class PrometheusMetricsExporterAdapter:
         ]
 
         if cap_list:
-            lines.extend([
-                "# HELP eaos_capability_health_score Capability health score.",
-                "# TYPE eaos_capability_health_score gauge",
-            ])
+            lines.extend(
+                [
+                    "# HELP eaos_capability_health_score Capability health score.",
+                    "# TYPE eaos_capability_health_score gauge",
+                ]
+            )
             for cap in cap_list:
                 cap_id = getattr(cap, "capability_id", "unknown")
                 c_score = getattr(cap, "health_score", 0.0)
@@ -63,4 +65,32 @@ class PrometheusMetricsExporterAdapter:
                 )
             lines.append("")
 
-        return "\n".join(lines) + "\n"
+            lines.extend(
+                [
+                    "# HELP eaos_capability_active_violations Active violations count.",
+                    "# TYPE eaos_capability_active_violations gauge",
+                ]
+            )
+            for cap in cap_list:
+                cap_id = getattr(cap, "capability_id", "unknown")
+                violations = getattr(cap, "active_violations", 0)
+                lines.append(
+                    f'eaos_capability_active_violations{{capability_id="{cap_id}"}} {violations}'
+                )
+            lines.append("")
+
+            lines.extend(
+                [
+                    "# HELP eaos_capability_active_incidents Active incidents count.",
+                    "# TYPE eaos_capability_active_incidents gauge",
+                ]
+            )
+            for cap in cap_list:
+                cap_id = getattr(cap, "capability_id", "unknown")
+                incidents = getattr(cap, "active_incidents", 0)
+                lines.append(
+                    f'eaos_capability_active_incidents{{capability_id="{cap_id}"}} {incidents}'
+                )
+            lines.append("")
+
+        return chr(10).join(lines) + chr(10)

@@ -1,1 +1,1 @@
-﻿# Validator service package
+# Validator service package

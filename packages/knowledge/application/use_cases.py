@@ -11,16 +11,17 @@ class StoreKnowledgeRequest(BaseModel):
 
 
 class StoreKnowledgeUseCase:
-    """Application Service chịu trách nhiệm lưu trữ tri thức mới."""
+    """Application Service chá»‹u trÃ¡ch nhiá»‡m lÆ°u trá»¯ tri thá»©c má»›i."""
 
     def __init__(self, repository: KnowledgeRepository) -> None:
         self.repository = repository
 
     def execute(self, request: StoreKnowledgeRequest) -> KnowledgeArtifact:
-        # Áp dụng quy tắc nghiệp vụ (ví dụ: lọc/chuẩn hóa dữ liệu đầu vào)
+        # Ãp dá»¥ng quy táº¯c nghiá»‡p vá»¥ (vÃ­ dá»¥: lá»c/chuáº©n hÃ³a dá»¯ liá»‡u Ä‘áº§u vÃ o)
         artifact = KnowledgeArtifact(
             title=request.title.strip(),
             content=request.content.strip(),
             author=request.author.strip(),
         )
         return self.repository.save(artifact)
+

@@ -1,9 +1,9 @@
-﻿import json
+import json
 import os
 from pathlib import Path
-from pydantic import BaseModel
 
 from libs.validation.checker import ASTBoundaryChecker, parse_adr_file
+from pydantic import BaseModel
 from services.validator.rules import (
     ADRStructureVerificationRule,
     HexagonalLayerIsolationRule,

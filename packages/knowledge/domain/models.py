@@ -4,21 +4,22 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class KnowledgeArtifact(BaseModel):
-    """Domain Entity đại diện cho một hiện vật tri thức trong hệ thống."""
+    """Domain Entity Ä‘áº¡i diá»‡n cho má»™t hiá»‡n váº­t tri thá»©c trong há»‡ thá»‘ng."""
 
-    id: str | None = Field(default=None, description="Định danh duy nhất")
-    title: str = Field(..., description="Tiêu đề của tri thức")
-    content: str = Field(..., description="Nội dung tri thức")
-    author: str = Field(..., description="Tác giả khởi tạo")
+    id: str | None = Field(default=None, description="Äá»‹nh danh duy nháº¥t")
+    title: str = Field(..., description="TiÃªu Ä‘á» cá»§a tri thá»©c")
+    content: str = Field(..., description="Ná»™i dung tri thá»©c")
+    author: str = Field(..., description="TÃ¡c giáº£ khá»Ÿi táº¡o")
     created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
-    model_config = ConfigDict(frozen=True)  # Entity là bất biến (Immutable)
+    model_config = ConfigDict(frozen=True)  # Entity lÃ  báº¥t biáº¿n (Immutable)
 
 
 class AuditLogEntry(BaseModel):
-    """Bản ghi lưu lại nhật ký thay đổi phục vụ lưu vết thêm/sửa/xóa."""
+    """Báº£n ghi lÆ°u láº¡i nháº­t kÃ½ thay Ä‘á»•i phá»¥c vá»¥ lÆ°u váº¿t thÃªm/sá»­a/xÃ³a."""
 
     action: str  # "ADD", "EDIT", "DELETE"
     timestamp: datetime = Field(default_factory=lambda: datetime.now(UTC))
     author: str
     details: str
+

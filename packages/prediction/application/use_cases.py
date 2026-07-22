@@ -8,21 +8,21 @@ from packages.prediction.domain.ports import PredictionRepository
 
 
 class MetricDatapoint(BaseModel):
-    """Điểm dữ liệu đo lường theo thời gian."""
+    """Äiá»ƒm dá»¯ liá»‡u Ä‘o lÆ°á»ng theo thá»i gian."""
 
     timestamp: datetime
     value: float
 
 
 class HistoricalMetricsPayload(BaseModel):
-    """Dữ liệu chuỗi thời gian lịch sử truyền vào để dự báo."""
+    """Dá»¯ liá»‡u chuá»—i thá»i gian lá»‹ch sá»­ truyá»n vÃ o Ä‘á»ƒ dá»± bÃ¡o."""
 
     metric_name: str
     datapoints: list[MetricDatapoint]
 
 
 class RunPredictionUseCase:
-    """Application Service phân tích xu hướng lịch sử và ngoại suy rủi ro."""
+    """Application Service phÃ¢n tÃ­ch xu hÆ°á»›ng lá»‹ch sá»­ vÃ  ngoáº¡i suy rá»§i ro."""
 
     def __init__(self, repo: PredictionRepository) -> None:
         self.repo = repo
@@ -32,9 +32,9 @@ class RunPredictionUseCase:
         datapoints = sorted(payload.datapoints, key=lambda x: x.timestamp)
 
         if len(datapoints) < 2:
-            raise ValueError("Cần tối thiểu 2 điểm dữ liệu lịch sử để dự báo.")
+            raise ValueError("Cáº§n tá»‘i thiá»ƒu 2 Ä‘iá»ƒm dá»¯ liá»‡u lá»‹ch sá»­ Ä‘á»ƒ dá»± bÃ¡o.")
 
-        # Thuật toán tính toán độ dốc xu hướng
+        # Thuáº­t toÃ¡n tÃ­nh toÃ¡n Ä‘á»™ dá»‘c xu hÆ°á»›ng
         first_val = datapoints[0].value
         last_val = datapoints[-1].value
         diff = last_val - first_val
@@ -42,7 +42,7 @@ class RunPredictionUseCase:
         avg_val = sum(d.value for d in datapoints) / len(datapoints)
         is_latency = "latency" in payload.metric_name.lower()
 
-        # Xác định hướng dịch chuyển chỉ số
+        # XÃ¡c Ä‘á»‹nh hÆ°á»›ng dá»‹ch chuyá»ƒn chá»‰ sá»‘
         if diff == 0:
             direction = "STABLE"
         elif (diff > 0 and is_latency) or (diff < 0 and not is_latency):
@@ -62,7 +62,7 @@ class RunPredictionUseCase:
         forecasts = []
         risks = []
 
-        # Nếu phát hiện chỉ số có xu hướng suy thoái
+        # Náº¿u phÃ¡t hiá»‡n chá»‰ sá»‘ cÃ³ xu hÆ°á»›ng suy thoÃ¡i
         if direction == "DEGRADING":
             projected_value = last_val + (diff * 3)
             target_date = datetime.now(UTC) + timedelta(days=90)
@@ -79,14 +79,14 @@ class RunPredictionUseCase:
             risks.append(
                 Risk(
                     id="RSK-01",
-                    title=(f"Nguy cơ sụt giảm chất lượng chỉ số {payload.metric_name}"),
+                    title=(f"Nguy cÆ¡ sá»¥t giáº£m cháº¥t lÆ°á»£ng chá»‰ sá»‘ {payload.metric_name}"),
                     probability=0.85,
                     timeframe_days=90,
                     severity="HIGH" if is_latency else "MEDIUM",
                 )
             )
         else:
-            # Nếu chỉ số an toàn ổn định
+            # Náº¿u chá»‰ sá»‘ an toÃ n á»•n Ä‘á»‹nh
             target_date = datetime.now(UTC) + timedelta(days=90)
             forecasts.append(
                 Forecast(
@@ -106,3 +106,4 @@ class RunPredictionUseCase:
         )
 
         return self.repo.save(prediction)
+

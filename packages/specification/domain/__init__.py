@@ -1,4 +1,13 @@
-# packages/specification/domain/__init__.py
-from .models import EvaluatePayloadResult
+from .models import (
+    EnterpriseSpecification,
+    EvaluatePayloadResult,
+    SpecField,
+    SpecRule,
+)
 
-__all__ = ["EvaluatePayloadResult"]
+__all__ = [
+    "EnterpriseSpecification",
+    "EvaluatePayloadResult",
+    "SpecField",
+    "SpecRule",
+]

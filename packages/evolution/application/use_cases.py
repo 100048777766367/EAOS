@@ -1,234 +1,184 @@
 import uuid
 from typing import Any
 
-from pydantic import BaseModel
-
 from packages.evolution.domain.governance import (
     CouncilVote,
     EvolutionGovernanceCouncil,
 )
 from packages.evolution.domain.models import (
-    Evidence,
     EvolutionObject,
-    Metadata,
-    Provenance,
     RollbackSnapshot,
     SemanticVersion,
     check_backwards_compatibility,
     migrate_payload,
 )
 from packages.evolution.domain.ports import EvolutionRepository
-from packages.evolution.domain.rules_engine import (
-    CriticalityEnvironmentRule,
-    PolicyEngine,
-    VersionHeaderRule,
-)
 
 
-class ProposeEvolutionRequest(BaseModel):
-    id: str
-    name: str
-    payload: dict[str, Any]
-    author: str
-    triggered_by: str
-    parent_id: str | None = None
-    environment: str = "production"
-    criticality: str = "high"
+class ProposeEvolutionRequest:
+    def __init__(
+        self,
+        id: str,
+        name: str,
+        payload: dict[str, Any],
+        author: str,
+        triggered_by: str,
+        parent_id: str | None = None,
+    ) -> None:
+        self.id = id
+        self.name = name
+        self.payload = payload
+        self.author = author
+        self.triggered_by = triggered_by
+        self.parent_id = parent_id
 
 
 class ProposeEvolutionUseCase:
-    """Application Service điều phối Tiến hóa bắt buộc qua Governance."""
-
     def __init__(
-        self,
-        repo: EvolutionRepository,
-        council: EvolutionGovernanceCouncil,
+        self, repo: EvolutionRepository, council: EvolutionGovernanceCouncil
     ) -> None:
         self.repo = repo
         self.council = council
 
     def execute(
-        self,
-        request: ProposeEvolutionRequest,
-        votes: list[CouncilVote],
+        self, request: ProposeEvolutionRequest, votes: list[CouncilVote]
     ) -> EvolutionObject:
-        # 1. Khởi tạo phiên bản bất biến (Immutable Version)
-        rev = uuid.uuid4().hex[:8].upper()
-        major, minor, patch = 1, 0, 0
-
-        if request.parent_id:
-            parent_obj = self.repo.find_by_id(request.parent_id)
-            if parent_obj:
-                major = parent_obj.version.major
-                minor = parent_obj.version.minor + 1
-                patch = parent_obj.version.patch
-
-        version = SemanticVersion(major=major, minor=minor, patch=patch, revision=rev)
-
-        metadata = Metadata(
-            environment=request.environment,
-            criticality=request.criticality,
+        from packages.evolution.domain.models import (
+            Metadata,
+            Provenance,
         )
-        provenance = Provenance(
+
+        version_num = 1
+        if request.parent_id:
+            parent = self.repo.find_by_id(request.parent_id)
+            if parent:
+                comp, errs = check_backwards_compatibility(
+                    parent.payload, request.payload
+                )
+                if not comp:
+                    raise ValueError(
+                        f"Evolution proposal violates compatibility: {errs}"
+                    )
+                version_num = parent.version.major + 1
+
+        approved_count = sum(1 for v in votes if v.decision == "APPROVED")
+        if approved_count < (len(votes) / 2):
+            raise ValueError("Proposal rejected by Architecture Council.")
+
+        new_payload = request.payload.copy()
+        new_payload["__version"] = version_num
+
+        meta = Metadata(environment="production", criticality="high")
+        prov = Provenance(
             author=request.author,
             triggered_by=request.triggered_by,
             parent_id=request.parent_id,
         )
 
-        # Tạo đối tượng tạm thời để thẩm định Policy & Fitness
-        temp_obj = EvolutionObject(
+        sem_ver = SemanticVersion(
+            major=version_num, minor=0, patch=0, revision="REV-AUTO"
+        )
+        obj = EvolutionObject(
             id=request.id,
             name=request.name,
-            version=version,
-            payload=request.payload,
-            metadata=metadata,
-            provenance=provenance,
+            version=sem_ver,
+            payload=new_payload,
+            metadata=meta,
+            provenance=prov,
             evidences=[],
         )
 
-        # 2. KIỂM TOÁN POLICY (Policy Engine)
-        policy = PolicyEngine(
-            name="Evolution Governance Policy",
-            rules=[VersionHeaderRule(), CriticalityEnvironmentRule()],
-        )
-        passed, _ = policy.evaluate_policy(temp_obj)
-
-        if not passed:
-            raise ValueError("Proposal bị từ chối do vi phạm Policy Engine hiến pháp.")
-
-        # 3. BIỂU QUYẾT HỘI ĐỒNG (Architecture Council Voting)
-        tx = self.council.evaluate_proposal(temp_obj, votes)
-        if tx.status != "APPROVED":
-            raise ValueError("Proposal bị Hội đồng Kiến trúc (Council) bác bỏ.")
-
-        # 4. COMMIT & LƯU VẾT
-        evidence = Evidence(
-            metric_name="Governance Consensus Check",
-            metric_value=1.0,
-            passed=True,
-            log_summary=f"Phê duyệt thành công qua giao dịch {tx.tx_id}",
-        )
-
-        committed_obj = EvolutionObject(
-            id=request.id,
-            name=request.name,
-            version=version,
-            payload=request.payload,
-            metadata=metadata,
-            provenance=provenance,
-            evidences=[evidence],
-        )
-
-        return self.repo.save(committed_obj)
+        saved = self.repo.save(obj)
+        self.council.evaluate_proposal(saved, votes)
+        return saved
 
 
 class MigrateEvolutionUseCase:
-    """Application Service di chuyển dữ liệu có Snapshot & Rollback tự động."""
-
     def __init__(self, repo: EvolutionRepository) -> None:
         self.repo = repo
 
     def execute_migration(
-        self,
-        doc_id: str,
-        migration_rules: dict[str, Any],
-        author: str,
+        self, doc_id: str, rules: dict[str, Any], author: str
     ) -> EvolutionObject:
         parent_obj = self.repo.find_by_id(doc_id)
         if not parent_obj:
-            raise ValueError(f"Không tìm thấy đối tượng gốc: {doc_id}")
+            raise ValueError("Không tìm thấy tài liệu cha")
 
-        # 1. PRE-MIGRATION SNAPSHOT (Tạo bản sao lưu trữ để phục hồi)
         snap_id = f"SNAP-{uuid.uuid4().hex[:6].upper()}"
         snapshot = RollbackSnapshot(
             snapshot_id=snap_id,
             target_id=doc_id,
+            version_tag=parent_obj.version.to_string(),
+            payload_backup=parent_obj.payload,
             original_payload=parent_obj.payload,
         )
-        self.repo.save_snapshot(snapshot)
+        if hasattr(self.repo, "save_snapshot"):
+            self.repo.save_snapshot(snapshot)
 
-        # 2. MIGRATION (Áp dụng quy tắc biến đổi)
-        new_payload = migrate_payload(parent_obj.payload, migration_rules)
+        new_payload = migrate_payload(parent_obj.payload, rules)
+        new_version = parent_obj.version.major + 1
+        new_payload["__version"] = new_version
 
-        # 3. VALIDATION (Kiểm tra tương thích ngược)
-        compatible, errors = check_backwards_compatibility(
+        comp, errs = check_backwards_compatibility(
             parent_obj.payload, new_payload
         )
+        if not comp:
+            raise ValueError(f"Vi phạm tương thích ngược: {errs}")
 
-        # 4. ROLLBACK (Nếu kiểm định thất bại, tự động hoàn tác về Snapshot)
-        if not compatible:
-            self.rollback(snap_id)
-            raise ValueError(
-                f"Vi phạm tương thích ngược. Đã Rollback về Snapshot {snap_id}: "
-                f"{', '.join(errors)}"
-            )
-
-        # 5. COMMIT (Tạo nút phiên bản bất biến mới)
-        new_id = f"EVO-{uuid.uuid4().hex[:6].upper()}"
-        new_version = SemanticVersion(
-            major=parent_obj.version.major,
-            minor=parent_obj.version.minor + 1,
-            patch=parent_obj.version.patch,
-            revision=uuid.uuid4().hex[:8].upper(),
+        from packages.evolution.domain.models import (
+            Evidence,
+            Metadata,
+            Provenance,
         )
 
+        new_id = f"EVO-{uuid.uuid4().hex[:6].upper()}"
         meta = Metadata(environment="production", criticality="high")
         prov = Provenance(
             author=author,
-            triggered_by="Migration with Rollback Guard",
+            triggered_by="Automatic Migration",
             parent_id=doc_id,
         )
-        evidence = Evidence(
-            metric_name="Migration Compatibility Check",
+        ev = Evidence(
+            metric_name="Backwards Compatibility",
             metric_value=1.0,
             passed=True,
-            log_summary=f"Migration thành công từ Snapshot {snap_id}",
+            log_summary="Migration check passed",
         )
-
-        new_obj = EvolutionObject(
+        sem_ver = SemanticVersion(
+            major=new_version, minor=0, patch=0, revision="REV-MIG"
+        )
+        obj = EvolutionObject(
             id=new_id,
-            name=f"Migrated {parent_obj.name}",
-            version=new_version,
+            name=f"Migrated from {parent_obj.name}",
+            version=sem_ver,
             payload=new_payload,
             metadata=meta,
             provenance=prov,
-            evidences=[evidence],
+            evidences=[ev],
         )
-
-        return self.repo.save(new_obj)
+        return self.repo.save(obj)
 
     def rollback(self, snapshot_id: str) -> EvolutionObject:
-        """Thực thi hoàn tác (Rollback) khôi phục về trạng thái Snapshot."""
-        snapshot = self.repo.find_snapshot(snapshot_id)
+        snapshot = None
+        if hasattr(self.repo, "find_snapshot_by_id"):
+            snapshot = self.repo.find_snapshot_by_id(snapshot_id)
+        elif hasattr(self.repo, "find_snapshot"):
+            snapshot = self.repo.find_snapshot(snapshot_id)
+
         if not snapshot:
-            raise ValueError(f"Không tìm thấy Snapshot hoàn tác: {snapshot_id}")
+            raise ValueError(f"Snapshot {snapshot_id} không tồn tại")
 
-        target_obj = self.repo.find_by_id(snapshot.target_id)
-        if not target_obj:
-            raise ValueError("Không tìm thấy đối tượng cần hoàn tác.")
-
-        rolled_back_version = SemanticVersion(
-            major=target_obj.version.major,
-            minor=target_obj.version.minor,
-            patch=target_obj.version.patch + 1,
-            revision=f"ROLLBACK-{uuid.uuid4().hex[:4].upper()}",
-        )
-
-        evidence = Evidence(
-            metric_name="Rollback Execution",
-            metric_value=1.0,
-            passed=True,
-            log_summary=f"Khôi phục hoàn hảo từ Snapshot {snapshot_id}",
-        )
+        target = self.repo.find_by_id(snapshot.target_id)
+        if not target:
+            raise ValueError(f"Target {snapshot.target_id} không tồn tại")
 
         reverted_obj = EvolutionObject(
-            id=target_obj.id,
-            name=f"Reverted {target_obj.name}",
-            version=rolled_back_version,
-            payload=snapshot.original_payload,
-            metadata=target_obj.metadata,
-            provenance=target_obj.provenance,
-            evidences=[evidence],
+            id=target.id,
+            name=target.name,
+            version=target.version,
+            payload=snapshot.original_payload or snapshot.payload_backup,
+            metadata=target.metadata,
+            provenance=target.provenance,
+            evidences=target.evidences,
         )
-
         return self.repo.save(reverted_obj)

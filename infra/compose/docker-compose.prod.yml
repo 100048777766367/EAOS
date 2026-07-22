@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  eaos-postgres:
+    image: pgvector/pgvector:pg16
+    container_name: eaos-postgres-prod
+    restart: always
+    environment:
+      POSTGRES_DB: eaos_db
+      POSTGRES_USER: eaos
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-eaos_secure_pass_2026}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_prod_data:/var/lib/postgresql/data
+
+  eaos-redis:
+    image: redis:7-alpine
+    container_name: eaos-redis-prod
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_prod_data:/data
+
+  eaos-minio:
+    image: minio/minio
+    container_name: eaos-minio-prod
+    restart: always
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: eaos_admin
+      MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD:-eaos_minio_pass_2026}
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_prod_data:/data
+
+volumes:
+  postgres_prod_data:
+  redis_prod_data:
+  minio_prod_data:

@@ -23,9 +23,6 @@ class PostgresUserModel(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
 
 
-# Repository giữ nguyên logic như bạn đã viết
-
-
 class PostgresUserRepository(UserRepository):
     def __init__(self, db_url: str) -> None:
         self.engine = create_engine(db_url)
@@ -72,3 +69,21 @@ class PostgresUserRepository(UserRepository):
             )
         finally:
             db_session.close()
+
+
+class InMemoryUserRepository(UserRepository):
+    """Adapter bộ nhớ RAM lưu trữ người dùng khi Postgres offline."""
+
+    def __init__(self) -> None:
+        self._users_by_id: dict[str, User] = {}
+        self._users_by_email: dict[str, User] = {}
+
+    def save(self, user: User) -> User:
+        user_id = user.id or str(uuid.uuid4())
+        saved_user = user.model_copy(update={"id": user_id})
+        self._users_by_id[user_id] = saved_user
+        self._users_by_email[saved_user.email] = saved_user
+        return saved_user
+
+    def find_by_email(self, email: str) -> User | None:
+        return self._users_by_email.get(email)

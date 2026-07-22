@@ -4,7 +4,7 @@ from packages.marketplace.domain.models import MarketplaceAsset
 
 
 class MarketplacePort(Protocol):
-    """Port định nghĩa hành vi đăng bán, tìm kiếm và cắm nóng Capability."""
+    """Port Ä‘á»‹nh nghÄ©a hÃ nh vi Ä‘Äƒng bÃ¡n, tÃ¬m kiáº¿m vÃ  cáº¯m nÃ³ng Capability."""
 
     def publish_asset(self, asset: MarketplaceAsset) -> MarketplaceAsset: ...
 

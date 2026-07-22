@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Any
 
-import yaml
+import yaml  # type: ignore[import-untyped]
 
 from packages.specification.domain.models import (
     EnterpriseSpecification,
@@ -12,12 +12,14 @@ from packages.specification.domain.ports import SpecificationRegistryPort
 
 
 class InMemorySpecificationRegistry(SpecificationRegistryPort):
-    """Adapter lưu trữ và thông dịch tệp đặc tả YAML trong bộ nhớ RAM."""
+    """Adapter lưu trữ và thông dịch tệp đặc tả YAML trong RAM."""
 
     def __init__(self) -> None:
         self._store: dict[str, EnterpriseSpecification] = {}
 
-    def register(self, spec: EnterpriseSpecification) -> EnterpriseSpecification:
+    def register(
+        self, spec: EnterpriseSpecification
+    ) -> EnterpriseSpecification:
         self._store[spec.id] = spec
         return spec
 
@@ -28,7 +30,6 @@ class InMemorySpecificationRegistry(SpecificationRegistryPort):
         return list(self._store.values())
 
     def load_from_yaml(self, file_path: Path) -> EnterpriseSpecification:
-        """Đọc quét tệp tin YAML đặc tả và biên dịch thành mô hình miền."""
         if not file_path.exists():
             raise FileNotFoundError(f"Không tìm thấy đặc tả: {file_path}")
 

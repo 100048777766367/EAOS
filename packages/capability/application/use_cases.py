@@ -9,10 +9,11 @@ class LoadCapabilityRequest(BaseModel):
 
 
 class RegisterCapabilityUseCase:
-    """Application Service chịu trách nhiệm biên dịch và nạp năng lực nghiệp vụ."""
+    """Application Service chá»‹u trÃ¡ch nhiá»‡m biÃªn dá»‹ch vÃ  náº¡p nÄƒng lá»±c nghiá»‡p vá»¥."""
 
     def __init__(self, registry: CapabilityRegistryPort) -> None:
         self.registry = registry
 
     def execute(self, capability: BusinessCapability) -> BusinessCapability:
         return self.registry.register(capability)
+

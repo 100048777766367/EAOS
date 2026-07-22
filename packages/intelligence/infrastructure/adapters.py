@@ -7,7 +7,7 @@ from packages.intelligence.domain.ports import IntelligenceRegistryPort
 
 
 class InMemoryIntelligenceRegistry(IntelligenceRegistryPort):
-    """Adapter lưu trữ kết quả nhận thức trí tuệ tích hợp chỉ số hiệu năng."""
+    """Adapter lÆ°u trá»¯ káº¿t quáº£ nháº­n thá»©c trÃ­ tuá»‡ tÃ­ch há»£p chá»‰ sá»‘ hiá»‡u nÄƒng."""
 
     def __init__(self) -> None:
         self._decisions: dict[str, SemanticDecision] = {}
@@ -41,7 +41,8 @@ class InMemoryIntelligenceRegistry(IntelligenceRegistryPort):
         return self._optimizations
 
     def get_success_rate(self) -> float:
-        """Đo đạc chỉ số (Metrics): Tỷ lệ các quyết định có độ tin cậy cao."""
+        """Äo Ä‘áº¡c chá»‰ sá»‘ (Metrics): Tá»· lá»‡ cÃ¡c quyáº¿t Ä‘á»‹nh cÃ³ Ä‘á»™ tin cáº­y cao."""
         if self._total_decisions_count == 0:
             return 1.0
         return self._success_decisions_count / self._total_decisions_count
+

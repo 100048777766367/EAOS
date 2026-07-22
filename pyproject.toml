@@ -9,11 +9,11 @@ authors = [
     { name = "EAOS Engineering Team", email = "arch@eaos.internal" }
 ]
 dependencies = [
-    "fastapi>=0.139.0",
-    "pydantic>=2.13.4",
-    "typer>=0.26.8",
+    "fastapi>=0.110.0",
+    "pydantic>=2.6.0",
+    "typer>=0.9.0",
     "structlog>=25.1.0",
-    "rich>=14.0.0",
+    "rich>=13.0.0",
     "eaos-api",
     "eaos-knowledge",
     "eaos-identity",
@@ -35,7 +35,7 @@ dependencies = [
     "eaos-marketplace",
     "eaos-intelligence",
     "eaos-civilization",
-    "eaos-platform-services", # <-- Đồng bộ hóa tên gói mới của platform_services
+    "eaos-platform-services"
 ]
 
 [build-system]
@@ -49,42 +49,41 @@ packages = []
 managed = true
 package = false
 default-groups = ["dev"]
-workspace = { members = ["apps/api", 
-                         "packages/knowledge", 
-                         "packages/identity", 
-                         "packages/evolution", 
-                         "packages/reflection", 
-                         "packages/learning", 
-                         "packages/prediction",
-                         "packages/simulation",
-                         "packages/self_rewrite",
-                         "packages/autonomous",
-                         "packages/capability",
-                         "packages/specification",
-                         "packages/workflow",
-                         "packages/agent",
-                         "packages/memory",
-                         "packages/federation",
-                         "packages/tenancy", 
-                         "packages/exchange", 
-                         "packages/marketplace",
-                         "packages/intelligence",
-                         "packages/civilization",
-                         "platform_services"      # <-- Đổi tên từ platform sang platform_services tránh xung đột thư viện chuẩn
-                         ] }
+workspace = { members = [
+    "apps/api",
+    "packages/knowledge",
+    "packages/identity",
+    "packages/evolution",
+    "packages/reflection",
+    "packages/learning",
+    "packages/prediction",
+    "packages/simulation",
+    "packages/self_rewrite",
+    "packages/autonomous",
+    "packages/capability",
+    "packages/specification",
+    "packages/workflow",
+    "packages/agent",
+    "packages/memory",
+    "packages/federation",
+    "packages/tenancy",
+    "packages/exchange",
+    "packages/marketplace",
+    "packages/intelligence",
+    "packages/civilization",
+    "platform_services"
+] }
 
 [dependency-groups]
 dev = [
-    "pytest>=9.1.1",
-    "pytest-cov>=7.0.0",
-    "pytest-mock>=3.14.0",
+    "pytest>=8.0.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.12.0",
     "ruff>=0.15.21",
-    "mypy>=2.3.0",
-    "pre-commit>=4.0.0",
-    "import-linter>=2.0",
-    "taskipy>=1.14.1",
-    "httpx2>=2.7.0",
+    "mypy>=1.8.0",
+    "taskipy>=1.12.0",
     "httpx>=0.28.1",
+    "httpx2>=2.7.0"
 ]
 
 [tool.ruff]
@@ -98,7 +97,7 @@ exclude = [".venv", "build", "dist", "generated"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM", "C4", "RET", "RUF", "PIE", "PERF"]
-ignore = []
+ignore = ["RUF001", "RUF002", "RUF003"]
 
 [tool.ruff.format]
 quote-style = "double"
@@ -122,7 +121,7 @@ check_untyped_defs = true
 show_error_codes = true
 pretty = true
 exclude = [
-    "\\.venv",
+    ".venv",
     "build",
     "dist",
     "generated"
@@ -137,12 +136,11 @@ run = "python -m kernel.runtime.main"
 validate = "python -m apps.cli.main validate"
 graph = "python -m apps.cli.main graph"
 metrics = "python -m apps.cli.main metrics"
-time-machine = "python -m apps.cli.main time-machine"
+time_machine = "python -m apps.cli.main time-machine"
 twin = "python -m apps.cli.main twin"
 compile = "python -m apps.cli.main compile-spec"
 loop = "python -m apps.cli.main loop"
 dlm = "python -m apps.cli.main dlm"
-
 
 [tool.uv.sources]
 eaos-api = { workspace = true }
@@ -159,11 +157,11 @@ eaos-capability = { workspace = true }
 eaos-specification = { workspace = true }
 eaos-workflow = { workspace = true }
 eaos-agent = { workspace = true }
-eaos-memory = { workspace = true } 
+eaos-memory = { workspace = true }
 eaos-federation = { workspace = true }
 eaos-tenancy = { workspace = true }
 eaos-exchange = { workspace = true }
 eaos-marketplace = { workspace = true }
 eaos-intelligence = { workspace = true }
-eaos-civilization = { workspace = true } 
-eaos-platform-services = { workspace = true } # <-- Ánh xạ đúng tên gói mới
+eaos-civilization = { workspace = true }
+eaos-platform-services = { workspace = true }

@@ -4,7 +4,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class AgentExecution(BaseModel):
-    """Chi tiết nhật ký thực thi của từng AI Agent trong chuỗi tác vụ."""
+    """Chi tiáº¿t nháº­t kÃ½ thá»±c thi cá»§a tá»«ng AI Agent trong chuá»—i tÃ¡c vá»¥."""
 
     agent_role: str  # Planner, Architect, Coder, Reviewer, Tester
     input_received: str
@@ -15,7 +15,7 @@ class AgentExecution(BaseModel):
 
 
 class Patch(BaseModel):
-    """Mô tả nội dung tệp tin Patch dạng unified diff."""
+    """MÃ´ táº£ ná»™i dung tá»‡p tin Patch dáº¡ng unified diff."""
 
     file_path: str
     diff_content: str
@@ -24,7 +24,7 @@ class Patch(BaseModel):
 
 
 class PullRequest(BaseModel):
-    """Siêu dữ liệu đại diện cho một PR đề xuất thay đổi mã nguồn."""
+    """SiÃªu dá»¯ liá»‡u Ä‘áº¡i diá»‡n cho má»™t PR Ä‘á» xuáº¥t thay Ä‘á»•i mÃ£ nguá»“n."""
 
     id: str
     title: str
@@ -37,13 +37,14 @@ class PullRequest(BaseModel):
 
 
 class SelfRewriteJob(BaseModel):
-    """Thực thể điều hành toàn bộ phiên tự lập trình của AI."""
+    """Thá»±c thá»ƒ Ä‘iá»u hÃ nh toÃ n bá»™ phiÃªn tá»± láº­p trÃ¬nh cá»§a AI."""
 
     id: str
     problem: str
-    status: str  # "SUCCESS" hoặc "FAILED"
+    status: str  # "SUCCESS" hoáº·c "FAILED"
     agent_logs: list[AgentExecution] = Field(default_factory=list)
     pull_request: PullRequest | None = Field(default=None)
     created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
     model_config = ConfigDict(frozen=True)
+

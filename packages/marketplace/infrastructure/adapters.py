@@ -3,7 +3,7 @@ from packages.marketplace.domain.ports import MarketplacePort
 
 
 class InMemoryMarketplace(MarketplacePort):
-    """Adapter lưu trữ kho ứng dụng Năng lực trong RAM."""
+    """Adapter lÆ°u trá»¯ kho á»©ng dá»¥ng NÄƒng lá»±c trong RAM."""
 
     def __init__(self) -> None:
         self._store: dict[str, MarketplaceAsset] = {}
@@ -17,3 +17,4 @@ class InMemoryMarketplace(MarketplacePort):
 
     def list_assets(self) -> list[MarketplaceAsset]:
         return list(self._store.values())
+

@@ -2,7 +2,7 @@ from pydantic import BaseModel
 
 
 class StoreMemoryCommand(BaseModel):
-    """DTO đầu vào (Input) để thực thi Use Case ghi nhớ."""
+    """DTO Ä‘áº§u vÃ o (Input) Ä‘á»ƒ thá»±c thi Use Case ghi nhá»›."""
 
     decision_id: str
     outcome: str
@@ -12,8 +12,9 @@ class StoreMemoryCommand(BaseModel):
 
 
 class MemoryResponse(BaseModel):
-    """DTO đầu ra (Output) gửi về cho API Gateway."""
+    """DTO Ä‘áº§u ra (Output) gá»­i vá» cho API Gateway."""
 
     id: str
     outcome: str
     lesson_learned: str
+

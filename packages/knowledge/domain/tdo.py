@@ -7,14 +7,14 @@ from packages.knowledge.domain.models import KnowledgeArtifact
 
 
 class TDOFixity(BaseModel):
-    """Mã Hash bảo đảm tính toàn vẹn (Fixity Proof) chống sửa đổi tệp."""
+    """MÃ£ Hash báº£o Ä‘áº£m tÃ­nh toÃ n váº¹n (Fixity Proof) chá»‘ng sá»­a Ä‘á»•i tá»‡p."""
 
     algorithm: str = "SHA-256"
     value: str
 
 
 class TDOPromptProvenance(BaseModel):
-    """Nguồn gốc lịch sử khởi tạo tài liệu chuẩn bởi Con người hay AI."""
+    """Nguá»“n gá»‘c lá»‹ch sá»­ khá»Ÿi táº¡o tÃ i liá»‡u chuáº©n bá»Ÿi Con ngÆ°á»i hay AI."""
 
     author: str
     timestamp: datetime = Field(default_factory=lambda: datetime.now(UTC))
@@ -22,7 +22,7 @@ class TDOPromptProvenance(BaseModel):
 
 
 class TrustworthyDigitalObject(BaseModel):
-    """Đối tượng số đáng tin cậy tự mô tả chính nó (Self-describing TDO)."""
+    """Äá»‘i tÆ°á»£ng sá»‘ Ä‘Ã¡ng tin cáº­y tá»± mÃ´ táº£ chÃ­nh nÃ³ (Self-describing TDO)."""
 
     context: str = Field(
         default="https://eaos.internal/contexts/governance.jsonld",
@@ -39,8 +39,8 @@ class TrustworthyDigitalObject(BaseModel):
 def encapsulate_artifact(
     artifact: KnowledgeArtifact, author: str
 ) -> TrustworthyDigitalObject:
-    """Đóng gói dữ liệu tri thức thô thành TDO tự mô tả chuẩn mực."""
-    # Tạo mã định danh ngữ nghĩa duy nhất
+    """ÄÃ³ng gÃ³i dá»¯ liá»‡u tri thá»©c thÃ´ thÃ nh TDO tá»± mÃ´ táº£ chuáº©n má»±c."""
+    # Táº¡o mÃ£ Ä‘á»‹nh danh ngá»¯ nghÄ©a duy nháº¥t
     raw_payload = f"{artifact.title}|{artifact.content}|{artifact.author}"
     sha256_hash = hashlib.sha256(raw_payload.encode("utf-8")).hexdigest()
 
@@ -52,3 +52,4 @@ def encapsulate_artifact(
         data=artifact,
         fixity=fixity,
     )
+

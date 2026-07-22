@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Any
 
-import yaml
+import yaml  # type: ignore[import-untyped]
 
 from packages.capability.domain.models import (
     BusinessCapability,
@@ -12,7 +12,7 @@ from packages.capability.domain.ports import CapabilityRegistryPort
 
 
 class InMemoryCapabilityRegistry(CapabilityRegistryPort):
-    """Adapter lưu trữ và giải mã tệp tin cấu hình YAML Năng lực doanh nghiệp."""
+    """Adapter lÆ°u trá»¯ vÃ  giáº£i mÃ£ tá»‡p tin cáº¥u hÃ¬nh YAML NÄƒng lá»±c doanh nghiá»‡p."""
 
     def __init__(self) -> None:
         self._store: dict[str, BusinessCapability] = {}
@@ -28,9 +28,9 @@ class InMemoryCapabilityRegistry(CapabilityRegistryPort):
         return list(self._store.values())
 
     def load_from_yaml(self, file_path: Path) -> BusinessCapability:
-        """Đọc quét tệp tin YAML và biên dịch thành mô hình thực thi."""
+        """Äá»c quÃ©t tá»‡p tin YAML vÃ  biÃªn dá»‹ch thÃ nh mÃ´ hÃ¬nh thá»±c thi."""
         if not file_path.exists():
-            raise FileNotFoundError(f"Không tìm thấy tệp cấu hình: {file_path}")
+            raise FileNotFoundError(f"KhÃ´ng tÃ¬m tháº¥y tá»‡p cáº¥u hÃ¬nh: {file_path}")
 
         content = file_path.read_text(encoding="utf-8")
         data: dict[str, Any] = yaml.safe_load(content)
@@ -60,3 +60,4 @@ class InMemoryCapabilityRegistry(CapabilityRegistryPort):
             contracts=contracts,
             events=data.get("events", []),
         )
+

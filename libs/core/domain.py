@@ -1,6 +1,7 @@
-﻿import hashlib
+import hashlib
 from datetime import UTC, datetime
 from typing import Any
+
 from pydantic import BaseModel, ConfigDict, Field
 
 

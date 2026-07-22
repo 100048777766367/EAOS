@@ -3,7 +3,7 @@ from packages.simulation.domain.ports import SimulationRepository
 
 
 class InMemorySimulationRepository(SimulationRepository):
-    """Adapter lưu trữ kết quả mô phỏng trong RAM phục vụ kiểm thử."""
+    """Adapter lÆ°u trá»¯ káº¿t quáº£ mÃ´ phá»ng trong RAM phá»¥c vá»¥ kiá»ƒm thá»­."""
 
     def __init__(self) -> None:
         self._store: dict[str, Simulation] = {}
@@ -17,3 +17,4 @@ class InMemorySimulationRepository(SimulationRepository):
 
     def list_all(self) -> list[Simulation]:
         return list(self._store.values())
+

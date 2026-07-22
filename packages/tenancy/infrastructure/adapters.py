@@ -3,7 +3,7 @@ from packages.tenancy.domain.ports import TenantRegistryPort
 
 
 class InMemoryTenantRegistry(TenantRegistryPort):
-    """Adapter bộ nhớ quản lý an toàn Tenant Context trong RAM."""
+    """Adapter bá»™ nhá»› quáº£n lÃ½ an toÃ n Tenant Context trong RAM."""
 
     def __init__(self) -> None:
         self._store: dict[str, TenantContext] = {}
@@ -17,3 +17,4 @@ class InMemoryTenantRegistry(TenantRegistryPort):
 
     def list_all(self) -> list[TenantContext]:
         return list(self._store.values())
+

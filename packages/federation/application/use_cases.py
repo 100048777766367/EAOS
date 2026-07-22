@@ -14,7 +14,7 @@ from packages.federation.domain.ports import FederationRepositoryPort
 
 
 class CollectiveEvolutionUseCase:
-    """Application Service điều phối việc tiếp nhận và giả lập học hỏi tập thể."""
+    """Application Service Ä‘iá»u phá»‘i viá»‡c tiáº¿p nháº­n vÃ  giáº£ láº­p há»c há»i táº­p thá»ƒ."""
 
     def __init__(
         self,
@@ -29,7 +29,7 @@ class CollectiveEvolutionUseCase:
     ) -> CollectiveEvolutionReport:
         member = self.registry.find_member_by_id(receiver_id)
         if not member:
-            raise ValueError(f"Không tìm thấy thành viên: {receiver_id}")
+            raise ValueError(f"KhÃ´ng tÃ¬m tháº¥y thÃ nh viÃªn: {receiver_id}")
 
         simulated_proposal = {
             "package_name": f"evolved-{packet.heuristic_id.lower()}",
@@ -43,14 +43,14 @@ class CollectiveEvolutionUseCase:
         if twin_result["status"] == "APPROVED":
             status = "ADOPTED"
             reason = (
-                f"Học hỏi thành công từ {packet.sender_id}. "
-                "Cấu hình tương thích 100% với hiến pháp cục bộ."
+                f"Há»c há»i thÃ nh cÃ´ng tá»« {packet.sender_id}. "
+                "Cáº¥u hÃ¬nh tÆ°Æ¡ng thÃ­ch 100% vá»›i hiáº¿n phÃ¡p cá»¥c bá»™."
             )
         else:
             status = "REJECTED"
             reason = (
-                f"Từ chối tiếp nhận chính sách từ {packet.sender_id}. "
-                "Vi phạm ranh giới hiến pháp cục bộ."
+                f"Tá»« chá»‘i tiáº¿p nháº­n chÃ­nh sÃ¡ch tá»« {packet.sender_id}. "
+                "Vi pháº¡m ranh giá»›i hiáº¿n phÃ¡p cá»¥c bá»™."
             )
 
         report = CollectiveEvolutionReport(
@@ -65,7 +65,7 @@ class CollectiveEvolutionUseCase:
 
 
 class ExecuteFederatedGovernanceUseCase:
-    """Application Service điều phối biểu quyết liên minh đa tổ chức."""
+    """Application Service Ä‘iá»u phá»‘i biá»ƒu quyáº¿t liÃªn minh Ä‘a tá»• chá»©c."""
 
     def __init__(self, registry: FederationRepositoryPort) -> None:
         self.registry = registry
@@ -91,7 +91,7 @@ class ExecuteFederatedGovernanceUseCase:
 
 
 class HeartbeatUseCase:
-    """Application Service chịu trách nhiệm ghi nhận Heartbeat và kiểm tra Health."""
+    """Application Service chá»‹u trÃ¡ch nhiá»‡m ghi nháº­n Heartbeat vÃ  kiá»ƒm tra Health."""
 
     def __init__(self, registry: FederationRepositoryPort) -> None:
         self.registry = registry
@@ -99,9 +99,9 @@ class HeartbeatUseCase:
     def execute_heartbeat(self, member_id: str) -> EcosystemMember:
         member = self.registry.find_member_by_id(member_id)
         if not member:
-            raise ValueError(f"Không tìm thấy thành viên: {member_id}")
+            raise ValueError(f"KhÃ´ng tÃ¬m tháº¥y thÃ nh viÃªn: {member_id}")
 
-        # Tự chẩn đoán Health status dựa trên Capability Index
+        # Tá»± cháº©n Ä‘oÃ¡n Health status dá»±a trÃªn Capability Index
         simulated_health = "HEALTHY"
         if len(member.capabilities_index) == 0:
             simulated_health = "DEGRADED"
@@ -113,3 +113,4 @@ class HeartbeatUseCase:
             }
         )
         return self.registry.register_member(updated)
+

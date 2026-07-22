@@ -6,7 +6,7 @@ from packages.evolution.domain.models import EvolutionObject
 
 
 class RuleResult(BaseModel):
-    """Kết quả kiểm thử của một luật cụ thể."""
+    """Káº¿t quáº£ kiá»ƒm thá»­ cá»§a má»™t luáº­t cá»¥ thá»ƒ."""
 
     rule_name: str
     passed: bool
@@ -14,14 +14,14 @@ class RuleResult(BaseModel):
 
 
 class Rule(ABC):
-    """Lớp trừu tượng cho mọi quy tắc kiến trúc cấp cao."""
+    """Lá»›p trá»«u tÆ°á»£ng cho má»i quy táº¯c kiáº¿n trÃºc cáº¥p cao."""
 
     @abstractmethod
     def evaluate(self, obj: EvolutionObject) -> RuleResult: ...
 
 
 class VersionHeaderRule(Rule):
-    """Quy tắc bắt buộc mọi cấu hình tiến hóa phải có số phiên bản."""
+    """Quy táº¯c báº¯t buá»™c má»i cáº¥u hÃ¬nh tiáº¿n hÃ³a pháº£i cÃ³ sá»‘ phiÃªn báº£n."""
 
     def evaluate(self, obj: EvolutionObject) -> RuleResult:
         version = obj.payload.get("__version")
@@ -29,17 +29,17 @@ class VersionHeaderRule(Rule):
             return RuleResult(
                 rule_name="VersionHeaderRule",
                 passed=False,
-                message="Khóa '__version' bị thiếu trong payload cấu hình.",
+                message="KhÃ³a '__version' bá»‹ thiáº¿u trong payload cáº¥u hÃ¬nh.",
             )
         return RuleResult(
             rule_name="VersionHeaderRule",
             passed=True,
-            message=f"Khóa '__version' hợp chuẩn, giá trị: {version}.",
+            message=f"KhÃ³a '__version' há»£p chuáº©n, giÃ¡ trá»‹: {version}.",
         )
 
 
 class CriticalityEnvironmentRule(Rule):
-    """Môi trường production bắt buộc độ nghiêm trọng phải là high."""
+    """MÃ´i trÆ°á»ng production báº¯t buá»™c Ä‘á»™ nghiÃªm trá»ng pháº£i lÃ  high."""
 
     def evaluate(self, obj: EvolutionObject) -> RuleResult:
         env = obj.metadata.environment
@@ -48,17 +48,17 @@ class CriticalityEnvironmentRule(Rule):
             return RuleResult(
                 rule_name="CriticalityEnvironmentRule",
                 passed=False,
-                message="Môi trường production yêu cầu criticality='high'.",
+                message="MÃ´i trÆ°á»ng production yÃªu cáº§u criticality='high'.",
             )
         return RuleResult(
             rule_name="CriticalityEnvironmentRule",
             passed=True,
-            message="Mức độ nghiêm trọng phù hợp với môi trường sản xuất.",
+            message="Má»©c Ä‘á»™ nghiÃªm trá»ng phÃ¹ há»£p vá»›i mÃ´i trÆ°á»ng sáº£n xuáº¥t.",
         )
 
 
 class PolicyEngine:
-    """Động cơ gom các luật (Rules) thành các Chính sách lớn (Policies)."""
+    """Äá»™ng cÆ¡ gom cÃ¡c luáº­t (Rules) thÃ nh cÃ¡c ChÃ­nh sÃ¡ch lá»›n (Policies)."""
 
     def __init__(self, name: str, rules: list[Rule]) -> None:
         self.name = name
@@ -76,7 +76,7 @@ class PolicyEngine:
 
 
 class FitnessEngine:
-    """Động cơ phân tích điểm thể lực kiến trúc từ các bằng chứng (Evidence)."""
+    """Äá»™ng cÆ¡ phÃ¢n tÃ­ch Ä‘iá»ƒm thá»ƒ lá»±c kiáº¿n trÃºc tá»« cÃ¡c báº±ng chá»©ng (Evidence)."""
 
     @staticmethod
     def calculate_fitness(obj: EvolutionObject) -> float:
@@ -84,3 +84,4 @@ class FitnessEngine:
             return 0.0
         passed_evidences = [ev for ev in obj.evidences if ev.passed]
         return len(passed_evidences) / len(obj.evidences)
+

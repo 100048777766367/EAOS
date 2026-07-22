@@ -4,17 +4,17 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class LinkedGraphNode(BaseModel):
-    """Sơ đồ nút liên kết ngữ nghĩa liên doanh nghiệp bằng RDF (Sprint 3)."""
+    """SÆ¡ Ä‘á»“ nÃºt liÃªn káº¿t ngá»¯ nghÄ©a liÃªn doanh nghiá»‡p báº±ng RDF (Sprint 3)."""
 
-    uri: str = Field(..., description="Địa chỉ URI định danh ngữ nghĩa toàn cầu")
-    relation: str = Field(..., description="Quan hệ: hasSharedPolicy, trustMember")
-    target_uri: str = Field(..., description="Địa chỉ URI của nút đích")
+    uri: str = Field(..., description="Äá»‹a chá»‰ URI Ä‘á»‹nh danh ngá»¯ nghÄ©a toÃ n cáº§u")
+    relation: str = Field(..., description="Quan há»‡: hasSharedPolicy, trustMember")
+    target_uri: str = Field(..., description="Äá»‹a chá»‰ URI cá»§a nÃºt Ä‘Ã­ch")
 
     model_config = ConfigDict(frozen=True)
 
 
 class SharedEcosystemEvent(BaseModel):
-    """Sự kiện phi đồng bộ truyền phát xuyên tổ chức trên Event Mesh (Sprint 4)."""
+    """Sá»± kiá»‡n phi Ä‘á»“ng bá»™ truyá»n phÃ¡t xuyÃªn tá»• chá»©c trÃªn Event Mesh (Sprint 4)."""
 
     event_id: str
     sender_tenant_id: str
@@ -23,3 +23,4 @@ class SharedEcosystemEvent(BaseModel):
     timestamp: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
     model_config = ConfigDict(frozen=True)
+

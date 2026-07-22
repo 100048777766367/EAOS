@@ -1,5 +1,5 @@
 id: workflow.invoice_approval
-name: Invoice Approval Workflow
+name: Invoice Autonomous Approval Lifecycle
 initial_state: drafted
 states:
   - name: drafted
@@ -7,12 +7,6 @@ states:
       - trigger: submit
         target: validating
   - name: validating
-    transitions:
-      - trigger: fail_validation
-        target: rejected
-      - trigger: pass_validation
-        target: manager_reviewing
-  - name: manager_reviewing
     transitions:
       - trigger: approve
         target: approved

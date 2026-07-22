@@ -5,7 +5,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class SimulatedMetrics(BaseModel):
-    """Chỉ số hiệu năng đo lường giả lập (Estimated Latency, CPU, RAM)."""
+    """Chá»‰ sá»‘ hiá»‡u nÄƒng Ä‘o lÆ°á»ng giáº£ láº­p (Estimated Latency, CPU, RAM)."""
 
     estimated_latency_ms: float
     expected_cpu_usage: float
@@ -15,7 +15,7 @@ class SimulatedMetrics(BaseModel):
 
 
 class SimulationResult(BaseModel):
-    """Kết quả thực thi Dry-Run trong Sandbox ảo cô lập."""
+    """Káº¿t quáº£ thá»±c thi Dry-Run trong Sandbox áº£o cÃ´ láº­p."""
 
     passed_tests_count: int
     failed_tests_count: int
@@ -27,7 +27,7 @@ class SimulationResult(BaseModel):
 
 
 class Scenario(BaseModel):
-    """Kịch bản mô phỏng chạy thử đề xuất thay đổi."""
+    """Ká»‹ch báº£n mÃ´ phá»ng cháº¡y thá»­ Ä‘á» xuáº¥t thay Ä‘á»•i."""
 
     id: str
     name: str
@@ -38,12 +38,13 @@ class Scenario(BaseModel):
 
 
 class Simulation(BaseModel):
-    """Thực thể Giả lập tối cao điều hành việc kiểm thử trước khi sáp nhập."""
+    """Thá»±c thá»ƒ Giáº£ láº­p tá»‘i cao Ä‘iá»u hÃ nh viá»‡c kiá»ƒm thá»­ trÆ°á»›c khi sÃ¡p nháº­p."""
 
     id: str
     scenario_id: str
-    status: str  # "SUCCESS" hoặc "FAILED"
+    status: str  # "SUCCESS" hoáº·c "FAILED"
     result: SimulationResult
     created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
     model_config = ConfigDict(frozen=True)
+

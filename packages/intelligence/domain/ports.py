@@ -8,7 +8,7 @@ from packages.intelligence.domain.models import (
 
 
 class IntelligenceRegistryPort(Protocol):
-    """Port định nghĩa hành vi lưu trữ và lập kế hoạch nhận thức."""
+    """Port Ä‘á»‹nh nghÄ©a hÃ nh vi lÆ°u trá»¯ vÃ  láº­p káº¿ hoáº¡ch nháº­n thá»©c."""
 
     def save_decision(self, decision: SemanticDecision) -> SemanticDecision: ...
 

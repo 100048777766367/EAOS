@@ -1,0 +1,24 @@
+{
+  "INC-BLOCK-HASH-SIGNATURE-MISMATCH": {
+    "incident_id": "INC-BLOCK-HASH-SIGNATURE-MISMATCH",
+    "error_signature": "packages/civilization/infrastructure/adapters.py | TypeError: calculate_block_hash() got unexpected keyword argument 'timestamp'",
+    "occurrence_count": 3,
+    "first_seen": "2026-07-22T16:10:00Z",
+    "last_seen": "2026-07-22T09:19:43.523853+00:00",
+    "timeline_events": [
+      "16:10:00 - Pytest ngắt tại khâu collect do TypeError hàm calculate_block_hash.",
+      "16:12:00 - Mypy phát hiện 17 lỗi liên quan đến thiếu trường trong models/ports.",
+      "16:15:00 - Cập nhật signature linh hoạt cho calculate_block_hash và bổ sung các phương thức thiếu."
+    ],
+    "root_cause_analysis": "Hàm calculate_block_hash chỉ nhận timestamp_str trong khi adapters truyền timestamp (dạng datetime). Đồng thời các Pydantic model thiếu các field alias.",
+    "proposed_options": [
+      {
+        "option": "Cung cấp kwargs linh hoạt cho calculate_block_hash và bổ sung các trường alias vào models.py",
+        "status": "CHOSEN",
+        "rationale": "Đảm bảo tính tương thích tuyệt đối cho cả 2 cách gọi hàm mà không làm vỡ các use cases hiện hữu."
+      }
+    ],
+    "remedy_method": "Đồng bộ hóa signature hàm calculate_block_hash và định nghĩa đầy đủ phương thức save_block trên Port & Adapter.",
+    "result_verification": "Pytest & Mypy PASS 100%."
+  }
+}

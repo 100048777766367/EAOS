@@ -20,7 +20,7 @@ class SimulationRequest(BaseModel):
 
 
 class RunSimulationUseCase:
-    """Service điều phối Dry-Run chạy Fitness và Policy ảo trên Sandbox."""
+    """Service Ä‘iá»u phá»‘i Dry-Run cháº¡y Fitness vÃ  Policy áº£o trÃªn Sandbox."""
 
     def __init__(self, repo: SimulationRepository) -> None:
         self.repo = repo
@@ -31,13 +31,13 @@ class RunSimulationUseCase:
         target_payload = request.target_payload
         has_version = "__version" in target_payload
 
-        # Giả lập Clone Sandbox và chạy khô 1000 tests
+        # Giáº£ láº­p Clone Sandbox vÃ  cháº¡y khÃ´ 1000 tests
         passed_tests = 1000 if has_version else 950
         failed_tests = 0 if has_version else 50
         sim_fitness = 1.0 if has_version else 0.95
         policy_passed = has_version
 
-        # Giả lập tính toán hiệu năng tải của CPU, RAM và độ trễ
+        # Giáº£ láº­p tÃ­nh toÃ¡n hiá»‡u nÄƒng táº£i cá»§a CPU, RAM vÃ  Ä‘á»™ trá»…
         estimated_latency = 120.5 if has_version else 250.0
         expected_cpu = 15.4 if has_version else 45.0
         simulated_mem = 128.0 if has_version else 512.0
@@ -67,3 +67,4 @@ class RunSimulationUseCase:
         )
 
         return self.repo.save(sim)
+

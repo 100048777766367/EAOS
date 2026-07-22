@@ -7,7 +7,7 @@ from packages.memory.domain.ports import MemoryRepositoryPort
 
 
 class StoreMemoryHandler:
-    """Handler chịu trách nhiệm thực thi nghiệp vụ lưu vết bộ nhớ."""
+    """Handler chá»‹u trÃ¡ch nhiá»‡m thá»±c thi nghiá»‡p vá»¥ lÆ°u váº¿t bá»™ nhá»›."""
 
     def __init__(self, repo: MemoryRepositoryPort) -> None:
         self.repo = repo
@@ -33,7 +33,7 @@ class StoreMemoryHandler:
 
 
 class RecallMemoryHandler:
-    """Handler chịu trách nhiệm thực thi hồi tưởng bộ nhớ."""
+    """Handler chá»‹u trÃ¡ch nhiá»‡m thá»±c thi há»“i tÆ°á»Ÿng bá»™ nhá»›."""
 
     def __init__(self, repo: MemoryRepositoryPort) -> None:
         self.repo = repo
@@ -43,3 +43,4 @@ class RecallMemoryHandler:
 
     def semantic_recall(self, query_text: str, limit: int = 5) -> list[MemoryRecord]:
         return self.repo.vector_search(query_text, limit)
+

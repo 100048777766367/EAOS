@@ -4,7 +4,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class TenantPolicyOverride(BaseModel):
-    """Value Object quản lý việc ghi đè Policy đặc thù của từng Doanh nghiệp."""
+    """Value Object quáº£n lÃ½ viá»‡c ghi Ä‘Ã¨ Policy Ä‘áº·c thÃ¹ cá»§a tá»«ng Doanh nghiá»‡p."""
 
     policy_id: str
     is_enabled: bool = True
@@ -14,12 +14,13 @@ class TenantPolicyOverride(BaseModel):
 
 
 class TenantContext(BaseModel):
-    """Aggregate Root quản lý ngữ cảnh an toàn của từng doanh nghiệp cô lập."""
+    """Aggregate Root quáº£n lÃ½ ngá»¯ cáº£nh an toÃ n cá»§a tá»«ng doanh nghiá»‡p cÃ´ láº­p."""
 
-    tenant_id: str = Field(..., description="Mã phân mục doanh nghiệp")
-    domain_name: str = Field(..., description="Tên miền doanh nghiệp")
+    tenant_id: str = Field(..., description="MÃ£ phÃ¢n má»¥c doanh nghiá»‡p")
+    domain_name: str = Field(..., description="TÃªn miá»n doanh nghiá»‡p")
     activated_capabilities: list[str] = Field(default_factory=list)
     policy_overrides: list[TenantPolicyOverride] = Field(default_factory=list)
     created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
     model_config = ConfigDict(frozen=True)
+

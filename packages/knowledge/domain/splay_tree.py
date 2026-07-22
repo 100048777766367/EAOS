@@ -2,18 +2,18 @@ from typing import Any
 
 
 class SplayNode[T]:
-    """Nút đại diện cho phần tử lưu trong Splay Tree."""
+    """NÃºt Ä‘áº¡i diá»‡n cho pháº§n tá»­ lÆ°u trong Splay Tree."""
 
     def __init__(self, key: str, value: T) -> None:
-        self.key: str = key  # Khóa tìm kiếm (ví dụ: artifact_id)
-        self.value: T = value  # Dữ liệu đối tượng
+        self.key: str = key  # KhÃ³a tÃ¬m kiáº¿m (vÃ­ dá»¥: artifact_id)
+        self.value: T = value  # Dá»¯ liá»‡u Ä‘á»‘i tÆ°á»£ng
         self.left: SplayNode[T] | None = None
         self.right: SplayNode[T] | None = None
         self.parent: SplayNode[T] | None = None
 
 
 class SplayTree[T]:
-    """Cây Splay Tree tự tối ưu hóa."""
+    """CÃ¢y Splay Tree tá»± tá»‘i Æ°u hÃ³a."""
 
     def __init__(self) -> None:
         self.root: SplayNode[T] | None = None
@@ -53,7 +53,7 @@ class SplayTree[T]:
         x.parent = y
 
     def _splay(self, x: SplayNode[T]) -> None:
-        """Đưa nút x vừa truy cập lên làm gốc của cây."""
+        """ÄÆ°a nÃºt x vá»«a truy cáº­p lÃªn lÃ m gá»‘c cá»§a cÃ¢y."""
         while x.parent is not None:
             p = x.parent
             g = p.parent
@@ -81,7 +81,7 @@ class SplayTree[T]:
                 self._left_rotate(p)
 
     def search(self, key: str) -> SplayNode[T] | None:
-        """Tìm kiếm khóa và tự động splay nút tìm thấy lên làm gốc."""
+        """TÃ¬m kiáº¿m khÃ³a vÃ  tá»± Ä‘á»™ng splay nÃºt tÃ¬m tháº¥y lÃªn lÃ m gá»‘c."""
         x = self.root
         while x is not None:
             if key < x.key:
@@ -100,12 +100,12 @@ class SplayTree[T]:
         return None
 
     def insert(self, key: str, value: T) -> None:
-        """Chèn phần tử mới vào cây nhị phân và splay lên làm Root."""
+        """ChÃ¨n pháº§n tá»­ má»›i vÃ o cÃ¢y nhá»‹ phÃ¢n vÃ  splay lÃªn lÃ m Root."""
         if self.root is None:
             self.root = SplayNode(key, value)
             return
 
-        # Khai báo kiểu tường minh cho phép x và parent nhận giá trị None (Sửa lỗi Mypy)
+        # Khai bÃ¡o kiá»ƒu tÆ°á»ng minh cho phÃ©p x vÃ  parent nháº­n giÃ¡ trá»‹ None (Sá»­a lá»—i Mypy)
         x: SplayNode[T] | None = self.root
         parent: SplayNode[T] | None = None
 
@@ -133,7 +133,7 @@ class SplayTree[T]:
         self._splay(node)
 
     def delete(self, key: str) -> bool:
-        """Xóa phần tử và splay tái sắp xếp lại hai nhánh của cây."""
+        """XÃ³a pháº§n tá»­ vÃ  splay tÃ¡i sáº¯p xáº¿p láº¡i hai nhÃ¡nh cá»§a cÃ¢y."""
         node = self.search(key)
         if node is None or node.key != key:
             return False
@@ -191,3 +191,4 @@ class SplayTree[T]:
 
         _to_mermaid(self.root)
         return "\n".join(lines)
+

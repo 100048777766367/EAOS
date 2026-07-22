@@ -1,1 +1,1 @@
-﻿# Validation utilities package
+# Validation utilities package

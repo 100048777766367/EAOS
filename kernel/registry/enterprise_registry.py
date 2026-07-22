@@ -26,16 +26,16 @@ class EnterpriseRegistry:
         self._resources: dict[str, RegistryResource] = {}
 
     def register(self, resource: RegistryResource) -> RegistryResource:
-        """Đăng ký một tài nguyên mới vào hệ thống Discovery."""
+
         self._resources[resource.id] = resource
         return resource
 
     def find_by_id(self, resource_id: str) -> RegistryResource | None:
-        """Tìm kiếm một tài nguyên cụ thể theo mã ID."""
+
         return self._resources.get(resource_id)
 
     def list_by_type(self, resource_type: str) -> list[RegistryResource]:
-        """Liệt kê toàn bộ tài nguyên theo phân loại."""
+
         return [
             r
             for r in self._resources.values()
@@ -43,5 +43,5 @@ class EnterpriseRegistry:
         ]
 
     def list_all(self) -> list[RegistryResource]:
-        """Liệt kê toàn bộ tài nguyên trong hệ thống."""
+
         return list(self._resources.values())

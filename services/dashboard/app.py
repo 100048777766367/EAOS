@@ -1,11 +1,11 @@
-﻿import json
-import typer
+import json
 from pathlib import Path
+
+import typer
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 from rich.text import Text
-
 from services.validator.engine import EAOSValidatorEngine
 
 app = typer.Typer(help="EAOS - Enterprise Architecture Operating System CLI")

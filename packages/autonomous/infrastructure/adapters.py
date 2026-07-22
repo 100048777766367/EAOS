@@ -14,7 +14,7 @@ class Base(DeclarativeBase):
 
 
 class PostgresLoopCycleModel(Base):
-    """SQLAlchemy 2.0 Model lưu trữ bền vững trạng thái chu kỳ tiến hóa."""
+    """SQLAlchemy 2.0 Model lÆ°u trá»¯ bá»n vá»¯ng tráº¡ng thÃ¡i chu ká»³ tiáº¿n hÃ³a."""
 
     __tablename__ = "autonomous_loop_cycles"
 
@@ -27,7 +27,7 @@ class PostgresLoopCycleModel(Base):
 
 
 class PostgresAutonomousRepository(AutonomousRepository):
-    """Adapter hiện thực hóa Port kết nối PostgreSQL cho Vòng lặp tự trị."""
+    """Adapter hiá»‡n thá»±c hÃ³a Port káº¿t ná»‘i PostgreSQL cho VÃ²ng láº·p tá»± trá»‹."""
 
     def __init__(self, db_url: str) -> None:
         self.engine = create_engine(db_url)
@@ -88,9 +88,9 @@ class PostgresAutonomousRepository(AutonomousRepository):
 
 
 class InMemoryAutonomousRepository(AutonomousRepository):
-    """Adapter bộ nhớ RAM lưu trữ chu kỳ tiến hóa phục vụ kiểm thử di động."""
+    """Adapter bá»™ nhá»› RAM lÆ°u trá»¯ chu ká»³ tiáº¿n hÃ³a phá»¥c vá»¥ kiá»ƒm thá»­ di Ä‘á»™ng."""
 
-    # Đồng bộ chữ ký khởi tạo db_url để có thể hoán đổi cắm nóng (swap) cực kỳ mượt mà
+    # Äá»“ng bá»™ chá»¯ kÃ½ khá»Ÿi táº¡o db_url Ä‘á»ƒ cÃ³ thá»ƒ hoÃ¡n Ä‘á»•i cáº¯m nÃ³ng (swap) cá»±c ká»³ mÆ°á»£t mÃ 
     def __init__(self, db_url: str = "") -> None:
         self._store: dict[str, LoopCycle] = {}
 

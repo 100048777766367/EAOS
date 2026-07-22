@@ -1,21 +1,9 @@
 id: spec.invoice
-name: Invoice Specification
-version: 1.0.0
-fields:
-  - name: id
-    type: str
-    required: true
-  - name: amount
-    type: float
-    required: true
-  - name: customer_id
-    type: str
-    required: true
-policies:
-  - billing_policy
+name: Invoice Verification Schema
 rules:
-  - id: RULE-INV-01
-    expression: amount > 0
-    error_message: Số tiền hóa đơn bắt buộc phải lớn hơn 0.
-workflows:
-  - invoice_approval
+  - id: RULE-001
+    expression: payload.id.startswith('INV-')
+    error_message: Mã hóa hóa đơn bắt buộc phải bắt đầu bằng INV-
+  - id: RULE-002
+    expression: payload.amount > 0
+    error_message: Tổng tiền hóa đơn bắt buộc phải lớn hơn 0

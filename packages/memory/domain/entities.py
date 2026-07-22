@@ -4,15 +4,15 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class MemoryRecord(BaseModel):
-    """Domain Entity đại diện cho một bản ghi bộ nhớ vĩnh cửu."""
+    """Thực thể bản ghi bộ nhớ vĩnh cửu trong RAM."""
 
-    id: str = Field(..., description="Mã bản ghi bộ nhớ")
-    memory_type: str = Field(..., description="EPISODIC hoặc SEMANTIC")
+    id: str = Field(..., description="Mã bản ghi")
+    memory_type: str = Field(default="EPISODIC", description="Phân loại bộ nhớ")
     timestamp: datetime = Field(default_factory=lambda: datetime.now(UTC))
-    decision_id: str = Field(..., description="Mã quyết định liên kết")
-    outcome: str = Field(..., description="Kết quả: SUCCESS hoặc FAILED")
-    evidence_summary: str = Field(..., description="Tóm tắt bằng chứng")
-    lesson_learned: str = Field(..., description="Bài học chắt lọc rút ra")
+    decision_id: str = Field(..., description="Mã quyết định")
+    outcome: str = Field(..., description="Kết quả")
+    evidence_summary: str = Field(..., description="Bằng chứng")
+    lesson_learned: str = Field(..., description="Bài học")
     key_learnings: list[str] = Field(default_factory=list)
 
     model_config = ConfigDict(frozen=True)

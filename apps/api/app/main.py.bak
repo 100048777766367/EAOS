@@ -1,0 +1,26 @@
+"""EAOS Enterprise API Gateway & Delivery Layer."""
+
+from fastapi import FastAPI
+from packages.metrics_engine.infrastructure.adapters import (
+    InMemoryMetricsRepository,
+)
+from platform_services.telemetry.observability import (
+    EAOSObservabilityMiddleware,
+)
+
+app = FastAPI(title="EAOS Enterprise Architecture OS API", version="1.0.0")
+
+# Initialize shared metrics repository
+metrics_repo = InMemoryMetricsRepository()
+
+# Register Automated Observability Middleware Interceptor
+app.add_middleware(
+    EAOSObservabilityMiddleware,
+    metrics_repository=metrics_repo,
+    system_id="EAOS-CORE",
+)
+
+
+@app.get("/health")
+def health_check() -> dict[str, str]:
+    return {"status": "healthy", "system": "EAOS-CORE"}

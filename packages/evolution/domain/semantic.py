@@ -4,11 +4,11 @@ from packages.evolution.domain.models import EvolutionObject
 
 
 class SemanticLayer:
-    """Lớp ngữ nghĩa dịch chuyển tri thức EAOS sang dạng JSON-LD và RDF."""
+    """Lá»›p ngá»¯ nghÄ©a dá»‹ch chuyá»ƒn tri thá»©c EAOS sang dáº¡ng JSON-LD vÃ  RDF."""
 
     @staticmethod
     def to_json_ld(obj: EvolutionObject) -> dict[str, Any]:
-        """Biên dịch đối tượng sang tệp tin JSON-LD liên kết."""
+        """BiÃªn dá»‹ch Ä‘á»‘i tÆ°á»£ng sang tá»‡p tin JSON-LD liÃªn káº¿t."""
         return {
             "@context": {
                 "eaos": "https://eaos.internal/vocab#",
@@ -29,7 +29,7 @@ class SemanticLayer:
 
     @staticmethod
     def to_rdf_triples(obj: EvolutionObject) -> list[str]:
-        """Biên dịch thành các bộ ba RDF (N-Triples) cho AI/AGI quét."""
+        """BiÃªn dá»‹ch thÃ nh cÃ¡c bá»™ ba RDF (N-Triples) cho AI/AGI quÃ©t."""
         subject = f"<https://eaos.internal/objects/{obj.id}>"
         rdf_triples = [
             (
@@ -49,3 +49,4 @@ class SemanticLayer:
                 f"{subject} <https://eaos.internal/vocab#hasParent> {parent_uri} ."
             )
         return rdf_triples
+

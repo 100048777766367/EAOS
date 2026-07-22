@@ -1,4 +1,4 @@
-﻿.PHONY: test lint validate graph metrics run-web clean
+.PHONY: test lint validate graph metrics run-web clean
 test:
 pytest tests/ -v
 

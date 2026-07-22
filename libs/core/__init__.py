@@ -1,19 +1,19 @@
-﻿from .domain import (
-    Entity,
+from .domain import (
     AggregateRoot,
-    ValueObject,
+    Entity,
     TDOFixity,
     TDOPromptProvenance,
     TrustworthyDigitalObject,
+    ValueObject,
     encapsulate_artifact,
 )
 
 __all__ = [
-    "Entity",
     "AggregateRoot",
-    "ValueObject",
+    "Entity",
     "TDOFixity",
     "TDOPromptProvenance",
     "TrustworthyDigitalObject",
+    "ValueObject",
     "encapsulate_artifact",
 ]

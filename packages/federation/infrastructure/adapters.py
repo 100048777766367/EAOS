@@ -7,7 +7,7 @@ from packages.federation.domain.ports import FederationRepositoryPort
 
 
 class InMemoryFederationRegistry(FederationRepositoryPort):
-    """Adapter bộ nhớ RAM quản lý kết nối chéo hệ sinh thái."""
+    """Adapter bá»™ nhá»› RAM quáº£n lÃ½ káº¿t ná»‘i chÃ©o há»‡ sinh thÃ¡i."""
 
     def __init__(self) -> None:
         self._members: dict[str, EcosystemMember] = {}
@@ -41,3 +41,4 @@ class InMemoryFederationRegistry(FederationRepositoryPort):
 
     def list_federated_transactions(self) -> list[FederatedTransaction]:
         return self._txs
+

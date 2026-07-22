@@ -1,7 +1,7 @@
 import json
 import os
 from datetime import UTC, datetime
-from typing import Any  # <-- THÊM ĐÚNG IMPORT ANY VÀO ĐÂY
+from typing import Any  # <-- THÃŠM ÄÃšNG IMPORT ANY VÃ€O ÄÃ‚Y
 
 from pydantic import BaseModel, Field
 
@@ -9,26 +9,26 @@ from packages.evolution.domain.models import EvolutionObject
 
 
 class CouncilVote(BaseModel):
-    """Lá phiếu biểu quyết của Hội đồng quản trị Agent/Con người."""
+    """LÃ¡ phiáº¿u biá»ƒu quyáº¿t cá»§a Há»™i Ä‘á»“ng quáº£n trá»‹ Agent/Con ngÆ°á»i."""
 
     voter: str
-    decision: str  # "APPROVED" hoặc "REJECTED"
+    decision: str  # "APPROVED" hoáº·c "REJECTED"
     reason: str
     voted_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
 
 class EvolutionTransaction(BaseModel):
-    """Giao dịch tiến hóa đã được phê duyệt và ghi sổ."""
+    """Giao dá»‹ch tiáº¿n hÃ³a Ä‘Ã£ Ä‘Æ°á»£c phÃª duyá»‡t vÃ  ghi sá»•."""
 
     tx_id: str
     timestamp: datetime = Field(default_factory=lambda: datetime.now(UTC))
     evolution_id: str
     votes: list[CouncilVote]
-    status: str  # "APPROVED" hoặc "REJECTED"
+    status: str  # "APPROVED" hoáº·c "REJECTED"
 
 
 class EvolutionGovernanceCouncil:
-    """Hội đồng giám sát biểu quyết cho các đề xuất tự tiến hóa."""
+    """Há»™i Ä‘á»“ng giÃ¡m sÃ¡t biá»ƒu quyáº¿t cho cÃ¡c Ä‘á» xuáº¥t tá»± tiáº¿n hÃ³a."""
 
     def __init__(
         self, ledger_path: str = "runtime/traces/evolution_ledger.jsonl"
@@ -64,3 +64,4 @@ class EvolutionGovernanceCouncil:
             return []
         with open(self.ledger_path, encoding="utf-8") as f:
             return [json.loads(line.strip()) for line in f if line.strip()]
+

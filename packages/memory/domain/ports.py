@@ -1,10 +1,10 @@
 from typing import Protocol
 
-from packages.memory.domain.entities import MemoryRecord  # Sửa đường dẫn sang entities
+from packages.memory.domain.entities import MemoryRecord
 
 
 class MemoryRepositoryPort(Protocol):
-    """Port định nghĩa các hành vi truy vấn và ghi nhớ lịch sử."""
+    """Port định nghĩa các hành vi lưu vết lịch sử bộ nhớ vĩnh cửu."""
 
     def save(self, record: MemoryRecord) -> MemoryRecord: ...
 
@@ -13,7 +13,7 @@ class MemoryRepositoryPort(Protocol):
     def query_memories(self, keyword: str) -> list[MemoryRecord]: ...
 
     def vector_search(
-        self, query_text: str, limit: int = 5
+        self, query: str, limit: int = 5
     ) -> list[MemoryRecord]: ...
 
     def list_all(self) -> list[MemoryRecord]: ...

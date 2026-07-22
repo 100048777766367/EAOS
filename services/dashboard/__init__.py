@@ -1,1 +1,1 @@
-﻿# Dashboard package
+# Dashboard package

@@ -3,7 +3,7 @@ from packages.reflection.domain.ports import ReflectionRepository
 
 
 class InMemoryReflectionRepository(ReflectionRepository):
-    """Adapter lưu trữ báo cáo tự suy ngẫm trong RAM phục vụ kiểm thử."""
+    """Adapter lÆ°u trá»¯ bÃ¡o cÃ¡o tá»± suy ngáº«m trong RAM phá»¥c vá»¥ kiá»ƒm thá»­."""
 
     def __init__(self) -> None:
         self._store: dict[str, ReflectionReport] = {}
@@ -17,3 +17,4 @@ class InMemoryReflectionRepository(ReflectionRepository):
 
     def find_by_subject(self, subject: str) -> list[ReflectionReport]:
         return [r for r in self._store.values() if r.subject == subject]
+

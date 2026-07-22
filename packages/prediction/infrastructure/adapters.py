@@ -3,7 +3,7 @@ from packages.prediction.domain.ports import PredictionRepository
 
 
 class InMemoryPredictionRepository(PredictionRepository):
-    """Adapter lưu trữ kết quả dự đoán trong RAM phục vụ kiểm thử."""
+    """Adapter lÆ°u trá»¯ káº¿t quáº£ dá»± Ä‘oÃ¡n trong RAM phá»¥c vá»¥ kiá»ƒm thá»­."""
 
     def __init__(self) -> None:
         self._store: dict[str, Prediction] = {}
@@ -17,3 +17,4 @@ class InMemoryPredictionRepository(PredictionRepository):
 
     def list_all(self) -> list[Prediction]:
         return list(self._store.values())
+

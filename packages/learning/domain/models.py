@@ -4,7 +4,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class Lesson(BaseModel):
-    """Giá trị đúc rút từ một sự cố thực tế."""
+    """GiÃ¡ trá»‹ Ä‘Ãºc rÃºt tá»« má»™t sá»± cá»‘ thá»±c táº¿."""
 
     id: str
     takeaway: str
@@ -14,7 +14,7 @@ class Lesson(BaseModel):
 
 
 class Pattern(BaseModel):
-    """Mẫu thiết kế chuẩn được hệ thống khuyến khích sử dụng."""
+    """Máº«u thiáº¿t káº¿ chuáº©n Ä‘Æ°á»£c há»‡ thá»‘ng khuyáº¿n khÃ­ch sá»­ dá»¥ng."""
 
     id: str
     name: str
@@ -24,7 +24,7 @@ class Pattern(BaseModel):
 
 
 class AntiPattern(BaseModel):
-    """Mẫu phản thiết kế (chống chỉ định) cần tránh."""
+    """Máº«u pháº£n thiáº¿t káº¿ (chá»‘ng chá»‰ Ä‘á»‹nh) cáº§n trÃ¡nh."""
 
     id: str
     name: str
@@ -34,7 +34,7 @@ class AntiPattern(BaseModel):
 
 
 class Heuristic(BaseModel):
-    """Quy tắc kinh nghiệm (Rule of thumb) của các AI Agents."""
+    """Quy táº¯c kinh nghiá»‡m (Rule of thumb) cá»§a cÃ¡c AI Agents."""
 
     id: str
     rule_of_thumb: str
@@ -44,7 +44,7 @@ class Heuristic(BaseModel):
 
 
 class Experience(BaseModel):
-    """Thực thể Kinh nghiệm hoàn chỉnh của EAOS, đúc rút từ Reflection."""
+    """Thá»±c thá»ƒ Kinh nghiá»‡m hoÃ n chá»‰nh cá»§a EAOS, Ä‘Ãºc rÃºt tá»« Reflection."""
 
     id: str
     reflection_id: str
@@ -56,3 +56,4 @@ class Experience(BaseModel):
     created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
     model_config = ConfigDict(frozen=True)
+

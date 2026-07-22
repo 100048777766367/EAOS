@@ -2,22 +2,14 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class AgentConfig(BaseModel):
-    """Value Object quản lý cấu hình và tham số mô hình LLM của Agent."""
-
-    model_name: str = Field(..., description="Tên mô hình LLM sử dụng")
-    temperature: float = Field(default=0.2, description="Độ sáng tạo")
-    max_tokens: int = Field(default=4096, description="Giới hạn token")
-
-    model_config = ConfigDict(frozen=True)
-
+    model_name: str
+    temperature: float = 0.1
 
 class AIAgent(BaseModel):
-    """Aggregate Root đại diện cho một AI Agent thực thi có Lifecycle."""
-
-    id: str = Field(..., description="Mã Agent duy nhất (agent.planner)")
-    role: str = Field(..., description="Vai trò đảm nhiệm (Planner, Coder)")
+    id: str
+    role: str
     config: AgentConfig
-    current_state: str = Field(default="INITIALIZED")
+    current_state: str = "INITIALIZED"
     lifecycle_history: list[str] = Field(default_factory=list)
-
     model_config = ConfigDict(frozen=True)
+

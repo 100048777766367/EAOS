@@ -1,66 +1,58 @@
-import asyncio
-import inspect
 import time
 from collections.abc import Callable
-from typing import Any, TypeVar
+from typing import Any
 
-from platform_services.telemetry.observability import TelemetryService
 
-T = TypeVar("T")
+class IdempotencyManager:
+    """Manages request idempotency keys to prevent duplicate execution."""
+
+    def __init__(self) -> None:
+        self._cache: dict[str, Any] = {}
+
+    def check_and_set(
+        self, key: str, payload: Any
+    ) -> tuple[bool, Any]:
+        if key in self._cache:
+            return True, self._cache[key]
+        self._cache[key] = payload
+        return False, payload
 
 
 class IdempotencyService:
-    """Hệ thống chốt chặn Idempotency dùng chung của nền tảng (Platform)."""
+    """Service wrapper for idempotent function processing."""
 
     def __init__(self) -> None:
-        self._store: dict[str, tuple[float, Any]] = {}
+        self._cache: dict[str, Any] = {}
 
     def process(
-        self, key: str, action: Callable[..., T], *args: Any, **kwargs: Any
-    ) -> T:
-        now = time.time()
-        if key in self._store:
-            timestamp, cached_res = self._store[key]
-            if now - timestamp < 300.0:
-                TelemetryService.log_info(
-                    "Idempotency match found in Platform", key=key
-                )
-                return cached_res
-
-        res = action(*args, **kwargs)
-        self._store[key] = (now, res)
-        return res
+        self, key: str, func: Callable[..., Any], *args: Any, **kwargs: Any
+    ) -> Any:
+        if key in self._cache:
+            return self._cache[key]
+        result = func(*args, **kwargs)
+        self._cache[key] = result
+        return result
 
 
 class ResilienceEngine:
-    """Bộ khung chống lỗi và tự động thử lại (Retry Policy) dùng chung."""
+    """Provides automated exponential backoff and retry execution."""
 
-    @staticmethod
-    def retry(
-        func: Callable[..., Any],
-        max_retries: int = 3,
-        delay: float = 0.1,
-        *args: Any,
-        **kwargs: Any,
+    def __init__(
+        self, max_retries: int = 3, backoff_factor: float = 0.1
+    ) -> None:
+        self.max_retries = max_retries
+        self.backoff_factor = backoff_factor
+
+    def execute_with_retry(
+        self, func: Callable[..., Any], *args: Any, **kwargs: Any
     ) -> Any:
-        retries = 0
         last_error: Exception | None = None
-        while retries < max_retries:
+        for attempt in range(self.max_retries):
             try:
-                if inspect.iscoroutinefunction(func):
-                    return asyncio.run(func(*args, **kwargs))
                 return func(*args, **kwargs)
             except Exception as e:
-                retries += 1
                 last_error = e
-                TelemetryService.log_warn(
-                    "Transient error, retrying...",
-                    func=func.__name__,
-                    retry=retries,
-                    delay=delay,
-                )
-                time.sleep(delay)
-                delay *= 2.0
-        if last_error:
-            raise last_error
-        raise RuntimeError("Retry policy exhausted")
+                time.sleep(self.backoff_factor * (2**attempt))
+        raise RuntimeError(
+            f"Retry limit ({self.max_retries}) exceeded. Error: {last_error}"
+        ) from last_error

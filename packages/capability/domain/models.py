@@ -2,17 +2,17 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class CapabilityMetadata(BaseModel):
-    """Value Object quản lý vòng đời và chủ sở hữu của Năng lực."""
+    """Value Object quáº£n lÃ½ vÃ²ng Ä‘á»i vÃ  chá»§ sá»Ÿ há»¯u cá»§a NÄƒng lá»±c."""
 
-    owner: str = Field(..., description="Chủ thể sở hữu kiểm duyệt")
-    status: str = Field(default="active", description="Trạng thái vòng đời")
-    description: str = Field(..., description="Mô tả năng lực kinh doanh")
+    owner: str = Field(..., description="Chá»§ thá»ƒ sá»Ÿ há»¯u kiá»ƒm duyá»‡t")
+    status: str = Field(default="active", description="Tráº¡ng thÃ¡i vÃ²ng Ä‘á»i")
+    description: str = Field(..., description="MÃ´ táº£ nÄƒng lá»±c kinh doanh")
 
     model_config = ConfigDict(frozen=True)
 
 
 class CapabilityContract(BaseModel):
-    """Mẫu liên kết giao diện API tĩnh (OpenAPI/gRPC)."""
+    """Máº«u liÃªn káº¿t giao diá»‡n API tÄ©nh (OpenAPI/gRPC)."""
 
     id: str
     type: str  # "REST", "gRPC", "Event"
@@ -22,11 +22,11 @@ class CapabilityContract(BaseModel):
 
 
 class BusinessCapability(BaseModel):
-    """Aggregate Root đại diện cho Năng lực thực thi tối cao (Capability)."""
+    """Aggregate Root Ä‘áº¡i diá»‡n cho NÄƒng lá»±c thá»±c thi tá»‘i cao (Capability)."""
 
-    id: str = Field(..., description="Mã năng lực (ví dụ: capability.identity)")
-    name: str = Field(..., description="Tên năng lực nghiệp vụ")
-    version: str = Field(..., description="Phiên bản phát hành")
+    id: str = Field(..., description="MÃ£ nÄƒng lá»±c (vÃ­ dá»¥: capability.identity)")
+    name: str = Field(..., description="TÃªn nÄƒng lá»±c nghiá»‡p vá»¥")
+    version: str = Field(..., description="PhiÃªn báº£n phÃ¡t hÃ nh")
     metadata: CapabilityMetadata
     dependencies: list[str] = Field(default_factory=list)
     policies: list[str] = Field(default_factory=list)
@@ -34,3 +34,4 @@ class BusinessCapability(BaseModel):
     events: list[str] = Field(default_factory=list)
 
     model_config = ConfigDict(frozen=True)
+

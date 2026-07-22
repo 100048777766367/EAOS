@@ -1,8 +1,8 @@
-﻿from abc import ABC, abstractmethod
+from abc import ABC, abstractmethod
 from pathlib import Path
-from pydantic import BaseModel
 
 from libs.validation.checker import ADRDocument
+from pydantic import BaseModel
 
 
 class RuleResult(BaseModel):

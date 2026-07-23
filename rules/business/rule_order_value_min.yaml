@@ -1,0 +1,6 @@
+rule_id: rule_order_value_min
+category: business
+enabled: true
+description: "Minimum order transaction threshold"
+severity: CRITICAL
+action: BLOCK

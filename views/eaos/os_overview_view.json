@@ -1,0 +1,9 @@
+{
+  "view_id": "os_overview_view",
+  "title": "EAOS Operating System Overview",
+  "category": "eaos",
+  "widgets": [
+    { "type": "header", "label": "EAOS Operating System Overview" },
+    { "type": "status", "value": "ACTIVE" }
+  ]
+}

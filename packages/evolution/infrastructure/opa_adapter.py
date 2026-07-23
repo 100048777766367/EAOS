@@ -37,9 +37,7 @@ class OPAEngineAdapter:
                 headers={"Content-Type": "application/json"},
                 method="POST",
             )
-            with urllib.request.urlopen(
-                req, timeout=self.timeout_seconds
-            ) as response:
+            with urllib.request.urlopen(req, timeout=self.timeout_seconds) as response:
                 res_json = json.loads(response.read().decode("utf-8"))
                 result = res_json.get("result", {})
                 allow = result.get("allow", True)

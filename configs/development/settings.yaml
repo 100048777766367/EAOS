@@ -1,0 +1,11 @@
+debug: true
+api_port: 8000
+
+database:
+  url: postgresql://eaos:eaos@localhost:5432/eaos
+  pool_size: 10
+  max_overflow: 20
+
+redis:
+  url: redis://localhost:6379/0
+  max_connections: 50

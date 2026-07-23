@@ -1,0 +1,364 @@
+{
+  "canonical_layers_found": 51,
+  "canonical_layers_missing": 1,
+  "unindexed_assets_found": 0,
+  "total_files_scanned": 2545,
+  "empty_directories_count": 0,
+  "extension_matrix": {
+    "[no_ext]": 1279,
+    ".example": 1,
+    ".ini": 1,
+    ".yaml": 35,
+    ".md": 146,
+    ".yml": 11,
+    ".db": 1,
+    ".ps1": 8,
+    ".toml": 34,
+    ".txt": 1,
+    ".lock": 1,
+    ".py": 927,
+    ".json": 37,
+    ".sh": 2,
+    ".bak": 10,
+    ".go": 1,
+    ".mod": 1,
+    ".ts": 1,
+    ".ndjson": 2,
+    ".log": 1,
+    ".prom": 1,
+    ".jsonl": 2,
+    ".rego": 2,
+    ".jsonld": 2,
+    ".api": 1,
+    ".sql": 3,
+    ".conf": 5,
+    ".tf": 2,
+    ".dot": 1,
+    ".mermaid": 3,
+    ".rdf": 1,
+    ".svg": 3,
+    ".html": 1,
+    ".opts": 1,
+    ".rdb": 1,
+    ".map": 5,
+    ".stat": 1,
+    ".meta": 5,
+    ".graphql": 1,
+    ".proto": 3,
+    ".jinja": 1
+  },
+  "details": [
+    {
+      "name": ".agents",
+      "status": "EXISTS",
+      "file_count": 2,
+      "total_size_bytes": 155
+    },
+    {
+      "name": ".github",
+      "status": "EXISTS",
+      "file_count": 11,
+      "total_size_bytes": 9734
+    },
+    {
+      "name": "agents",
+      "status": "EXISTS",
+      "file_count": 15,
+      "total_size_bytes": 8468
+    },
+    {
+      "name": "ai",
+      "status": "EXISTS",
+      "file_count": 9,
+      "total_size_bytes": 120
+    },
+    {
+      "name": "apps",
+      "status": "EXISTS",
+      "file_count": 44,
+      "total_size_bytes": 140406
+    },
+    {
+      "name": "architecture",
+      "status": "EXISTS",
+      "file_count": 4,
+      "total_size_bytes": 48
+    },
+    {
+      "name": "assets",
+      "status": "EXISTS",
+      "file_count": 9,
+      "total_size_bytes": 1200
+    },
+    {
+      "name": "capabilities",
+      "status": "EXISTS",
+      "file_count": 21,
+      "total_size_bytes": 1798
+    },
+    {
+      "name": "catalog",
+      "status": "EXISTS",
+      "file_count": 8,
+      "total_size_bytes": 5032
+    },
+    {
+      "name": "configs",
+      "status": "EXISTS",
+      "file_count": 10,
+      "total_size_bytes": 1039
+    },
+    {
+      "name": "contexts",
+      "status": "EXISTS",
+      "file_count": 9,
+      "total_size_bytes": 4823
+    },
+    {
+      "name": "contracts",
+      "status": "EXISTS",
+      "file_count": 14,
+      "total_size_bytes": 2190
+    },
+    {
+      "name": "data",
+      "status": "EXISTS",
+      "file_count": 1344,
+      "total_size_bytes": 47797139
+    },
+    {
+      "name": "decision",
+      "status": "EXISTS",
+      "file_count": 7,
+      "total_size_bytes": 3179
+    },
+    {
+      "name": "digital_twin",
+      "status": "EXISTS",
+      "file_count": 5,
+      "total_size_bytes": 1141
+    },
+    {
+      "name": "docs",
+      "status": "EXISTS",
+      "file_count": 23,
+      "total_size_bytes": 543104
+    },
+    {
+      "name": "ecosystem",
+      "status": "EXISTS",
+      "file_count": 11,
+      "total_size_bytes": 758
+    },
+    {
+      "name": "engine",
+      "status": "EXISTS",
+      "file_count": 68,
+      "total_size_bytes": 84351
+    },
+    {
+      "name": "evolution",
+      "status": "EXISTS",
+      "file_count": 5,
+      "total_size_bytes": 48
+    },
+    {
+      "name": "examples",
+      "status": "EXISTS",
+      "file_count": 6,
+      "total_size_bytes": 0
+    },
+    {
+      "name": "extensions",
+      "status": "EXISTS",
+      "file_count": 4,
+      "total_size_bytes": 46
+    },
+    {
+      "name": "federation",
+      "status": "EXISTS",
+      "file_count": 5,
+      "total_size_bytes": 49
+    },
+    {
+      "name": "fitness",
+      "status": "EXISTS",
+      "file_count": 45,
+      "total_size_bytes": 31245
+    },
+    {
+      "name": "generated",
+      "status": "EXISTS",
+      "file_count": 79,
+      "total_size_bytes": 172701
+    },
+    {
+      "name": "infra",
+      "status": "EXISTS",
+      "file_count": 18,
+      "total_size_bytes": 3457
+    },
+    {
+      "name": "kernel",
+      "status": "EXISTS",
+      "file_count": 56,
+      "total_size_bytes": 102421
+    },
+    {
+      "name": "knowledge",
+      "status": "EXISTS",
+      "file_count": 47,
+      "total_size_bytes": 7511
+    },
+    {
+      "name": "libs",
+      "status": "EXISTS",
+      "file_count": 11,
+      "total_size_bytes": 12054
+    },
+    {
+      "name": "marketplace",
+      "status": "EXISTS",
+      "file_count": 6,
+      "total_size_bytes": 998
+    },
+    {
+      "name": "memory",
+      "status": "EXISTS",
+      "file_count": 7,
+      "total_size_bytes": 2893
+    },
+    {
+      "name": "meta",
+      "status": "EXISTS",
+      "file_count": 6,
+      "total_size_bytes": 934
+    },
+    {
+      "name": "operating_model",
+      "status": "EXISTS",
+      "file_count": 8,
+      "total_size_bytes": 4243
+    },
+    {
+      "name": "operations",
+      "status": "EXISTS",
+      "file_count": 8,
+      "total_size_bytes": 2998
+    },
+    {
+      "name": "observability",
+      "status": "EXISTS",
+      "file_count": 8,
+      "total_size_bytes": 2794
+    },
+    {
+      "name": "packages",
+      "status": "EXISTS",
+      "file_count": 795,
+      "total_size_bytes": 863828
+    },
+    {
+      "name": "platform",
+      "status": "MISSING",
+      "file_count": 0,
+      "total_size_bytes": 0
+    },
+    {
+      "name": "platform_layer",
+      "status": "EXISTS",
+      "file_count": 8,
+      "total_size_bytes": 3315
+    },
+    {
+      "name": "platform_services",
+      "status": "EXISTS",
+      "file_count": 82,
+      "total_size_bytes": 118092
+    },
+    {
+      "name": "policies",
+      "status": "EXISTS",
+      "file_count": 21,
+      "total_size_bytes": 4467
+    },
+    {
+      "name": "portfolio",
+      "status": "EXISTS",
+      "file_count": 8,
+      "total_size_bytes": 3144
+    },
+    {
+      "name": "products",
+      "status": "EXISTS",
+      "file_count": 4,
+      "total_size_bytes": 44
+    },
+    {
+      "name": "rules",
+      "status": "EXISTS",
+      "file_count": 17,
+      "total_size_bytes": 1146
+    },
+    {
+      "name": "runtime",
+      "status": "EXISTS",
+      "file_count": 21,
+      "total_size_bytes": 57831
+    },
+    {
+      "name": "schemas",
+      "status": "EXISTS",
+      "file_count": 17,
+      "total_size_bytes": 2099
+    },
+    {
+      "name": "scripts",
+      "status": "EXISTS",
+      "file_count": 7,
+      "total_size_bytes": 7595
+    },
+    {
+      "name": "sdk",
+      "status": "EXISTS",
+      "file_count": 12,
+      "total_size_bytes": 12784
+    },
+    {
+      "name": "security",
+      "status": "EXISTS",
+      "file_count": 24,
+      "total_size_bytes": 21389
+    },
+    {
+      "name": "services",
+      "status": "EXISTS",
+      "file_count": 34,
+      "total_size_bytes": 40518
+    },
+    {
+      "name": "specifications",
+      "status": "EXISTS",
+      "file_count": 23,
+      "total_size_bytes": 2477
+    },
+    {
+      "name": "tests",
+      "status": "EXISTS",
+      "file_count": 128,
+      "total_size_bytes": 614196
+    },
+    {
+      "name": "tools",
+      "status": "EXISTS",
+      "file_count": 149,
+      "total_size_bytes": 271321
+    },
+    {
+      "name": "views",
+      "status": "EXISTS",
+      "file_count": 16,
+      "total_size_bytes": 2058
+    }
+  ]
+}

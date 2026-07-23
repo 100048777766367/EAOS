@@ -1,0 +1,7 @@
+id: cap.integration
+name: Ecosystem Integration & Mesh
+domain: Integration
+status: ACTIVE
+version: 1.0.0
+owner: Chief Enterprise Architect
+bounded_context: packages/integration

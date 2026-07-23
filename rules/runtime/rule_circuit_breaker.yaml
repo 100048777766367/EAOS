@@ -1,0 +1,6 @@
+rule_id: rule_circuit_breaker
+category: runtime
+enabled: true
+description: "Circuit breaker threshold 5 failures"
+severity: CRITICAL
+action: BLOCK

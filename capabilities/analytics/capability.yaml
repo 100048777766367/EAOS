@@ -1,0 +1,7 @@
+id: cap.analytics
+name: Enterprise Analytics & Intelligence
+domain: Analytics
+status: ACTIVE
+version: 1.0.0
+owner: Chief Enterprise Architect
+bounded_context: packages/analytics

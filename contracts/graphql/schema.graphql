@@ -1,0 +1,15 @@
+type Query {
+  health: HealthResponse!
+  capabilities: [BusinessCapability!]!
+}
+
+type HealthResponse {
+  status: String!
+  version: String!
+}
+
+type BusinessCapability {
+  id: ID!
+  name: String!
+  status: String!
+}

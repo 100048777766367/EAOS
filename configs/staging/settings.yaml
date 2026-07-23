@@ -1,0 +1,11 @@
+debug: false
+api_port: 8000
+
+database:
+  url: postgresql://eaos:stg_pass@staging-db:5432/eaos_stg
+  pool_size: 10
+  max_overflow: 20
+
+redis:
+  url: redis://staging-redis:6379/0
+  max_connections: 50

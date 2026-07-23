@@ -1,7 +1,8 @@
 """Data Transfer Objects for Governance Loop application layer."""
 
-from packages.governance_loop.domain.models import LoopCadence
 from pydantic import BaseModel, Field
+
+from packages.governance_loop.domain.models import LoopCadence
 
 
 class StartGovernanceCycleCommand(BaseModel):

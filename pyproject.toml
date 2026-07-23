@@ -10,7 +10,10 @@ authors = [
 ]
 dependencies = [
     "fastapi>=0.110.0",
-    "pydantic>=2.6.0",
+    "uvicorn>=0.28.0",
+    "pydantic[email]>=2.6.0",
+    "email-validator>=2.0.0",
+    "sqlalchemy>=2.0.0",
     "typer>=0.9.0",
     "structlog>=25.1.0",
     "rich>=13.0.0",
@@ -129,14 +132,16 @@ exclude = [
 
 [tool.taskipy.tasks]
 doctor = "python tools/doctor/main.py"
-lint = "python -m ruff check . && python -m mypy apps/ kernel/ engine/ packages/ tools/ tests/ platform_services/"
+lint = "python -m ruff check --fix --unsafe-fixes . && python -m mypy apps/ kernel/ engine/ packages/ tools/ tests/ platform_services/"
 format = "python -m ruff format ."
 test = "python -m pytest tests/"
 run = "python -m kernel.runtime.main"
+server = "python -m uvicorn apps.api.app.main:app --host 0.0.0.0 --port 8000"
 validate = "python -m apps.cli.main validate"
 graph = "python -m apps.cli.main graph"
 metrics = "python -m apps.cli.main metrics"
 time_machine = "python -m apps.cli.main time-machine"
+time-machine = "python -m apps.cli.main time-machine"
 twin = "python -m apps.cli.main twin"
 compile = "python -m apps.cli.main compile-spec"
 loop = "python -m apps.cli.main loop"

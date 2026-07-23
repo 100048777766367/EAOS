@@ -1,0 +1,9 @@
+{
+  "view_id": "constitution_view",
+  "title": "Architecture Constitution Visualizer",
+  "category": "foundation",
+  "widgets": [
+    { "type": "header", "label": "Architecture Constitution Visualizer" },
+    { "type": "status", "value": "ACTIVE" }
+  ]
+}

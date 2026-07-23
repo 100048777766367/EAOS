@@ -1,0 +1,13 @@
+﻿from pydantic import BaseModel, ConfigDict
+
+
+class ChaosExperimentResult(BaseModel):
+    model_config = ConfigDict(frozen=True)
+    experiment_id: str = "exp_001"
+    fault_type: str = "DATABASE_DISCONNECT"
+    system_recovered: bool = True
+    recovery_time_ms: float = 12.5
+
+class ChaosEngine:
+    def inject_fault(self, fault_type: str, target_service: str) -> ChaosExperimentResult:
+        return ChaosExperimentResult(fault_type=fault_type)

@@ -1,0 +1,9 @@
+{
+  "view_id": "control_room_view",
+  "title": "Live Operations Control Room",
+  "category": "runtime",
+  "widgets": [
+    { "type": "header", "label": "Live Operations Control Room" },
+    { "type": "status", "value": "ACTIVE" }
+  ]
+}

@@ -2,11 +2,12 @@
 
 from pathlib import Path
 
+from pydantic import BaseModel, Field
+
 from packages.capability_mapping.domain.models import (
     CapabilityMaturityLevel,
     RealizationType,
 )
-from pydantic import BaseModel, Field
 
 
 class BindingDTO(BaseModel):

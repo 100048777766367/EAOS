@@ -1,0 +1,15 @@
+apiVersion: eaos.governance/v2
+kind: SecurityPolicyManifest
+metadata:
+  name: hyperscale-zero-trust-policy
+  environment: production
+spec:
+  tenancy:
+    rls_enforcement: mandatory
+    default_isolation_level: strict
+  security:
+    post_quantum_algorithm: CRYSTALS-Kyber768-AES256
+    secret_rotation_ttl_seconds: 3600
+  observability:
+    otlp_exporter_enabled: true
+    sample_rate: 1.0

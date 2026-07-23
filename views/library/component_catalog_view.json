@@ -1,0 +1,9 @@
+{
+  "view_id": "component_catalog_view",
+  "title": "UI Component & Asset Catalog",
+  "category": "library",
+  "widgets": [
+    { "type": "header", "label": "UI Component & Asset Catalog" },
+    { "type": "status", "value": "ACTIVE" }
+  ]
+}

@@ -1,0 +1,7 @@
+id: cap.content
+name: Enterprise Content Management
+domain: Content
+status: ACTIVE
+version: 1.0.0
+owner: Chief Enterprise Architect
+bounded_context: packages/content

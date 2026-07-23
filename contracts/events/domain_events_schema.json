@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EAOS Async Domain Event Mesh Schema",
+  "type": "object",
+  "properties": {
+    "event_id": { "type": "string" },
+    "topic": { "type": "string" },
+    "correlation_id": { "type": "string" },
+    "payload": { "type": "object" }
+  },
+  "required": ["event_id", "topic", "payload"]
+}

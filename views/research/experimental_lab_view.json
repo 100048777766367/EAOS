@@ -1,0 +1,9 @@
+{
+  "view_id": "experimental_lab_view",
+  "title": "Digital Twin Simulation Lab",
+  "category": "research",
+  "widgets": [
+    { "type": "header", "label": "Digital Twin Simulation Lab" },
+    { "type": "status", "value": "ACTIVE" }
+  ]
+}

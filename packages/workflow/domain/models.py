@@ -1,36 +1,56 @@
-from datetime import UTC, datetime
+"""Workflow state machine domain entities and value objects."""
 
-from pydantic import BaseModel, ConfigDict, Field
+from typing import Any
+
+from pydantic import BaseModel, ConfigDict
 
 
 class Transition(BaseModel):
-    trigger: str = Field(..., description="Sự kiện kích hoạt")
-    target: str = Field(..., description="Trạng thái đích")
+    """Value object representing a workflow state transition rule."""
 
     model_config = ConfigDict(frozen=True)
+
+    trigger: str
+    target: str
 
 
 class State(BaseModel):
-    name: str = Field(..., description="Tên trạng thái")
-    transitions: list[Transition] = Field(default_factory=list)
+    """Value object representing a workflow state definition."""
 
     model_config = ConfigDict(frozen=True)
+
+    name: str
+    transitions: list[Transition] = []
 
 
 class WorkflowDefinition(BaseModel):
-    id: str = Field(..., description="Mã quy trình")
-    name: str = Field(..., description="Tên quy trình")
-    initial_state: str = Field(..., description="Trạng thái khởi đầu")
-    states: list[State] = Field(default_factory=list)
+    """Aggregate root representing a workflow definition."""
 
     model_config = ConfigDict(frozen=True)
+
+    id: str
+    name: str
+    initial_state: str
+    states: list[State] = []
+
+
+class WorkflowState(BaseModel):
+    """Value object representing active workflow state."""
+
+    model_config = ConfigDict(frozen=True)
+
+    state_name: str
+    is_terminal: bool
 
 
 class WorkflowInstance(BaseModel):
-    instance_id: str = Field(..., description="Mã phiên chạy")
-    workflow_id: str = Field(..., description="Mã quy trình liên kết")
-    current_state: str = Field(..., description="Trạng thái hiện hành")
-    history: list[str] = Field(default_factory=list)
-    updated_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
+    """Value object representing active workflow instance execution."""
 
     model_config = ConfigDict(frozen=True)
+
+    instance_id: str
+    workflow_id: str = ""
+    definition_id: str = ""
+    current_state: str
+    history: list[str] = []
+    metadata: dict[str, Any] = {}

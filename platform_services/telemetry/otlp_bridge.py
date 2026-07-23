@@ -10,9 +10,7 @@ class OTLPTraceSpan(BaseModel):
     trace_id: str
     span_id: str
     name: str
-    start_time: datetime = Field(
-        default_factory=lambda: datetime.now(UTC)
-    )
+    start_time: datetime = Field(default_factory=lambda: datetime.now(UTC))
     attributes: dict[str, Any] = Field(default_factory=dict)
 
 
@@ -22,17 +20,13 @@ class OTLPMetricRecord(BaseModel):
     metric_name: str
     value: float
     unit: str = "ms"
-    timestamp: datetime = Field(
-        default_factory=lambda: datetime.now(UTC)
-    )
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
 
 class OTLPCollectorBridge:
     """Bridge chuyển đổi và xuất dữ liệu Telemetry sang chuẩn OTLP gRPC/JSON."""
 
-    def __init__(
-        self, endpoint_url: str = "http://localhost:4318/v1/traces"
-    ) -> None:
+    def __init__(self, endpoint_url: str = "http://localhost:4318/v1/traces") -> None:
         self.endpoint_url = endpoint_url
         self.trace_buffer: list[OTLPTraceSpan] = []
         self.metric_buffer: list[OTLPMetricRecord] = []

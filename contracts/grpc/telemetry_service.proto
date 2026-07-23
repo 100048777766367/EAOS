@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package eaos.telemetry.v1;
+
+message TraceSpanRequest {
+  string service_name = 1;
+  string trace_id = 2;
+  string span_id = 3;
+  double duration_ms = 4;
+}
+
+message TraceSpanResponse {
+  bool exported = 1;
+  string status = 2;
+}
+
+service TelemetryExporterService {
+  rpc ExportSpan (TraceSpanRequest) returns (TraceSpanResponse);
+}

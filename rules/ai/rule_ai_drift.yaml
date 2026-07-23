@@ -1,0 +1,6 @@
+rule_id: rule_ai_drift
+category: ai
+enabled: true
+description: "Model drift threshold max 0.2"
+severity: CRITICAL
+action: BLOCK

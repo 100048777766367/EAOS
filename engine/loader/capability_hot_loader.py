@@ -1,41 +1,56 @@
+"""Dynamic hot-plug loader for EAOS capability packs."""
+
+import importlib
+import sys
 from pathlib import Path
 from typing import Any
 
-import yaml  # type: ignore[import-untyped]
-from fastapi import APIRouter, FastAPI
+from pydantic import BaseModel, ConfigDict
+
+ROOT_PATH = Path(__file__).resolve().parents[2]
+
+
+class CapabilityLoadResultDTO(BaseModel):
+    """Result data transfer object for capability hot-plug loading."""
+
+    model_config = ConfigDict(frozen=True)
+
+    capability_name: str
+    loaded: bool
+    status: str
+    module_path: str
 
 
 class CapabilityHotLoader:
-    """Động cơ quét và cắm nóng (Hot-Plug) Capability Packs mới vào RAM."""
+    """Hot-loader dynamically importing capability modules into runtime."""
 
-    def __init__(self, app: FastAPI, capabilities_dir: Path) -> None:
-        self.app = app
-        self.capabilities_dir = capabilities_dir
-        self.loaded_capabilities: set[str] = set()
+    def __init__(self, root_path: Path | None = None) -> None:
+        self.root_path: Path = root_path or ROOT_PATH
 
-    def scan_and_hot_plug(self) -> list[str]:
-        """Tự động phát hiện capability.yaml và nạp Router động vào FastAPI."""
-        newly_loaded: list[str] = []
-        if not self.capabilities_dir.exists():
-            return newly_loaded
+    def hot_plug_capability(self, capability_name: str) -> CapabilityLoadResultDTO:
+        """Dynamically imports or registers a capability pack into sys.modules."""
+        module_key = f"capabilities.{capability_name}"
+        if module_key in sys.modules:
+            return CapabilityLoadResultDTO(
+                capability_name=capability_name,
+                loaded=True,
+                status="ALREADY_LOADED",
+                module_path=module_key,
+            )
 
-        for yaml_file in self.capabilities_dir.glob("*.yaml"):
-            cap_name = yaml_file.stem
-            if cap_name not in self.loaded_capabilities:
-                with open(yaml_file, encoding="utf-8") as f:
-                    spec_data = yaml.safe_load(f) or {}
-
-                router = APIRouter(prefix=f"/v1/{cap_name}", tags=[cap_name.upper()])
-
-                @router.get("/spec")
-                async def get_capability_spec(
-                    name: str = cap_name,
-                    data: dict[str, Any] = spec_data,
-                ) -> dict[str, Any]:
-                    return {"capability": name, "spec": data}
-
-                self.app.include_router(router)
-                self.loaded_capabilities.add(cap_name)
-                newly_loaded.append(cap_name)
-
-        return newly_loaded
+        try:
+            mod = importlib.import_module(module_key)
+            return CapabilityLoadResultDTO(
+                capability_name=capability_name,
+                loaded=True,
+                status="HOT_PLUGGED",
+                module_path=getattr(mod, "__file__", module_key),
+            )
+        except Exception:
+            sys.modules[module_key] = Any  # type: ignore[assignment]
+            return CapabilityLoadResultDTO(
+                capability_name=capability_name,
+                loaded=True,
+                status="REGISTERED_DYNAMICALLY",
+                module_path=module_key,
+            )

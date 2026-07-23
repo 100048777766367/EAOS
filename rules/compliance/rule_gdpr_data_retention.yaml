@@ -1,0 +1,6 @@
+rule_id: rule_gdpr_data_retention
+category: compliance
+enabled: true
+description: "GDPR 30-day user data deletion"
+severity: CRITICAL
+action: BLOCK

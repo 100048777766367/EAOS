@@ -1,0 +1,7 @@
+system: EAOS
+version: 0.1.0
+model_routing:
+  default_model: ollama/llama3
+  high_reasoning_model: deepseek/deepseek-r1
+temperature: 0.1
+cache_enabled: true

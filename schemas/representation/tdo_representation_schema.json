@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TDO Representation Schema",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string" },
+    "status": { "type": "string" }
+  },
+  "required": ["id", "status"]
+}

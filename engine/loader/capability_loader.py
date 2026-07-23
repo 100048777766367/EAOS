@@ -12,14 +12,10 @@ class CapabilityHotLoader:
     def __init__(self) -> None:
         self.active_capabilities: dict[str, APIRouter] = {}
 
-    def hot_plug_capability(
-        self, pack_name: str, app: FastAPI
-    ) -> dict[str, Any]:
+    def hot_plug_capability(self, pack_name: str, app: FastAPI) -> dict[str, Any]:
         """Nạp động Python package và đăng ký APIRouter vào FastAPI."""
         try:
-            router = APIRouter(
-                prefix=f"/v1/{pack_name}", tags=[pack_name.capitalize()]
-            )
+            router = APIRouter(prefix=f"/v1/{pack_name}", tags=[pack_name.capitalize()])
 
             @router.get("/status")
             async def get_pack_status() -> dict[str, str]:

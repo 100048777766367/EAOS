@@ -1,0 +1,6 @@
+rule_id: rule_line_length_max
+category: engineering
+enabled: true
+description: "Strict line length under 88 characters"
+severity: CRITICAL
+action: BLOCK

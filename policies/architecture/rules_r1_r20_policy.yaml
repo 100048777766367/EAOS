@@ -1,0 +1,15 @@
+policy_id: POL-ARCH-R1-R20
+name: Architecture Constitution 20 Immutable Rules Policy
+version: 2.0.0
+category: architecture
+rules:
+  - id: R01_PURPOSE_FIRST
+    enforcement: MANDATORY
+  - id: R04_STABLE_CORE_FLEXIBLE_EDGE
+    enforcement: MANDATORY
+  - id: R09_EXECUTABLE_ARCHITECTURE
+    enforcement: MANDATORY
+  - id: R14_MODEL_AGNOSTIC
+    enforcement: MANDATORY
+  - id: R16_SECURITY_ARCHITECTURE
+    enforcement: MANDATORY

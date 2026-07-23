@@ -1,0 +1,7 @@
+{
+  "evidence_id": "EVID-2026-001",
+  "rule_reference": "R19_EVIDENCE_BEFORE_EVOLUTION",
+  "metric_name": "API_p99_latency_ms",
+  "measured_value": 18.4,
+  "status": "COMPLIANT"
+}

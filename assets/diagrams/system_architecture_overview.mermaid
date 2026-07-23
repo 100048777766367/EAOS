@@ -1,0 +1,6 @@
+graph TD
+    A[HTTP Client / API Gateway] --> B[FastAPI Router Controller]
+    B --> C[Application Use Case]
+    C --> D[Domain Model Core]
+    B --> E[Infrastructure Adapters]
+    E --> F[(PostgreSQL / Redis)]

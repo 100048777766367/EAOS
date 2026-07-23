@@ -1,7 +1,8 @@
 """Data Transfer Objects for Metrics Engine application layer."""
 
-from packages.metrics_engine.domain.models import MetricType
 from pydantic import BaseModel, Field
+
+from packages.metrics_engine.domain.models import MetricType
 
 
 class RecordObservationCommand(BaseModel):

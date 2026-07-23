@@ -1,0 +1,9 @@
+policy_id: POL-SEC-001
+name: Zero-Trust Post-Quantum Security Policy
+version: 1.0.0
+category: security
+rules:
+  - id: RULE_DILITHIUM3_SIGNATURES
+    enforcement: MANDATORY
+  - id: RULE_RATE_LIMITING
+    capacity: 5

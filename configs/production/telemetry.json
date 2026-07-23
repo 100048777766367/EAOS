@@ -1,0 +1,13 @@
+{
+  "service_name": "eaos-hyperscale-gateway",
+  "environment": "production",
+  "otlp_exporter": {
+    "endpoint": "http://otel-collector:4317",
+    "protocol": "grpc",
+    "timeout_ms": 5000
+  },
+  "sampling": {
+    "type": "probabilistic",
+    "ratio": 1.0
+  }
+}

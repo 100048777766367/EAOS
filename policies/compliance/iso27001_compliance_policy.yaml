@@ -1,0 +1,7 @@
+policy_id: POL-COMP-001
+name: ISO27001 & Merkle Ledger Audit Policy
+version: 1.0.0
+category: compliance
+rules:
+  - id: RULE_MERKLE_PROOF_MANDATORY
+    enforcement: MANDATORY

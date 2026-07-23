@@ -1,0 +1,7 @@
+policy_id: POL-QUAL-001
+name: Continuous Quality Gate & Fitness Policy
+version: 1.0.0
+category: quality
+rules:
+  - id: RULE_HEALTH_SCORE_MIN
+    limit: 100

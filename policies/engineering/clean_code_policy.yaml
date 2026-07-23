@@ -1,0 +1,9 @@
+policy_id: POL-ENG-001
+name: Engineering Code Quality & Formatting Policy
+version: 1.0.0
+category: engineering
+rules:
+  - id: RULE_MAX_LINE_LENGTH
+    limit: 88
+  - id: RULE_MYPY_STRICT
+    enforcement: MANDATORY

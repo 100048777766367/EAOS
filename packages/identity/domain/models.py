@@ -1,16 +1,14 @@
-from datetime import UTC, datetime
+"""User domain entity for identity context."""
 
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
+from pydantic import BaseModel, ConfigDict
 
 
 class User(BaseModel):
-    """Domain Entity Ä‘áº¡i diá»‡n cho ngÆ°á»i dÃ¹ng (Con ngÆ°á»i hoáº·c AI Agent)."""
-
-    id: str | None = Field(default=None)
-    email: EmailStr = Field(...)
-    username: str = Field(...)
-    hashed_password: str = Field(...)
-    is_active: bool = Field(default=True)
-    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
+    """Value object representing an identity user."""
 
     model_config = ConfigDict(frozen=True)
+
+    id: str
+    email: str
+    username: str
+    hashed_password: str = ""

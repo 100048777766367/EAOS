@@ -1,0 +1,7 @@
+id: cap.automation
+name: Business Process Automation
+domain: Automation
+status: ACTIVE
+version: 1.0.0
+owner: Chief Enterprise Architect
+bounded_context: packages/automation

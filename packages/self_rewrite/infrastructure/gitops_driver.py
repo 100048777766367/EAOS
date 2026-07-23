@@ -24,7 +24,6 @@ class GitHubGitOpsDriver:
     """Driver tương tác trực tiếp với GitHub REST API để thực thi GitOps."""
 
     def __init__(
-
         self,
         owner: str = "100048777766367",
         repo: str = "EAOS",
@@ -51,31 +50,18 @@ class GitHubGitOpsDriver:
                     "User-Agent": "EAOS-Autonomous-Engine",
                 }
 
-                ref_url = (
-                    f"https://api.github.com/repos/{self.owner}/{self.repo}"
-                    "/git/ref/heads/main"
-                )
+                ref_url = f"https://api.github.com/repos/{self.owner}/{self.repo}/git/ref/heads/main"
                 ref_req = urllib.request.Request(ref_url, headers=headers)
                 with urllib.request.urlopen(ref_req) as resp:
                     main_data = json.loads(resp.read().decode("utf-8"))
                     main_sha = main_data["object"]["sha"]
 
-                branch_url = (
-                    f"https://api.github.com/repos/{self.owner}/{self.repo}"
-                    "/git/refs"
-                )
-                branch_payload = json.dumps(
-                    {"ref": f"refs/heads/{branch_name}", "sha": main_sha}
-                ).encode("utf-8")
-                b_req = urllib.request.Request(
-                    branch_url, data=branch_payload, headers=headers
-                )
+                branch_url = f"https://api.github.com/repos/{self.owner}/{self.repo}/git/refs"
+                branch_payload = json.dumps({"ref": f"refs/heads/{branch_name}", "sha": main_sha}).encode("utf-8")
+                b_req = urllib.request.Request(branch_url, data=branch_payload, headers=headers)
                 urllib.request.urlopen(b_req)
 
-                file_url = (
-                    f"https://api.github.com/repos/{self.owner}/{self.repo}"
-                    f"/contents/{file_path}"
-                )
+                file_url = f"https://api.github.com/repos/{self.owner}/{self.repo}/contents/{file_path}"
                 file_payload = json.dumps(
                     {
                         "message": commit_message,
@@ -93,9 +79,7 @@ class GitHubGitOpsDriver:
                     f_data = json.loads(f_resp.read().decode("utf-8"))
                     commit_sha = f_data["commit"]["sha"]
 
-                pr_url = (
-                    f"https://api.github.com/repos/{self.owner}/{self.repo}/pulls"
-                )
+                pr_url = f"https://api.github.com/repos/{self.owner}/{self.repo}/pulls"
                 pr_payload = json.dumps(
                     {
                         "title": pr_title,
@@ -104,9 +88,7 @@ class GitHubGitOpsDriver:
                         "body": "Tự động sinh bởi EAOS Self-Rewrite Engine.",
                     }
                 ).encode("utf-8")
-                pr_req = urllib.request.Request(
-                    pr_url, data=pr_payload, headers=headers
-                )
+                pr_req = urllib.request.Request(pr_url, data=pr_payload, headers=headers)
                 with urllib.request.urlopen(pr_req) as pr_resp:
                     pr_data = json.loads(pr_resp.read().decode("utf-8"))
                     return GitHubPRResponse(
@@ -124,10 +106,7 @@ class GitHubGitOpsDriver:
         return GitHubPRResponse(
             status="SIMULATED_GITOPS",
             pr_number=fake_pr_num,
-            pr_url=(
-                f"https://github.com/{self.owner}/{self.repo}"
-                f"/pull/{fake_pr_num}"
-            ),
+            pr_url=(f"https://github.com/{self.owner}/{self.repo}/pull/{fake_pr_num}"),
             branch_name=branch_name,
             commit_sha=fake_sha,
         )

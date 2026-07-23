@@ -1,0 +1,8 @@
+{
+  "system": "EAOS",
+  "version": "0.1.0",
+  "metamodel": {
+    "entities": ["BusinessCapability", "EvolutionObject", "ArchitectureProposal"],
+    "value_objects": ["RegoRuleResult", "MerkleBlockProof", "ZKAttestationProof"]
+  }
+}

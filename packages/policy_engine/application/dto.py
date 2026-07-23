@@ -2,8 +2,9 @@
 
 from typing import Any
 
-from packages.policy_engine.domain.models import Operator, PolicyEffect
 from pydantic import BaseModel, Field
+
+from packages.policy_engine.domain.models import Operator, PolicyEffect
 
 
 class ConditionDTO(BaseModel):

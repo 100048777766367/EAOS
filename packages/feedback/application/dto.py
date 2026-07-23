@@ -1,10 +1,11 @@
 """Data Transfer Objects for the Feedback application layer."""
 
+from pydantic import BaseModel, Field
+
 from packages.feedback.domain.models import (
     FeedbackSeverity,
     FeedbackSource,
 )
-from pydantic import BaseModel, Field
 
 
 class IngestionSignalCommand(BaseModel):

@@ -1,0 +1,6 @@
+syntax = "proto3";
+package eaos.governance.v1;
+
+message VoteProposalRequest {
+  string proposal_id = 1;
+}

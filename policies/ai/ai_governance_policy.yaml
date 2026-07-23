@@ -1,0 +1,9 @@
+policy_id: POL-AI-001
+name: Model Agnostic AI & Token Budget Policy
+version: 1.0.0
+category: ai
+rules:
+  - id: RULE_MODEL_AGNOSTIC
+    enforcement: MANDATORY
+  - id: RULE_MAX_BUDGET_USD
+    limit: 0.05

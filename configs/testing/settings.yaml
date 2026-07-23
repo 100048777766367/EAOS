@@ -1,0 +1,11 @@
+debug: true
+api_port: 8001
+
+database:
+  url: sqlite:///file:memdb1?mode=memory&cache=shared
+  pool_size: 10
+  max_overflow: 20
+
+redis:
+  url: redis://localhost:6379/1
+  max_connections: 50

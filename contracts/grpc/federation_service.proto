@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package eaos.federation.v1;
+
+message SynodProposalRequest {
+  string proposal_id = 1;
+  string action = 2;
+  string payload_hash = 3;
+}
+
+message SynodQuorumResponse {
+  string proposal_id = 1;
+  bool achieved_bft_consensus = 2;
+  int32 approvals = 3;
+}
+
+service FederationService {
+  rpc ProposeGovernance (SynodProposalRequest) returns (SynodQuorumResponse);
+}

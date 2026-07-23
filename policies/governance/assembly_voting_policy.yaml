@@ -1,0 +1,7 @@
+policy_id: POL-GOV-001
+name: BFT Synod & Assembly Governance Policy
+version: 1.0.0
+category: governance
+rules:
+  - id: RULE_BFT_QUORUM_THRESHOLD
+    formula: "2f + 1"

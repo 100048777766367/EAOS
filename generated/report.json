@@ -1,1 +1,18 @@
-{}
+{
+  "system_name": "EAOS Core OS",
+  "overall_passed": true,
+  "results": [
+    {
+      "rule_name": "Hexagonal Layer Isolation",
+      "passed": true,
+      "message": "Tất cả các ranh giới tuân thủ phân lớp Hexagonal.",
+      "details": []
+    },
+    {
+      "rule_name": "ADR Standardized Structure",
+      "passed": true,
+      "message": "Tất cả các ADR tuân thủ chuẩn cấu trúc hiến pháp.",
+      "details": []
+    }
+  ]
+}

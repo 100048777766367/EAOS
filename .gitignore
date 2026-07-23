@@ -1,35 +1,11 @@
-# --- Python ---
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-env/
-venv/
 .venv/
-ENV/
-env.bak/
-venv.bak/
-
-# --- IDE & OS ---
-.vscode/
-.idea/
-.DS_Store
-Thumbs.db
-
-# --- Environment & Secrets ---
-.env
-.env.*
-!.env.example
-secrets/
-
-# --- Build & Distribution ---
-dist/
-build/
-*.egg-info/
+venv/
+__pycache__/
+*.pyc
+.mypy_cache/
 .pytest_cache/
 .ruff_cache/
-.mypy_cache/
-
-# --- EAOS Specific ---
-# Không ignore uv.lock và .python-version để đảm bảo tính tái lập (Reproducibility)
+.env
+*.db
+runtime/backups/*
+generated/architecture/time_machine/*

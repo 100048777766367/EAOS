@@ -1,29 +1,38 @@
 {
   "snapshot_id": "prod_baseline_v1",
-  "timestamp": "2026-07-22T06:11:09.729419+00:00",
-  "architecture_score": 76,
+  "timestamp": "2026-07-22T20:18:36.693350+00:00",
+  "architecture_score": 80,
   "active_packages": [
     "agent",
     "analytics",
     "application",
+    "architecture_fitness",
+    "architecture_memory",
     "automation",
     "autonomous",
     "capability",
+    "capability_mapping",
     "civilization",
     "content",
+    "continuous_improvement",
     "domain",
     "evolution",
     "exchange",
     "federation",
+    "feedback",
     "finance",
+    "governance_loop",
     "identity",
     "infrastructure",
     "integration",
     "intelligence",
     "knowledge",
+    "knowledge_graph",
     "learning",
     "marketplace",
     "memory",
+    "metrics_engine",
+    "policy_engine",
     "prediction",
     "reflection",
     "security",
@@ -33,6 +42,7 @@
     "specification",
     "synchronization",
     "tenancy",
+    "traceability",
     "trust",
     "workflow"
   ],
@@ -71,6 +81,28 @@
         "concrete": 0
       }
     },
+    "architecture_fitness": {
+      "afferent_coupling_ca": 0,
+      "efferent_coupling_ce": 0,
+      "instability_i": 0.0,
+      "abstractness_a": 0.1667,
+      "distance_d": 0.8333,
+      "classes": {
+        "abstract": 2,
+        "concrete": 10
+      }
+    },
+    "architecture_memory": {
+      "afferent_coupling_ca": 0,
+      "efferent_coupling_ce": 0,
+      "instability_i": 0.0,
+      "abstractness_a": 0.125,
+      "distance_d": 0.875,
+      "classes": {
+        "abstract": 2,
+        "concrete": 14
+      }
+    },
     "automation": {
       "afferent_coupling_ca": 0,
       "efferent_coupling_ce": 0,
@@ -84,10 +116,10 @@
     },
     "autonomous": {
       "afferent_coupling_ca": 0,
-      "efferent_coupling_ce": 6,
-      "instability_i": 1.0,
+      "efferent_coupling_ce": 0,
+      "instability_i": 0.0,
       "abstractness_a": 0.1111,
-      "distance_d": 0.1111,
+      "distance_d": 0.8889,
       "classes": {
         "abstract": 1,
         "concrete": 8
@@ -104,15 +136,26 @@
         "concrete": 6
       }
     },
-    "civilization": {
-      "afferent_coupling_ca": 1,
+    "capability_mapping": {
+      "afferent_coupling_ca": 0,
       "efferent_coupling_ce": 0,
       "instability_i": 0.0,
-      "abstractness_a": 0.1111,
-      "distance_d": 0.8889,
+      "abstractness_a": 0.1333,
+      "distance_d": 0.8667,
+      "classes": {
+        "abstract": 2,
+        "concrete": 13
+      }
+    },
+    "civilization": {
+      "afferent_coupling_ca": 0,
+      "efferent_coupling_ce": 0,
+      "instability_i": 0.0,
+      "abstractness_a": 0.125,
+      "distance_d": 0.875,
       "classes": {
         "abstract": 1,
-        "concrete": 8
+        "concrete": 7
       }
     },
     "content": {
@@ -124,6 +167,17 @@
       "classes": {
         "abstract": 0,
         "concrete": 0
+      }
+    },
+    "continuous_improvement": {
+      "afferent_coupling_ca": 0,
+      "efferent_coupling_ce": 0,
+      "instability_i": 0.0,
+      "abstractness_a": 0.1429,
+      "distance_d": 0.8571,
+      "classes": {
+        "abstract": 2,
+        "concrete": 12
       }
     },
     "domain": {
@@ -138,14 +192,14 @@
       }
     },
     "evolution": {
-      "afferent_coupling_ca": 1,
+      "afferent_coupling_ca": 0,
       "efferent_coupling_ce": 0,
       "instability_i": 0.0,
-      "abstractness_a": 0.08,
-      "distance_d": 0.92,
+      "abstractness_a": 0.069,
+      "distance_d": 0.931,
       "classes": {
         "abstract": 2,
-        "concrete": 23
+        "concrete": 27
       }
     },
     "exchange": {
@@ -170,6 +224,17 @@
         "concrete": 9
       }
     },
+    "feedback": {
+      "afferent_coupling_ca": 0,
+      "efferent_coupling_ce": 0,
+      "instability_i": 0.0,
+      "abstractness_a": 0.1667,
+      "distance_d": 0.8333,
+      "classes": {
+        "abstract": 2,
+        "concrete": 10
+      }
+    },
     "finance": {
       "afferent_coupling_ca": 0,
       "efferent_coupling_ce": 0,
@@ -181,15 +246,26 @@
         "concrete": 0
       }
     },
+    "governance_loop": {
+      "afferent_coupling_ca": 0,
+      "efferent_coupling_ce": 0,
+      "instability_i": 0.0,
+      "abstractness_a": 0.2143,
+      "distance_d": 0.7857,
+      "classes": {
+        "abstract": 3,
+        "concrete": 11
+      }
+    },
     "identity": {
       "afferent_coupling_ca": 0,
       "efferent_coupling_ce": 0,
       "instability_i": 0.0,
-      "abstractness_a": 0.1429,
-      "distance_d": 0.8571,
+      "abstractness_a": 0.1667,
+      "distance_d": 0.8333,
       "classes": {
         "abstract": 1,
-        "concrete": 6
+        "concrete": 5
       }
     },
     "infrastructure": {
@@ -215,17 +291,28 @@
       }
     },
     "intelligence": {
-      "afferent_coupling_ca": 1,
-      "efferent_coupling_ce": 1,
-      "instability_i": 0.5,
-      "abstractness_a": 0.0833,
-      "distance_d": 0.4167,
+      "afferent_coupling_ca": 0,
+      "efferent_coupling_ce": 0,
+      "instability_i": 0.0,
+      "abstractness_a": 0.0769,
+      "distance_d": 0.9231,
       "classes": {
         "abstract": 1,
-        "concrete": 11
+        "concrete": 12
       }
     },
     "knowledge": {
+      "afferent_coupling_ca": 0,
+      "efferent_coupling_ce": 0,
+      "instability_i": 0.0,
+      "abstractness_a": 0.0667,
+      "distance_d": 0.9333,
+      "classes": {
+        "abstract": 1,
+        "concrete": 14
+      }
+    },
+    "knowledge_graph": {
       "afferent_coupling_ca": 0,
       "efferent_coupling_ce": 0,
       "instability_i": 0.0,
@@ -237,11 +324,11 @@
       }
     },
     "learning": {
-      "afferent_coupling_ca": 1,
+      "afferent_coupling_ca": 0,
       "efferent_coupling_ce": 1,
-      "instability_i": 0.5,
+      "instability_i": 1.0,
       "abstractness_a": 0.125,
-      "distance_d": 0.375,
+      "distance_d": 0.125,
       "classes": {
         "abstract": 1,
         "concrete": 7
@@ -262,11 +349,33 @@
       "afferent_coupling_ca": 0,
       "efferent_coupling_ce": 0,
       "instability_i": 0.0,
-      "abstractness_a": 0.1111,
-      "distance_d": 0.8889,
+      "abstractness_a": 0.0909,
+      "distance_d": 0.9091,
       "classes": {
         "abstract": 1,
-        "concrete": 8
+        "concrete": 10
+      }
+    },
+    "metrics_engine": {
+      "afferent_coupling_ca": 0,
+      "efferent_coupling_ce": 0,
+      "instability_i": 0.0,
+      "abstractness_a": 0.1538,
+      "distance_d": 0.8462,
+      "classes": {
+        "abstract": 2,
+        "concrete": 11
+      }
+    },
+    "policy_engine": {
+      "afferent_coupling_ca": 0,
+      "efferent_coupling_ce": 0,
+      "instability_i": 0.0,
+      "abstractness_a": 0.1176,
+      "distance_d": 0.8824,
+      "classes": {
+        "abstract": 2,
+        "concrete": 15
       }
     },
     "prediction": {
@@ -281,7 +390,7 @@
       }
     },
     "reflection": {
-      "afferent_coupling_ca": 2,
+      "afferent_coupling_ca": 1,
       "efferent_coupling_ce": 0,
       "instability_i": 0.0,
       "abstractness_a": 0.1667,
@@ -306,11 +415,11 @@
       "afferent_coupling_ca": 0,
       "efferent_coupling_ce": 0,
       "instability_i": 0.0,
-      "abstractness_a": 0.125,
-      "distance_d": 0.875,
+      "abstractness_a": 0.1429,
+      "distance_d": 0.8571,
       "classes": {
-        "abstract": 1,
-        "concrete": 7
+        "abstract": 2,
+        "concrete": 12
       }
     },
     "shared": {
@@ -339,11 +448,11 @@
       "afferent_coupling_ca": 0,
       "efferent_coupling_ce": 0,
       "instability_i": 0.0,
-      "abstractness_a": 0.1429,
-      "distance_d": 0.8571,
+      "abstractness_a": 0.125,
+      "distance_d": 0.875,
       "classes": {
         "abstract": 1,
-        "concrete": 6
+        "concrete": 7
       }
     },
     "synchronization": {
@@ -361,11 +470,22 @@
       "afferent_coupling_ca": 0,
       "efferent_coupling_ce": 0,
       "instability_i": 0.0,
-      "abstractness_a": 0.1667,
-      "distance_d": 0.8333,
+      "abstractness_a": 0.125,
+      "distance_d": 0.875,
       "classes": {
         "abstract": 1,
-        "concrete": 5
+        "concrete": 7
+      }
+    },
+    "traceability": {
+      "afferent_coupling_ca": 0,
+      "efferent_coupling_ce": 0,
+      "instability_i": 0.0,
+      "abstractness_a": 0.0833,
+      "distance_d": 0.9167,
+      "classes": {
+        "abstract": 1,
+        "concrete": 11
       }
     },
     "trust": {
@@ -380,7 +500,7 @@
       }
     },
     "workflow": {
-      "afferent_coupling_ca": 2,
+      "afferent_coupling_ca": 0,
       "efferent_coupling_ce": 0,
       "instability_i": 0.0,
       "abstractness_a": 0.1111,

@@ -1,0 +1,6 @@
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "EAOS Enterprise Operating System",
+  "softwareVersion": "0.1.0"
+}

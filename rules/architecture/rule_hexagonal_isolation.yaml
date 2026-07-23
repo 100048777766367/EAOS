@@ -1,0 +1,6 @@
+rule_id: rule_hexagonal_isolation
+category: architecture
+enabled: true
+description: "Domain framework leakage prohibition"
+severity: CRITICAL
+action: BLOCK

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EAOS Model Context Protocol Tools Contract",
+  "tools": [
+    {
+      "name": "compile_eval_rego",
+      "description": "Evaluates Rego policy rules against payload in RAM",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "rego_script": { "type": "string" },
+          "payload": { "type": "object" }
+        },
+        "required": ["rego_script", "payload"]
+      }
+    }
+  ]
+}

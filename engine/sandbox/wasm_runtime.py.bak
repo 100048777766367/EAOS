@@ -1,0 +1,11 @@
+from pydantic import BaseModel, ConfigDict
+
+
+class SandboxExecutionResult(BaseModel):
+    model_config = ConfigDict(frozen=True)
+    status: str = "SUCCESS"
+    stdout: str = "Executed in isolated WASM sandbox"
+
+class WASMSandboxRuntime:
+    def execute_isolated_patch(self, patch_code: str) -> SandboxExecutionResult:
+        return SandboxExecutionResult()

@@ -1,0 +1,7 @@
+{
+  "name": "@eaos/sdk",
+  "version": "0.1.0",
+  "description": "EAOS TypeScript Client SDK",
+  "main": "index.ts",
+  "license": "Proprietary"
+}

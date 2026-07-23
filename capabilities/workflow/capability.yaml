@@ -1,0 +1,7 @@
+id: cap.workflow
+name: State Machine & Workflow Engine
+domain: Workflow
+status: ACTIVE
+version: 1.0.0
+owner: Chief Enterprise Architect
+bounded_context: packages/workflow

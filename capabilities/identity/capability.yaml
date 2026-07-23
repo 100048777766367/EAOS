@@ -1,17 +1,7 @@
-id: capability.identity
-name: Identity
+id: cap.identity
+name: User Identity & Access Control
+domain: Identity
+status: ACTIVE
 version: 1.0.0
-owner: Security Council
-status: active
-description: Enterprise Identity Management Capability
-dependencies:
-  - capability.knowledge
-policies:
-  - identity_policy.yaml
-contracts:
-  - id: rest-api
-    type: REST
-    definition_path: apps/api/openapi.json
-events:
-  - UserRegistered
-  - UserDisabled
+owner: Chief Enterprise Architect
+bounded_context: packages/identity

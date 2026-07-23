@@ -2,8 +2,9 @@
 
 from pathlib import Path
 
-from packages.traceability.domain.models import CausalNodeType
 from pydantic import BaseModel, Field
+
+from packages.traceability.domain.models import CausalNodeType
 
 
 class CausalNodeDTO(BaseModel):

@@ -1,0 +1,6 @@
+rule_id: rule_mypy_strict
+category: quality
+enabled: true
+description: "Zero MyPy strict typing errors"
+severity: CRITICAL
+action: BLOCK

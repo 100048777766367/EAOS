@@ -1,10 +1,11 @@
 """DTOs for Continuous Improvement application layer."""
 
+from pydantic import BaseModel
+
 from packages.continuous_improvement.domain.models import (
     ImprovementCategory,
     InitiativeStatus,
 )
-from pydantic import BaseModel
 
 
 class ActionItemDTO(BaseModel):

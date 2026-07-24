@@ -46,7 +46,7 @@ class AIPreCommitGuard:
                         if mod in self.FORBIDDEN_DOMAIN_IMPORTS:
                             violations.append(f"Forbidden import '{mod}' in domain")
             except SyntaxError as e:
-                violations.append(f"Syntax Error in generated patch: {e}")
+                violations.append(f"Syntax Error in patch: {e}")
 
         passed = len(violations) == 0
         risk = 0.0 if passed else 100.0

@@ -92,6 +92,7 @@ class MonorepoTopologyScanner:
 
     IGNORED_DIRS: ClassVar[set[str]] = {
         ".git",
+        ".github",
         ".venv",
         "venv",
         "__pycache__",

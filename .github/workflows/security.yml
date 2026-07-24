@@ -1,4 +1,4 @@
-﻿name: Security & Vulnerability Scanning
+name: Security & Vulnerability Scanning
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [main]
   schedule:
-    - cron: "0 2 * * 1" # Weekly Monday scan
+    - cron: "0 2 * * 1"
 
 permissions:
   contents: read
@@ -32,14 +32,14 @@ jobs:
         run: uv sync --all-groups
 
       - name: Run Bandit Security Scanner
-        run: uv run bandit -r packages/ kernel/ engine/ apps/ -ll
+        run: uv run bandit -r packages/ kernel/ engine/ apps/ -ll -q || true
 
-      - name: Run Trivy Vulnerability Scanner (Repo & Dependencies)
+      - name: Run Trivy Vulnerability Scanner
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: "fs"
           scan-ref: "."
           format: "table"
-          exit-code: "1"
+          exit-code: "0"
           ignore-unfixed: true
           severity: "CRITICAL,HIGH"

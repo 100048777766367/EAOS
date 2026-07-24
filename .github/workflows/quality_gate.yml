@@ -1,17 +1,19 @@
-name: Architecture Topology & Proof Verification
+name: Quality Gates & Fitness Functions
 
 on:
   push:
     branches: [main, develop]
   pull_request:
     branches: [main, develop]
+  schedule:
+    - cron: "0 0 * * *"
 
 permissions:
   contents: read
 
 jobs:
-  topology-and-proof:
-    name: Topology Audit & Empirical Axioms Proof
+  quality-gate:
+    name: Code Quality, Tests & Architecture Validation
     runs-on: ubuntu-latest
 
     steps:
@@ -28,8 +30,11 @@ jobs:
       - name: Install Dependencies
         run: uv sync --all-groups
 
-      - name: Verify Monorepo Topology
-        run: uv run python tools/audit/topology_scanner.py
+      - name: Run Ruff Lint Check
+        run: uv run task lint
 
-      - name: Run Empirical Axioms Proof Engine
-        run: uv run python tools/proof/proof_engine.py
+      - name: Run Full Test Suite Gate
+        run: uv run task test
+
+      - name: Run Architecture Validator Gate
+        run: uv run task validate

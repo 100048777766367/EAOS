@@ -4,13 +4,13 @@ on:
   schedule:
     - cron: "15 21 * * *"
 
+permissions:
+  issues: write
+  pull-requests: write
+
 jobs:
   stale:
     runs-on: ubuntu-latest
-    permissions:
-      issues: write
-      pull-requests: write
-
     steps:
       - uses: actions/stale@v9
         with:

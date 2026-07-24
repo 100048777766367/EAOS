@@ -1,0 +1,21 @@
+# EAOS Automated Pull Request Labeler Rules
+'area: governance':
+  - 'packages/governance/**/*'
+  - 'kernel/governance/**/*'
+  - 'policies/**/*'
+
+'area: security':
+  - 'platform_services/security/**/*'
+  - 'policies/security/**/*'
+
+'area: telemetry':
+  - 'platform_services/telemetry/**/*'
+  - 'observability/**/*'
+
+'area: tests':
+  - 'tests/**/*'
+  - 'fitness/**/*'
+
+'area: infrastructure':
+  - '.github/**/*'
+  - 'infra/**/*'

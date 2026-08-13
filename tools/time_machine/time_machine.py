@@ -1,10 +1,10 @@
-"""Time Machine snapshot and state restoration engine for EAOS."""
-
 import json
 import time
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict
+
+"""Time Machine snapshot and state restoration engine for EAOS."""
 
 
 class SnapshotMetadataDTO(BaseModel):

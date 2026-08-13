@@ -1,0 +1,1526 @@
+.eaos-copilot-pane {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    background: #060b17;
+    color: #cbd5e1;
+}
+
+.eaos-copilot-header {
+    min-height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 9px 12px;
+    background: #080d1a;
+    border-bottom: 1px solid #1e293b;
+}
+
+.eaos-copilot-brand,
+.eaos-copilot-header-right {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.eaos-copilot-icon {
+    display: flex;
+    width: 28px;
+    height: 28px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 7px;
+    border: 1px solid #164e63;
+    background: #083344;
+    color: #67e8f9;
+    font-family: "Fira Code", monospace;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.eaos-copilot-title {
+    color: #f1f5f9;
+    font-family: "Fira Code", monospace;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.eaos-copilot-subtitle {
+    max-width: 160px;
+    overflow: hidden;
+    color: #64748b;
+    font-family: "Fira Code", monospace;
+    font-size: 8px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.eaos-status-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 18px;
+    padding: 0 7px;
+    border-radius: 999px;
+    border: 1px solid;
+    font-family: "Fira Code", monospace;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+.status-ready {
+    border-color: #065f46;
+    background: #022c22;
+    color: #34d399;
+}
+
+.status-running {
+    border-color: #155e75;
+    background: #082f49;
+    color: #22d3ee;
+}
+
+.status-error {
+    border-color: #9f1239;
+    background: #4c0519;
+    color: #fb7185;
+}
+
+.status-idle {
+    border-color: #334155;
+    background: #0f172a;
+    color: #64748b;
+}
+
+.eaos-icon-button {
+    display: flex;
+    width: 22px;
+    height: 22px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    border: 1px solid #334155;
+    background: #0f172a;
+    color: #64748b;
+    cursor: pointer;
+    font-size: 15px;
+    line-height: 1;
+}
+
+.eaos-icon-button:hover {
+    border-color: #475569;
+    color: #cbd5e1;
+}
+
+.eaos-model-strip {
+    display: flex;
+    align-items: center;
+    min-height: 34px;
+    gap: 10px;
+    padding: 7px 12px;
+    background: #050916;
+    border-bottom: 1px solid #111827;
+}
+
+.eaos-model-item {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.eaos-model-label {
+    color: #475569;
+    font-family: "Fira Code", monospace;
+    font-size: 7px;
+    font-weight: 700;
+}
+
+.eaos-model-value {
+    max-width: 120px;
+    overflow: hidden;
+    color: #94a3b8;
+    font-family: "Fira Code", monospace;
+    font-size: 8px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.eaos-model-divider {
+    width: 1px;
+    height: 12px;
+    background: #1e293b;
+}
+
+.eaos-task-card {
+    margin: 8px 9px 0;
+    padding: 9px;
+    border: 1px solid #1e293b;
+    border-radius: 8px;
+    background: #050916;
+}
+
+.eaos-section-header,
+.eaos-trace-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.eaos-section-header {
+    margin-bottom: 8px;
+}
+
+.eaos-section-title,
+.eaos-section-subtitle {
+    font-family: "Fira Code", monospace;
+}
+
+.eaos-section-title {
+    color: #94a3b8;
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 0.07em;
+}
+
+.eaos-section-subtitle {
+    margin-top: 2px;
+    color: #475569;
+    font-size: 7px;
+}
+
+.eaos-task-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 7px 12px;
+}
+
+.eaos-task-label {
+    color: #475569;
+    font-family: "Fira Code", monospace;
+    font-size: 7px;
+    font-weight: 700;
+}
+
+.eaos-task-value {
+    margin-top: 1px;
+    overflow: hidden;
+    color: #cbd5e1;
+    font-family: "Fira Code", monospace;
+    font-size: 8px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.eaos-chat-stream {
+    flex: 1;
+    min-height: 80px;
+    overflow-y: auto;
+    padding: 10px;
+    scroll-behavior: smooth;
+}
+
+.eaos-chat-message {
+    margin-bottom: 8px;
+    padding: 9px;
+    border-radius: 8px;
+    border: 1px solid #1e293b;
+    background: #0f172a;
+}
+
+.eaos-chat-user {
+    margin-left: 18px;
+    border-color: #155e75;
+    background: #082f49;
+}
+
+.eaos-chat-assistant {
+    margin-right: 5px;
+}
+
+.eaos-chat-label {
+    margin-bottom: 4px;
+    color: #34d399;
+    font-family: "Fira Code", monospace;
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+}
+
+.eaos-chat-body {
+    overflow-wrap: anywhere;
+    color: #cbd5e1;
+    font-size: 10px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+.eaos-trace-section {
+    border-top: 1px solid #1e293b;
+    background: #050916;
+}
+
+.eaos-trace-header {
+    padding: 8px 11px;
+}
+
+.eaos-trace-toggle {
+    border: 0;
+    background: transparent;
+    color: #22d3ee;
+    cursor: pointer;
+    font-family: "Fira Code", monospace;
+    font-size: 8px;
+}
+
+.eaos-trace {
+    max-height: 230px;
+    overflow-y: auto;
+    padding: 1px 14px 7px;
+}
+
+.eaos-timeline-item {
+    display: grid;
+    grid-template-columns: 18px minmax(0, 1fr);
+    column-gap: 8px;
+    min-height: 31px;
+}
+
+.eaos-timeline-marker {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.eaos-timeline-dot {
+    position: relative;
+    z-index: 2;
+    width: 8px;
+    height: 8px;
+    margin-top: 4px;
+    border: 2px solid #475569;
+    border-radius: 50%;
+    background: #020617;
+    transition: 0.15s ease;
+}
+
+.eaos-timeline-line {
+    position: absolute;
+    top: 11px;
+    bottom: -2px;
+    width: 1px;
+    background: #1e293b;
+}
+
+.eaos-timeline-content {
+    min-width: 0;
+    padding-bottom: 5px;
+}
+
+.eaos-timeline-title {
+    color: #64748b;
+    font-family: "Fira Code", monospace;
+    font-size: 8px;
+    font-weight: 700;
+}
+
+.eaos-timeline-meta {
+    margin-top: 1px;
+    color: #475569;
+    font-family: "Inter", sans-serif;
+    font-size: 7px;
+}
+
+.eaos-timeline-item.active
+.eaos-timeline-dot {
+    border-color: #22d3ee;
+    background: #22d3ee;
+    box-shadow: 0 0 9px rgba(34, 211, 238, 0.45);
+}
+
+.eaos-timeline-item.active
+.eaos-timeline-title {
+    color: #22d3ee;
+}
+
+.eaos-timeline-item.completed
+.eaos-timeline-dot {
+    border-color: #34d399;
+    background: #34d399;
+    box-shadow: 0 0 7px rgba(52, 211, 153, 0.3);
+}
+
+.eaos-timeline-item.completed
+.eaos-timeline-title {
+    color: #34d399;
+}
+
+.eaos-timeline-item.failed
+.eaos-timeline-dot {
+    border-color: #fb7185;
+    background: #fb7185;
+}
+
+.eaos-timeline-item.failed
+.eaos-timeline-title {
+    color: #fb7185;
+}
+
+.eaos-quick-status {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+    padding: 7px 9px;
+    border-top: 1px solid #1e293b;
+    background: #040712;
+}
+
+.eaos-quick-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 0;
+    padding: 5px 6px;
+    border: 1px solid #1e293b;
+    border-radius: 5px;
+    background: #080d1a;
+    color: #64748b;
+    font-family: "Fira Code", monospace;
+    font-size: 7px;
+}
+
+.eaos-quick-value {
+    font-weight: 800;
+}
+
+.eaos-quick-value.idle {
+    color: #475569;
+}
+
+.eaos-quick-value.running {
+    color: #22d3ee;
+}
+
+.eaos-quick-value.pass {
+    color: #34d399;
+}
+
+.eaos-quick-value.fail {
+    color: #fb7185;
+}
+
+.eaos-chat-input {
+    flex-shrink: 0;
+    padding: 9px;
+    border-top: 1px solid #1e293b;
+    background: #040814;
+}
+
+.eaos-chat-input textarea {
+    width: 100%;
+    min-height: 48px;
+    resize: none;
+    padding: 9px;
+    padding-right: 8px;
+    border: 1px solid #334155;
+    border-radius: 7px;
+    outline: 0;
+    background: #080d1a;
+    color: #e2e8f0;
+    font-family: "Inter", sans-serif;
+    font-size: 10px;
+}
+
+.eaos-chat-input textarea:focus {
+    border-color: #0891b2;
+    box-shadow: 0 0 0 1px rgba(8, 145, 178, 0.18);
+}
+
+.eaos-chat-input-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 5px;
+}
+
+.eaos-input-hint {
+    color: #475569;
+    font-family: "Fira Code", monospace;
+    font-size: 7px;
+}
+
+.eaos-send-button {
+    min-width: 58px;
+    padding: 5px 10px;
+    border: 1px solid #0891b2;
+    border-radius: 5px;
+    background: #06b6d4;
+    color: #082f49;
+    cursor: pointer;
+    font-size: 9px;
+    font-weight: 800;
+}
+
+.eaos-send-button:hover {
+    background: #22d3ee;
+}
+
+.eaos-send-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+}
+
+#execution-trace.hidden {
+    display: none;
+}
+
+/* ============================================================
+   EAOS IDE LAYOUT SYSTEM
+   ============================================================ */
+
+:root {
+    --eaos-header-height: 42px;
+    --eaos-activity-width: 48px;
+    --eaos-explorer-width: 230px;
+    --eaos-copilot-width: 360px;
+    --eaos-terminal-height: 190px;
+    --eaos-footer-height: 26px;
+    --eaos-border: #1e293b;
+    --eaos-bg: #030712;
+    --eaos-surface: #060b17;
+    --eaos-surface-2: #080d1a;
+}
+
+/* Main application shell */
+
+body {
+    min-width: 1180px;
+}
+
+/* Header */
+
+.eaos-ide-header {
+    height: var(--eaos-header-height);
+    min-height: var(--eaos-header-height);
+    max-height: var(--eaos-header-height);
+}
+
+/* Activity bar */
+
+.eaos-activity-bar {
+    width: var(--eaos-activity-width);
+    min-width: var(--eaos-activity-width);
+    max-width: var(--eaos-activity-width);
+}
+
+/* Explorer */
+
+.eaos-explorer {
+    width: var(--eaos-explorer-width);
+    min-width: var(--eaos-explorer-width);
+    max-width: var(--eaos-explorer-width);
+}
+
+/* Center workspace */
+
+.eaos-center-workspace {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+/* Editor */
+
+.eaos-editor-pane {
+    min-width: 0;
+    min-height: 0;
+}
+
+/* Terminal */
+
+.eaos-terminal {
+    height: var(--eaos-terminal-height);
+    min-height: var(--eaos-terminal-height);
+    max-height: var(--eaos-terminal-height);
+}
+
+/* Copilot */
+
+.eaos-copilot-shell {
+    width: var(--eaos-copilot-width);
+    min-width: var(--eaos-copilot-width);
+    max-width: var(--eaos-copilot-width);
+}
+
+/* Footer */
+
+.eaos-runtime-footer {
+    height: var(--eaos-footer-height);
+    min-height: var(--eaos-footer-height);
+    max-height: var(--eaos-footer-height);
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.eaos-header-left {
+    min-width: 260px;
+}
+
+.eaos-header-center {
+    flex: 1 1 auto;
+    min-width: 250px;
+    display: flex;
+    justify-content: center;
+}
+
+.eaos-header-right {
+    min-width: 330px;
+    justify-content: flex-end;
+}
+
+.eaos-header-file {
+    max-width: 320px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ============================================================
+   EXPLORER
+   ============================================================ */
+
+.eaos-explorer-header {
+    height: 34px;
+    min-height: 34px;
+}
+
+.eaos-explorer-body {
+    padding: 7px;
+}
+
+.eaos-explorer-section {
+    margin-bottom: 10px;
+}
+
+.eaos-explorer-section-title {
+    padding: 5px 7px;
+    color: #64748b;
+    font-family: "Fira Code", monospace;
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+}
+
+.eaos-explorer-row {
+    min-height: 25px;
+    padding: 4px 7px;
+    border-radius: 5px;
+    transition:
+        background 120ms ease,
+        color 120ms ease;
+}
+
+.eaos-explorer-row:hover {
+    background: #0f172a;
+}
+
+.eaos-explorer-row.active {
+    background: #082f49;
+    color: #67e8f9;
+}
+
+/* ============================================================
+   EDITOR
+   ============================================================ */
+
+.eaos-editor-tabs {
+    height: 34px;
+    min-height: 34px;
+}
+
+.eaos-editor-tab {
+    height: 34px;
+    padding: 0 11px;
+    border-right: 1px solid #1e293b;
+}
+
+.eaos-editor-tab.active {
+    background: #030712;
+    box-shadow:
+        inset 0 2px 0 #22d3ee;
+}
+
+/* ============================================================
+   TERMINAL
+   ============================================================ */
+
+.eaos-terminal-header {
+    height: 30px;
+    min-height: 30px;
+}
+
+.eaos-terminal-body {
+    font-size: 10px;
+    line-height: 1.55;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1400px) {
+    :root {
+        --eaos-explorer-width: 210px;
+        --eaos-copilot-width: 330px;
+    }
+}
+
+@media (min-width: 1700px) {
+    :root {
+        --eaos-explorer-width: 250px;
+        --eaos-copilot-width: 390px;
+    }
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+.eaos-runtime-footer {
+    padding-left: 10px;
+    padding-right: 10px;
+    background: #020617;
+    border-top: 1px solid #1e293b;
+}
+
+.eaos-runtime-footer > div {
+    min-width: 0;
+}
+
+.eaos-runtime-footer span {
+    white-space: nowrap;
+}
+
+/* === EAOS_IDE_LAYOUT_V2_BEGIN === */
+
+:root {
+    --eaos-header-height: 42px;
+    --eaos-activity-width: 48px;
+    --eaos-explorer-width: 230px;
+    --eaos-copilot-width: 360px;
+    --eaos-terminal-height: 190px;
+    --eaos-footer-height: 26px;
+    --eaos-divider: #1e293b;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    min-width: 1180px;
+}
+
+.eaos-ide-header {
+    height: var(--eaos-header-height);
+    min-height: var(--eaos-header-height);
+    max-height: var(--eaos-header-height);
+    overflow: hidden;
+}
+
+.eaos-header-left {
+    min-width: 260px;
+}
+
+.eaos-header-center {
+    flex: 1 1 auto;
+    min-width: 220px;
+    justify-content: center;
+}
+
+.eaos-header-right {
+    min-width: 300px;
+    justify-content: flex-end;
+}
+
+.eaos-workspace-shell {
+    min-width: 0;
+    min-height: 0;
+}
+
+.eaos-activity-bar {
+    width: var(--eaos-activity-width);
+    min-width: var(--eaos-activity-width);
+    max-width: var(--eaos-activity-width);
+}
+
+.eaos-explorer {
+    width: var(--eaos-explorer-width);
+    min-width: var(--eaos-explorer-width);
+    max-width: var(--eaos-explorer-width);
+}
+
+.eaos-center-workspace {
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 0;
+}
+
+.eaos-editor-pane {
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 0;
+}
+
+.eaos-terminal {
+    height: var(--eaos-terminal-height);
+    min-height: 90px;
+    max-height: 52vh;
+    flex-shrink: 0;
+}
+
+.eaos-copilot-shell {
+    width: var(--eaos-copilot-width);
+    min-width: var(--eaos-copilot-width);
+    max-width: var(--eaos-copilot-width);
+}
+
+.eaos-runtime-footer {
+    height: var(--eaos-footer-height);
+    min-height: var(--eaos-footer-height);
+    max-height: var(--eaos-footer-height);
+}
+
+/* ---------- RESIZERS ---------- */
+
+.eaos-pane-resizer {
+    position: relative;
+    z-index: 50;
+    flex-shrink: 0;
+    background: transparent;
+    transition: background 120ms ease;
+}
+
+.eaos-pane-resizer:hover,
+.eaos-pane-resizer.active {
+    background: #155e75;
+}
+
+.eaos-horizontal-resizer {
+    width: 3px;
+    cursor: col-resize;
+}
+
+.eaos-vertical-resizer {
+    height: 3px;
+    cursor: row-resize;
+}
+
+.eaos-horizontal-resizer::after {
+    position: absolute;
+    inset: 0 -3px;
+    content: "";
+}
+
+.eaos-vertical-resizer::after {
+    position: absolute;
+    inset: -3px 0;
+    content: "";
+}
+
+/* ---------- HEADER ---------- */
+
+.eaos-header-control {
+    height: 24px;
+    padding: 0 8px;
+    border: 1px solid #334155;
+    border-radius: 5px;
+    background: #0f172a;
+    color: #94a3b8;
+    font-family: "Fira Code", monospace;
+    font-size: 8px;
+}
+
+.eaos-header-control:hover {
+    border-color: #0891b2;
+    color: #67e8f9;
+}
+
+/* ---------- EXPLORER ---------- */
+
+.eaos-explorer-header {
+    height: 34px;
+    min-height: 34px;
+}
+
+.eaos-explorer-body {
+    padding: 7px;
+}
+
+.eaos-explorer-row {
+    min-height: 25px;
+    border-radius: 5px;
+}
+
+.eaos-explorer-row:hover {
+    background: #0f172a;
+}
+
+/* ---------- EDITOR ---------- */
+
+.eaos-editor-tab-strip {
+    height: 34px;
+    min-height: 34px;
+}
+
+.eaos-editor-tab {
+    height: 34px;
+    padding: 0 11px;
+}
+
+/* ---------- TERMINAL ---------- */
+
+.eaos-terminal-header {
+    height: 30px;
+    min-height: 30px;
+    flex-shrink: 0;
+}
+
+/* ---------- COPILOT ---------- */
+
+.eaos-copilot-shell {
+    min-height: 0;
+    overflow: hidden;
+}
+
+/* ---------- FOOTER ---------- */
+
+.eaos-runtime-footer {
+    padding-left: 10px;
+    padding-right: 10px;
+    overflow: hidden;
+    background: #020617;
+    border-top: 1px solid var(--eaos-divider);
+}
+
+.eaos-runtime-footer span {
+    white-space: nowrap;
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 1400px) {
+    :root {
+        --eaos-explorer-width: 210px;
+        --eaos-copilot-width: 330px;
+    }
+}
+
+@media (min-width: 1700px) {
+    :root {
+        --eaos-explorer-width: 250px;
+        --eaos-copilot-width: 390px;
+    }
+}
+
+/* === EAOS_IDE_LAYOUT_V2_END === */
+
+/* === EAOS_RESIZER_V3_BEGIN === */
+
+.eaos-pane-resizer {
+    position: relative;
+    z-index: 9999;
+    flex: 0 0 auto;
+    background: transparent;
+    user-select: none;
+    touch-action: none;
+}
+
+.eaos-horizontal-resizer {
+    width: 6px;
+    min-width: 6px;
+    height: 100%;
+    cursor: col-resize;
+}
+
+.eaos-vertical-resizer {
+    width: 100%;
+    min-width: 100%;
+    height: 6px;
+    min-height: 6px;
+    cursor: row-resize;
+}
+
+.eaos-horizontal-resizer::before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 2px;
+    width: 2px;
+    background: #1e293b;
+    content: "";
+}
+
+.eaos-horizontal-resizer:hover::before,
+.eaos-horizontal-resizer.active::before {
+    background: #22d3ee;
+}
+
+.eaos-vertical-resizer::before {
+    position: absolute;
+    top: 2px;
+    right: 0;
+    left: 0;
+    height: 2px;
+    background: #1e293b;
+    content: "";
+}
+
+.eaos-vertical-resizer:hover::before,
+.eaos-vertical-resizer.active::before {
+    background: #22d3ee;
+}
+
+.eaos-workspace-shell.resizing,
+.eaos-workspace-shell.resizing * {
+    cursor: inherit !important;
+}
+
+.eaos-resize-overlay {
+    position: fixed;
+    z-index: 100000;
+    inset: 0;
+    background: transparent;
+    user-select: none;
+    touch-action: none;
+}
+
+body.eaos-resizing {
+    user-select: none !important;
+    overflow: hidden !important;
+}
+
+/* === EAOS_RESIZER_V3_END === */
+/* ============================================================
+   EAOS IDE — PANE TOGGLE SYSTEM
+   ============================================================ */
+
+.eaos-pane-hidden {
+    display: none !important;
+}
+
+/* Toggle button state */
+
+.eaos-header-control.is-active {
+    border-color: #0891b2;
+    color: #67e8f9;
+    background: #082f49;
+}
+
+/* ============================================================
+   FOCUS MODE
+   ============================================================ */
+
+.eaos-workspace-shell.eaos-focus-mode
+.eaos-activity-bar,
+
+.eaos-workspace-shell.eaos-focus-mode
+#pane-left-explorer,
+
+.eaos-workspace-shell.eaos-focus-mode
+#resizer-explorer,
+
+.eaos-workspace-shell.eaos-focus-mode
+#resizer-copilot,
+
+.eaos-workspace-shell.eaos-focus-mode
+#pane-right-inspector,
+
+.eaos-workspace-shell.eaos-focus-mode
+#resizer-terminal,
+
+.eaos-workspace-shell.eaos-focus-mode
+#pane-bottom-terminal {
+    display: none !important;
+}
+
+.eaos-workspace-shell.eaos-focus-mode
+.eaos-center-workspace {
+    width: 100%;
+    flex: 1 1 100%;
+}
+
+body.eaos-focus-mode .eaos-ide-header {
+    border-bottom-color: #164e63;
+}
+
+body.eaos-focus-mode .eaos-header-control {
+    opacity: 0.8;
+}
+.eaos-pane-hidden {
+    display: none !important;
+}
+
+.eaos-workspace-shell.eaos-focus-mode .eaos-activity-bar,
+.eaos-workspace-shell.focus-left-hidden .eaos-activity-bar {
+    display: none !important;
+}
+
+.eaos-workspace-shell.eaos-focus-mode #pane-left-explorer,
+.eaos-workspace-shell.focus-left-hidden #pane-left-explorer {
+    display: none !important;
+}
+
+.eaos-workspace-shell.eaos-focus-mode #pane-right-inspector,
+.eaos-workspace-shell.focus-right-hidden #pane-right-inspector {
+    display: none !important;
+}
+
+.eaos-workspace-shell.eaos-focus-mode #pane-bottom-terminal,
+.eaos-workspace-shell.focus-terminal-hidden #pane-bottom-terminal {
+    display: none !important;
+}
+
+.eaos-workspace-shell.eaos-focus-mode #resizer-explorer,
+.eaos-workspace-shell.eaos-focus-mode #resizer-copilot,
+.eaos-workspace-shell.eaos-focus-mode #resizer-terminal {
+    display: none !important;
+}
+
+.eaos-header-control.is-active {
+    border-color: #0891b2;
+    color: #67e8f9;
+    background: #083344;
+}
+/* ============================================================
+   EAOS IDE — PANE TOGGLE SYSTEM
+   ============================================================ */
+
+.eaos-pane-hidden {
+    display: none !important;
+}
+
+/* ---------- HEADER CONTROL STATE ---------- */
+
+.eaos-header-control {
+    cursor: pointer;
+    user-select: none;
+    transition:
+        background 120ms ease,
+        border-color 120ms ease,
+        color 120ms ease,
+        opacity 120ms ease;
+}
+
+.eaos-header-control.is-active {
+    border-color: #0891b2;
+    background: #083344;
+    color: #67e8f9;
+}
+
+.eaos-header-control:not(.is-active) {
+    opacity: 0.72;
+}
+
+/* ---------- FOCUS MODE ---------- */
+
+.eaos-workspace-shell.eaos-focus-mode
+.eaos-activity-bar {
+    display: none !important;
+}
+
+.eaos-workspace-shell.eaos-focus-mode
+#pane-left-explorer {
+    display: none !important;
+}
+
+.eaos-workspace-shell.eaos-focus-mode
+#pane-right-inspector {
+    display: none !important;
+}
+
+.eaos-workspace-shell.eaos-focus-mode
+#pane-bottom-terminal {
+    display: none !important;
+}
+
+.eaos-workspace-shell.eaos-focus-mode
+#resizer-explorer {
+    display: none !important;
+}
+
+.eaos-workspace-shell.eaos-focus-mode
+#resizer-copilot {
+    display: none !important;
+}
+
+.eaos-workspace-shell.eaos-focus-mode
+#resizer-terminal {
+    display: none !important;
+}
+
+/* ---------- FOCUS BODY ---------- */
+
+body.eaos-focus-mode {
+    min-width: 0;
+}
+
+body.eaos-focus-mode
+.eaos-header-left {
+    min-width: 180px;
+}
+
+body.eaos-focus-mode
+.eaos-header-right {
+    min-width: 220px;
+}
+
+/* ---------- TRANSITION ---------- */
+
+#pane-left-explorer,
+#pane-right-inspector,
+#pane-bottom-terminal {
+    transition:
+        width 160ms ease,
+        min-width 160ms ease,
+        max-width 160ms ease,
+        opacity 120ms ease;
+}
+
+/* Hidden state must win over transitions. */
+#pane-left-explorer.eaos-pane-hidden,
+#pane-right-inspector.eaos-pane-hidden,
+#pane-bottom-terminal.eaos-pane-hidden,
+#resizer-explorer.eaos-pane-hidden,
+#resizer-copilot.eaos-pane-hidden,
+#resizer-terminal.eaos-pane-hidden {
+    display: none !important;
+}
+
+/* ---------- ACCESSIBILITY ---------- */
+
+.eaos-header-control:focus-visible,
+#btn-focus-mode:focus-visible {
+    outline: 1px solid #22d3ee;
+    outline-offset: 2px;
+}
+
+/* ---------- SMALL VIEWPORT ---------- */
+
+@media (max-width: 1200px) {
+    .eaos-header-center {
+        display: none;
+    }
+
+    .eaos-header-left {
+        min-width: 180px;
+    }
+
+    .eaos-header-right {
+        min-width: 0;
+    }
+}
+
+/* ============================================================
+   EAOS PANE SYSTEM V2
+   ============================================================ */
+
+.eaos-pane-hidden {
+    display: none !important;
+}
+
+.eaos-header-control {
+    position: relative;
+}
+
+.eaos-header-control.is-active {
+    border-color: #0891b2;
+    background: #083344;
+    color: #67e8f9;
+}
+
+.eaos-header-control:not(.is-active) {
+    opacity: 0.72;
+}
+
+.eaos-header-control:active {
+    transform: translateY(1px);
+}
+
+/* Focus mode must override normal pane state. */
+
+body.eaos-focus-mode
+.eaos-workspace-shell {
+    min-width: 0;
+}
+
+body.eaos-focus-mode
+.eaos-center-workspace {
+    width: 100%;
+    min-width: 0;
+}
+
+body.eaos-focus-mode
+.eaos-editor-pane {
+    width: 100%;
+}
+
+/* Prevent hidden panes from leaving flex artifacts. */
+
+.eaos-workspace-shell
+.eaos-pane-hidden {
+    flex: 0 0 0 !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+}
+
+/* Resizers disappear with their panes. */
+
+.eaos-workspace-shell
+.eaos-pane-hidden.eaos-pane-resizer {
+    display: none !important;
+}
+
+/* Keep editor usable when side panes disappear. */
+
+.eaos-center-workspace {
+    min-width: 0;
+    min-height: 0;
+}
+
+.eaos-editor-pane {
+    min-width: 0;
+    min-height: 0;
+}
+
+/* Keyboard accessibility. */
+
+.eaos-header-control:focus-visible,
+#btn-focus-mode:focus-visible {
+    outline: 1px solid #22d3ee;
+    outline-offset: 2px;
+}
+
+/* ============================================================
+   END EAOS PANE SYSTEM V2
+   ============================================================ */
+
+/* ============================================================
+   EAOS IDE — Pane Resizer Runtime Stabilization
+   Responsibility:
+   - reliable pointer hit area
+   - flex isolation
+   - drag cursor
+   - prevent transition interference while resizing
+   ============================================================ */
+
+.eaos-pane-resizer {
+    position: relative;
+    z-index: 50;
+
+    flex: 0 0 6px;
+
+    display: block;
+
+    padding: 0;
+    margin: 0;
+
+    background: transparent;
+
+    opacity: 1;
+
+    pointer-events: auto;
+
+    user-select: none;
+    -webkit-user-select: none;
+
+    touch-action: none;
+
+    transition:
+        background-color 120ms ease,
+        opacity 120ms ease;
+}
+
+.eaos-pane-resizer:hover,
+.eaos-pane-resizer:focus-visible,
+.eaos-pane-resizer.is-resizing {
+    background: rgba(34, 211, 238, 0.28);
+
+    outline: none;
+}
+
+.eaos-horizontal-resizer {
+    width: 6px;
+    min-width: 6px;
+    max-width: 6px;
+
+    height: 100%;
+
+    cursor: col-resize;
+
+    align-self: stretch;
+}
+
+.eaos-vertical-resizer {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+
+    height: 6px;
+    min-height: 6px;
+    max-height: 6px;
+
+    cursor: row-resize;
+
+    align-self: stretch;
+
+    flex: 0 0 6px;
+}
+
+
+/* ------------------------------------------------------------
+   Prevent flexbox from collapsing resizer / pane boundaries.
+   ------------------------------------------------------------ */
+
+.eaos-workspace-shell {
+    min-width: 0;
+    min-height: 0;
+}
+
+.eaos-center-workspace {
+    min-width: 0;
+    min-height: 0;
+}
+
+#pane-left-explorer,
+#pane-right-inspector,
+#pane-bottom-terminal {
+    flex-shrink: 0;
+}
+
+
+/* ------------------------------------------------------------
+   During drag, transitions must not fight pointer movement.
+   ------------------------------------------------------------ */
+
+body.eaos-resizing .eaos-pane-resizer,
+body.eaos-resizing #pane-left-explorer,
+body.eaos-resizing #pane-right-inspector,
+body.eaos-resizing #pane-bottom-terminal {
+    transition: none !important;
+}
+
+body.eaos-resizing,
+body.eaos-resizing * {
+    cursor: inherit;
+}
+
+body.eaos-resizing-explorer,
+body.eaos-resizing-right {
+    cursor: col-resize !important;
+}
+
+body.eaos-resizing-explorer *,
+body.eaos-resizing-right * {
+    cursor: col-resize !important;
+}
+
+body.eaos-resizing-terminal {
+    cursor: row-resize !important;
+}
+
+body.eaos-resizing-terminal * {
+    cursor: row-resize !important;
+}
+
+
+/* ------------------------------------------------------------
+   Keep center editor capable of shrinking while side panes
+   retain their explicit dimensions.
+   ------------------------------------------------------------ */
+
+.eaos-center-workspace,
+.eaos-editor-pane {
+    min-width: 0 !important;
+    min-height: 0 !important;
+}
+
+
+/* ------------------------------------------------------------
+   Terminal must participate in vertical flex layout correctly.
+   JS controls the explicit height.
+   ------------------------------------------------------------ */
+
+#pane-bottom-terminal {
+    box-sizing: border-box;
+
+    flex-shrink: 0;
+
+    overflow: hidden;
+}
+
+#resizer-terminal {
+    flex-shrink: 0;
+}
+
+
+/* ------------------------------------------------------------
+   Stronger hit target without visually increasing the divider.
+   ------------------------------------------------------------ */
+
+#resizer-explorer,
+#resizer-copilot,
+#resizer-terminal {
+    isolation: isolate;
+}
+
+#resizer-explorer::before,
+#resizer-copilot::before,
+#resizer-terminal::before {
+    content: "";
+
+    position: absolute;
+
+    z-index: 51;
+
+    pointer-events: auto;
+}
+
+#resizer-explorer::before,
+#resizer-copilot::before {
+    top: 0;
+    bottom: 0;
+
+    left: -4px;
+    right: -4px;
+}
+
+#resizer-terminal::before {
+    left: 0;
+    right: 0;
+
+    top: -4px;
+    bottom: -4px;
+}
+
+
+/* ------------------------------------------------------------
+   When a pane is hidden, its resizer must disappear with it.
+   ------------------------------------------------------------ */
+
+.eaos-pane-hidden + .eaos-pane-resizer,
+.eaos-pane-resizer.eaos-pane-hidden {
+    display: none !important;
+}
+

@@ -1,10 +1,11 @@
-"""FastAPI Router for Sales Capability Application."""
-
 from typing import Any
 
 from fastapi import APIRouter
 from packages.sales.application.use_cases import ProcessOrderUseCase
 from pydantic import BaseModel, ConfigDict
+
+"""FastAPI Router for Sales Capability Application."""
+
 
 router = APIRouter(prefix="/v1/sales", tags=["Sales Capability"])
 

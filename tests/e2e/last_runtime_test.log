@@ -1,0 +1,109 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.3, pytest-9.1.1, pluggy-1.6.0
+rootdir: D:\EAOS
+configfile: pyproject.toml
+plugins: anyio-4.14.2, base-url-2.1.0, cov-7.1.0, mock-3.15.1, playwright-0.9.0
+collected 22 items
+
+tests\e2e\test_chat_ide_runtime.py ....F......F.F........                [100%]
+
+================================== FAILURES ===================================
+_________________ test_activity_keyboard_navigation[chromium] _________________
+tests\e2e\test_chat_ide_runtime.py:174: in test_activity_keyboard_navigation
+    expect(focused).to_have_attribute(
+E   AssertionError: Locator expected to have attribute 'search'
+E   Actual value: ai-studio 
+E   Call log:
+E     - Expect "to_have_attribute" with timeout 5000ms
+E     - waiting for locator(":focus")
+E       14 ╫ locator resolved to <button type="button" tabindex="-1" id="act-ai-studio" aria-pressed="false" title="AI Studio Hub" data-activity="ai-studio" aria-label="AI Studio Hub" class="act-btn w-9 h-9 rounded-lg hover:bg-slate-800/80 hover:text-slate-200 flex items-center justify-center border border-transparent transition-all">à</button>
+E          - unexpected value "ai-studio"
+E   
+E   Aria snapshot:
+E   - button "AI Studio Hub"
+________________________ test_monaco_editor[chromium] _________________________
+tests\e2e\test_chat_ide_runtime.py:395: in test_monaco_editor
+    expect(host).to_be_visible()
+E   AssertionError: Locator expected to be visible
+E   Actual value: hidden 
+E   Call log:
+E     - Expect "to_be_visible" with timeout 5000ms
+E     - waiting for locator("#monaco-editor-container")
+E       13 ╫ locator resolved to <div role="textbox" aria-multiline="true" aria-label="Code editor" data-editor-host="monaco" id="monaco-editor-container" class="flex-1 min-h-0 bg-[#030712]"></div>
+E          - unexpected value "hidden"
+E   
+E   Aria snapshot:
+E   - banner:
+E     - text: EAOS IDE | D:\EAOS
+E     - button "File"
+E     - button "Edit"
+E     - button "View"
+E     - button "Terminal"
+E     - link "\U0001f5a5\ufe0f Control Room":
+E       - /url: http://127.0.0.1:3002/control-room
+E     - button "\U0001f4c2 Left" [pressed]
+E     - button "\u26a1 Terminal" [pressed]
+E     - button "\U0001f4ac Right" [pressed]
+E     - button "\U0001f3af Focus"
+E     - text: "|"
+E     - link "Fullscreen \u2197":
+E       - /url: /workspace
+E   - complementary "EAOS Activity Bar":
+E     - navigation "Workspace Navigation":
+E       - button "File Explorer" [pressed]
+E       - button "Global Search"
+E       - button "Git Source Control"
+E       - button "AI Studio Hub"
+E       - button "System Doctor Diagnostics"
+E     - navigation "System Navigation":
+E       - button "Settings"
+E   - text: Explorer EAOS_WORKSPACE
+E   - separator "Resize Explorer"
+E   - main:
+E     - region "EAOS Code Editor":
+E       - tablist "Open files":
+E         - tab "apps/api/app/main.py" [selected]
+E       - textbox "Code editor"
+E     - separator "Resize Terminal"
+E     - text: Terminal Problems (0) Output PowerShell / EAOS Core Engine EAOS Cybernetic Engine v0.1.0 Ready. PS D:\\EAOS> docker compose up -d [+] up 9/9 \u2714 Containers Healthy PS D:\\EAOS> _
+E   - separator "Resize Copilot"
+E   - complementary:
+E     - region "EAOS AI Copilot":
+E       - text: EAOS Copilot Enterprise Architecture Assistant
+E       - status: Ready
+E       - button "Clear chat": ╫
+E       - region "AI runtime": Provider ù Model ù
+E       - region "Active task":
+E         - text: Active Task
+E         - status: Idle
+E         - text: Task ù Agent ù Evidence ù Latency ù
+E       - log "Chat messages":
+E         - article: EAOS Copilot Ready.
+E       - region "Execution trace":
+E         - text: Execution Trace No active execution
+E         - button "Trace" [expanded]
+E         - text: System ready Waiting for task
+E       - region "Runtime health": Ruff ù Pytest ù Overall ù
+E       - textbox "Chat message":
+E         - /placeholder: Ask EAOS Copilot...
+E       - text: Enter to send ╖ Shift+Enter for newline
+E       - button "Send"
+E     - text: Agent Role Selector
+E     - combobox:
+E       - option "Coder Agent" [selected]
+E       - option "Planner Agent"
+E       - option "Architect Agent"
+E       - option "Security Guard Agent"
+E     - text: "Swarm Telemetry Doctor Health: 100% OK Governance: Compliant Pytest Gate: 237 Passed Quick Actions"
+E     - button "\U0001fa7a Run Doctor Audit"
+E     - button "\u26a1 Generate Kernel Patch"
+E   - contentinfo: Checking... UTF-8 Python ù API ù PID ù Tests ù WS ù EAOS ù
+_______________________ test_chat_send_event[chromium] ________________________
+tests\e2e\test_chat_ide_runtime.py:467: in test_chat_send_event
+    assert result is True
+E   assert False is True
+=========================== short test summary info ===========================
+FAILED tests/e2e/test_chat_ide_runtime.py::test_activity_keyboard_navigation[chromium]
+FAILED tests/e2e/test_chat_ide_runtime.py::test_monaco_editor[chromium] - Ass...
+FAILED tests/e2e/test_chat_ide_runtime.py::test_chat_send_event[chromium] - a...
+=================== 3 failed, 19 passed in 71.56s (0:01:11) ===================

@@ -1,8 +1,8 @@
-"""Application use cases for Sales Lead Ingestion and Scoring."""
-
 import uuid
 
 from packages.crm.domain.models import SalesLead
+
+"""Application use cases for Sales Lead Ingestion and Scoring."""
 
 
 class IngestLeadUseCase:

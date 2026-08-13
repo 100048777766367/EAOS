@@ -5,7 +5,10 @@ from typing import Annotated, Any
 from fastapi import APIRouter, Body, Header, Response, status
 from kernel.events.schema_registry import EventSchemaValidationDTO
 from kernel.events.stream_replay import EventStreamReplayEngine, EventStreamSnapshot
-from packages.knowledge_graph.application.dto import IngestGraphBatchCommand, NodeIngestDTO
+from packages.knowledge_graph.application.dto import (
+    IngestGraphBatchCommand,
+    NodeIngestDTO,
+)
 from packages.knowledge_graph.application.use_cases import IngestKnowledgeGraphUseCase
 from packages.knowledge_graph.domain.models import NodeType
 from packages.self_rewrite.application.dto import SelfRewriteRequest
@@ -13,7 +16,12 @@ from packages.self_rewrite.application.use_cases import RunSelfRewriteUseCase
 from tools.chaos.chaos_daemon import ChaosDaemonStatusDTO
 from tools.chaos.chaos_engine import ChaosEngine, ChaosExperimentResult
 
-from apps.api.app.container import chaos_daemon, knowledge_graph_adapter, schema_verifier, self_rewrite_repo
+from apps.api.app.container import (
+    chaos_daemon,
+    knowledge_graph_adapter,
+    schema_verifier,
+    self_rewrite_repo,
+)
 
 router = APIRouter(tags=["Events & Chaos"])
 
@@ -31,9 +39,7 @@ async def verify_event_schema_compatibility(
             t_name = str(request.get("topic", "default.topic"))
         if p_data is None:
             p_data = request.get("payload", {})
-    return schema_verifier.verify_event_compatibility(
-        topic=t_name or "default.topic", payload=p_data or {}
-    )
+    return schema_verifier.verify_event_compatibility(topic=t_name or "default.topic", payload=p_data or {})
 
 
 @router.post("/events/publish/degraded-health", status_code=202)

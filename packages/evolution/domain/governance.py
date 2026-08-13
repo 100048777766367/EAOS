@@ -18,7 +18,7 @@ class CouncilVote(BaseModel):
 
 
 class EvolutionTransaction(BaseModel):
-    """Giao dá»‹ch tiáº¿n hÃ³a Ä‘Ã£ Ä‘Æ°á»£c phÃª duyá»‡t vÃ  ghi sá»•."""
+    """Giao dá»‹ch tiáº¿n hÃ³a Ä‘Ã£ Ä‘Æ°á»£c phÃª duyá»‡t vÃ  ghi sá»•."""
 
     tx_id: str
     timestamp: datetime = Field(default_factory=lambda: datetime.now(UTC))

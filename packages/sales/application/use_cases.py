@@ -1,8 +1,8 @@
-"""Application use cases for Sales Order Processing."""
-
 import uuid
 
 from packages.sales.domain.models import SalesOrder
+
+"""Application use cases for Sales Order Processing."""
 
 
 class ProcessOrderUseCase:

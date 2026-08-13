@@ -1,6 +1,6 @@
-"""Font Registration and CSS @font-face Generator."""
-
 from pydantic import BaseModel, ConfigDict
+
+"""Font Registration and CSS @font-face Generator."""
 
 
 class FontSpec(BaseModel):

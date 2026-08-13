@@ -1,0 +1,12 @@
+{
+  "EAOS": {
+    "Constitution": "v3",
+    "Governance": "v2",
+    "Tasks": "1–20",
+    "Skills": 8,
+    "Contracts": 17,
+    "Policies": 12,
+    "Schemas": 9,
+    "Evidence Engine": "v1"
+  }
+}

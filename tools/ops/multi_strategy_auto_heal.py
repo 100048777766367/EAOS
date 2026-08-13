@@ -1,11 +1,11 @@
-"""Multi-strategy auto-healing engine with automatic rollback and learning."""
-
 import json
 import time
 from pathlib import Path
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict
+
+"""Multi-strategy auto-healing engine with automatic rollback and learning."""
 
 
 class HealAttemptDTO(BaseModel):

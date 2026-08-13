@@ -1,6 +1,6 @@
-"""Động cơ xử lý ADR Lifecycle."""
-
 from __future__ import annotations
+
+"""Động cơ xử lý ADR Lifecycle."""
 
 
 class AdrEngine:

@@ -1,9 +1,9 @@
-"""Enterprise Governance Domain Model for EAOS Constitution."""
-
 from datetime import UTC, datetime
 from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Enterprise Governance Domain Model for EAOS Constitution."""
 
 
 class ArchitecturalMaturityLevel(StrEnum):

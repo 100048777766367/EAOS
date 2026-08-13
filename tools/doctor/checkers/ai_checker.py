@@ -1,11 +1,11 @@
-"""AI Runtime Checker probing Ollama and OpenWebUI."""
-
 from __future__ import annotations
 
 import urllib.request
 from typing import ClassVar
 
 from tools.doctor.dto import DiagnosticCheckDTO, SeverityLevel
+
+"""AI Runtime Checker probing Ollama and OpenWebUI."""
 
 
 class AIChecker:

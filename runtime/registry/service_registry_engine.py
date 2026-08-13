@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from models import ServiceInstance
+from apps.models import ServiceInstance
 
 
 class ServiceRegistryEngine:

@@ -9,4 +9,8 @@ class MarkdownSpecParser:
     @staticmethod
     def parse_markdown_headers(content: str) -> list[str]:
         """Trích xuất các tiêu đề # trong Markdown."""
-        return [line.strip() for line in content.splitlines() if line.startswith("#")]
+        return [
+            line.strip()
+            for line in content.splitlines()
+            if line.startswith("#")
+        ]

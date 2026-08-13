@@ -1,13 +1,13 @@
+from datetime import UTC, datetime
+from enum import StrEnum
+
+from pydantic import BaseModel, ConfigDict, Field
+
 """Universal Enterprise Architecture Frameworks Domain Model.
 
 Provides a Unifying Architecture Abstraction Layer supporting reference,
 mapping, integration, and extension across 12 global EA categories.
 """
-
-from datetime import UTC, datetime
-from enum import StrEnum
-
-from pydantic import BaseModel, ConfigDict, Field
 
 
 class FrameworkMetadataVO(BaseModel):

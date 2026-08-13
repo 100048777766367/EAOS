@@ -1,9 +1,9 @@
-"""Mô hình DTO cho hệ thống Năng lực Doanh nghiệp (CAPABILITIES)."""
-
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import StrEnum
+
+"""Mô hình DTO cho hệ thống Năng lực Doanh nghiệp (CAPABILITIES)."""
 
 
 class CapabilityLevel(StrEnum):

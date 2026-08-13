@@ -1,8 +1,0 @@
-﻿{
-  "llm_provider": "ollama",
-  "ollama": {
-    "base_url": "http://localhost:11434",
-    "default_model": "llama3",
-    "available_models": ["llama3", "qwen3.6"]
-  }
-}

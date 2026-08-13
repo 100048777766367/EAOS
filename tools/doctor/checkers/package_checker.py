@@ -1,10 +1,10 @@
-"""Package Checker inspecting monorepo package structure."""
-
 from __future__ import annotations
 
 from pathlib import Path
 
 from tools.doctor.dto import DiagnosticCheckDTO
+
+"""Package Checker inspecting monorepo package structure."""
 
 
 class PackageChecker:

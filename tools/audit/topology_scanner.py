@@ -1,11 +1,12 @@
-"""Enterprise Architecture Topology Scanner & Asset Discovery Engine."""
-
 import json
 import logging
 from pathlib import Path
 from typing import ClassVar
 
 from pydantic import BaseModel, ConfigDict
+
+"""Enterprise Architecture Topology Scanner & Asset Discovery Engine."""
+
 
 logger = logging.getLogger(__name__)
 

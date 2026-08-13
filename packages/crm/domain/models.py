@@ -1,8 +1,8 @@
-"""CRM and Sales Lead Domain Model for EAOS Capability App."""
-
 from datetime import UTC, datetime
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""CRM and Sales Lead Domain Model for EAOS Capability App."""
 
 
 class SalesLead(BaseModel):

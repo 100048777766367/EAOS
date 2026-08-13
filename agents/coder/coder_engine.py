@@ -1,6 +1,6 @@
-"""Động cơ viết code của Coder Agent."""
-
 from __future__ import annotations
+
+"""Động cơ viết code của Coder Agent."""
 
 
 class CoderEngine:

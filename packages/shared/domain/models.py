@@ -1,6 +1,6 @@
-"""Shared domain entity primitives and value objects for EAOS."""
-
 from pydantic import BaseModel, ConfigDict
+
+"""Shared domain entity primitives and value objects for EAOS."""
 
 
 class EntityID(BaseModel):

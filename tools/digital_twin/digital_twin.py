@@ -18,7 +18,7 @@ class DigitalTwinOrchestrator:
         proposed_layer = proposal.get("layer", "infrastructure")
         validator = ArchitectureValidator(self.root_dir)
         validator.run_all_checks()
-        simulated_violations = list(validator.violations)
+        simulated_violations = list(getattr(validator, "violations", []))
         LAYER_PRIORITY = {"domain": 0, "application": 1, "infrastructure": 2}
         proposed_pri = LAYER_PRIORITY.get(proposed_layer.lower(), 99)
         extra_violations = [
@@ -28,7 +28,7 @@ class DigitalTwinOrchestrator:
         ]
         simulated_violations.extend(extra_violations)
         simulated_score = current_score
-        if len(simulated_violations) > len(validator.violations):
+        if len(simulated_violations) > len(getattr(validator, "violations", [])):
             simulated_score = max(0, simulated_score - 15)
         score_delta = simulated_score - current_score
         status = "APPROVED"
@@ -36,7 +36,7 @@ class DigitalTwinOrchestrator:
         if simulated_score < 80:
             status = "REJECTED"
             recommendations.append("Từ chối Rollout: Điểm số sức khỏe giả lập sụt giảm dưới 80.")
-        if len(simulated_violations) > len(validator.violations):
+        if len(simulated_violations) > len(getattr(validator, "violations", [])):
             status = "REJECTED"
             recommendations.append("Từ chối Rollout: Phát hiện vi phạm ranh giới phân lớp giả lập.")
         if status == "APPROVED":

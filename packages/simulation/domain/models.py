@@ -1,10 +1,10 @@
-"""Domain Models for Simulation Engine."""
-
 from datetime import UTC, datetime
 from enum import StrEnum
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Domain Models for Simulation Engine."""
 
 
 class BranchEnvironmentType(StrEnum):
@@ -58,9 +58,7 @@ class ComparativeResearchReport(BaseModel):
 
     report_id: str
     experiment_name: str
-    timestamp: datetime = Field(
-        default_factory=lambda: datetime.now(UTC)
-    )
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(UTC))
     alpha_evidence: EmpiricalEvidence
     beta_evidence: EmpiricalEvidence
     deltas: list[MetricDelta]

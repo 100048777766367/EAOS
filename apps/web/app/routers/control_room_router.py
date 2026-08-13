@@ -1,11 +1,12 @@
-"""Control Room Router cho apps/web."""
-
 from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse
 
 from apps.web.app.presenters.control_room_presenter import ControlRoomPresenter
+
+"""Control Room Router cho apps/web."""
+
 
 router = APIRouter(prefix="", tags=["Web Control Room"])
 

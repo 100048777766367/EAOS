@@ -1,8 +1,8 @@
-"""Laptop Environment Readiness Checker for EAOS Local Deployment."""
-
 import shutil
 
 from pydantic import BaseModel, ConfigDict
+
+"""Laptop Environment Readiness Checker for EAOS Local Deployment."""
 
 
 class EnvironmentCheckDTO(BaseModel):

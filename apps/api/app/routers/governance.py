@@ -3,9 +3,15 @@
 from typing import Any
 
 from fastapi import APIRouter
-from kernel.governance.constitution_amendment import AmendmentProposal, ConstitutionalAmendmentEngine
+from kernel.governance.constitution_amendment import (
+    AmendmentProposal,
+    ConstitutionalAmendmentEngine,
+)
 from kernel.governance.zkp_merkle import MerkleBlockProof, MerkleLedgerVerifier
-from tools.graph.system_integration_auditor import DirectoryConnectivityDTO, SystemIntegrationAuditor
+from tools.graph.system_integration_auditor import (
+    DirectoryConnectivityDTO,
+    SystemIntegrationAuditor,
+)
 from tools.validate.pre_commit_hook import PreCommitASTHookEngine
 
 from apps.api.app.container import ROOT_PATH, knowledge_repo, policy_evaluator
@@ -46,7 +52,9 @@ async def audit_system_topology_connectivity() -> DirectoryConnectivityDTO:
 
 
 @router.post("/rego/compile-eval")
-async def compile_eval_rego(request: RegoEvalRequest | dict[str, Any]) -> dict[str, Any]:
+async def compile_eval_rego(
+    request: RegoEvalRequest | dict[str, Any],
+) -> dict[str, Any]:
     script = str(request.get("rego_script", "")) if isinstance(request, dict) else request.rego_script
     payload = request.get("payload", {}) if isinstance(request, dict) else request.payload
     passed, results = policy_evaluator.compile_and_eval(rego_script=script, input_payload=payload)

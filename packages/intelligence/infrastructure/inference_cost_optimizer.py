@@ -1,8 +1,8 @@
-"""Inference Cost Optimization Engine for Zero/Low-Cost AI Execution."""
-
 import time
 
 from pydantic import BaseModel, ConfigDict
+
+"""Inference Cost Optimization Engine for Zero/Low-Cost AI Execution."""
 
 
 class InferenceOptimizationResultDTO(BaseModel):

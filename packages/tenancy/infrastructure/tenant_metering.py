@@ -1,8 +1,8 @@
-"""Tenant resource metering and quota enforcement guard for EAOS multi-tenancy."""
-
 from typing import ClassVar
 
 from pydantic import BaseModel, ConfigDict
+
+"""Tenant resource metering and quota enforcement guard for EAOS multi-tenancy."""
 
 
 class TenantQuotaCheck(BaseModel):

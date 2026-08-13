@@ -1,9 +1,9 @@
-"""Policy Enforcement Middleware for EAOS API Gateway."""
-
 from collections.abc import Awaitable, Callable
 
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
+
+"""Policy Enforcement Middleware for EAOS API Gateway."""
 
 
 class PolicyEnforcementMiddleware(BaseHTTPMiddleware):

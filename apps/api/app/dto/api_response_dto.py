@@ -1,8 +1,8 @@
-"""API Response and Request DTOs."""
-
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""API Response and Request DTOs."""
 
 
 class HealthResponse(BaseModel):

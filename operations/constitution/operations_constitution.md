@@ -1,6 +1,6 @@
 # EAOS Operations Constitution v1.0
 
-> **Status:** FROZEN (CENTENNIAL EDITION)  
+> **Status:** FROZEN (CENTENNIAL EDITION)
 > **Scope:** Enterprise Operations Governance (100-Year Life Span)
 
 ## Immutable Operations Rules

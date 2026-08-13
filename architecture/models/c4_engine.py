@@ -1,6 +1,6 @@
-"""Động cơ kiểm toán C4 Metamodel và 52 Canonical Layers."""
-
 from __future__ import annotations
+
+"""Động cơ kiểm toán C4 Metamodel và 52 Canonical Layers."""
 
 
 class C4Engine:

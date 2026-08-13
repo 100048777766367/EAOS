@@ -1,11 +1,11 @@
-"""Enterprise Memory Domain Models (v4.x Autonomous Learning)."""
-
 from __future__ import annotations
 
 from datetime import UTC, datetime
 from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Enterprise Memory Domain Models (v4.x Autonomous Learning)."""
 
 
 class MemoryCategory(StrEnum):

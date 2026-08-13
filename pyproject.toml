@@ -60,7 +60,8 @@ dependencies = [
     "opentelemetry-sdk>=1.23.0",
     "opentelemetry-exporter-otlp-proto-http>=1.23.0",
     "neo4j>=5.18.0",
-    "jinja2>=3.1.6"
+    "jinja2>=3.1.6",
+    "python-dotenv>=1.2.2",
 ]
 
 [build-system]
@@ -74,9 +75,21 @@ packages = []
 managed = true
 package = false
 default-groups = ["dev"]
+
+# IMPORTANT:
+# Do not use "apps/*" here because apps/runtime is runtime data,
+# not a Python workspace package.
 workspace = { members = [
-    "apps/*",
+    "apps/api",
+    "apps/agent",
+    "apps/cli",
+    "apps/desktop",
+    "apps/web",
+    "apps/automation",
+    "apps/ledger",
+
     "packages/*",
+
     "platforms",
     "designs",
     "locales",
@@ -106,35 +119,94 @@ dev = [
     "mypy>=1.8.0",
     "taskipy>=1.12.0",
     "httpx>=0.28.1",
-    "types-pyyaml>=6.0.12.20260724"
+    "types-pyyaml>=6.0.12.20260724",
+    "pytest-playwright>=0.9.0",
 ]
 
 [tool.ruff]
-target-version = "py314"
+target-version = "py312"
 line-length = 120
 fix = true
 show-fixes = true
 output-format = "concise"
+
 src = [
-    "apps", "packages", "kernel", "engine", "tools", "platforms", 
-    "capabilities", "governances", "federations", "observabilitys", 
-    "securitys", "agents", "ai", "runtime", "schemas", "sdk", 
-    "validation", "services", "designs", "locales"
+    "apps",
+    "packages",
+    "kernel",
+    "engine",
+    "tools",
+    "platforms",
+    "capabilities",
+    "governances",
+    "federations",
+    "observabilitys",
+    "securitys",
+    "agents",
+    "ai",
+    "runtime",
+    "schemas",
+    "sdk",
+    "validation",
+    "services",
+    "designs",
+    "locales"
 ]
+
 exclude = [
-    ".venv", "venvss", "build", "dist", "generated", ".git", 
-    "venv", ".ruff_cache", ".pytest_cache", ".pytest_tmp", 
-    ".mypy_cache", "runtime/tmp", ".vscode", ".github", ".agents"
+    ".venv",
+    "venvss",
+    "build",
+    "dist",
+    "generated",
+    ".git",
+    "venv",
+    ".ruff_cache",
+    ".pytest_cache",
+    ".pytest_tmp",
+    ".mypy_cache",
+    "runtime/tmp",
+    ".eaos-repair-backup",
+    ".vscode",
+    ".github",
+    ".eaos_contract_backup_20260808_185550",
+    ".eaos_backups",
+    ".memory",
+    ".agents"
 ]
 
 [tool.ruff.lint]
 select = [
-    "E", "F", "I", "UP", "B", "SIM", "C4", "RET", "RUF", "PIE", "PERF", "S"
+    "E",
+    "F",
+    "I",
+    "UP",
+    "B",
+    "SIM",
+    "C4",
+    "RET",
+    "RUF",
+    "PIE",
+    "PERF",
+    "S"
 ]
+
 ignore = [
-    "RUF001", "RUF002", "RUF003", "S101",
-    "S102", "S105", "S106", "S107", "S108",
-    "S110", "S112", "S310", "S311", "S603", "S607"
+    "RUF001",
+    "RUF002",
+    "RUF003",
+    "S101",
+    "S102",
+    "S105",
+    "S106",
+    "S107",
+    "S108",
+    "S110",
+    "S112",
+    "S310",
+    "S311",
+    "S603",
+    "S607"
 ]
 
 [tool.ruff.format]
@@ -166,6 +238,7 @@ strict_equality = true
 check_untyped_defs = true
 show_error_codes = true
 pretty = true
+
 exclude = [
     "^build/",
     "^dist/",
@@ -179,6 +252,7 @@ exclude = [
 [tool.taskipy.tasks]
 doctor = "python -m tools.doctor.main"
 validate = "python -m apps.cli.main validate"
+control_plane = "python -m apps.cli.main control-plane"
 server = "python -m uvicorn apps.api.app.main:app --host 0.0.0.0 --port 8000"
 run = "python -m kernel.runtime.main"
 lint = "python -m ruff check --fix --unsafe-fixes . && python -m mypy apps/ kernel/ engine/ packages/ tools/ platforms/ capabilities/ governances/ federations/ observabilitys/ securitys/"
@@ -231,11 +305,38 @@ eaos-l2l-bus = { workspace = true }
 
 [tool.pytest.ini_options]
 pythonpath = [
-    ".", "packages", "apps", "platforms", "capabilities", 
-    "tools", "kernel", "engine", "governances", "federations", 
-    "observabilitys", "securitys", "agents", "ai", "runtime"
+    ".",
+    "packages",
+    "apps",
+    "platforms",
+    "capabilities",
+    "tools",
+    "kernel",
+    "engine",
+    "governances",
+    "federations",
+    "observabilitys",
+    "securitys",
+    "agents",
+    "ai",
+    "runtime"
 ]
+
 addopts = "-ra -q --tb=short --basetemp=runtime/tmp -p no:warnings"
-testpaths = ["tests", "fitness"]
+
+testpaths = [
+    "tests",
+    "fitness"
+]
+
 tmp_path_retention_count = 1
 tmp_path_retention_policy = "none"
+
+[tool.poe.tasks]
+sanitize = "python fix_syntax.py"
+lint = [
+    "sanitize",
+    "ruff check --fix",
+    "ruff format"
+]
+check-security = "python scripts/check_invisible_chars.py"

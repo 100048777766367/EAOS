@@ -1,8 +1,8 @@
-"""Sales Bounded Context Definition (DDD Pattern)."""
-
 from __future__ import annotations
 
 from contexts.crm.crm_context import BoundedContextDTO
+
+"""Sales Bounded Context Definition (DDD Pattern)."""
 
 
 class SalesContextRegistry:

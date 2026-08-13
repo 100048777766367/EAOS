@@ -1,8 +1,8 @@
-"""Markdown Formatter for Enterprise Doctor Report."""
-
 from __future__ import annotations
 
 from tools.doctor.dto import DiagnosticReportDTO
+
+"""Markdown Formatter for Enterprise Doctor Report."""
 
 
 class MarkdownReporter:

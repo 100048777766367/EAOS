@@ -1,5 +1,3 @@
-"""Identity Application Use Cases (S-Tier Capability)."""
-
 from __future__ import annotations
 
 import uuid
@@ -11,6 +9,8 @@ from pydantic import BaseModel, EmailStr
 
 from packages.identity.domain.models import User
 from packages.identity.domain.ports import UserRepository
+
+"""Identity Application Use Cases (S-Tier Capability)."""
 
 
 class RegisterUserRequest(BaseModel):

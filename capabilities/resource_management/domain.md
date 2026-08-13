@@ -1,0 +1,1 @@
+# resource Specification: domain.md

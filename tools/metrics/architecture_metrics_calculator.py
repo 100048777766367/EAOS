@@ -1,10 +1,10 @@
-"""Architecture metrics calculator analyzing package instability and distance."""
-
 import json
 from pathlib import Path
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict
+
+"""Architecture metrics calculator analyzing package instability and distance."""
 
 
 class PackageMetricDTO(BaseModel):

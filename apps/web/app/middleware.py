@@ -1,10 +1,10 @@
-"""Web UI Security and Performance Middleware."""
-
 import time
 from collections.abc import Awaitable, Callable
 
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
+
+"""Web UI Security and Performance Middleware."""
 
 
 class WebSecurityHeadersMiddleware(BaseHTTPMiddleware):
@@ -24,7 +24,5 @@ class WebSecurityHeadersMiddleware(BaseHTTPMiddleware):
         response.headers["X-Frame-Options"] = "DENY"
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["X-XSS-Protection"] = "1; mode=block"
-        response.headers["Referrer-Policy"] = (
-            "strict-origin-when-cross-origin"
-        )
+        response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
         return response

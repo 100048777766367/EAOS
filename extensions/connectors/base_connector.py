@@ -1,10 +1,10 @@
-"""Base Connector Protocol for Third-Party Integrations."""
-
 from __future__ import annotations
 
 from typing import Protocol, runtime_checkable
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Base Connector Protocol for Third-Party Integrations."""
 
 
 class ConnectorStatusDTO(BaseModel):

@@ -1,0 +1,116 @@
+<aside
+    class="eaos-activity-bar w-12 bg-[#030712] border-r border-slate-800 flex flex-col items-center py-3 shrink-0 text-slate-400 select-none"
+    aria-label="EAOS Activity Bar"
+>
+    <!-- Primary navigation -->
+    <nav
+        class="eaos-activity-nav flex flex-col items-center gap-2"
+        aria-label="Workspace Navigation"
+    >
+
+        <button
+            id="act-explorer"
+            type="button"
+            class="act-btn active w-9 h-9 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center border border-cyan-500/30 transition-all"
+            title="File Explorer"
+            aria-label="File Explorer"
+            aria-pressed="true"
+            data-activity="explorer"
+        >
+            <span
+                class="text-base leading-none"
+                aria-hidden="true"
+            >📁</span>
+        </button>
+
+        <button
+            id="act-search"
+            type="button"
+            class="act-btn w-9 h-9 rounded-lg hover:bg-slate-800/80 hover:text-slate-200 flex items-center justify-center border border-transparent transition-all"
+            title="Global Search"
+            aria-label="Global Search"
+            aria-pressed="false"
+            data-activity="search"
+        >
+            <span
+                class="text-base leading-none"
+                aria-hidden="true"
+            >🔍</span>
+        </button>
+
+        <button
+            id="act-source-control"
+            type="button"
+            class="act-btn w-9 h-9 rounded-lg hover:bg-slate-800/80 hover:text-slate-200 flex items-center justify-center border border-transparent transition-all relative"
+            title="Git Source Control"
+            aria-label="Git Source Control"
+            aria-pressed="false"
+            data-activity="source-control"
+        >
+            <span
+                class="text-base leading-none"
+                aria-hidden="true"
+            >🌿</span>
+
+            <span
+                class="absolute top-1 right-1 w-2 h-2 rounded-full bg-cyan-400"
+                aria-label="Source control changes"
+            ></span>
+        </button>
+
+        <button
+            id="act-ai-studio"
+            type="button"
+            class="act-btn w-9 h-9 rounded-lg hover:bg-slate-800/80 hover:text-slate-200 flex items-center justify-center border border-transparent transition-all"
+            title="AI Studio Hub"
+            aria-label="AI Studio Hub"
+            aria-pressed="false"
+            data-activity="ai-studio"
+        >
+            <span
+                class="text-base leading-none"
+                aria-hidden="true"
+            >🤖</span>
+        </button>
+
+        <button
+            id="act-doctor"
+            type="button"
+            class="act-btn w-9 h-9 rounded-lg hover:bg-slate-800/80 hover:text-slate-200 flex items-center justify-center border border-transparent transition-all"
+            title="System Doctor Diagnostics"
+            aria-label="System Doctor Diagnostics"
+            aria-pressed="false"
+            data-activity="doctor"
+        >
+            <span
+                class="text-base leading-none"
+                aria-hidden="true"
+            >🩺</span>
+        </button>
+
+    </nav>
+
+    <!-- Spacer -->
+    <div class="flex-1"></div>
+
+    <!-- Secondary / system navigation -->
+    <nav
+        class="eaos-activity-system flex flex-col items-center gap-2"
+        aria-label="System Navigation"
+    >
+
+        <button
+            id="btn-settings"
+            type="button"
+            class="act-btn w-9 h-9 rounded-lg hover:bg-slate-800/80 hover:text-slate-200 flex items-center justify-center border border-transparent transition-all"
+            title="Settings"
+            aria-label="Settings"
+        >
+            <span
+                class="text-base leading-none"
+                aria-hidden="true"
+            >⚙️</span>
+        </button>
+
+    </nav>
+</aside>

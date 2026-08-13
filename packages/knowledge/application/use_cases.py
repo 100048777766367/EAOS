@@ -17,7 +17,7 @@ class StoreKnowledgeUseCase:
         self.repository = repository
 
     def execute(self, request: StoreKnowledgeRequest) -> KnowledgeArtifact:
-        # Ãp dá»¥ng quy táº¯c nghiá»‡p vá»¥ (vÃ­ dá»¥: lá»c/chuáº©n hÃ³a dá»¯ liá»‡u Ä‘áº§u vÃ o)
+        # Ãp dá»¥ng quy táº¯c nghiá»‡p vá»¥ (vÃ­ dá»¥: lá»c/chuáº©n hÃ³a dá»¯ liá»‡u Ä‘áº§u vÃ o)
         artifact = KnowledgeArtifact(
             title=request.title.strip(),
             content=request.content.strip(),

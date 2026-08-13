@@ -6,7 +6,7 @@ from pydantic import BaseModel, ConfigDict, Field
 class LinkedGraphNode(BaseModel):
     """SÆ¡ Ä‘á»“ nÃºt liÃªn káº¿t ngá»¯ nghÄ©a liÃªn doanh nghiá»‡p báº±ng RDF (Sprint 3)."""
 
-    uri: str = Field(..., description="Äá»‹a chá»‰ URI Ä‘á»‹nh danh ngá»¯ nghÄ©a toÃ n cáº§u")
+    uri: str = Field(..., description="Äá»‹a chá»‰ URI Ä‘á»‹nh danh ngá»¯ nghÄ©a toÃ n cáº§u")
     relation: str = Field(..., description="Quan há»‡: hasSharedPolicy, trustMember")
     target_uri: str = Field(..., description="Äá»‹a chá»‰ URI cá»§a nÃºt Ä‘Ã­ch")
 

@@ -1,8 +1,8 @@
-"""Code Generator Domain Models (Phase 3)."""
-
 from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Code Generator Domain Models (Phase 3)."""
 
 
 class GeneratedArtifact(BaseModel):

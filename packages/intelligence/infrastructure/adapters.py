@@ -1,8 +1,8 @@
-"""Infrastructure adapters for AI intelligence domain."""
-
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict
+
+"""Infrastructure adapters for AI intelligence domain."""
 
 
 class ModelDriftReport(BaseModel):

@@ -4,6 +4,8 @@ Manages discovery, registration, health monitoring, and graceful shutdown
 across all delivery channels (api, web, cli, agent, desktop, automation, ledger).
 """
 
+from __future__ import annotations
+
 import os
 import time
 from typing import ClassVar
@@ -125,9 +127,7 @@ class AppsManager:
         if app_id not in self._registered_apps:
             return None
 
-        status = self._app_statuses.get(
-            app_id, AppLifecycleStatus.REGISTERED
-        )
+        status = self._app_statuses.get(app_id, AppLifecycleStatus.REGISTERED)
         start_time = self._start_times.get(app_id, time.time())
         uptime = time.time() - start_time if status == AppLifecycleStatus.HEALTHY else 0.0
 
@@ -151,9 +151,7 @@ class AppsManager:
                 if health.status == AppLifecycleStatus.HEALTHY:
                     healthy_count += 1
 
-        overall = (
-            "HEALTHY" if healthy_count == len(self._registered_apps) else "DEGRADED"
-        )
+        overall = "HEALTHY" if healthy_count == len(self._registered_apps) else "DEGRADED"
 
         return AppMatrixSummaryDTO(
             total_apps=len(self._registered_apps),

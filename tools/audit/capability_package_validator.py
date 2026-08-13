@@ -1,9 +1,9 @@
-"""Validator auditing 58 Capability Packages for 7-file compliance."""
-
 from pathlib import Path
 from typing import ClassVar
 
 from pydantic import BaseModel, ConfigDict
+
+"""Validator auditing 58 Capability Packages for 7-file compliance."""
 
 
 class CapabilityPackageStatusDTO(BaseModel):

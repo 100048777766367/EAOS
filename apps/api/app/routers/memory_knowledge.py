@@ -8,7 +8,11 @@ from packages.memory.application.handlers import StoreMemoryHandler
 from packages.memory.domain.entities import MemoryRecord
 from packages.memory.infrastructure.hybrid_graph_vector import HybridSearchResult
 
-from apps.api.app.container import idempotency_service, knowledge_graph_adapter, memory_repo
+from apps.api.app.container import (
+    idempotency_service,
+    knowledge_graph_adapter,
+    memory_repo,
+)
 
 router = APIRouter(tags=["Memory & Search"])
 

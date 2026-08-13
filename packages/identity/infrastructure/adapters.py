@@ -1,6 +1,6 @@
-"""Infrastructure adapters for user identity management."""
-
 from typing import Any
+
+"""Infrastructure adapters for user identity management."""
 
 
 class InMemoryUserRepository:

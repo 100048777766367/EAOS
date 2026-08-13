@@ -4,7 +4,7 @@ from packages.evolution.domain.models import EvolutionObject
 
 
 class SemanticLayer:
-    """Lá»›p ngá»¯ nghÄ©a dá»‹ch chuyá»ƒn tri thá»©c EAOS sang dáº¡ng JSON-LD vÃ  RDF."""
+    """Lá»›p ngá»¯ nghÄ©a dá»‹ch chuyá»ƒn tri thá»©c EAOS sang dáº¡ng JSON-LD vÃ  RDF."""
 
     @staticmethod
     def to_json_ld(obj: EvolutionObject) -> dict[str, Any]:
@@ -29,7 +29,7 @@ class SemanticLayer:
 
     @staticmethod
     def to_rdf_triples(obj: EvolutionObject) -> list[str]:
-        """BiÃªn dá»‹ch thÃ nh cÃ¡c bá»™ ba RDF (N-Triples) cho AI/AGI quÃ©t."""
+        """BiÃªn dá»‹ch thÃ nh cÃ¡c bá»™ ba RDF (N-Triples) cho AI/AGI quÃ©t."""
         subject = f"<https://eaos.internal/objects/{obj.id}>"
         rdf_triples = [
             (

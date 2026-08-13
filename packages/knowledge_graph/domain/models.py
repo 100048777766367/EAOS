@@ -1,8 +1,8 @@
-"""Domain models for Knowledge Graph context."""
-
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from enum import Enum, auto
+
+"""Domain models for Knowledge Graph context."""
 
 
 class NodeType(Enum):

@@ -1,8 +1,8 @@
-"""Application use cases for Accounting General Ledger."""
-
 import uuid
 
 from packages.accounting.domain.models import GeneralLedgerRecord
+
+"""Application use cases for Accounting General Ledger."""
 
 
 class PostLedgerRecordUseCase:

@@ -1,0 +1,56 @@
+from __future__ import annotations
+
+from pathlib import Path
+
+from dxs.application.compatibility_service import CompatibilityService
+from dxs.application.repository_doctor import RepositoryDoctor
+from dxs.application.validate_repository import RepositoryValidator
+from dxs.contracts.versioning import ContractVersion
+from dxs.domain.compatibility import CompatibilityResult
+from dxs.domain.repository import RepositoryContext
+from dxs.domain.validation import ValidationResult
+from dxs.ports.repository_context import RepositoryContextProvider
+
+
+class RepositoryApplication:
+    """Application facade for DXS repository operations."""
+
+    def __init__(
+        self,
+        context_provider: RepositoryContextProvider,
+        compatibility_service: CompatibilityService,
+    ) -> None:
+        self._context_provider = context_provider
+        self._doctor = RepositoryDoctor()
+        self._validator = RepositoryValidator()
+        self._compatibility = compatibility_service
+
+    def discover(
+        self,
+        root: Path,
+    ) -> RepositoryContext:
+        return self._context_provider.discover(root)
+
+    def inspect(
+        self,
+        root: Path,
+    ) -> list[str]:
+        context = self.discover(root)
+        return self._doctor.inspect(context)
+
+    def validate(
+        self,
+        root: Path,
+    ) -> list[ValidationResult]:
+        context = self.discover(root)
+        return self._validator.validate(context)
+
+    def compatibility(
+        self,
+        current: ContractVersion,
+        target: ContractVersion,
+    ) -> CompatibilityResult:
+        return self._compatibility.check(
+            current=current,
+            target=target,
+        )

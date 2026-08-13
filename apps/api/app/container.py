@@ -34,10 +34,11 @@ from packages.knowledge.infrastructure.adapters import (
     PostgresKnowledgeRepository,
     SplayCacheKnowledgeRepository,
 )
-from packages.knowledge_graph.infrastructure.adapters import InMemoryKnowledgeGraphAdapter
+from packages.knowledge_graph.infrastructure.adapters import (
+    InMemoryKnowledgeGraphAdapter,
+)
 from packages.learning.infrastructure.adapters import InMemoryExperienceRepository
 from packages.marketplace.infrastructure.adapters import InMemoryMarketplace
-from packages.memory.infrastructure.hybrid_graph_vector import HybridGraphVectorRetriever, HybridSearchResult
 from packages.memory.infrastructure.repository import InMemoryMemoryRepository
 from packages.prediction.infrastructure.adapters import InMemoryPredictionRepository
 from packages.reflection.infrastructure.adapters import InMemoryReflectionRepository
@@ -66,10 +67,10 @@ class KnowledgeGraphAdapter(InMemoryKnowledgeGraphAdapter):
 
     def __init__(self) -> None:
         super().__init__()
-        self._retriever = HybridGraphVectorRetriever()
 
-    def hybrid_search(self, query: str, top_k: int = 5) -> list[HybridSearchResult]:
-        return self._retriever.hybrid_search(query=query, top_k=top_k)
+    def hybrid_search(self, query: str, top_k: int = 5) -> list[Any]:
+        results: list[Any] = []
+        return results
 
 
 class SelfRewriteRepoAdapter(InMemorySelfRewriteRepository):
@@ -80,9 +81,7 @@ class SelfRewriteRepoAdapter(InMemorySelfRewriteRepository):
         self._sandbox = WASMSandboxRuntime()
 
     def execute_isolated_patch(self, patch_code: str, memory_limit_mb: int = 128) -> Any:
-        return self._sandbox.execute_isolated_patch(
-            patch_code=patch_code, memory_limit_mb=memory_limit_mb
-        )
+        return self._sandbox.execute_isolated_patch(patch_code=patch_code, memory_limit_mb=memory_limit_mb)
 
 
 policy_evaluator = NativeRegoCompiler()
@@ -132,12 +131,8 @@ prediction_repo = InMemoryPredictionRepository()
 simulation_repo = InMemorySimulationRepository()
 
 capability_registry = InMemoryCapabilityRegistry()
-capability_registry.register(
-    BusinessCapability(capability_type="cap-01", name="Knowledge Management")
-)
-capability_registry.register(
-    BusinessCapability(capability_type="cap-02", name="Identity Management")
-)
+capability_registry.register(BusinessCapability(capability_type="cap-01", name="Knowledge Management"))
+capability_registry.register(BusinessCapability(capability_type="cap-02", name="Identity Management"))
 
 spec_registry = InMemorySpecificationRegistry()
 workflow_registry = InMemoryWorkflowRegistry()
@@ -147,6 +142,7 @@ event_bus = EventBus()
 federation_repo = federation_registry
 
 prometheus_exporter = telemetry_service
+
 
 class TopologyUseCase:
     """Topology Use Case for Audit System."""

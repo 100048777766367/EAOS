@@ -1,7 +1,7 @@
-"""Web Application Settings."""
-
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+"""Web Application Settings."""
 
 
 class WebSettings(BaseSettings):

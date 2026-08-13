@@ -1,8 +1,8 @@
-"""Executable specification compiler and validator engine for EAOS specs."""
-
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict
+
+"""Executable specification compiler and validator engine for EAOS specs."""
 
 
 class SpecificationAuditDTO(BaseModel):

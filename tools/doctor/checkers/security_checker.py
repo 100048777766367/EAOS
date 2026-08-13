@@ -1,11 +1,11 @@
-"""Security Checker inspecting environment variables and secrets."""
-
 from __future__ import annotations
 
 import os
 from pathlib import Path
 
 from tools.doctor.dto import DiagnosticCheckDTO, SeverityLevel
+
+"""Security Checker inspecting environment variables and secrets."""
 
 
 class SecurityChecker:

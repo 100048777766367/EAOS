@@ -1,8 +1,8 @@
-"""AST Fitness Functions Domain Models (Phase 2)."""
-
 from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""AST Fitness Functions Domain Models (Phase 2)."""
 
 
 class ASTFitnessViolation(BaseModel):

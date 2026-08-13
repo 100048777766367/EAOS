@@ -1,8 +1,9 @@
-"""Identity domain schemas and DTOs."""
-
 from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
+
+"""Identity domain schemas and DTOs."""
+
 
 __all__ = ["UserRegisterRequest", "UserResponse", "UserRole"]
 

@@ -1,8 +1,8 @@
-"""Data payload rule validator engine for EAOS specifications."""
-
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict
+
+"""Data payload rule validator engine for EAOS specifications."""
 
 
 class ValidationCheckDTO(BaseModel):

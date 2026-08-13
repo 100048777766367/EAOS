@@ -1,5 +1,3 @@
-"""Sprint 3 Engine: Framework & Capability Registry for EAOS."""
-
 from __future__ import annotations
 
 import builtins
@@ -7,6 +5,8 @@ import builtins
 from pydantic import BaseModel, ConfigDict, Field
 
 from packages.frameworks.domain.models import FrameworkMetadataVO
+
+"""Sprint 3 Engine: Framework & Capability Registry for EAOS."""
 
 
 class FrameworkRegistry(BaseModel):

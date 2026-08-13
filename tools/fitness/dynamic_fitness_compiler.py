@@ -1,8 +1,8 @@
-"""Dynamic Architectural Fitness Function DSL compiler for EAOS."""
-
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict
+
+"""Dynamic Architectural Fitness Function DSL compiler for EAOS."""
 
 
 class FitnessEvaluation(BaseModel):

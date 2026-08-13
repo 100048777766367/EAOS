@@ -1,6 +1,6 @@
-"""Động cơ ứng dụng Agent Worker."""
-
 from __future__ import annotations
+
+"""Động cơ ứng dụng Agent Worker."""
 
 
 class AgentAppEngine:

@@ -1,11 +1,11 @@
-"""EAOS Doctor Orchestration Engine (SOLID OCP)."""
-
 from __future__ import annotations
 
 from pathlib import Path
 
 from tools.doctor.dto import DiagnosticCheckDTO, DiagnosticReportDTO
 from tools.doctor.registry import CheckerRegistry
+
+"""EAOS Doctor Orchestration Engine (SOLID OCP)."""
 
 
 class EAOSDoctorEngine:

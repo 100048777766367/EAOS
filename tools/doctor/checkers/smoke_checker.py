@@ -1,10 +1,10 @@
-"""Smoke Checker for basic workspace health."""
-
 from __future__ import annotations
 
 from pathlib import Path
 
 from tools.doctor.dto import DiagnosticCheckDTO, SeverityLevel
+
+"""Smoke Checker for basic workspace health."""
 
 
 class SmokeChecker:

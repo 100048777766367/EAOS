@@ -1,8 +1,9 @@
-"""Lifecycle service managing state enable/disable for capabilities."""
-
 import logging
 
 from engine.capability.registry import CapabilityRegistry
+
+"""Lifecycle service managing state enable/disable for capabilities."""
+
 
 logger = logging.getLogger(__name__)
 

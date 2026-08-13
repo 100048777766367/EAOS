@@ -1,8 +1,8 @@
-"""People & HR Management Domain Model for EAOS."""
-
 from datetime import UTC, datetime
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""People & HR Management Domain Model for EAOS."""
 
 
 class EmployeeProfile(BaseModel):

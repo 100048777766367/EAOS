@@ -1,11 +1,11 @@
-"""Sổ cái vết danh mục phần tử domain chống lượng tử."""
-
 from __future__ import annotations
 
 import hashlib
 import json
 import time
 from typing import Any
+
+"""Sổ cái vết danh mục phần tử domain chống lượng tử."""
 
 
 class QuantumCatalogLedger:

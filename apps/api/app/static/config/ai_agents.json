@@ -1,0 +1,8 @@
+﻿{
+  "agents": [
+    { "role": "architect", "name": "System Architect", "description": "High level system planning" },
+    { "role": "coder", "name": "Autonomous Coder", "description": "Patch generation and refactoring" },
+    { "role": "security", "name": "Security Auditor", "description": "Vulnerability scanning" },
+    { "role": "doctor", "name": "System Doctor", "description": "Workspace diagnostics" }
+  ]
+}

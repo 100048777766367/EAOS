@@ -1,6 +1,6 @@
-"""Domain entities and value objects for Automation context."""
-
 from pydantic import BaseModel, ConfigDict
+
+"""Domain entities and value objects for Automation context."""
 
 
 class AutomationStatusVO(BaseModel):

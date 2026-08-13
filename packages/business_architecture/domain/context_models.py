@@ -1,8 +1,8 @@
-"""Context Engine Domain Models (Phase 1)."""
-
 from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Context Engine Domain Models (Phase 1)."""
 
 
 class SystemContextPayload(BaseModel):

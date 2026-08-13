@@ -1,8 +1,8 @@
-"""Architecture Fitness Functions Evaluator Engine."""
-
 from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Architecture Fitness Functions Evaluator Engine."""
 
 
 class FitnessEvaluationDTO(BaseModel):

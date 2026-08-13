@@ -1,10 +1,11 @@
-"""Telemetry and Live SSE Stream UI Router."""
-
 import asyncio
 from collections.abc import AsyncGenerator
 
 from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
+
+"""Telemetry and Live SSE Stream UI Router."""
+
 
 router = APIRouter(prefix="/telemetry-ui", tags=["UI Telemetry"])
 
@@ -15,9 +16,7 @@ async def generate_ui_stream() -> AsyncGenerator[str]:
     while True:
         await asyncio.sleep(2)
         step += 1
-        data_json = (
-            f'{{"step": {step}, "active_users": 1, "agent_tasks": 3, "system_load": 0.12}}'
-        )
+        data_json = f'{{"step": {step}, "active_users": 1, "agent_tasks": 3, "system_load": 0.12}}'
         yield f"data: {data_json}\n\n"
 
 

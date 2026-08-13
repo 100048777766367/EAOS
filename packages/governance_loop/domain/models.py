@@ -1,8 +1,8 @@
-"""Domain models for Governance Loop bounded context."""
-
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from enum import Enum, auto
+
+"""Domain models for Governance Loop bounded context."""
 
 
 class LoopCadence(Enum):

@@ -1,11 +1,11 @@
-"""Knowledge Economy & Asset Valuation Domain Models (100-Year Life)."""
-
 from __future__ import annotations
 
 from datetime import UTC, datetime
 from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Knowledge Economy & Asset Valuation Domain Models (100-Year Life)."""
 
 
 class KnowledgeLifecycleState(StrEnum):

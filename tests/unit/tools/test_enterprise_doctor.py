@@ -1,5 +1,3 @@
-"""Unit test suite for Enterprise Doctor System."""
-
 from __future__ import annotations
 
 from pathlib import Path
@@ -7,6 +5,8 @@ from pathlib import Path
 from tools.doctor.engine import EAOSDoctorEngine
 from tools.doctor.reporters.console_reporter import ConsoleReporter
 from tools.doctor.reporters.json_reporter import JSONReporter
+
+"""Unit test suite for Enterprise Doctor System."""
 
 
 def test_doctor_engine_diagnosis(tmp_path: Path) -> None:

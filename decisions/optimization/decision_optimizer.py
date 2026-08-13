@@ -1,8 +1,8 @@
-"""Decision Optimizer Engine."""
-
 from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Decision Optimizer Engine."""
 
 
 class OptimizationResultDTO(BaseModel):

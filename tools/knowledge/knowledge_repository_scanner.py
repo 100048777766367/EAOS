@@ -1,8 +1,8 @@
-"""Knowledge repository scanner and organizational memory auditor for EAOS."""
-
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict
+
+"""Knowledge repository scanner and organizational memory auditor for EAOS."""
 
 
 class KnowledgeCategoryDTO(BaseModel):

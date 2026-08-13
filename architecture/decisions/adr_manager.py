@@ -1,8 +1,8 @@
-"""ADR manager module."""
-
 from __future__ import annotations
 
 from dataclasses import dataclass
+
+"""ADR manager module."""
 
 
 @dataclass

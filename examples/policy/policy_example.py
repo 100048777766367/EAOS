@@ -1,8 +1,8 @@
-"""OPA Rego Policy Evaluation Executable Example."""
-
 from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""OPA Rego Policy Evaluation Executable Example."""
 
 
 class PolicyExampleResultDTO(BaseModel):

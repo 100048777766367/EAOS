@@ -1,8 +1,8 @@
-"""Infrastructure adapter loading declarative Policy-as-Code YAML manifests."""
-
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict
+
+"""Infrastructure adapter loading declarative Policy-as-Code YAML manifests."""
 
 
 class PolicyManifestDTO(BaseModel):

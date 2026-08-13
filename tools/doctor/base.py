@@ -1,10 +1,10 @@
-"""Base Protocol for Plugin Checkers (Enterprise Plugin API)."""
-
 from __future__ import annotations
 
 from typing import Protocol, runtime_checkable
 
 from tools.doctor.dto import DiagnosticCheckDTO
+
+"""Base Protocol for Plugin Checkers (Enterprise Plugin API)."""
 
 
 @runtime_checkable

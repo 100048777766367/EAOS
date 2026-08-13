@@ -1,0 +1,37 @@
+<div id="pane-right-inspector" class="w-64 bg-[#060b17] border-l border-slate-800/80 p-3 space-y-4 shrink-0 text-xs font-sans overflow-y-auto transition-all duration-200">
+    <div class="space-y-1.5">
+        <label class="font-bold text-slate-400 text-[11px] uppercase tracking-wider block">Agent Role Selector</label>
+        <select id="agent-role-select" class="w-full bg-[#080d1a] border border-slate-700 rounded p-2 text-xs text-slate-200 font-mono cursor-pointer">
+            <option value="agent-coder">Coder Agent</option>
+            <option value="planner">Planner Agent</option>
+            <option value="architect">Architect Agent</option>
+            <option value="security-guard">Security Guard Agent</option>
+        </select>
+    </div>
+
+    <div class="space-y-2 bg-[#040814] p-3 rounded-lg border border-slate-800 font-mono">
+        <span class="font-bold text-slate-400 text-[10px] uppercase tracking-wider block">Swarm Telemetry</span>
+        <div class="flex justify-between items-center text-[11px]">
+            <span class="text-slate-400">Doctor Health:</span>
+            <span class="text-emerald-400 font-bold">100% OK</span>
+        </div>
+        <div class="flex justify-between items-center text-[11px]">
+            <span class="text-slate-400">Governance:</span>
+            <span class="text-cyan-400">Compliant</span>
+        </div>
+        <div class="flex justify-between items-center text-[11px]">
+            <span class="text-slate-400">Pytest Gate:</span>
+            <span class="text-emerald-400">237 Passed</span>
+        </div>
+    </div>
+
+    <div class="space-y-2">
+        <span class="font-bold text-slate-400 text-[10px] uppercase tracking-wider block">Quick Actions</span>
+        <button id="btn-quick-doctor" type="button" class="w-full py-2 px-3 bg-slate-800/80 hover:bg-slate-700 border border-slate-700 rounded-lg text-slate-200 text-xs text-left cursor-pointer">
+            <span>🩺 Run Doctor Audit</span>
+        </button>
+        <button id="btn-quick-patch" type="button" class="w-full py-2 px-3 bg-slate-800/80 hover:bg-slate-700 border border-slate-700 rounded-lg text-slate-200 text-xs text-left cursor-pointer">
+            <span>⚡ Generate Kernel Patch</span>
+        </button>
+    </div>
+</div>

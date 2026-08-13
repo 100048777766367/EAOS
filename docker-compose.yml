@@ -2,6 +2,7 @@ services:
   postgres:
     image: pgvector/pgvector:pg16
     container_name: eaos-postgres
+    restart: unless-stopped
     environment:
       POSTGRES_DB: eaos
       POSTGRES_USER: eaos
@@ -28,10 +29,11 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-      
+
   minio:
     image: minio/minio:latest
     container_name: eaos-minio
+    restart: unless-stopped
     command: server /data --console-address ":9001"
     environment:
       MINIO_ROOT_USER: eaos
@@ -42,7 +44,7 @@ services:
     volumes:
       - minio_data:/data
     healthcheck:
-      test: ["CMD-SHELL","curl -f http://localhost:9000/minio/health/live || exit 1"]
+      test: ["CMD-SHELL", "curl -f http://localhost:9000/minio/health/live || exit 1"]
       interval: 30s
       timeout: 5s
       retries: 3
@@ -59,6 +61,7 @@ services:
   neo4j:
     image: neo4j:5-community
     container_name: eaos-neo4j
+    restart: unless-stopped
     environment:
       NEO4J_AUTH: neo4j/eaos_secret_pass
     ports:
@@ -67,16 +70,17 @@ services:
     volumes:
       - neo4j_data:/data
       - neo4j_logs:/logs
-    restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:7474/ || exit 1"]
-      interval: 30s
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:7474/ || exit 1"]
+      interval: 15s
       timeout: 10s
       retries: 5
+      start_period: 30s
 
   ollama:
     image: ollama/ollama:latest
     container_name: eaos-ollama
+    restart: unless-stopped
     ports:
       - "11434:11434"
     volumes:
@@ -85,9 +89,10 @@ services:
   otel-collector:
     image: otel/opentelemetry-collector-contrib:latest
     container_name: eaos-otel
+    restart: unless-stopped
     command: ["--config=/etc/otel/config.yaml"]
     volumes:
-      - ./observability/otel/config.yaml:/etc/otel/config.yaml
+      - ./infra/compose/observability/otel/config.yaml:/etc/otel/config.yaml
     ports:
       - "4317:4317"
       - "4318:4318"
@@ -95,16 +100,17 @@ services:
   prometheus:
     image: prom/prometheus:latest
     container_name: eaos-prometheus
+    restart: unless-stopped
     volumes:
       - ./observability/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
       - prometheus_data:/prometheus
     ports:
       - "9090:9090"
-    restart: unless-stopped
 
   grafana:
     image: grafana/grafana:latest
     container_name: eaos-grafana
+    restart: unless-stopped
     environment:
       GF_SECURITY_ADMIN_PASSWORD: admin
     ports:
@@ -114,9 +120,21 @@ services:
       - ./observability/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
       - ./observability/grafana/dashboards:/etc/grafana/provisioning/dashboards/files
       - grafana_data:/var/lib/grafana
-    restart: unless-stopped
 
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: eaos-open-webui
+    restart: unless-stopped
+    depends_on:
+      - ollama
+    environment:
+      OLLAMA_BASE_URL: http://eaos-ollama:11434
+    ports:
+      - "8080:8080"
+    volumes:
+      - open_webui_data:/app/backend/data
 volumes:
+  open_webui_data:
   qdrant_data:
   pgdata:
   ollama_data:
@@ -125,3 +143,4 @@ volumes:
   minio_data:
   prometheus_data:
   grafana_data:
+

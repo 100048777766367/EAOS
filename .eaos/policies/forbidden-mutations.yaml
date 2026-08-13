@@ -1,0 +1,4 @@
+forbidden:
+  - modify_constitution_without_approval
+  - delete_evidence
+  - overwrite_checkpoint

@@ -30,7 +30,9 @@ class SpecManager:
         self.workflows = WorkflowSpecEngine()
         self.parser = MarkdownSpecParser()
 
-    def evaluate_spec_compliance(self, spec_id: str, payload: dict[str, Any]) -> SpecComplianceResult:
+    def evaluate_spec_compliance(
+        self, spec_id: str, payload: dict[str, Any]
+    ) -> SpecComplianceResult:
         """Đánh giá tính tuân thủ của codebase theo đặc tả."""
         is_compliant = len(payload) > 0
         violations = [] if is_compliant else ["Payload rỗng."]
@@ -43,6 +45,8 @@ class SpecManager:
             proof_hash=proof,
         )
 
-    def simulate_spec_drift(self, spec_id: str, proposed_changes: dict[str, Any]) -> dict[str, Any]:
+    def simulate_spec_drift(
+        self, spec_id: str, proposed_changes: dict[str, Any]
+    ) -> dict[str, Any]:
         """Mô phỏng sai lệch đặc tả trước khi cập nhật."""
         return DryRunSpecSimulator.simulate_drift(spec_id, proposed_changes)

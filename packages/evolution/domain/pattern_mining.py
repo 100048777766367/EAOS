@@ -1,8 +1,8 @@
-"""Pattern Mining Engine Models (v4.x Autonomous Learning)."""
-
 from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Pattern Mining Engine Models (v4.x Autonomous Learning)."""
 
 
 class CandidateRule(BaseModel):

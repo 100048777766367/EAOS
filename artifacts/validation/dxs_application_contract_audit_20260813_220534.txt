@@ -1,0 +1,392 @@
+
+============================================================
+ DXS APPLICATION CONTRACT AUDIT
+============================================================
+
+------------------------------------------------------------
+dxs\application\repository_service.py
+------------------------------------------------------------
+from __future__ import annotations
+
+from pathlib import Path
+
+from dxs.application.compatibility_service import CompatibilityService
+from dxs.application.repository_doctor import RepositoryDoctor
+from dxs.application.validate_repository import RepositoryValidator
+from dxs.contracts.versioning import ContractVersion
+from dxs.domain.compatibility import CompatibilityResult
+from dxs.domain.repository import RepositoryContext
+from dxs.domain.validation import ValidationResult
+from dxs.ports.repository_context import RepositoryContextProvider
+
+
+class RepositoryApplication:
+    """Application facade for DXS repository operations."""
+
+    def __init__(
+        self,
+        context_provider: RepositoryContextProvider,
+        compatibility_service: CompatibilityService,
+    ) -> None:
+        self._context_provider = context_provider
+        self._doctor = RepositoryDoctor()
+        self._validator = RepositoryValidator()
+        self._compatibility = compatibility_service
+
+    def discover(
+        self,
+        root: Path,
+    ) -> RepositoryContext:
+        return self._context_provider.discover(root)
+
+    def inspect(
+        self,
+        root: Path,
+    ) -> list[str]:
+        context = self.discover(root)
+        return self._doctor.inspect(context)
+
+    def validate(
+        self,
+        root: Path,
+    ) -> list[ValidationResult]:
+        context = self.discover(root)
+        return self._validator.validate(context)
+
+    def compatibility(
+        self,
+        current: ContractVersion,
+        target: ContractVersion,
+    ) -> CompatibilityResult:
+        return self._compatibility.check(
+            current=current,
+            target=target,
+        )
+
+------------------------------------------------------------
+dxs\health\service.py
+------------------------------------------------------------
+from __future__ import annotations
+
+from .model import HealthReport, HealthStatus
+
+
+class HealthService:
+    """Build deterministic health reports."""
+
+    def evaluate(
+        self,
+        passed: int,
+        failed: int,
+    ) -> HealthReport:
+        """Classify health from diagnostic counts."""
+        if failed == 0:
+            status = HealthStatus.HEALTHY
+        elif passed > 0:
+            status = HealthStatus.DEGRADED
+        else:
+            status = HealthStatus.UNHEALTHY
+
+        return HealthReport(
+            status=status,
+            passed=passed,
+            failed=failed,
+        )
+
+------------------------------------------------------------
+dxs\health\model.py
+------------------------------------------------------------
+from __future__ import annotations
+
+from dataclasses import dataclass
+from enum import StrEnum
+
+
+class HealthStatus(StrEnum):
+    """Repository health classification."""
+
+    HEALTHY = "healthy"
+    DEGRADED = "degraded"
+    UNHEALTHY = "unhealthy"
+
+
+@dataclass(frozen=True)
+class HealthReport:
+    """Aggregate health result."""
+
+    status: HealthStatus
+    passed: int
+    failed: int
+
+    @property
+    def healthy(self) -> bool:
+        """Return whether health is fully healthy."""
+        return self.status is HealthStatus.HEALTHY
+
+------------------------------------------------------------
+dxs\evidence\service.py
+------------------------------------------------------------
+from __future__ import annotations
+
+from dataclasses import replace
+from datetime import UTC, datetime
+
+from .model import Evidence, EvidenceStatus
+
+
+class EvidenceService:
+    """Deterministic evidence lifecycle service."""
+
+    def capture(
+        self,
+        key: str,
+        value: str,
+        source: str,
+    ) -> Evidence:
+        """Capture new repository evidence."""
+        return Evidence(
+            key=key.strip(),
+            value=value,
+            source=source.strip(),
+            status=EvidenceStatus.OPEN,
+            created_at=datetime.now(UTC),
+        )
+
+    def verify(self, evidence: Evidence) -> Evidence:
+        """Mark evidence as verified."""
+        return replace(
+            evidence,
+            status=EvidenceStatus.VERIFIED,
+        )
+
+    def supersede(self, evidence: Evidence) -> Evidence:
+        """Mark evidence as superseded."""
+        return replace(
+            evidence,
+            status=EvidenceStatus.SUPERSEDED,
+        )
+
+------------------------------------------------------------
+dxs\evidence\model.py
+------------------------------------------------------------
+from __future__ import annotations
+
+from dataclasses import dataclass
+from datetime import datetime
+from enum import StrEnum
+
+
+class EvidenceStatus(StrEnum):
+    """Lifecycle status for diagnostic evidence."""
+
+    OPEN = "open"
+    VERIFIED = "verified"
+    SUPERSEDED = "superseded"
+
+
+@dataclass(frozen=True)
+class Evidence:
+    """Immutable evidence captured during repository diagnostics."""
+
+    key: str
+    value: str
+    source: str
+    status: EvidenceStatus = EvidenceStatus.OPEN
+    created_at: datetime | None = None
+
+    def __post_init__(self) -> None:
+        if not self.key.strip():
+            raise ValueError("Evidence key must not be empty.")
+
+        if not self.source.strip():
+            raise ValueError("Evidence source must not be empty.")
+
+------------------------------------------------------------
+dxs\remediation\service.py
+------------------------------------------------------------
+from __future__ import annotations
+
+from dataclasses import replace
+
+from .model import Remediation, RemediationStatus
+
+
+class RemediationService:
+    """Deterministic remediation lifecycle service."""
+
+    def create(
+        self,
+        key: str,
+        description: str,
+    ) -> Remediation:
+        """Create an open remediation."""
+        return Remediation(
+            key=key.strip(),
+            description=description.strip(),
+        )
+
+    def resolve(self, remediation: Remediation) -> Remediation:
+        """Resolve a remediation."""
+        return replace(
+            remediation,
+            status=RemediationStatus.RESOLVED,
+        )
+
+    def block(self, remediation: Remediation) -> Remediation:
+        """Mark a remediation as blocked."""
+        return replace(
+            remediation,
+            status=RemediationStatus.BLOCKED,
+        )
+
+------------------------------------------------------------
+dxs\remediation\model.py
+------------------------------------------------------------
+from __future__ import annotations
+
+from dataclasses import dataclass
+from enum import StrEnum
+
+
+class RemediationStatus(StrEnum):
+    """Lifecycle status for a remediation action."""
+
+    OPEN = "open"
+    RESOLVED = "resolved"
+    BLOCKED = "blocked"
+
+
+@dataclass(frozen=True)
+class Remediation:
+    """Action required to resolve a diagnostic finding."""
+
+    key: str
+    description: str
+    status: RemediationStatus = RemediationStatus.OPEN
+
+    def __post_init__(self) -> None:
+        if not self.key.strip():
+            raise ValueError("Remediation key must not be empty.")
+
+        if not self.description.strip():
+            raise ValueError("Remediation description must not be empty.")
+
+------------------------------------------------------------
+dxs\scaffolding\service.py
+------------------------------------------------------------
+from __future__ import annotations
+
+from pathlib import Path
+
+from dxs.contracts.scaffolding import ScaffoldResult
+
+
+def scaffold_capability(root: Path, name: str) -> ScaffoldResult:
+    target = root / name
+    created: list[Path] = []
+    skipped: list[Path] = []
+    for relative in (
+        "domain/__init__.py",
+        "application/__init__.py",
+        "ports/__init__.py",
+        "adapters/__init__.py",
+        "tests/__init__.py",
+        "README.md",
+    ):
+        path = target / relative
+        if path.exists():
+            skipped.append(path)
+            continue
+        path.parent.mkdir(parents=True, exist_ok=True)
+        content = (
+            f"# {name}\n\nArchitecture-aware capability scaffold.\n"
+            if path.name == "README.md"
+            else '"""Generated package boundary."""\n'
+        )
+        path.write_text(content, encoding="utf-8")
+        created.append(path)
+    return ScaffoldResult(target, tuple(created), tuple(skipped))
+
+------------------------------------------------------------
+dxs\scaffolding\__init__.py
+------------------------------------------------------------
+"""DXS scaffolding subsystem."""
+
+------------------------------------------------------------
+dxs\bootstrap\composition.py
+------------------------------------------------------------
+from __future__ import annotations
+
+from dxs.adapters.compatibility import CompatibilityAdapter
+from dxs.adapters.repository_context import RepositoryContextProvider
+from dxs.application.compatibility_service import CompatibilityService
+from dxs.application.repository_service import RepositoryApplication
+
+
+def create_repository_application() -> RepositoryApplication:
+    """Build the DXS repository application composition root."""
+
+    context_provider = RepositoryContextProvider()
+
+    compatibility_service = CompatibilityService(
+        checker=CompatibilityAdapter(),
+    )
+
+    return RepositoryApplication(
+        context_provider=context_provider,
+        compatibility_service=compatibility_service,
+    )
+
+
+__all__ = ["create_repository_application"]
+
+============================================================
+ RepositoryApplication METHODS
+============================================================
+    def __init__(
+    def discover(
+    def inspect(
+    def validate(
+    def compatibility(
+
+============================================================
+ Bootstrap FACTORY
+============================================================
+from __future__ import annotations
+
+from dxs.adapters.compatibility import CompatibilityAdapter
+from dxs.adapters.repository_context import RepositoryContextProvider
+from dxs.application.compatibility_service import CompatibilityService
+from dxs.application.repository_service import RepositoryApplication
+
+
+def create_repository_application() -> RepositoryApplication:
+    """Build the DXS repository application composition root."""
+
+    context_provider = RepositoryContextProvider()
+
+    compatibility_service = CompatibilityService(
+        checker=CompatibilityAdapter(),
+    )
+
+    return RepositoryApplication(
+        context_provider=context_provider,
+        compatibility_service=compatibility_service,
+    )
+
+
+__all__ = ["create_repository_application"]
+
+============================================================
+ CLI ATTRIBUTE FALLBACKS
+============================================================
+        results = application.health(root)
+        results = application.evidence(root)
+        result = application.remediation(root)
+        result = application.scaffold(root)
+
+============================================================
+ DXS APPLICATION CONTRACT AUDIT COMPLETE
+============================================================
+
+[EVIDENCE] .\artifacts\validation\dxs_application_contract_audit_20260813_220534.txt

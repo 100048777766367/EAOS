@@ -1,8 +1,8 @@
-"""DTOs for Architecture Memory application layer."""
-
 from pydantic import BaseModel, Field
 
 from packages.architecture_memory.domain.models import MemoryTier, MemoryType
+
+"""DTOs for Architecture Memory application layer."""
 
 
 class TagDTO(BaseModel):

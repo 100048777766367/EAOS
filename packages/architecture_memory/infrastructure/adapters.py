@@ -1,6 +1,6 @@
-"""Infrastructure adapters for architecture memory storage."""
-
 from typing import Any
+
+"""Infrastructure adapters for architecture memory storage."""
 
 
 class PgVectorArchitectureMemoryAdapter:

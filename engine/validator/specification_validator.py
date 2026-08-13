@@ -1,8 +1,9 @@
-"""Specification validator engine auditing executable domain specs."""
-
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict
+
+"""Specification validator engine auditing executable domain specs."""
+
 
 ROOT_PATH = Path(__file__).resolve().parents[2]
 

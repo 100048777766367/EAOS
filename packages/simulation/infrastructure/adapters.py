@@ -29,7 +29,10 @@ class InMemoryDigitalTwinSandboxAdapter(DigitalTwinSandboxPort):
 
     @override
     def fork_branch(
-        self, parent_snapshot_id: str, branch_id: str, branch_type: BranchEnvironmentType
+        self,
+        parent_snapshot_id: str,
+        branch_id: str,
+        branch_type: BranchEnvironmentType,
     ) -> str:
         parent_state = self._snapshots.get(parent_snapshot_id, {})
         self._branches[branch_id] = {
@@ -39,16 +42,14 @@ class InMemoryDigitalTwinSandboxAdapter(DigitalTwinSandboxPort):
         return branch_id
 
     @override
-    def execute_workload(
-        self, branch_id: str, workload_payload: dict[str, Any]
-    ) -> EmpiricalEvidence:
+    def execute_workload(self, branch_id: str, workload_payload: dict[str, Any]) -> EmpiricalEvidence:
         branch_info = self._branches.get(branch_id, {})
         branch_type = branch_info.get("type", BranchEnvironmentType.BASELINE_ALPHA)
 
         start_time = time.perf_counter()
 
         has_mutation = "_mutation" in workload_payload
-        
+
         if has_mutation:
             mutation = workload_payload["_mutation"]
             time_delay = mutation.get("simulated_delay_ms", 12.0)
@@ -71,11 +72,7 @@ class InMemoryDigitalTwinSandboxAdapter(DigitalTwinSandboxPort):
             fitness_score=fitness,
             memory_usage_mb=memory,
             error_count=errors,
-            custom_metrics=[
-                EmpiricalMetric(
-                    metric_name="Throughput", value=1200.0, unit="req/sec"
-                )
-            ],
+            custom_metrics=[EmpiricalMetric(metric_name="Throughput", value=1200.0, unit="req/sec")],
         )
 
 
@@ -86,16 +83,12 @@ class InMemoryResearchReportRepository(ResearchReportRepositoryPort):
         self._reports: dict[str, ComparativeResearchReport] = {}
 
     @override
-    def save_report(
-        self, report: ComparativeResearchReport
-    ) -> ComparativeResearchReport:
+    def save_report(self, report: ComparativeResearchReport) -> ComparativeResearchReport:
         self._reports[report.report_id] = report
         return report
 
     @override
-    def find_report_by_id(
-        self, report_id: str
-    ) -> ComparativeResearchReport | None:
+    def find_report_by_id(self, report_id: str) -> ComparativeResearchReport | None:
         return self._reports.get(report_id)
 
 
@@ -106,14 +99,10 @@ class InMemorySimulationRepository(ResearchReportRepositoryPort):
         self._reports: dict[str, ComparativeResearchReport] = {}
 
     @override
-    def save_report(
-        self, report: ComparativeResearchReport
-    ) -> ComparativeResearchReport:
+    def save_report(self, report: ComparativeResearchReport) -> ComparativeResearchReport:
         self._reports[report.report_id] = report
         return report
 
     @override
-    def find_report_by_id(
-        self, report_id: str
-    ) -> ComparativeResearchReport | None:
+    def find_report_by_id(self, report_id: str) -> ComparativeResearchReport | None:
         return self._reports.get(report_id)

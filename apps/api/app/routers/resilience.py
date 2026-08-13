@@ -7,6 +7,7 @@ from engine.sandbox.wasm_runtime import (
     WASMSandboxRuntime,
 )
 from fastapi import APIRouter, Body
+from platforms.performance.async_concurrency import ConcurrencyTuningEngine
 from pydantic import BaseModel, ConfigDict
 from tools.chaos.chaos_daemon import (
     AutomatedChaosDaemon,
@@ -69,10 +70,6 @@ async def execute_wasm_sandbox(
 
 @router.get("/performance/concurrency/metrics")
 async def get_concurrency_metrics() -> dict[str, Any]:
-    from platforms.performance.async_concurrency import (
-        ConcurrencyTuningEngine,
-    )
-
     engine = ConcurrencyTuningEngine()
     return engine.get_metrics_snapshot().model_dump()
 
@@ -81,9 +78,5 @@ async def get_concurrency_metrics() -> dict[str, Any]:
 async def batch_evict_splay_cache(
     target_items: Annotated[int, Body(embed=True)] = 1000,
 ) -> dict[str, Any]:
-    from platforms.performance.async_concurrency import (
-        ConcurrencyTuningEngine,
-    )
-
     engine = ConcurrencyTuningEngine()
     return engine.batch_evict_splay_cache(target_items)

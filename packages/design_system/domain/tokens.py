@@ -1,8 +1,8 @@
-"""Design Tokens Domain Models (ADR-UI-001)."""
-
 from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Design Tokens Domain Models (ADR-UI-001)."""
 
 
 class SemanticColorTokens(BaseModel):

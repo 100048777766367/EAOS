@@ -1,8 +1,8 @@
-"""Domain models for Business Capability Mapping context."""
-
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from enum import Enum, auto
+
+"""Domain models for Business Capability Mapping context."""
 
 
 class CapabilityMaturityLevel(Enum):

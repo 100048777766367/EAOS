@@ -1,8 +1,9 @@
-"""AI models package."""
-
 from __future__ import annotations
 
 from .model_provider import AIProviderType
+
+"""AI models package."""
+
 
 ModelProvider = AIProviderType
 

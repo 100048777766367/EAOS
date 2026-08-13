@@ -1,8 +1,8 @@
-"""Evaluate Governance Use Case."""
-
 from typing import Any
 
 from pydantic import BaseModel, Field
+
+"""Evaluate Governance Use Case."""
 
 
 class EvaluateGovernanceRequest(BaseModel):

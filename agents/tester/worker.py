@@ -1,11 +1,11 @@
-"""Autonomous Tester Agent Worker."""
-
 from __future__ import annotations
 
 import subprocess
 from pathlib import Path
 
 from agents.base import AgentRole, AgentWorkResult
+
+"""Autonomous Tester Agent Worker."""
 
 
 class TesterWorker:

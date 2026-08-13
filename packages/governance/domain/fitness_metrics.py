@@ -1,6 +1,6 @@
-"""Architectural Fitness and Observability Metrics Engine for EAOS."""
-
 from pydantic import BaseModel, ConfigDict
+
+"""Architectural Fitness and Observability Metrics Engine for EAOS."""
 
 
 class ArchitecturalFitnessMetrics(BaseModel):

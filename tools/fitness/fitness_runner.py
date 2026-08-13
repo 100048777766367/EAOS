@@ -1,5 +1,3 @@
-"""Unified fitness functions runner evaluating 6-dimensional scorecard."""
-
 from fitness.ai.evaluator import AIFitnessEvaluator
 from fitness.architecture.evaluator import ArchitectureFitnessEvaluator
 from fitness.governance.evaluator import GovernanceFitnessEvaluator
@@ -7,6 +5,8 @@ from fitness.performance.evaluator import PerformanceFitnessEvaluator
 from fitness.quality.evaluator import QualityFitnessEvaluator
 from fitness.security.evaluator import SecurityFitnessEvaluator
 from pydantic import BaseModel, ConfigDict
+
+"""Unified fitness functions runner evaluating 6-dimensional scorecard."""
 
 
 class ArchitecturalFitnessScorecardDTO(BaseModel):

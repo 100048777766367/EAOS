@@ -1,8 +1,8 @@
-"""UI as a Capability & Meta-Layer Domain Models (ADR-UI-002)."""
-
 from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""UI as a Capability & Meta-Layer Domain Models (ADR-UI-002)."""
 
 
 class CommandPaletteAction(BaseModel):

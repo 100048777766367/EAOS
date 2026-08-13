@@ -1,5 +1,3 @@
-"""Level 10 Git Agent Adapter."""
-
 from __future__ import annotations
 
 import subprocess
@@ -7,6 +5,8 @@ from pathlib import Path
 
 from packages.agent.domain.git_models import GitOperationResult
 from packages.agent.ports.git_port import GitAgentPort
+
+"""Level 10 Git Agent Adapter."""
 
 
 class GitAgentAdapter(GitAgentPort):

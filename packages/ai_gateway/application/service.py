@@ -24,7 +24,7 @@ class AICapabilityService:
         """Executes AI generation with automatic fallback capability."""
         try:
             return await self.primary.generate(request)
-        except AIProviderTimeoutError, AIProviderUnavailableError:
+        except (AIProviderTimeoutError, AIProviderUnavailableError):
             if self.fallback:
                 return await self.fallback.generate(request)
             raise

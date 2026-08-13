@@ -1,9 +1,9 @@
-"""Process Architecture Frameworks & Methodologies for EAOS."""
-
 from datetime import UTC, datetime
 from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Process Architecture Frameworks & Methodologies for EAOS."""
 
 
 class ProcessFrameworkType(StrEnum):

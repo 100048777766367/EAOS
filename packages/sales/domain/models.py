@@ -1,8 +1,8 @@
-"""Sales and Commerce Domain Model for EAOS Capability App."""
-
 from datetime import UTC, datetime
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Sales and Commerce Domain Model for EAOS Capability App."""
 
 
 class SalesOrder(BaseModel):

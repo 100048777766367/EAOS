@@ -1,9 +1,9 @@
-"""Memory Domain Entities."""
-
 from datetime import UTC, datetime
 from uuid import uuid4
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Memory Domain Entities."""
 
 
 class MemoryRecord(BaseModel):
@@ -18,9 +18,7 @@ class MemoryRecord(BaseModel):
     evidence_summary: str = ""
     lesson_learned: str = ""
     key_learnings: list[str] = Field(default_factory=list)
-    timestamp: str | datetime | None = Field(
-        default_factory=lambda: datetime.now(UTC).isoformat()
-    )
+    timestamp: str | datetime | None = Field(default_factory=lambda: datetime.now(UTC).isoformat())
 
     @property
     def record_id(self) -> str:

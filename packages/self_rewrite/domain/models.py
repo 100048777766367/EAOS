@@ -37,7 +37,7 @@ class PullRequest(BaseModel):
 
 
 class SelfRewriteJob(BaseModel):
-    """Thá»±c thá»ƒ Ä‘iá»u hÃ nh toÃ n bá»™ phiÃªn tá»± láº­p trÃ¬nh cá»§a ai."""
+    """Thá»±c thá»ƒ Ä‘iá»u hÃ nh toÃ n bá»™ phiÃªn tá»± láº­p trÃ¬nh cá»§a ai."""
 
     id: str
     problem: str

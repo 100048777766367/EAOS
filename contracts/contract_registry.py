@@ -1,10 +1,10 @@
-"""Enterprise Contracts Registry & Schema Validator Engine."""
-
 from __future__ import annotations
 
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Enterprise Contracts Registry & Schema Validator Engine."""
 
 
 class ContractProtocolDTO(BaseModel):

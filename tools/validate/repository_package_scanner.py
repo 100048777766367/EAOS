@@ -1,11 +1,11 @@
+from __future__ import annotations
+
+from pathlib import Path
+
 """EAOS Repository Package Scanner & Provisioner.
 
 Scans for missing __init__.py, README.md, and pyproject.toml files.
 """
-
-from __future__ import annotations
-
-from pathlib import Path
 
 
 class PackageRepositoryScanner:

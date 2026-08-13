@@ -7,6 +7,7 @@ from platforms.telemetry.otlp_exporter import (
     OpenTelemetryOTLPExporter,
     OTLPSpanExportDTO,
 )
+from platforms.telemetry.telemetry_fitness import TelemetryFitnessBridge
 
 router = APIRouter(prefix="", tags=["Telemetry"])
 otlp_exporter = OpenTelemetryOTLPExporter()
@@ -61,10 +62,6 @@ async def evaluate_telemetry_fitness_bridge(
     metrics = trace_metrics
     if isinstance(request, dict) and not metrics:
         metrics = request.get("trace_metrics", {})
-
-    from platforms.telemetry.telemetry_fitness import (
-        TelemetryFitnessBridge,
-    )
 
     bridge = TelemetryFitnessBridge()
     return bridge.process_telemetry_trace(trace_metrics=metrics or {})

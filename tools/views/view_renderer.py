@@ -1,10 +1,10 @@
-"""View renderer engine and visual representation manager for EAOS."""
-
 import json
 from pathlib import Path
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict
+
+"""View renderer engine and visual representation manager for EAOS."""
 
 
 class ViewDefinitionDTO(BaseModel):

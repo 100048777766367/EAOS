@@ -1,10 +1,10 @@
-"""Console Formatter for Enterprise Doctor Report."""
-
 from __future__ import annotations
 
 from typing import Any
 
 from tools.doctor.dto import DiagnosticReportDTO, SeverityLevel
+
+"""Console Formatter for Enterprise Doctor Report."""
 
 
 class ConsoleReporter:

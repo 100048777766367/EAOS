@@ -1,8 +1,8 @@
-"""Tech Stack & Capability Classification Auditor for EAOS Platform."""
-
 from typing import ClassVar
 
 from pydantic import BaseModel, ConfigDict
+
+"""Tech Stack & Capability Classification Auditor for EAOS Platform."""
 
 
 class TechStackAuditReportDTO(BaseModel):

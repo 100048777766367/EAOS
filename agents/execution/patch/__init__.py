@@ -1,0 +1,1 @@
+"""Patch and diff subsystem."""

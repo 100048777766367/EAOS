@@ -1,8 +1,8 @@
-"""GitOps driver managing isolated feature branch creation and PR proposals."""
-
 import time
 
 from pydantic import BaseModel, ConfigDict
+
+"""GitOps driver managing isolated feature branch creation and PR proposals."""
 
 
 class PullRequestProposalDTO(BaseModel):

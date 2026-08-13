@@ -1,8 +1,8 @@
-"""Shared DDD domain primitives and base value object abstractions."""
-
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict
+
+"""Shared DDD domain primitives and base value object abstractions."""
 
 
 class ValueObjectBase(BaseModel):

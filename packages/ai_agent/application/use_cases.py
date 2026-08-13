@@ -1,8 +1,8 @@
-"""Application use cases for AI Agent Task Orchestration."""
-
 import uuid
 
 from packages.ai_agent.domain.models import AIAgentProfile
+
+"""Application use cases for AI Agent Task Orchestration."""
 
 
 class OrchestrateAgentTaskUseCase:

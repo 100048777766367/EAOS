@@ -1,5 +1,7 @@
 """Production Thread-Safe i18n Translation Manager for EAOS."""
 
+from __future__ import annotations
+
 import json
 from pathlib import Path
 from typing import Any, ClassVar
@@ -21,9 +23,7 @@ class LocalesManager:
         translations_dir: Path | None = None,
         default_locale: str = "en",
     ) -> None:
-        self.translations_dir = (
-            translations_dir or Path(__file__).parent / "translations"
-        )
+        self.translations_dir = translations_dir or Path(__file__).parent / "translations"
         self.default_locale = default_locale
         self._catalogs: dict[str, TranslationCatalogSchema] = {}
         self._raw_catalogs: dict[str, dict[str, Any]] = {}
@@ -54,9 +54,7 @@ class LocalesManager:
                 with json_file.open("r", encoding="utf-8") as f:
                     raw_data = json.load(f)
                     self._raw_catalogs[locale] = raw_data
-                    catalog = TranslationCatalogSchema.model_validate(
-                        raw_data
-                    )
+                    catalog = TranslationCatalogSchema.model_validate(raw_data)
                     self._catalogs[locale] = catalog
             except Exception as err:
                 logger.error(
@@ -69,14 +67,10 @@ class LocalesManager:
         """Returns a list of all successfully loaded language codes."""
         return list(self._catalogs.keys())
 
-    def get_catalog_schema(
-        self, locale: str | None = None
-    ) -> TranslationCatalogSchema | None:
+    def get_catalog_schema(self, locale: str | None = None) -> TranslationCatalogSchema | None:
         """Returns validated Pydantic catalog schema for a locale."""
         target_locale = locale or self.default_locale
-        return self._catalogs.get(target_locale) or self._catalogs.get(
-            self.default_locale
-        )
+        return self._catalogs.get(target_locale) or self._catalogs.get(self.default_locale)
 
     def translate(
         self,
@@ -89,11 +83,7 @@ class LocalesManager:
         'system.title') with fallback and parameter interpolation.
         """
         target_locale = locale or self.default_locale
-        raw_catalog = (
-            self._raw_catalogs.get(target_locale)
-            or self._raw_catalogs.get(self.default_locale)
-            or {}
-        )
+        raw_catalog = self._raw_catalogs.get(target_locale) or self._raw_catalogs.get(self.default_locale) or {}
 
         keys = key_path.split(".")
         value: Any = raw_catalog

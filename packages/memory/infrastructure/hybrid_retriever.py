@@ -1,6 +1,6 @@
-"""Hybrid Graph-Vector Retriever Infrastructure Implementation."""
-
 from pydantic import BaseModel, ConfigDict
+
+"""Hybrid Graph-Vector Retriever Infrastructure Implementation."""
 
 
 class HybridSearchResult(BaseModel):

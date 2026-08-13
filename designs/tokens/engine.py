@@ -1,11 +1,11 @@
-"""Design Token Compiler Engine for EAOS Design System."""
-
 import json
 import re
 from pathlib import Path
 from typing import Self
 
 from pydantic import BaseModel, Field, model_validator
+
+"""Design Token Compiler Engine for EAOS Design System."""
 
 
 class ColorToken(BaseModel):

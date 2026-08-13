@@ -1,10 +1,10 @@
-"""Native Tool Calling Domain Models (Phase 1)."""
-
 from __future__ import annotations
 
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Native Tool Calling Domain Models (Phase 1)."""
 
 
 class ToolExecutionRequest(BaseModel):

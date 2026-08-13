@@ -1,8 +1,8 @@
-"""Canonical layers module."""
-
 from __future__ import annotations
 
 from dataclasses import dataclass
+
+"""Canonical layers module."""
 
 
 @dataclass

@@ -1,10 +1,10 @@
-"""WebAssembly/Isolated Execution Sandbox Runtime for AI patches."""
-
 import ast
 import time
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict
+
+"""WebAssembly/Isolated Execution Sandbox Runtime for AI patches."""
 
 
 class SandboxExecutionResult(BaseModel):

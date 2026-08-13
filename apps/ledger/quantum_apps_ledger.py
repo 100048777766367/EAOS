@@ -1,11 +1,11 @@
-"""Sổ cái vết ứng dụng chống lượng tử."""
-
 from __future__ import annotations
 
 import hashlib
 import json
 import time
 from typing import Any
+
+"""Sổ cái vết ứng dụng chống lượng tử."""
 
 
 class QuantumAppsLedger:

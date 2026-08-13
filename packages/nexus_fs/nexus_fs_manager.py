@@ -1,8 +1,8 @@
-"""NexusFS Enterprise Storage Manager for EAOS."""
-
 import json
 from pathlib import Path
 from typing import Any
+
+"""NexusFS Enterprise Storage Manager for EAOS."""
 
 
 class NexusFSManager:

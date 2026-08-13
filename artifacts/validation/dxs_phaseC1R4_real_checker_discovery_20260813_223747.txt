@@ -1,0 +1,58 @@
+[1/10] Checking repository state...
+[PASS] DXS source and tests found.
+
+[2/10] Restoring tests before new modification...
+[RESTORE] D:\EAOS\tests\dxs\test_compatibility.py.backup_phaseC1R2_20260813_223558
+[RESTORE] D:\EAOS\tests\dxs\test_migration.py.backup_phaseC1R2_20260813_223558
+[PASS] Tests restored.
+
+[3/10] Creating C.1-R4 backups...
+[BACKUP] D:\EAOS\tests\dxs\test_compatibility.py.backup_phaseC1R4_20260813_223747
+[BACKUP] D:\EAOS\tests\dxs\test_migration.py.backup_phaseC1R4_20260813_223747
+
+[4/10] Searching source tree for actual CompatibilityChecker...
+=== ROOT ===
+D:\EAOS
+
+=== CompatibilityChecker DEFINITIONS ===
+path=D:\EAOS\dxs\ports\compatibility.py
+module=dxs.ports.compatibility
+line=12
+
+=== IMPORT / CONSTRUCTOR INSPECTION ===
+
+MODULE: dxs.ports.compatibility
+class: <class 'dxs.ports.compatibility.CompatibilityChecker'>
+signature: (*args, **kwargs)
+__init__: (self, *args, **kwargs)
+public members:
+   check
+
+=== COMPATIBILITY SERVICE SOURCE ===
+CompatibilityService: <class 'dxs.application.compatibility_service.CompatibilityService'>
+signature: (checker: 'CompatibilityChecker') -> 'None'
+__init__: (self, checker: 'CompatibilityChecker') -> 'None'
+
+=== MIGRATION SERVICE SOURCE ===
+MigrationService: <class 'dxs.application.migration_service.MigrationService'>
+signature: (compatibility_service: 'CompatibilityService') -> 'None'
+__init__: (self, compatibility_service: 'CompatibilityService') -> 'None'
+
+
+[PASS] CompatibilityChecker source discovery completed.
+
+[5/10] Resolving actual checker module...
+[FOUND] CompatibilityChecker module: dxs.ports.compatibility
+
+[6/10] Updating test assumptions using discovered implementation...
+PATCHED: tests\dxs\test_compatibility.py
+PATCHED: tests\dxs\test_migration.py
+SAFE_PATCH_COMPLETE
+
+[PASS] Tests patched using the actual discovered CompatibilityChecker.
+
+[7/10] Verifying test assumptions...
+[PASS] No obsolete zero-argument assumptions remain.
+
+[8/10] Running focused tests...
+[FAIL] Compatibility tests failed with exit code 1.

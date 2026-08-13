@@ -1,11 +1,11 @@
-"""Smart MinIO Seeder with auto-credential detection."""
-
 import io
 import json
 import os
 import re
 
 from minio import Minio
+
+"""Smart MinIO Seeder with auto-credential detection."""
 
 
 def find_credentials() -> list[tuple[str, str]]:

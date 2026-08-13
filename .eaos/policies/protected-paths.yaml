@@ -1,0 +1,4 @@
+protected_paths:
+  - .git/**
+  - .venv/**
+  - eaos_backups/**

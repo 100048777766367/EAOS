@@ -1,7 +1,8 @@
-"""Prometheus & Observability Metrics Router for EAOS."""
-
 from fastapi import APIRouter
 from fastapi.responses import PlainTextResponse
+
+"""Prometheus & Observability Metrics Router for EAOS."""
+
 
 router = APIRouter(tags=["Observability"])
 

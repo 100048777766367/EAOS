@@ -1,9 +1,9 @@
-"""Mô hình DTO cho hệ thống Đồng thuận Liên bang (FEDERATION)."""
-
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import StrEnum
+
+"""Mô hình DTO cho hệ thống Đồng thuận Liên bang (FEDERATION)."""
 
 
 class FederationRole(StrEnum):

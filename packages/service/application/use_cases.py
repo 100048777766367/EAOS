@@ -1,8 +1,8 @@
-"""Application use cases for Service Delivery Provisioning."""
-
 import uuid
 
 from packages.service.domain.models import ServiceEngagement
+
+"""Application use cases for Service Delivery Provisioning."""
 
 
 class ProvisionServiceEngagementUseCase:

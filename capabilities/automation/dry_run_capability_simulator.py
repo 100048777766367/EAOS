@@ -1,8 +1,8 @@
-"""Mô phỏng thay đổi hợp đồng năng lực an toàn."""
-
 from __future__ import annotations
 
 from typing import Any
+
+"""Mô phỏng thay đổi hợp đồng năng lực an toàn."""
 
 
 class DryRunCapabilitySimulator:

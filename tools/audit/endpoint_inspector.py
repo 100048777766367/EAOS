@@ -1,9 +1,9 @@
-"""Endpoint Inspector probing live health of all 9 EAOS services."""
-
 import urllib.request
 from typing import ClassVar
 
 from pydantic import BaseModel, ConfigDict
+
+"""Endpoint Inspector probing live health of all 9 EAOS services."""
 
 
 class EndpointStatusDTO(BaseModel):

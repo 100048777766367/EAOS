@@ -1,0 +1,12 @@
+﻿<div class="bg-[#030712] flex flex-col h-full min-h-0">
+    <!-- Active File Tab Bar -->
+    <div class="h-8 bg-[#060b17] border-b border-slate-800 flex items-center px-2 space-x-1 shrink-0 font-mono text-xs">
+        <div class="px-3 py-1 bg-[#030712] text-cyan-400 border-t-2 border-cyan-400 rounded-t flex items-center space-x-2">
+            <span class="text-blue-400">📄</span>
+            <span id="active-filename">apps/api/app/main.py</span>
+        </div>
+    </div>
+
+    <!-- Editor Container -->
+    <div id="monaco-editor-container" class="flex-1 min-h-0 bg-[#030712]"></div>
+</div>

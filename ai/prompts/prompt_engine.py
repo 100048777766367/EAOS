@@ -1,6 +1,6 @@
-"""Động cơ tối ưu hóa Prompt."""
-
 from __future__ import annotations
+
+"""Động cơ tối ưu hóa Prompt."""
 
 
 class PromptEngine:

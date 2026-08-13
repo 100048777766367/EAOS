@@ -1,8 +1,9 @@
-"""AI router package."""
-
 from __future__ import annotations
 
 from .model_router import FinOpsModelRouter
+
+"""AI router package."""
+
 
 ModelRouter = FinOpsModelRouter
 

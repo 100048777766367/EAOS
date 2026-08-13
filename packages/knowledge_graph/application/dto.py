@@ -1,8 +1,8 @@
-"""Data Transfer Objects for Knowledge Graph application layer."""
-
 from pydantic import BaseModel, Field
 
 from packages.knowledge_graph.domain.models import NodeType
+
+"""Data Transfer Objects for Knowledge Graph application layer."""
 
 
 class NodeIngestDTO(BaseModel):

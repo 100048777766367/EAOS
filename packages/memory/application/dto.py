@@ -1,6 +1,6 @@
-"""Memory Application DTOs."""
-
 from pydantic import BaseModel, ConfigDict
+
+"""Memory Application DTOs."""
 
 
 class StoreMemoryCommand(BaseModel):

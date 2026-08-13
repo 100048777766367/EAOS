@@ -1,8 +1,8 @@
-"""DTOs for Architecture Fitness application layer."""
-
 from pydantic import BaseModel
 
 from packages.architecture_fitness.domain.models import FitnessDimension
+
+"""DTOs for Architecture Fitness application layer."""
 
 
 class EvaluationItemDTO(BaseModel):

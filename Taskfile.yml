@@ -5,7 +5,7 @@ tasks:
     desc: "Cháº¡y kiá»ƒm tra code vÃ  kiáº¿n trÃºc"
     cmds:
       - uv run ruff check .
-  
+
   typecheck:
     desc: "Kiá»ƒm tra kiá»ƒu dá»¯ liá»‡u nghiÃªm ngáº·t"
     cmds:
@@ -17,7 +17,7 @@ tasks:
       - uv run pytest tests/
 
   doctor:
-    desc: "Kiá»ƒm tra sá»©c khá»e mÃ´i trÆ°á»ng"
+    desc: "Kiá»ƒm tra sá»©c khá»�e mÃ´i trÆ°á»ng"
     cmds:
       - uv run python tools/doctor/main.py
 

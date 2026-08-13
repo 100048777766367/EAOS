@@ -1,0 +1,85 @@
+"""Open WebUI OpenAI-compatible Gateway Router."""
+
+from collections.abc import AsyncGenerator
+from typing import Any, Final
+
+from fastapi import APIRouter
+from fastapi.responses import StreamingResponse
+
+from apps.api.app.schemas.chat import ChatCompletionRequest
+
+router: Final[APIRouter] = APIRouter(tags=["Open WebUI Gateway"])
+
+
+@router.get("/v1/models")
+async def list_models() -> dict[str, Any]:
+    """List available OpenAI-compatible models."""
+    return {
+        "object": "list",
+        "data": [
+            {
+                "id": "ollama",
+                "object": "model",
+                "created": 1700000000,
+                "owned_by": "eaos",
+            },
+            {
+                "id": "gemini-1.5-flash",
+                "object": "model",
+                "created": 1700000000,
+                "owned_by": "google",
+            },
+        ],
+    }
+
+
+async def event_generator(content: str, model_name: str) -> AsyncGenerator[str, None]:
+    """Generate Server-Sent Events for streaming chat completions."""
+    chunk = {
+        "id": "chatcmpl-eaos-123",
+        "object": "chat.completion.chunk",
+        "created": 1700000000,
+        "model": model_name,
+        "choices": [
+            {
+                "index": 0,
+                "delta": {"role": "assistant", "content": content},
+                "finish_reason": None,
+            }
+        ],
+    }
+    yield f"data: {chunk}\n\n"
+    yield "data: [DONE]\n\n"
+
+
+@router.post("/v1/chat/completions", response_model=None)
+async def chat_completions(
+    req: ChatCompletionRequest,
+) -> StreamingResponse | dict[str, Any]:
+    """OpenAI-compatible chat completions endpoint."""
+    user_msg = ""
+    if req.messages:
+        user_msg = req.messages[-1].content
+
+    if req.stream:
+        return StreamingResponse(
+            event_generator(f"[EAOS Gateway] Da nhan: {user_msg}", req.model),
+            media_type="text/event-stream",
+        )
+
+    return {
+        "id": "chatcmpl-eaos-123",
+        "object": "chat.completion",
+        "created": 1700000000,
+        "model": req.model,
+        "choices": [
+            {
+                "index": 0,
+                "message": {
+                    "role": "assistant",
+                    "content": f"[EAOS Gateway] Da nhan: {user_msg}",
+                },
+                "finish_reason": "stop",
+            }
+        ],
+    }

@@ -1,6 +1,6 @@
-"""Sprint 4 Engine: EA Knowledge Graph for AI Reasoning."""
-
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Sprint 4 Engine: EA Knowledge Graph for AI Reasoning."""
 
 
 class GraphNodeVO(BaseModel):

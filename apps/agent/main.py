@@ -1,11 +1,11 @@
-"""Executable entrypoint for EAOS Agent Application."""
-
 from __future__ import annotations
 
 import asyncio
 import sys
 
 from agents.orchestrator import AutonomousAgentSwarm
+
+"""Executable entrypoint for EAOS Agent Application."""
 
 
 def main() -> None:

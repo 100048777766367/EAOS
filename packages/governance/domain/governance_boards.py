@@ -1,10 +1,10 @@
-"""11 Federated Governance Boards Domain Models (ADR-GOV-001)."""
-
 from __future__ import annotations
 
 from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""11 Federated Governance Boards Domain Models (ADR-GOV-001)."""
 
 
 class BoardID(StrEnum):

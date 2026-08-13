@@ -1,8 +1,8 @@
-"""Chain of Thought Reasoning Engine."""
-
 from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict
+
+"""Chain of Thought Reasoning Engine."""
 
 
 class ReasoningStep(BaseModel):

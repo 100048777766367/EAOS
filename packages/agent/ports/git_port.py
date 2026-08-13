@@ -1,10 +1,10 @@
-"""Git Agent Port Protocol."""
-
 from __future__ import annotations
 
 from typing import Protocol, runtime_checkable
 
 from packages.agent.domain.git_models import GitOperationResult
+
+"""Git Agent Port Protocol."""
 
 
 @runtime_checkable

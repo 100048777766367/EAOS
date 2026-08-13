@@ -1,0 +1,22 @@
+﻿<aside class="w-12 bg-[#030712] border-r border-slate-800 flex flex-col items-center py-3 space-y-3 shrink-0 text-slate-400 select-none">
+    <button id="act-explorer" class="act-btn active w-9 h-9 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center border border-cyan-500/30 transition-all" title="File Explorer">
+        <span class="text-base">📁</span>
+    </button>
+    <button id="act-search" class="act-btn w-9 h-9 rounded-lg hover:bg-slate-800/80 hover:text-slate-200 flex items-center justify-center transition-all" title="Global Search">
+        <span class="text-base">🔍</span>
+    </button>
+    <button id="act-source-control" class="act-btn w-9 h-9 rounded-lg hover:bg-slate-800/80 hover:text-slate-200 flex items-center justify-center transition-all relative" title="Git Source Control">
+        <span class="text-base">🌿</span>
+        <span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-cyan-400"></span>
+    </button>
+    <button id="act-ai-studio" class="act-btn w-9 h-9 rounded-lg hover:bg-slate-800/80 hover:text-slate-200 flex items-center justify-center transition-all" title="AI Studio Hub">
+        <span class="text-base">🤖</span>
+    </button>
+    <button id="act-doctor" class="act-btn w-9 h-9 rounded-lg hover:bg-slate-800/80 hover:text-slate-200 flex items-center justify-center transition-all" title="System Doctor Diagnostics">
+        <span class="text-base">🩺</span>
+    </button>
+    <div class="flex-1"></div>
+    <button id="btn-settings" class="w-9 h-9 rounded-lg hover:bg-slate-800/80 hover:text-slate-200 flex items-center justify-center transition-all" title="Settings">
+        <span class="text-base">⚙️</span>
+    </button>
+</aside>

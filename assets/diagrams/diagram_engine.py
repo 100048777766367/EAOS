@@ -1,6 +1,6 @@
-"""Diagram engine module."""
-
 from __future__ import annotations
+
+"""Diagram engine module."""
 
 
 class DiagramEngine:

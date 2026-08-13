@@ -44,7 +44,7 @@ class Heuristic(BaseModel):
 
 
 class Experience(BaseModel):
-    """Thá»±c thá»ƒ Kinh nghiá»‡m hoÃ n chá»‰nh cá»§a EAOS, Ä‘Ãºc rÃºt tá»« Reflection."""
+    """Thá»±c thá»ƒ Kinh nghiá»‡m hoÃ n chá»‰nh cá»§a EAOS, Ä‘Ãºc rÃºt tá»« Reflection."""
 
     id: str
     reflection_id: str

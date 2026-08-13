@@ -3,7 +3,7 @@ from packages.exchange.domain.ports import EcosystemEventMeshPort
 
 
 class InMemoryEcosystemEventMesh(EcosystemEventMeshPort):
-    """Adapter lÆ°u trá»¯ vÃ  Ä‘iá»u phá»‘i Event Mesh xuyÃªn biÃªn giá»›i doanh nghiá»‡p."""
+    """Adapter lÆ°u trá»¯ vÃ  Ä‘iá»u phá»‘i Event Mesh xuyÃªn biÃªn giá»›i doanh nghiá»‡p."""
 
     def __init__(self) -> None:
         self._events: list[SharedEcosystemEvent] = []

@@ -1,11 +1,11 @@
-"""Filesystem Checker testing write permissions and directory structure."""
-
 from __future__ import annotations
 
 import tempfile
 from pathlib import Path
 
 from tools.doctor.dto import DiagnosticCheckDTO, SeverityLevel
+
+"""Filesystem Checker testing write permissions and directory structure."""
 
 
 class FilesystemChecker:

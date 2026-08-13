@@ -1,8 +1,8 @@
-"""Analytics & Telemetry Domain Model for EAOS Capability App."""
-
 from datetime import UTC, datetime
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Analytics & Telemetry Domain Model for EAOS Capability App."""
 
 
 class AnalyticsTrendPoint(BaseModel):

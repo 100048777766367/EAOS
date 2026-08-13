@@ -1,8 +1,8 @@
-"""Accounting and Ledger Management Domain Model for EAOS."""
-
 from datetime import UTC, datetime
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Accounting and Ledger Management Domain Model for EAOS."""
 
 
 class GeneralLedgerRecord(BaseModel):

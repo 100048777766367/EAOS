@@ -1,0 +1,418 @@
+<div
+    id="pane-chat-pane"
+    class="eaos-copilot-pane"
+>
+    <!-- HEADER -->
+    <div class="eaos-copilot-header">
+        <div class="eaos-copilot-brand">
+            <div class="eaos-copilot-icon">
+                AI
+            </div>
+
+            <div class="min-w-0">
+                <div class="eaos-copilot-title">
+                    EAOS Copilot
+                </div>
+
+                <div
+                    id="copilot-subtitle"
+                    class="eaos-copilot-subtitle"
+                >
+                    Agent Coder
+                </div>
+            </div>
+        </div>
+
+        <div class="eaos-copilot-header-right">
+            <span
+                id="copilot-connection"
+                class="eaos-status-chip status-ready"
+            >
+                CONNECTED
+            </span>
+
+            <button
+                id="btn-clear-chat"
+                type="button"
+                class="eaos-icon-button"
+                title="Clear conversation"
+            >
+                ×
+            </button>
+        </div>
+    </div>
+
+    <!-- MODEL STRIP -->
+    <div class="eaos-model-strip">
+        <div class="eaos-model-item">
+            <span class="eaos-model-label">
+                PROVIDER
+            </span>
+
+            <span
+                id="runtime-provider"
+                class="eaos-model-value"
+            >
+                —
+            </span>
+        </div>
+
+        <div class="eaos-model-divider"></div>
+
+        <div class="eaos-model-item">
+            <span class="eaos-model-label">
+                MODEL
+            </span>
+
+            <span
+                id="runtime-model"
+                class="eaos-model-value"
+            >
+                —
+            </span>
+        </div>
+    </div>
+
+    <!-- ACTIVE TASK -->
+    <section
+        id="active-task-card"
+        class="eaos-task-card"
+    >
+        <div class="eaos-section-header">
+            <span>ACTIVE TASK</span>
+
+            <span
+                id="task-state-chip"
+                class="eaos-status-chip status-idle"
+            >
+                IDLE
+            </span>
+        </div>
+
+        <div class="eaos-task-grid">
+            <div>
+                <div class="eaos-task-label">
+                    TASK
+                </div>
+
+                <div
+                    id="runtime-task"
+                    class="eaos-task-value"
+                >
+                    —
+                </div>
+            </div>
+
+            <div>
+                <div class="eaos-task-label">
+                    AGENT
+                </div>
+
+                <div
+                    id="runtime-agent"
+                    class="eaos-task-value"
+                >
+                    coder
+                </div>
+            </div>
+
+            <div>
+                <div class="eaos-task-label">
+                    EVIDENCE
+                </div>
+
+                <div
+                    id="runtime-evidence"
+                    class="eaos-task-value"
+                >
+                    —
+                </div>
+            </div>
+
+            <div>
+                <div class="eaos-task-label">
+                    LATENCY
+                </div>
+
+                <div
+                    id="runtime-latency"
+                    class="eaos-task-value"
+                >
+                    —
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CHAT -->
+    <div
+        id="chat-stream"
+        class="eaos-chat-stream"
+    >
+        <div
+            class="eaos-chat-message eaos-chat-assistant"
+        >
+            <div class="eaos-chat-label">
+                EAOS AGENT
+            </div>
+
+            <div class="eaos-chat-body">
+                Runtime connected.
+                Submit a task to begin execution.
+            </div>
+        </div>
+    </div>
+
+    <!-- EXECUTION TRACE -->
+    <section class="eaos-trace-section">
+        <div class="eaos-trace-header">
+            <div>
+                <div class="eaos-section-title">
+                    EXECUTION TRACE
+                </div>
+
+                <div
+                    id="trace-summary"
+                    class="eaos-section-subtitle"
+                >
+                    Waiting for task
+                </div>
+            </div>
+
+            <button
+                id="btn-toggle-execution"
+                type="button"
+                class="eaos-trace-toggle"
+            >
+                Collapse
+            </button>
+        </div>
+
+        <div
+            id="execution-trace"
+            class="eaos-trace"
+        >
+            <div
+                class="eaos-timeline-item"
+                data-step="QUEUED"
+            >
+                <div class="eaos-timeline-marker">
+                    <span class="eaos-timeline-dot"></span>
+                    <span class="eaos-timeline-line"></span>
+                </div>
+
+                <div class="eaos-timeline-content">
+                    <div class="eaos-timeline-title">
+                        QUEUED
+                    </div>
+
+                    <div class="eaos-timeline-meta">
+                        Request accepted
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="eaos-timeline-item"
+                data-step="RUNNING"
+            >
+                <div class="eaos-timeline-marker">
+                    <span class="eaos-timeline-dot"></span>
+                    <span class="eaos-timeline-line"></span>
+                </div>
+
+                <div class="eaos-timeline-content">
+                    <div class="eaos-timeline-title">
+                        RUNNING
+                    </div>
+
+                    <div class="eaos-timeline-meta">
+                        Runtime task started
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="eaos-timeline-item"
+                data-step="LLM_STREAM"
+            >
+                <div class="eaos-timeline-marker">
+                    <span class="eaos-timeline-dot"></span>
+                    <span class="eaos-timeline-line"></span>
+                </div>
+
+                <div class="eaos-timeline-content">
+                    <div class="eaos-timeline-title">
+                        LLM STREAM
+                    </div>
+
+                    <div class="eaos-timeline-meta">
+                        Provider generating
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="eaos-timeline-item"
+                data-step="RESPONSE"
+            >
+                <div class="eaos-timeline-marker">
+                    <span class="eaos-timeline-dot"></span>
+                    <span class="eaos-timeline-line"></span>
+                </div>
+
+                <div class="eaos-timeline-content">
+                    <div class="eaos-timeline-title">
+                        RESPONSE
+                    </div>
+
+                    <div class="eaos-timeline-meta">
+                        Agent response assembled
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="eaos-timeline-item"
+                data-step="VERIFYING"
+            >
+                <div class="eaos-timeline-marker">
+                    <span class="eaos-timeline-dot"></span>
+                    <span class="eaos-timeline-line"></span>
+                </div>
+
+                <div class="eaos-timeline-content">
+                    <div class="eaos-timeline-title">
+                        VERIFYING
+                    </div>
+
+                    <div class="eaos-timeline-meta">
+                        Verification pipeline
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="eaos-timeline-item"
+                data-step="RUFF"
+            >
+                <div class="eaos-timeline-marker">
+                    <span class="eaos-timeline-dot"></span>
+                    <span class="eaos-timeline-line"></span>
+                </div>
+
+                <div class="eaos-timeline-content">
+                    <div class="eaos-timeline-title">
+                        RUFF
+                    </div>
+
+                    <div class="eaos-timeline-meta">
+                        Static analysis
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="eaos-timeline-item"
+                data-step="PYTEST"
+            >
+                <div class="eaos-timeline-marker">
+                    <span class="eaos-timeline-dot"></span>
+                    <span class="eaos-timeline-line"></span>
+                </div>
+
+                <div class="eaos-timeline-content">
+                    <div class="eaos-timeline-title">
+                        PYTEST
+                    </div>
+
+                    <div class="eaos-timeline-meta">
+                        Automated tests
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="eaos-timeline-item eaos-timeline-last"
+                data-step="COMPLETED"
+            >
+                <div class="eaos-timeline-marker">
+                    <span class="eaos-timeline-dot"></span>
+                </div>
+
+                <div class="eaos-timeline-content">
+                    <div class="eaos-timeline-title">
+                        COMPLETED
+                    </div>
+
+                    <div class="eaos-timeline-meta">
+                        Task finished
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- QUICK STATUS -->
+    <div class="eaos-quick-status">
+        <div class="eaos-quick-item">
+            <span>Ruff</span>
+
+            <span
+                id="runtime-ruff"
+                class="eaos-quick-value idle"
+            >
+                —
+            </span>
+        </div>
+
+        <div class="eaos-quick-item">
+            <span>Pytest</span>
+
+            <span
+                id="runtime-pytest"
+                class="eaos-quick-value idle"
+            >
+                —
+            </span>
+        </div>
+
+        <div class="eaos-quick-item">
+            <span>Overall</span>
+
+            <span
+                id="runtime-overall"
+                class="eaos-quick-value idle"
+            >
+                —
+            </span>
+        </div>
+    </div>
+
+    <!-- INPUT -->
+    <form
+        id="chat-form"
+        class="eaos-chat-input"
+    >
+        <textarea
+            id="chat-input"
+            rows="2"
+            placeholder="Ask EAOS to analyze, build, verify..."
+            autocomplete="off"
+        ></textarea>
+
+        <div class="eaos-chat-input-footer">
+            <div class="eaos-input-hint">
+                Enter send · Shift+Enter newline
+            </div>
+
+            <button
+                id="btn-send-chat"
+                type="submit"
+                class="eaos-send-button"
+            >
+                Send
+            </button>
+        </div>
+    </form>
+</div>

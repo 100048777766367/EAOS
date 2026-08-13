@@ -1,8 +1,8 @@
-"""Service health inspector and deployable unit auditor for EAOS."""
-
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict
+
+"""Service health inspector and deployable unit auditor for EAOS."""
 
 
 class ServiceUnitStatusDTO(BaseModel):

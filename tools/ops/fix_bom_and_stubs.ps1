@@ -32,7 +32,7 @@ foreach ($file in $pyFiles) {
         $bomFoundCount++
         $relPath = $file.FullName.Replace((Get-Item .).FullName + "\", "")
         Write-Host "  [BOM DETECTED] $relPath" -ForegroundColor Red
-        
+
         if (-not $DryRun) {
             Copy-Item -Path $file.FullName -Destination "$($file.FullName).bak" -Force
             $text = [System.IO.File]::ReadAllText($file.FullName, [System.Text.Encoding]::UTF8)

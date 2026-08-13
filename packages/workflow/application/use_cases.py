@@ -66,7 +66,7 @@ class ExecuteWorkflowUseCase:
                     f"Simulated stuck at {datetime.now(UTC)}. Resilience rescue triggered.",
                 ],
             )
-            logger.warn(
+            logger.warning(
                 "Workflow instance stuck detected",
                 instance_id=instance.instance_id,
                 state="STUCK_TIMEOUT_ERROR",

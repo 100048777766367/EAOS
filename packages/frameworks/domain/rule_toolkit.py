@@ -1,8 +1,8 @@
-"""Sprint 5 Engine: Rule Toolkit (RTK) for Executable Architecture Rules."""
-
 import ast
 
 from pydantic import BaseModel, ConfigDict
+
+"""Sprint 5 Engine: Rule Toolkit (RTK) for Executable Architecture Rules."""
 
 
 class RuleCheckResultDTO(BaseModel):

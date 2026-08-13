@@ -30,7 +30,7 @@
             const res = await fetch(`${API_BASE}/dashboard/constitutional-fitness`);
             const data = await res.json();
             document.getElementById('fit-health').textContent = `${data.health_score}%`;
-            
+
             const list = document.getElementById('fitness-list');
             list.innerHTML = data.checks.map(c => `
                 <div class="p-3 bg-slate-950 rounded border border-slate-800 flex justify-between items-center">

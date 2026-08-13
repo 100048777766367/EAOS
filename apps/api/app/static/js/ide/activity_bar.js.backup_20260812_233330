@@ -1,0 +1,544 @@
+/**
+ * EAOS IDE — Activity Bar Controller
+ *
+ * Responsibility:
+ * - Active activity state
+ * - aria-pressed synchronization
+ * - Keyboard navigation
+ * - Activity state persistence
+ * - Custom activity events
+ * - DOM controller API
+ *
+ * Does NOT own:
+ * - pane visibility
+ * - pane dimensions
+ * - Monaco
+ * - chat
+ * - AI runtime
+ * - WebSocket
+ * - application/business logic
+ */
+
+const ACTIVITY_SELECTOR =
+    "[data-activity]";
+
+const STORAGE_KEY =
+    "eaos.activity.active";
+
+const DEFAULT_ACTIVITY =
+    "explorer";
+
+const ACTIVITY_EVENT =
+    "eaos:activity";
+
+const NAVIGATION_KEYS = [
+    "ArrowUp",
+    "ArrowDown",
+    "Home",
+    "End",
+];
+
+const state = {
+    active: null,
+    activities: [],
+};
+
+function getButtons() {
+    return Array.from(
+        document.querySelectorAll(
+            ACTIVITY_SELECTOR
+        )
+    );
+}
+
+function getActivityName(button) {
+    return button?.dataset?.activity || null;
+}
+
+function findButton(activity) {
+    return getButtons().find(
+        (button) =>
+            getActivityName(button) === activity
+    ) || null;
+}
+
+function readPersistedActivity() {
+    try {
+        const value =
+            window.localStorage.getItem(
+                STORAGE_KEY
+            );
+
+        return value || null;
+    } catch {
+        return null;
+    }
+}
+
+function persistActivity(activity) {
+    try {
+        window.localStorage.setItem(
+            STORAGE_KEY,
+            activity
+        );
+    } catch {
+        // Persistence is optional.
+    }
+}
+
+function collectActivities() {
+    state.activities =
+        getButtons()
+            .map(getActivityName)
+            .filter(Boolean);
+}
+
+function normalizeActivity(activity) {
+    if (
+        activity &&
+        state.activities.includes(activity)
+    ) {
+        return activity;
+    }
+
+    if (
+        state.activities.includes(
+            DEFAULT_ACTIVITY
+        )
+    ) {
+        return DEFAULT_ACTIVITY;
+    }
+
+    return state.activities[0] || null;
+}
+
+function syncButtons() {
+    const buttons = getButtons();
+
+    buttons.forEach(
+        (button) => {
+            const activity =
+                getActivityName(button);
+
+            const active =
+                activity === state.active;
+
+            button.classList.toggle(
+                "active",
+                active
+            );
+
+            button.setAttribute(
+                "aria-pressed",
+                active
+                    ? "true"
+                    : "false"
+            );
+
+            button.setAttribute(
+                "tabindex",
+                active
+                    ? "0"
+                    : "-1"
+            );
+        }
+    );
+}
+
+function emitActivityEvent(
+    activity,
+    previous
+) {
+    document.dispatchEvent(
+        new CustomEvent(
+            ACTIVITY_EVENT,
+            {
+                detail: {
+                    activity,
+                    previous,
+                    source: "activity_bar",
+                },
+            }
+        )
+    );
+}
+
+function setActive(
+    activity,
+    options = {}
+) {
+    const normalized =
+        normalizeActivity(activity);
+
+    if (!normalized) {
+        return false;
+    }
+
+    const previous =
+        state.active;
+
+    if (
+        previous === normalized &&
+        !options.force
+    ) {
+        syncButtons();
+        return true;
+    }
+
+    state.active =
+        normalized;
+
+    syncButtons();
+
+    if (
+        options.persist !== false
+    ) {
+        persistActivity(
+            normalized
+        );
+    }
+
+    emitActivityEvent(
+        normalized,
+        previous
+    );
+
+    return true;
+}
+
+function activateButton(
+    button,
+    options = {}
+) {
+    if (!button) {
+        return false;
+    }
+
+    const activity =
+        getActivityName(button);
+
+    if (!activity) {
+        return false;
+    }
+
+    return setActive(
+        activity,
+        options
+    );
+}
+
+function focusButton(
+    index
+) {
+    const buttons =
+        getButtons();
+
+    if (!buttons.length) {
+        return;
+    }
+
+    const normalized =
+        Math.max(
+            0,
+            Math.min(
+                index,
+                buttons.length - 1
+            )
+        );
+
+    buttons[normalized].focus();
+}
+
+function handleNavigation(
+    event
+) {
+    const buttons =
+        getButtons();
+
+    if (!buttons.length) {
+        return;
+    }
+
+    const current =
+        document.activeElement;
+
+    const currentIndex =
+        buttons.indexOf(current);
+
+    if (
+        event.key === "Home"
+    ) {
+        event.preventDefault();
+        focusButton(0);
+        return;
+    }
+
+    if (
+        event.key === "End"
+    ) {
+        event.preventDefault();
+        focusButton(
+            buttons.length - 1
+        );
+        return;
+    }
+
+    if (
+        event.key !== "ArrowUp" &&
+        event.key !== "ArrowDown"
+    ) {
+        return;
+    }
+
+    event.preventDefault();
+
+    let index =
+        currentIndex >= 0
+            ? currentIndex
+            : 0;
+
+    if (
+        event.key === "ArrowDown"
+    ) {
+        index += 1;
+    } else {
+        index -= 1;
+    }
+
+    if (
+        index < 0
+    ) {
+        index =
+            buttons.length - 1;
+    }
+
+    if (
+        index >= buttons.length
+    ) {
+        index = 0;
+    }
+
+    focusButton(index);
+}
+
+function handleButtonKeydown(
+    event
+) {
+    if (
+        NAVIGATION_KEYS.includes(
+            event.key
+        )
+    ) {
+        handleNavigation(event);
+        return;
+    }
+
+    if (
+        event.key === "Enter" ||
+        event.key === " "
+    ) {
+        event.preventDefault();
+
+        activateButton(
+            event.currentTarget
+        );
+    }
+}
+
+function bindButtons() {
+    getButtons().forEach(
+        (button) => {
+            button.addEventListener(
+                "click",
+                () => {
+                    activateButton(
+                        button
+                    );
+                }
+            );
+
+            button.addEventListener(
+                "keydown",
+                handleButtonKeydown
+            );
+        }
+    );
+}
+
+function bindGlobalKeyboard() {
+    document.addEventListener(
+        "keydown",
+        (event) => {
+            const activeElement =
+                document.activeElement;
+
+            const isActivityButton =
+                activeElement &&
+                activeElement.matches &&
+                activeElement.matches(
+                    ACTIVITY_SELECTOR
+                );
+
+            if (!isActivityButton) {
+                return;
+            }
+
+            if (
+                event.key === "ArrowUp" ||
+                event.key === "ArrowDown" ||
+                event.key === "Home" ||
+                event.key === "End"
+            ) {
+                handleNavigation(event);
+            }
+        }
+    );
+}
+
+
+function dispatchActivityChange(activity) {
+    document.dispatchEvent(
+        new CustomEvent(
+            "eaos:activity-change",
+            {
+                detail: {
+                    activity,
+                },
+            }
+        )
+    );
+}
+document.addEventListener(
+    "eaos:activity-controller-change",
+    (event) => {
+        if (
+            event.detail &&
+            event.detail.activity
+        ) {
+            dispatchActivityChange(
+                event.detail.activity
+            );
+        }
+    }
+);
+
+function exposeAPI() {
+    window.EAOS =
+        window.EAOS || {};
+
+    window.EAOS.activity =
+        {
+            getState() {
+                return {
+                    active:
+                        state.active,
+
+                    activities:
+                        [...state.activities],
+                };
+            },
+
+            getActive() {
+                return state.active;
+            },
+
+            setActive(
+                activity,
+                options
+            ) {
+                return setActive(
+                    activity,
+                    options
+                );
+            },
+
+            activate(
+                activity
+            ) {
+                return setActive(
+                    activity
+                );
+            },
+
+            getActivities() {
+                return [
+                    ...state.activities,
+                ];
+            },
+
+            focus(
+                activity
+            ) {
+                const button =
+                    findButton(
+                        activity
+                    );
+
+                if (!button) {
+                    return false;
+                }
+
+                button.focus();
+
+                return true;
+            },
+
+            refresh() {
+                collectActivities();
+
+                setActive(
+                    state.active,
+                    {
+                        persist: false,
+                        force: true,
+                    }
+                );
+
+                return true;
+            },
+        };
+}
+
+function init() {
+    collectActivities();
+
+    const persisted =
+        readPersistedActivity();
+
+    const initial =
+        normalizeActivity(
+            persisted
+        );
+
+    if (initial) {
+        state.active =
+            initial;
+    }
+
+    syncButtons();
+
+    bindButtons();
+    bindGlobalKeyboard();
+
+    exposeAPI();
+
+    console.debug(
+        "[EAOS] Activity bar initialized",
+        window.EAOS.activity.getState()
+    );
+}
+
+if (
+    document.readyState ===
+    "loading"
+) {
+    document.addEventListener(
+        "DOMContentLoaded",
+        init,
+        {
+            once: true,
+        }
+    );
+} else {
+    init();
+}

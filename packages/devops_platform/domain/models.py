@@ -1,9 +1,9 @@
-"""DevOps & Platform Engineering Frameworks Domain Model for EAOS."""
-
 from datetime import UTC, datetime
 from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""DevOps & Platform Engineering Frameworks Domain Model for EAOS."""
 
 
 class DevOpsFrameworkType(StrEnum):

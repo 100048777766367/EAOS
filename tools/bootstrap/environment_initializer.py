@@ -1,9 +1,10 @@
-"""EAOS environment bootstrap initializer engine."""
-
 import json
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict
+
+"""EAOS environment bootstrap initializer engine."""
+
 
 ROOT_PATH = Path(__file__).resolve().parents[2]
 

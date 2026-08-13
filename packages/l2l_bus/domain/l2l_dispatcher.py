@@ -1,9 +1,9 @@
-"""L2L (Loop-to-Loop / App-to-App) Dispatcher Engine."""
-
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from enum import Enum
 from typing import Any, Protocol
+
+"""L2L (Loop-to-Loop / App-to-App) Dispatcher Engine."""
 
 
 class AppLoopStatus(Enum):
@@ -30,9 +30,7 @@ class L2LCommandDTO:
     target_app: str
     action_loop: str
     payload: dict[str, Any] = field(default_factory=dict)
-    timestamp: datetime = field(
-        default_factory=lambda: datetime.now(UTC)
-    )
+    timestamp: datetime = field(default_factory=lambda: datetime.now(UTC))
 
 
 @dataclass(frozen=True, slots=True)
@@ -51,9 +49,7 @@ class L2LAppDispatcher:
     def __init__(self) -> None:
         self._registered_loops: dict[str, ExecutableAppLoopPort] = {}
 
-    def register_app_loop(
-        self, app_name: str, loop_runner: ExecutableAppLoopPort
-    ) -> None:
+    def register_app_loop(self, app_name: str, loop_runner: ExecutableAppLoopPort) -> None:
         """Đăng ký vòng lặp thực thi của một App."""
         self._registered_loops[app_name] = loop_runner
 
@@ -64,10 +60,7 @@ class L2LAppDispatcher:
             return L2LResponseDTO(
                 command=command,
                 status=AppLoopStatus.NOT_FOUND,
-                error_message=(
-                    f"App Loop '{command.target_app}' không tồn tại hoặc "
-                    f"chưa được đăng ký vào L2L Bus."
-                ),
+                error_message=(f"App Loop '{command.target_app}' không tồn tại hoặc chưa được đăng ký vào L2L Bus."),
             )
 
         try:

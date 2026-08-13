@@ -1,8 +1,8 @@
-"""Specification and rule AST parser engine for EAOS."""
-
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict
+
+"""Specification and rule AST parser engine for EAOS."""
 
 
 class ParsedRuleDTO(BaseModel):

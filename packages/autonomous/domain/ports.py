@@ -4,7 +4,7 @@ from packages.autonomous.domain.models import LoopCycle
 
 
 class AutonomousRepository(Protocol):
-    """Port Ä‘á»‹nh nghÄ©a cÃ¡c hÃ nh vi lÆ°u trá»¯ vÃ  cháº©n Ä‘oÃ¡n vÃ²ng láº·p tá»± trá»‹."""
+    """Port Ä‘á»‹nh nghÄ©a cÃ¡c hÃ nh vi lÆ°u trá»¯ vÃ  cháº©n Ä‘oÃ¡n vÃ²ng láº·p tá»± trá»‹."""
 
     def save(self, cycle: LoopCycle) -> LoopCycle: ...
 

@@ -1,0 +1,176 @@
+============================================================
+DXS PHASE D.0 — CLI INSPECTION EVIDENCE
+============================================================
+
+Timestamp:
+20260813_225255
+
+Repository:
+D:\EAOS
+
+Scope:
+- Inspect CLI implementation
+- Locate except AttributeError
+- Inspect parser/command registration
+- Inspect scaffold implementation
+- Inspect scaffold runtime contract
+- Inspect existing CLI tests
+- NO implementation changes
+
+------------------------------------------------------------
+CLI FILES
+------------------------------------------------------------
+
+D:\EAOS\dxs\cli\__init__.py
+D:\EAOS\dxs\cli\main.py
+D:\EAOS\dxs\cli\phase8.py
+D:\EAOS\dxs\tests\test_cli.py
+
+------------------------------------------------------------
+except AttributeError
+------------------------------------------------------------
+
+D:\EAOS\dxs\cli\main.py:66: except AttributeError:
+D:\EAOS\dxs\cli\main.py:116: except AttributeError:
+D:\EAOS\dxs\cli\main.py:146: except AttributeError:
+D:\EAOS\dxs\cli\main.py:228: except AttributeError:
+D:\EAOS\dxs\cli\main.py:231: except AttributeError:
+D:\EAOS\dxs\cli\main.py:252: except AttributeError:
+D:\EAOS\dxs\cli\main.py:272: except AttributeError:
+D:\EAOS\dxs\cli\main.py:425: except AttributeError:
+D:\EAOS\dxs\cli\main.py:428: except AttributeError:
+D:\EAOS\dxs\cli\main.py:456: except AttributeError:
+D:\EAOS\dxs\cli\main.py:459: except AttributeError:
+D:\EAOS\dxs\cli\main.py:478: except AttributeError:
+D:\EAOS\dxs\cli\main.py:497: except AttributeError:
+
+------------------------------------------------------------
+CLI TESTS
+------------------------------------------------------------
+
+D:\EAOS\tests\unit\infrastructure\test_python_sdk_client.py
+D:\EAOS\tests\unit\tools\test_enterprise_cli.py
+
+------------------------------------------------------------
+INSPECTION OUTPUT
+------------------------------------------------------------
+
+=== PYTHON ROOT ===
+D:\EAOS
+
+=== CLI SOURCE MAP ===
+
+[FILE] D:\EAOS\dxs\application\architecture_checker.py
+  class RuleResult methods=[]
+  class ArchitectureChecker methods=['__init__', 'run', 'passed', '_check_root', '_check_required_packages', '_check_python_files', '_check_python_file', '_check_imports', '_check_import', '_check_relative_import', '_check_dependency_direction', '_detect_layer', '_result', 'print_report']
+  function main args=0
+
+[FILE] D:\EAOS\dxs\cli\__init__.py
+
+[FILE] D:\EAOS\dxs\cli\main.py
+  function _print_header args=1
+  function _print_footer args=0
+  function _doctor args=1
+  function _discover args=1
+  function _validate args=1
+  function _diagnose args=1
+  function _health args=1
+  function _evidence args=1
+  function _compatibility args=2
+  function _migration args=2
+  function _evolution args=1
+  function _remediation args=1
+  function _scaffold args=1
+  function _workspace args=1
+  function _documentation args=1
+  function _ide args=1
+  function _integrations args=1
+  function _policies args=1
+  function _governance args=1
+  function _orchestration args=1
+  function _observability args=1
+  function _self_diagnostics args=1
+  function _ai_capability args=1
+  function _ai_policy args=1
+  function _ai_adapter args=1
+  function _add_version_arguments args=1
+  function _build_parser args=0
+  function _dispatch args=2
+  function main args=0
+
+[FILE] D:\EAOS\dxs\cli\phase8.py
+  function main args=0
+
+=== PARSER / COMMAND TOKENS ===
+D:\EAOS\dxs\application\architecture_checker.py: click, typer
+D:\EAOS\dxs\cli\main.py: argparse, ArgumentParser, add_parser, add_subparsers, add_argument, scaffold
+
+=== SCAFFOLD MODULE MAP ===
+
+[FILE] D:\EAOS\dxs\scaffolding\__init__.py
+
+[FILE] D:\EAOS\dxs\scaffolding\service.py
+  function scaffold_capability
+
+=== IMPORTABLE CLI MODULES ===
+[IMPORT] dxs.application.architecture_checker -> D:\EAOS\dxs\application\architecture_checker.py
+  class ArchitectureChecker signature=(root: 'Path') -> 'None'
+  class Path signature=(*args, **kwargs)
+  class RuleResult signature=(rule_id: 'str', category: 'str', name: 'str', passed: 'bool', message: 'str', file: 'Path | None' = None, line: 'int | None' = None) -> None
+  function dataclass signature=(cls=None, /, *, init=True, repr=True, eq=True, order=False, unsafe_hash=False, frozen=False, match_args=True, kw_only=False, slots=False, weakref_slot=False)
+  function main signature=() -> 'int'
+[IMPORT] dxs.cli -> D:\EAOS\dxs\cli\__init__.py
+[IMPORT] dxs.cli.main -> D:\EAOS\dxs\cli\main.py
+  class AIAdapterService signature=(adapters: 'tuple[AIAdapter, ...]' = ()) -> 'None'
+  class AIPolicyService signature=(policy: 'AIPolicy') -> 'None'
+  class ArchitectureChecker signature=(root: 'Path') -> 'None'
+  class Callable signature=()
+  class CapabilityRegistryService signature=(capabilities: 'tuple[Capability, ...]' = ()) -> 'None'
+  class CompatibilityService signature=(checker: 'CompatibilityChecker') -> 'None'
+  class ContractVersion signature=(major: 'int', minor: 'int' = 0, patch: 'int' = 0) -> None
+  class DebuggingService signature=()
+  class DocumentationService signature=()
+  class EvolutionService signature=(compatibility: 'CompatibilityMatrix | None' = None, deprecation: 'DeprecationPolicy | None' = None, migration: 'MigrationPlanner | None' = None) -> 'None'
+  class IdeService signature=()
+  class IntegrationService signature=()
+  class MigrationRequest signature=(current_version: 'str', target_version: 'str') -> None
+  class MigrationService signature=(compatibility_service: 'CompatibilityService') -> 'None'
+  class Path signature=(*args, **kwargs)
+  function create_repository_application signature=() -> 'RepositoryApplication'
+  function discover_repository signature=(start: 'Path | None' = None) -> 'Path'
+  function main signature=() -> 'int'
+[IMPORT] dxs.cli.phase8 -> D:\EAOS\dxs\cli\phase8.py
+  class EvolutionService signature=() -> 'None'
+  class Path signature=(*args, **kwargs)
+  function main signature=() -> 'int'
+
+------------------------------------------------------------
+SCAFFOLD RUNTIME OUTPUT
+------------------------------------------------------------
+
+
+=== dxs.scaffolding ===
+file: D:\EAOS\dxs\scaffolding\__init__.py
+[SKIP] dxs.scaffolding.scaffolder: ModuleNotFoundError: No module named 'dxs.scaffolding.scaffolder'
+
+=== dxs.scaffolding.service ===
+file: D:\EAOS\dxs\scaffolding\service.py
+class Path: signature=(*args, **kwargs)
+class ScaffoldResult: signature=(root: 'Path', created: 'tuple[Path, ...]', skipped: 'tuple[Path, ...]') -> None
+function scaffold_capability(root: 'Path', name: 'str') -> 'ScaffoldResult'
+[SKIP] dxs.scaffolding.application: ModuleNotFoundError: No module named 'dxs.scaffolding.application'
+[SKIP] dxs.scaffolding.contracts: ModuleNotFoundError: No module named 'dxs.scaffolding.contracts'
+
+============================================================
+D.0 INSPECTION COMPLETE
+============================================================
+
+IMPORTANT:
+No implementation files were modified.
+No test files were modified.
+No CLI command was added.
+No AttributeError handler was removed.
+
+Next phase:
+D.1 — Patch CLI based ONLY on the inspected contracts.
+============================================================

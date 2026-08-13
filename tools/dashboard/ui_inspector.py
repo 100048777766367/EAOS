@@ -1,8 +1,8 @@
-"""UI View Inspector verifying presence of all EAOS frontend UI views."""
-
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict
+
+"""UI View Inspector verifying presence of all EAOS frontend UI views."""
 
 
 class UIViewStatusDTO(BaseModel):

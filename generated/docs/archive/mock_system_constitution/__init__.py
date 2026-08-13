@@ -1,2 +1,1 @@
-﻿# Auto-generated __init__.py for mock_system_constitution
-
+# Auto-generated __init__.py for mock_system_constitution

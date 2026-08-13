@@ -1,8 +1,8 @@
-"""Boilerplate code synthesizer generating Hexagonal DDD package structures."""
-
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict
+
+"""Boilerplate code synthesizer generating Hexagonal DDD package structures."""
 
 
 class GeneratedBoilerplateDTO(BaseModel):

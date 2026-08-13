@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from pydantic import BaseModel, ConfigDict, Field
+
 """Marketing Application DTOs — Input Commands and Output Results.
 
 Hexagonal Rule: DTOs live in the application layer as the boundary contract.
@@ -5,9 +9,6 @@ They translate between external representations and domain objects.
 They MUST NOT contain business logic.
 """
 
-from __future__ import annotations
-
-from pydantic import BaseModel, ConfigDict, Field
 
 # ---------------------------------------------------------------------------
 # Input Command DTOs (inbound from primary adapters / driving side)

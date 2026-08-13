@@ -1,8 +1,8 @@
-"""Context Window and Short-Term Memory Manager."""
-
 from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Context Window and Short-Term Memory Manager."""
 
 
 class ContextWindowDTO(BaseModel):

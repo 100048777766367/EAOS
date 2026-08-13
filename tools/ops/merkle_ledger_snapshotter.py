@@ -1,6 +1,6 @@
-"""Automated Merkle tree root hash ledger snapshotter."""
-
 from pydantic import BaseModel, ConfigDict
+
+"""Automated Merkle tree root hash ledger snapshotter."""
 
 
 class MerkleLedgerSnapshotDTO(BaseModel):

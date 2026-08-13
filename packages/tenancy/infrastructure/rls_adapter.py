@@ -1,6 +1,6 @@
-"""PostgreSQL Row-Level Security (RLS) tenant isolation adapter."""
-
 from pydantic import BaseModel, ConfigDict
+
+"""PostgreSQL Row-Level Security (RLS) tenant isolation adapter."""
 
 
 class RLSContextDTO(BaseModel):

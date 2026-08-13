@@ -1,6 +1,6 @@
-"""Động cơ kiểm toán Domain Events."""
-
 from __future__ import annotations
+
+"""Động cơ kiểm toán Domain Events."""
 
 
 class EventEngine:

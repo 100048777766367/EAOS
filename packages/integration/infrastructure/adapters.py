@@ -1,6 +1,6 @@
-"""Infrastructure storage adapters for Integration context."""
-
 from packages.integration.domain.models import IntegrationEntity
+
+"""Infrastructure storage adapters for Integration context."""
 
 
 class InMemoryIntegrationRepository:

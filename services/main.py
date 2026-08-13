@@ -1,2 +1,2 @@
-
-def new_function(): return True
+def new_function():
+    return True

@@ -1,5 +1,5 @@
-"""Äiá»ƒm xuáº¥t cÃ´ng khai cho EAOS Agents Engine."""
+"""EAOS autonomous agent subsystem."""
 
-from .agent_manager import AgentManager
+from .orchestrator import AgentOrchestrator
 
-__all__ = ["AgentManager"]
+__all__ = ["AgentOrchestrator"]

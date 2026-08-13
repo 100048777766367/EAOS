@@ -1,8 +1,8 @@
-"""Prompt Template Manager."""
-
 from __future__ import annotations
 
 from pathlib import Path
+
+"""Prompt Template Manager."""
 
 
 class PromptManager:

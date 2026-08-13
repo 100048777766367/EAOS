@@ -1,8 +1,8 @@
-"""Static assets registry and template loader for EAOS."""
-
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict
+
+"""Static assets registry and template loader for EAOS."""
 
 
 class AssetMetadataDTO(BaseModel):

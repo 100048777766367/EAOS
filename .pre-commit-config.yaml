@@ -16,18 +16,23 @@ repos:
       - id: check-json
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.1.15
+    rev: v0.3.0
     hooks:
       - id: ruff
-        args: [--fix, --exit-non-zero-on-fix]
+        args: [--fix]
       - id: ruff-format
 
-  # TÍCH HỢP TỐI CAO: Ép buộc chạy Linter Kiến trúc tự xây dựng của chính EAOS ngay khi commit!
+  # TÍCH HỢP TỐI CAO: Kiểm soát bảo mật ký tự ẩn và Hiến pháp kiến trúc EAOS
   - repo: local
     hooks:
+      - id: check-invisible-chars
+        name: Check Invisible / Homograph Chars
+        entry: python scripts/check_invisible_chars.py
+        language: system
+        types: [python]
+
       - id: eaos-architecture-validator
         name: EAOS Architecture Validator (Hiến pháp tối cao)
-        entry: uv run taskipy validate
+        entry: python -m task lint
         language: system
         pass_filenames: false
-        always_run: true

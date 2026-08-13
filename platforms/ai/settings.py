@@ -14,20 +14,12 @@ class EAOSSettings(BaseSettings):
         alias="DATABASE_URL",
     )
 
-    ollama_base_url: str = Field(
-        default="http://localhost:11434", alias="OLLAMA_BASE_URL"
-    )
-    ollama_model: str = Field(
-        default="nemotron-mini", alias="OLLAMA_MODEL"
-    )
-    default_ai_provider: str = Field(
-        default="gemini", alias="DEFAULT_AI_PROVIDER"
-    )
+    ollama_base_url: str = Field(default="http://localhost:11434", alias="OLLAMA_BASE_URL")
+    ollama_model: str = Field(default="nemotron-mini", alias="OLLAMA_MODEL")
+    default_ai_provider: str = Field(default="gemini", alias="DEFAULT_AI_PROVIDER")
 
     gemini_api_key: str = Field(default="", alias="GEMINI_API_KEY")
-    gemini_model: str = Field(
-        default="gemini-flash-latest", alias="GEMINI_MODEL"
-    )
+    gemini_model: str = Field(default="gemini-flash-latest", alias="GEMINI_MODEL")
     gemini_api_keys: str = Field(default="", alias="GEMINI_API_KEYS")
 
     groq_api_key: str = Field(default="", alias="GROQ_API_KEY")

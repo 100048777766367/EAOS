@@ -1,8 +1,8 @@
-"""Project bootstrap initializer establishing EAOS workspace structure."""
-
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict
+
+"""Project bootstrap initializer establishing EAOS workspace structure."""
 
 
 class BootstrapStatusDTO(BaseModel):

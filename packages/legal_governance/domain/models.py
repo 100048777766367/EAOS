@@ -1,9 +1,9 @@
-"""Legal Governance & Judicial System Domain Model for EAOS."""
-
 from datetime import UTC, datetime
 from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Legal Governance & Judicial System Domain Model for EAOS."""
 
 
 class JudicialRole(StrEnum):

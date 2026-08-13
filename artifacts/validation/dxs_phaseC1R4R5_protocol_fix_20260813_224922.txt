@@ -1,0 +1,50 @@
+============================================================
+DXS PHASE C.1-R4-R5 — VALIDATION EVIDENCE
+============================================================
+
+Repository:
+D:\EAOS
+
+Root cause:
+CompatibilityChecker is a typing.Protocol and cannot be instantiated.
+
+Incorrect test assumption:
+CompatibilityChecker()
+
+Correct concrete implementation:
+dxs.adapters.compatibility.CompatibilityAdapter
+
+Correct dependency:
+CompatibilityService(CompatibilityAdapter())
+
+Correct migration dependency:
+MigrationService(CompatibilityService(CompatibilityAdapter()))
+
+Modified tests:
+tests\dxs\test_compatibility.py
+tests\dxs\test_migration.py
+
+Backups:
+tests\dxs\test_compatibility.py.backup_phaseC1R4R5_20260813_224922
+tests\dxs\test_migration.py.backup_phaseC1R4R5_20260813_224922
+
+Focused validation:
+PASS - compatibility tests
+PASS - migration tests
+PASS - Phase C application contract
+PASS - dxs compile
+PASS - tests/dxs compile
+
+NOT RUN:
+- full pytest
+- async-heavy suites
+- E2E
+- Playwright
+- application servers
+
+Implementation files under dxs/:
+NOT MODIFIED
+
+============================================================
+PHASE C.1-R4-R5 PASS
+============================================================

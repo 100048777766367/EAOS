@@ -1,11 +1,11 @@
-"""Autonomous bug auto-fix recorder and evidence logger for EAOS."""
-
 import json
 import time
 from pathlib import Path
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict
+
+"""Autonomous bug auto-fix recorder and evidence logger for EAOS."""
 
 
 class ErrorRecordDTO(BaseModel):

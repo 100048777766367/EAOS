@@ -1,9 +1,9 @@
-"""Diagram manager module."""
-
 from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+
+"""Diagram manager module."""
 
 
 @dataclass

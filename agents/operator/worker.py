@@ -1,6 +1,6 @@
-"""Operator worker module."""
-
 from __future__ import annotations
+
+"""Operator worker module."""
 
 
 class OperatorWorker:

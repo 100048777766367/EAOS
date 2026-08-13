@@ -1,6 +1,6 @@
-"""Architectural Fitness Function Engine for EAOS Governance."""
-
 from pydantic import BaseModel, ConfigDict
+
+"""Architectural Fitness Function Engine for EAOS Governance."""
 
 
 class FitnessEvaluationResult(BaseModel):

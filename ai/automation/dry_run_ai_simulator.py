@@ -1,6 +1,6 @@
-"""Dry run AI simulator."""
-
 from __future__ import annotations
+
+"""Dry run AI simulator."""
 
 
 class DryRunAiSimulator:

@@ -1,0 +1,1073 @@
+/**
+ * EAOS IDE — Layout Resizer
+ *
+ * Responsibility:
+ * - Resize Explorer
+ * - Resize Right Inspector / Copilot
+ * - Resize Terminal
+ * - Pointer + mouse drag
+ * - Keyboard resize
+ * - Min/max constraints
+ * - CSS dimension synchronization
+ * - Resize state persistence
+ * - Resize lifecycle events
+ *
+ * Does NOT own:
+ * - pane visibility
+ * - focus mode
+ * - Monaco
+ * - chat
+ * - AI runtime
+ * - WebSocket
+ * - application state
+ *
+ * Boundary:
+ *
+ * pane_toggles.js
+ *     visibility / focus / pane state
+ *
+ * layout_resizer.js
+ *     dimensions / resize / persistence
+ *
+ * chat.css
+ *     visual + layout rules
+ *
+ * Jinja templates
+ *     DOM structure
+ */
+
+const RESIZER_IDS = {
+    explorer: "resizer-explorer",
+    right: "resizer-copilot",
+    terminal: "resizer-terminal",
+};
+
+const PANE_IDS = {
+    explorer: "pane-left-explorer",
+    right: "pane-right-inspector",
+    terminal: "pane-bottom-terminal",
+};
+
+const WORKSPACE_SELECTOR =
+    ".eaos-workspace-shell";
+
+const STORAGE_KEY =
+    "eaos.ide.pane-sizes.v2";
+
+const LIMITS = {
+    explorer: {
+        min: 180,
+        max: 520,
+        fallback: 280,
+    },
+
+    right: {
+        min: 260,
+        max: 620,
+        fallback: 360,
+    },
+
+    terminal: {
+        min: 140,
+
+        /*
+         * The effective terminal maximum is calculated at runtime
+         * from the workspace height.
+         *
+         * This value remains a safety ceiling only.
+         */
+        max: 900,
+
+        fallback: 260,
+    },
+};
+
+const KEYBOARD_STEP = 16;
+
+const state = {
+    explorer: null,
+    right: null,
+    terminal: null,
+
+    active: null,
+    dragging: false,
+
+    pointerId: null,
+    startX: 0,
+    startY: 0,
+    startSize: 0,
+};
+
+let initialized = false;
+
+
+/* =========================================================
+ * DOM
+ * ========================================================= */
+
+function byId(id) {
+    return document.getElementById(id);
+}
+
+function workspace() {
+    return document.querySelector(
+        WORKSPACE_SELECTOR
+    );
+}
+
+
+/* =========================================================
+ * NUMERIC HELPERS
+ * ========================================================= */
+
+function clamp(value, min, max) {
+    return Math.min(
+        Math.max(value, min),
+        max
+    );
+}
+
+function numeric(value) {
+    const parsed =
+        Number.parseFloat(value);
+
+    return Number.isFinite(parsed)
+        ? parsed
+        : null;
+}
+
+
+/* =========================================================
+ * SIZE READING
+ * ========================================================= */
+
+function readComputedSize(
+    element,
+    axis
+) {
+    if (!element) {
+        return null;
+    }
+
+    const computed =
+        window.getComputedStyle(element);
+
+    return axis === "width"
+        ? numeric(computed.width)
+        : numeric(computed.height);
+}
+
+function getEffectiveLimits(type) {
+    const base = LIMITS[type];
+
+    if (!base) {
+        return null;
+    }
+
+    const result = {
+        min: base.min,
+        max: base.max,
+        fallback: base.fallback,
+    };
+
+    if (type === "terminal") {
+        const shell = workspace();
+
+        if (shell) {
+            const rect =
+                shell.getBoundingClientRect();
+
+            /*
+             * Keep enough room for the editor.
+             * This prevents the terminal from consuming
+             * the complete center workspace.
+             */
+            const editorReserve = 120;
+
+            const dynamicMax =
+                Math.floor(
+                    rect.height -
+                    editorReserve
+                );
+
+            if (
+                Number.isFinite(dynamicMax) &&
+                dynamicMax > result.min
+            ) {
+                result.max = Math.min(
+                    result.max,
+                    dynamicMax
+                );
+            }
+        }
+    }
+
+    return result;
+}
+
+function getLimits(type) {
+    return (
+        getEffectiveLimits(type) ||
+        LIMITS[type]
+    );
+}
+function getCurrentSize(type) {
+    const pane =
+        byId(PANE_IDS[type]);
+
+    if (!pane) {
+        return LIMITS[type].fallback;
+    }
+
+    const axis =
+        type === "terminal"
+            ? "height"
+            : "width";
+
+    return (
+        numeric(
+            pane.dataset.eaosSize
+        ) ??
+        readComputedSize(
+            pane,
+            axis
+        ) ??
+        LIMITS[type].fallback
+    );
+}
+
+
+/* =========================================================
+ * PERSISTENCE
+ * ========================================================= */
+
+function loadState() {
+    try {
+        const raw =
+            window.localStorage.getItem(
+                STORAGE_KEY
+            );
+
+        if (!raw) {
+            return null;
+        }
+
+        const parsed =
+            JSON.parse(raw);
+
+        if (
+            !parsed ||
+            typeof parsed !== "object"
+        ) {
+            return null;
+        }
+
+        return parsed;
+    } catch (error) {
+        console.warn(
+            "[EAOS] Unable to restore pane sizes",
+            error
+        );
+
+        return null;
+    }
+}
+
+function saveState() {
+    try {
+        window.localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify({
+                explorer: state.explorer,
+                right: state.right,
+                terminal: state.terminal,
+            })
+        );
+    } catch (error) {
+        console.warn(
+            "[EAOS] Unable to persist pane sizes",
+            error
+        );
+    }
+}
+
+
+/* =========================================================
+ * INITIAL STATE
+ * ========================================================= */
+
+function resolveInitialSize(
+    type,
+    persisted
+) {
+    const limits =
+        LIMITS[type];
+
+    const persistedValue =
+        numeric(
+            persisted?.[type]
+        );
+
+    if (persistedValue !== null) {
+        return clamp(
+            persistedValue,
+            limits.min,
+            limits.max
+        );
+    }
+
+    return clamp(
+        getCurrentSize(type),
+        limits.min,
+        limits.max
+    );
+}
+
+function normalizeInitialState() {
+    const persisted =
+        loadState();
+
+    state.explorer =
+        resolveInitialSize(
+            "explorer",
+            persisted
+        );
+
+    state.right =
+        resolveInitialSize(
+            "right",
+            persisted
+        );
+
+    state.terminal =
+        resolveInitialSize(
+            "terminal",
+            persisted
+        );
+}
+
+
+/* =========================================================
+ * CSS SYNCHRONIZATION
+ * ========================================================= */
+
+function setPaneSize(
+    type,
+    size,
+    options = {}
+) {
+    const pane =
+        byId(PANE_IDS[type]);
+
+    if (!pane) {
+        return false;
+    }
+
+    const limits =
+        LIMITS[type];
+
+    const value =
+        numeric(size);
+
+    if (value === null) {
+        return false;
+    }
+
+    const next =
+        clamp(
+            value,
+            limits.min,
+            limits.max
+        );
+
+    state[type] = next;
+
+    pane.dataset.eaosSize =
+        String(Math.round(next));
+
+    if (type === "terminal") {
+        pane.style.height =
+            `${next}px`;
+
+        pane.style.minHeight =
+            `${next}px`;
+
+        pane.style.maxHeight =
+            `${next}px`;
+    } else {
+        pane.style.width =
+            `${next}px`;
+
+        pane.style.minWidth =
+            `${next}px`;
+
+        pane.style.maxWidth =
+            `${next}px`;
+    }
+
+    if (!options.silent) {
+        saveState();
+        emitResize(type);
+    }
+
+    return true;
+}
+
+function applyAll() {
+    if (state.explorer !== null) {
+        setPaneSize(
+            "explorer",
+            state.explorer,
+            { silent: true }
+        );
+    }
+
+    if (state.right !== null) {
+        setPaneSize(
+            "right",
+            state.right,
+            { silent: true }
+        );
+    }
+
+    if (state.terminal !== null) {
+        setPaneSize(
+            "terminal",
+            state.terminal,
+            { silent: true }
+        );
+    }
+}
+
+
+/* =========================================================
+ * EVENTS
+ * ========================================================= */
+
+function emitResize(type) {
+    document.dispatchEvent(
+        new CustomEvent(
+            "eaos:resize",
+            {
+                detail: {
+                    type,
+                    size: state[type],
+                    state: getState(),
+                },
+            }
+        )
+    );
+}
+
+function emitResizeStart(type) {
+    document.dispatchEvent(
+        new CustomEvent(
+            "eaos:resize-start",
+            {
+                detail: {
+                    type,
+                    size: getCurrentSize(type),
+                },
+            }
+        )
+    );
+}
+
+function emitResizeEnd(type) {
+    document.dispatchEvent(
+        new CustomEvent(
+            "eaos:resize-end",
+            {
+                detail: {
+                    type,
+                    size: state[type],
+                },
+            }
+        )
+    );
+}
+
+
+/* =========================================================
+ * POINTER DRAG
+ * ========================================================= */
+
+function beginDrag(
+    type,
+    event
+) {
+    const resizer =
+        byId(
+            RESIZER_IDS[type]
+        );
+
+    if (!resizer) {
+        return;
+    }
+
+    if (
+        event.button !== undefined &&
+        event.button !== 0
+    ) {
+        return;
+    }
+
+    const pane =
+        byId(PANE_IDS[type]);
+
+    if (!pane) {
+        return;
+    }
+
+    state.active = type;
+    state.dragging = true;
+
+    state.pointerId =
+        event.pointerId ?? null;
+
+    state.startX =
+        event.clientX;
+
+    state.startY =
+        event.clientY;
+
+    state.startSize =
+        getCurrentSize(type);
+
+    /*
+     * Ensure the browser does not interpret the gesture
+     * as page scrolling / text selection.
+     */
+    resizer.style.touchAction =
+        type === "terminal"
+            ? "none"
+            : "none";
+
+    resizer.classList.add(
+        "is-resizing"
+    );
+
+    document.body.classList.add(
+        "eaos-resizing"
+    );
+
+    document.body.classList.add(
+        `eaos-resizing-${type}`
+    );
+
+    if (
+        event.pointerId !== undefined &&
+        resizer.setPointerCapture
+    ) {
+        try {
+            resizer.setPointerCapture(
+                event.pointerId
+            );
+        } catch {
+            // Pointer capture is optional.
+        }
+    }
+
+    emitResizeStart(type);
+
+    event.preventDefault();
+}
+
+function updateDrag(event) {
+    if (
+        !state.dragging ||
+        !state.active
+    ) {
+        return;
+    }
+
+    const type =
+        state.active;
+
+    const deltaX =
+        event.clientX -
+        state.startX;
+
+    const deltaY =
+        event.clientY -
+        state.startY;
+
+    let next;
+
+    if (type === "explorer") {
+        next =
+            state.startSize +
+            deltaX;
+    } else if (type === "right") {
+        next =
+            state.startSize -
+            deltaX;
+    } else {
+        next =
+            state.startSize -
+            deltaY;
+    }
+
+    setPaneSize(
+        type,
+        next
+    );
+}
+
+function endDrag() {
+    if (!state.dragging) {
+        return;
+    }
+
+    const active =
+        state.active;
+
+    const resizer =
+        active
+            ? byId(
+                RESIZER_IDS[active]
+            )
+            : null;
+
+    if (resizer) {
+        resizer.classList.remove(
+            "is-resizing"
+        );
+    }
+
+    document.body.classList.remove(
+        "eaos-resizing"
+    );
+
+    if (active) {
+        document.body.classList.remove(
+            `eaos-resizing-${active}`
+        );
+
+        emitResizeEnd(active);
+    }
+
+    state.active = null;
+    state.dragging = false;
+    state.pointerId = null;
+}
+
+
+/* =========================================================
+ * KEYBOARD RESIZE
+ * ========================================================= */
+
+function resizeByKeyboard(
+    type,
+    direction
+) {
+    const current =
+        getCurrentSize(type);
+
+    const delta =
+        direction === "positive"
+            ? KEYBOARD_STEP
+            : -KEYBOARD_STEP;
+
+    setPaneSize(
+        type,
+        current + delta
+    );
+}
+
+function handleResizerKeydown(
+    type,
+    event
+) {
+    const key =
+        event.key;
+
+    if (
+        key === "Home" ||
+        key === "End"
+    ) {
+        event.preventDefault();
+
+        const limits =
+            getLimits(type);
+
+        setPaneSize(
+            type,
+            key === "Home"
+                ? limits.min
+                : limits.max
+        );
+
+        return;
+    }
+
+    /*
+     * Explorer
+     *
+     * ArrowRight = grow
+     * ArrowLeft  = shrink
+     */
+    if (type === "explorer") {
+        if (key === "ArrowRight") {
+            event.preventDefault();
+
+            resizeByKeyboard(
+                type,
+                "positive"
+            );
+
+            return;
+        }
+
+        if (key === "ArrowLeft") {
+            event.preventDefault();
+
+            resizeByKeyboard(
+                type,
+                "negative"
+            );
+
+            return;
+        }
+    }
+
+    /*
+     * Right pane
+     *
+     * ArrowLeft  = grow
+     * ArrowRight = shrink
+     */
+    if (type === "right") {
+        if (key === "ArrowLeft") {
+            event.preventDefault();
+
+            resizeByKeyboard(
+                type,
+                "positive"
+            );
+
+            return;
+        }
+
+        if (key === "ArrowRight") {
+            event.preventDefault();
+
+            resizeByKeyboard(
+                type,
+                "negative"
+            );
+
+            return;
+        }
+    }
+
+    /*
+     * Terminal
+     *
+     * ArrowUp   = grow
+     * ArrowDown = shrink
+     */
+    if (type === "terminal") {
+        if (key === "ArrowUp") {
+            event.preventDefault();
+
+            resizeByKeyboard(
+                type,
+                "positive"
+            );
+
+            return;
+        }
+
+        if (key === "ArrowDown") {
+            event.preventDefault();
+
+            resizeByKeyboard(
+                type,
+                "negative"
+            );
+
+            return;
+        }
+    }
+}
+
+
+/* =========================================================
+ * RESIZER SETUP
+ * ========================================================= */
+
+function setupResizer(type) {
+    const resizer =
+        byId(
+            RESIZER_IDS[type]
+        );
+
+    if (!resizer) {
+        return;
+    }
+
+    resizer.setAttribute(
+        "role",
+        "separator"
+    );
+
+    resizer.setAttribute(
+        "tabindex",
+        "0"
+    );
+
+    resizer.setAttribute(
+        "aria-orientation",
+        type === "terminal"
+            ? "horizontal"
+            : "vertical"
+    );
+
+    resizer.addEventListener(
+        "pointerdown",
+        event => {
+            beginDrag(
+                type,
+                event
+            );
+        }
+    );
+
+    resizer.addEventListener(
+        "keydown",
+        event => {
+            handleResizerKeydown(
+                type,
+                event
+            );
+        }
+    );
+
+    resizer.addEventListener(
+        "dblclick",
+        () => {
+            setPaneSize(
+                type,
+                LIMITS[type].fallback
+            );
+        }
+    );
+}
+
+function bindGlobalPointerEvents() {
+    document.addEventListener(
+        "pointermove",
+        updateDrag
+    );
+
+    document.addEventListener(
+        "pointerup",
+        endDrag
+    );
+
+    document.addEventListener(
+        "pointercancel",
+        endDrag
+    );
+
+    window.addEventListener(
+        "blur",
+        endDrag
+    );
+}
+
+
+/* =========================================================
+ * PUBLIC API
+ * ========================================================= */
+
+function getState() {
+    return {
+        explorer:
+            state.explorer,
+
+        right:
+            state.right,
+
+        terminal:
+            state.terminal,
+
+        active:
+            state.active,
+
+        dragging:
+            state.dragging,
+    };
+}
+
+function handleViewportResize() {
+    if (state.terminal !== null) {
+        const limits =
+            getLimits("terminal");
+
+        if (
+            state.terminal >
+            limits.max
+        ) {
+            setPaneSize(
+                "terminal",
+                limits.max
+            );
+        }
+    }
+}
+function exposeAPI() {
+    window.EAOS =
+        window.EAOS || {};
+
+    window.EAOS.layout = {
+        getState,
+
+        render() {
+            normalizeInitialState();
+            applyAll();
+        },
+
+        getSize(type) {
+            if (!LIMITS[type]) {
+                return null;
+            }
+
+            return getCurrentSize(
+                type
+            );
+        },
+
+        setSize(
+            type,
+            size
+        ) {
+            if (!LIMITS[type]) {
+                return false;
+            }
+
+            return setPaneSize(
+                type,
+                size
+            );
+        },
+
+        reset(type) {
+            if (!LIMITS[type]) {
+                return false;
+            }
+
+            return setPaneSize(
+                type,
+                LIMITS[type].fallback
+            );
+        },
+
+        resetAll() {
+            setPaneSize(
+                "explorer",
+                LIMITS.explorer.fallback
+            );
+
+            setPaneSize(
+                "right",
+                LIMITS.right.fallback
+            );
+
+            setPaneSize(
+                "terminal",
+                LIMITS.terminal.fallback
+            );
+        },
+
+        save() {
+            saveState();
+        },
+
+        clearSaved() {
+            try {
+                window.localStorage.removeItem(
+                    STORAGE_KEY
+                );
+
+                return true;
+            } catch (error) {
+                console.warn(
+                    "[EAOS] Unable to clear pane sizes",
+                    error
+                );
+
+                return false;
+            }
+        },
+    };
+}
+
+
+/* =========================================================
+ * INIT
+ * ========================================================= */
+
+export function initIDELayoutResizers() {
+    if (initialized) {
+        return;
+    }
+
+    initialized = true;
+
+    normalizeInitialState();
+
+    setupResizer(
+        "explorer"
+    );
+
+    setupResizer(
+        "right"
+    );
+
+    setupResizer(
+        "terminal"
+    );
+
+    bindGlobalPointerEvents();
+
+    window.addEventListener(
+        "resize",
+        handleViewportResize
+    );
+
+    exposeAPI();
+
+    applyAll();
+
+    const ws =
+        workspace();
+
+    if (ws) {
+        ws.dataset.resizeState =
+            "ready";
+    }
+
+    console.debug(
+        "[EAOS] Layout resizer initialized",
+        window.EAOS.layout.getState()
+    );
+
+    document.dispatchEvent(
+        new CustomEvent(
+            "eaos:layout-resizer-ready",
+            {
+                detail: {
+                    state:
+                        window.EAOS.layout.getState(),
+                },
+            }
+        )
+    );
+}
+
+
+
+
+

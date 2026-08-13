@@ -4,7 +4,7 @@ from packages.knowledge.domain.models import KnowledgeArtifact
 
 
 class KnowledgeRepository(Protocol):
-    """Port (Interface) Ä‘á»‹nh nghÄ©a cÃ¡c hÃ nh vi lÆ°u trá»¯ tri thá»©c."""
+    """Port (Interface) Ä‘á»‹nh nghÄ©a cÃ¡c hÃ nh vi lÆ°u trá»¯ tri thá»©c."""
 
     def save(self, artifact: KnowledgeArtifact) -> KnowledgeArtifact: ...
 

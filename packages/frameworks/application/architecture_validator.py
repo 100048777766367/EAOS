@@ -1,10 +1,10 @@
-"""Sprint 6 Engine: Executable Architecture Validator & Scorecard."""
-
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict
 
 from packages.frameworks.domain.rule_toolkit import RuleToolkitEngine
+
+"""Sprint 6 Engine: Executable Architecture Validator & Scorecard."""
 
 
 class ValidationReportDTO(BaseModel):

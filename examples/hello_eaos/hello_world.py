@@ -1,8 +1,8 @@
-"""Hello EAOS Executable Example."""
-
 from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Hello EAOS Executable Example."""
 
 
 class HelloEAOSResultDTO(BaseModel):

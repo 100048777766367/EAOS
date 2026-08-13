@@ -1,8 +1,8 @@
-"""Multi-Node Federation and CRDT State Sync Engine."""
-
 from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Multi-Node Federation and CRDT State Sync Engine."""
 
 
 class FederationSyncStateDTO(BaseModel):

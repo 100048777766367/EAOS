@@ -1,11 +1,11 @@
-"""Multi-Agent Swarm Domain Models (Phase 4)."""
-
 from __future__ import annotations
 
 from enum import StrEnum
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Multi-Agent Swarm Domain Models (Phase 4)."""
 
 
 class AgentRole(StrEnum):

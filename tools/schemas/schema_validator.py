@@ -1,9 +1,9 @@
-"""Static structural schema validator engine for EAOS JSON schemas."""
-
 import json
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict
+
+"""Static structural schema validator engine for EAOS JSON schemas."""
 
 
 class SchemaValidationReportDTO(BaseModel):

@@ -1,9 +1,9 @@
-"""Air-Gapped & On-Premise Isolated Deployment Engine for EAOS."""
-
 from datetime import UTC, datetime
 from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Air-Gapped & On-Premise Isolated Deployment Engine for EAOS."""
 
 
 class DeploymentTierEnum(StrEnum):

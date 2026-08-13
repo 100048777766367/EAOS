@@ -1,8 +1,8 @@
-"""CQRS Commands Catalog (CQRS Pattern)."""
-
 from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""CQRS Commands Catalog (CQRS Pattern)."""
 
 
 class CommandElementDTO(BaseModel):

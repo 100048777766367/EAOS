@@ -1,5 +1,3 @@
-"""Validator Checker invoking EAOS Architecture Validator."""
-
 from __future__ import annotations
 
 from pathlib import Path
@@ -7,6 +5,8 @@ from typing import Any
 
 from tools.doctor.dto import DiagnosticCheckDTO, SeverityLevel
 from tools.validate.architecture_validator import ArchitectureValidator
+
+"""Validator Checker invoking EAOS Architecture Validator."""
 
 
 class ValidatorChecker:

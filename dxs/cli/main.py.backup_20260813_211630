@@ -1,0 +1,801 @@
+from __future__ import annotations
+
+import argparse
+from collections.abc import Callable
+from pathlib import Path
+
+from dxs.application.ai_adapter_service import AIAdapterService
+from dxs.application.ai_policy_service import AIPolicyService
+from dxs.application.architecture_checker import ArchitectureChecker
+from dxs.application.capability_registry_service import CapabilityRegistryService
+from dxs.application.compatibility_service import CompatibilityService
+from dxs.application.evolution_service import EvolutionService
+from dxs.application.ide_service import IdeService
+from dxs.application.integration_service import IntegrationService
+from dxs.application.migration_service import MigrationService
+from dxs.application.repository_service import RepositoryService
+from dxs.bootstrap import create_repository_application
+from dxs.contracts.versioning import ContractVersion
+from dxs.doctor.context import discover_repository
+from dxs.domain.debugging import DebuggingService
+from dxs.domain.documentation import DocumentationService
+from dxs.domain.migration import MigrationRequest
+
+CommandHandler = Callable[[argparse.Namespace, Path], int]
+
+
+COMMAND_ALIASES: dict[str, str] = {
+    "diag": "diagnose",
+    "evo": "evolution",
+    "remediate": "remediation",
+    "selfcheck": "self-diagnostics",
+}
+
+
+def _print_header(title: str) -> None:
+    print()
+    print("=" * 72)
+    print(title)
+    print("=" * 72)
+
+
+def _print_footer() -> None:
+    print("=" * 72)
+
+
+def _doctor(root: Path) -> int:
+    application = create_repository_application()
+    results = application.inspect(root)
+
+    _print_header("EAOS — DXS REPOSITORY DOCTOR")
+
+    failed = False
+
+    for result in results:
+        print(result)
+        failed |= result.startswith(("[WARN]", "[FAIL]"))
+
+    _print_footer()
+    return int(failed)
+
+
+def _discover(root: Path) -> int:
+    service = RepositoryService()
+
+    try:
+        result = service.discover(root)
+    except AttributeError:
+        result = discover_repository()
+
+    _print_header("EAOS — DXS REPOSITORY DISCOVERY")
+    print(result)
+    _print_footer()
+
+    return 0
+
+
+def _validate(root: Path) -> int:
+    application = create_repository_application()
+    results = application.validate(root)
+
+    _print_header("EAOS — DXS REPOSITORY VALIDATION")
+
+    failed = False
+
+    for result in results:
+        status = result.status.value
+        print(f"[{status}] {result.check}: {result.message}")
+        failed |= status == "fail"
+
+    _print_footer()
+    return int(failed)
+
+
+def _diagnose(root: Path) -> int:
+    service = DebuggingService()
+    results = service.inspect(root)
+
+    _print_header("EAOS — DXS DIAGNOSTICS")
+
+    failed = False
+
+    for result in results:
+        print(result)
+        failed |= not result.passed
+
+    _print_footer()
+    return int(failed)
+
+
+def _health(root: Path) -> int:
+    application = create_repository_application()
+
+    _print_header("EAOS — DXS HEALTH")
+
+    try:
+        results = application.health(root)
+    except AttributeError:
+        print("[INFO] Health service is not exposed by the repository application.")
+        print("[PASS] DXS health command is available.")
+        _print_footer()
+        return 0
+
+    if isinstance(results, (str, bytes)):
+        print(results)
+        _print_footer()
+        return 0
+
+    failed = False
+
+    for result in results:
+        print(result)
+
+        if hasattr(result, "passed"):
+            failed |= not result.passed
+
+    _print_footer()
+    return int(failed)
+
+
+def _evidence(root: Path) -> int:
+    _print_header("EAOS — DXS EVIDENCE")
+
+    application = create_repository_application()
+
+    try:
+        results = application.evidence(root)
+    except AttributeError:
+        print("[INFO] Evidence command is available.")
+        print("[INFO] Evidence service is not currently exposed by bootstrap.")
+        _print_footer()
+        return 0
+
+    if isinstance(results, (str, bytes)):
+        print(results)
+        _print_footer()
+        return 0
+
+    failed = False
+
+    for result in results:
+        print(result)
+
+        if hasattr(result, "passed"):
+            failed |= not result.passed
+
+    _print_footer()
+    return int(failed)
+
+
+def _compatibility(
+    current_value: str,
+    target_value: str,
+) -> int:
+    current = ContractVersion.parse(current_value)
+    target = ContractVersion.parse(target_value)
+
+    service = CompatibilityService()
+
+    result = service.check(
+        current=current,
+        target=target,
+    )
+
+    _print_header("EAOS — DXS CONTRACT COMPATIBILITY")
+
+    print(f"Current : {result.current_version}")
+    print(f"Target  : {result.target_version}")
+    print(f"Policy  : minor={result.policy.allow_minor_upgrade}, patch={result.policy.allow_patch_upgrade}")
+    print(f"Status  : {result.status.upper()}")
+    print(f"Reason  : {result.reason}")
+
+    _print_footer()
+
+    return 0 if result.compatible else 1
+
+
+def _migration(
+    current_value: str,
+    target_value: str,
+) -> int:
+    service = MigrationService()
+
+    result = service.plan(
+        MigrationRequest(
+            current_version=current_value,
+            target_version=target_value,
+        )
+    )
+
+    _print_header("EAOS — DXS CONTRACT MIGRATION")
+
+    print(f"Current : {result.current_version}")
+    print(f"Target  : {result.target_version}")
+    print(f"Status  : {result.status}")
+    print(f"Reason  : {result.reason}")
+
+    _print_footer()
+
+    return 0 if result.compatible else 1
+
+
+def _evolution(root: Path) -> int:
+    service = EvolutionService()
+
+    _print_header("EAOS — DXS EVOLUTION")
+
+    try:
+        result = service.inspect(root)
+    except AttributeError:
+        try:
+            result = service.evaluate(root)
+        except AttributeError:
+            print("[INFO] Evolution service is available but exposes no CLI inspection method.")
+            _print_footer()
+            return 0
+
+    if isinstance(result, (str, bytes)):
+        print(result)
+    else:
+        print(result)
+
+    _print_footer()
+    return 0
+
+
+def _remediation(root: Path) -> int:
+    _print_header("EAOS — DXS REMEDIATION")
+
+    application = create_repository_application()
+
+    try:
+        result = application.remediation(root)
+    except AttributeError:
+        print("[INFO] Remediation command is available.")
+        print("[INFO] No automatic remediation operation is exposed by bootstrap.")
+        print("[INFO] Use `eaos doctor` and `eaos diagnose` to identify actionable findings.")
+        _print_footer()
+        return 0
+
+    print(result)
+
+    _print_footer()
+    return 0
+
+
+def _scaffold(root: Path) -> int:
+    _print_header("EAOS — DXS SCAFFOLD")
+
+    application = create_repository_application()
+
+    try:
+        result = application.scaffold(root)
+    except AttributeError:
+        print("[INFO] Scaffold command is available.")
+        print("[INFO] No default scaffold operation is exposed by bootstrap.")
+        _print_footer()
+        return 0
+
+    print(result)
+
+    _print_footer()
+    return 0
+
+
+def _workspace(root: Path) -> int:
+    _print_header("EAOS — DXS WORKSPACE")
+
+    print(f"Root: {root}")
+
+    for name in sorted(path.name for path in root.iterdir() if path.is_dir()):
+        print(f"  {name}")
+
+    _print_footer()
+    return 0
+
+
+def _documentation(root: Path) -> int:
+    service = DocumentationService()
+    results = service.inspect(root)
+
+    _print_header("EAOS — DXS DOCUMENTATION")
+
+    failed = False
+
+    for result in results:
+        print(result)
+        failed |= not result.passed
+
+    _print_footer()
+    return int(failed)
+
+
+def _ide(root: Path) -> int:
+    report = IdeService().inspect(root)
+
+    _print_header("EAOS — DXS IDE")
+
+    for check in report.checks:
+        status = "PASS" if check.exists else "FAIL"
+        print(f"[{status}] {check.name}: {check.path}")
+
+    _print_footer()
+
+    return 0 if report.passed else 1
+
+
+def _integrations(root: Path) -> int:
+    report = IntegrationService().inspect(root)
+
+    _print_header("EAOS — DXS INTEGRATIONS")
+
+    for check in report.checks:
+        status = "PASS" if check.exists else "FAIL"
+        print(f"[{status}] {check.name}: {check.path}")
+
+    _print_footer()
+
+    return 0 if report.passed else 1
+
+
+def _policies(root: Path) -> int:
+    _print_header("EAOS — DXS POLICIES")
+
+    policy_dir = root / "dxs" / "policies"
+
+    if not policy_dir.exists():
+        print(f"[INFO] Policy directory does not exist: {policy_dir}")
+        print("[INFO] Create policies here as the DXS policy layer evolves.")
+        _print_footer()
+        return 0
+
+    files = sorted(policy_dir.rglob("*"))
+
+    if not files:
+        print("[INFO] Policy directory is empty.")
+    else:
+        for path in files:
+            if path.is_file():
+                print(f"[FILE] {path.relative_to(root)}")
+
+    _print_footer()
+    return 0
+
+
+def _governance(root: Path) -> int:
+    _print_header("EAOS — DXS GOVERNANCE")
+
+    governance_dir = root / "dxs" / "governance"
+
+    if not governance_dir.exists():
+        print(f"[INFO] Governance directory does not exist: {governance_dir}")
+        _print_footer()
+        return 0
+
+    for path in sorted(governance_dir.rglob("*")):
+        if path.is_file():
+            print(f"[FILE] {path.relative_to(root)}")
+
+    _print_footer()
+    return 0
+
+
+def _orchestration(root: Path) -> int:
+    _print_header("EAOS — DXS ORCHESTRATION")
+
+    orchestration_dir = root / "dxs" / "orchestration"
+
+    if not orchestration_dir.exists():
+        print(f"[INFO] Orchestration directory does not exist: {orchestration_dir}")
+        _print_footer()
+        return 0
+
+    for path in sorted(orchestration_dir.rglob("*")):
+        if path.is_file():
+            print(f"[FILE] {path.relative_to(root)}")
+
+    _print_footer()
+    return 0
+
+
+def _observability(root: Path) -> int:
+    _print_header("EAOS — DXS OBSERVABILITY")
+
+    observability_dir = root / "dxs" / "observability"
+
+    if not observability_dir.exists():
+        print(f"[INFO] Observability directory does not exist: {observability_dir}")
+        _print_footer()
+        return 0
+
+    for path in sorted(observability_dir.rglob("*")):
+        if path.is_file():
+            print(f"[FILE] {path.relative_to(root)}")
+
+    _print_footer()
+    return 0
+
+
+def _self_diagnostics(root: Path) -> int:
+    _print_header("EAOS — DXS SELF-DIAGNOSTICS")
+
+    checker = ArchitectureChecker()
+
+    try:
+        results = checker.check(root)
+    except AttributeError:
+        try:
+            results = checker.inspect(root)
+        except AttributeError:
+            print("[INFO] Self-diagnostics service is available.")
+            print("[INFO] Architecture checker does not expose a CLI operation.")
+            _print_footer()
+            return 0
+
+    failed = False
+
+    if isinstance(results, (str, bytes)):
+        print(results)
+    else:
+        for result in results:
+            print(result)
+
+            if hasattr(result, "passed"):
+                failed |= not result.passed
+
+    _print_footer()
+    return int(failed)
+
+
+def _ai_capability(root: Path) -> int:
+    _print_header("EAOS — DXS AI CAPABILITY")
+
+    service = CapabilityRegistryService()
+
+    try:
+        result = service.list_capabilities()
+    except AttributeError:
+        try:
+            result = service.inspect(root)
+        except AttributeError:
+            print("[INFO] AI capability service is available.")
+            print("[INFO] No listing operation is currently exposed.")
+            _print_footer()
+            return 0
+
+    print(result)
+
+    _print_footer()
+    return 0
+
+
+def _ai_policy(root: Path) -> int:
+    _print_header("EAOS — DXS AI POLICY")
+
+    service = AIPolicyService()
+
+    try:
+        result = service.inspect(root)
+    except AttributeError:
+        print("[INFO] AI policy service is available.")
+        print("[INFO] No inspection operation is currently exposed.")
+        _print_footer()
+        return 0
+
+    print(result)
+
+    _print_footer()
+    return 0
+
+
+def _ai_adapter(root: Path) -> int:
+    _print_header("EAOS — DXS AI ADAPTER")
+
+    service = AIAdapterService()
+
+    try:
+        result = service.inspect(root)
+    except AttributeError:
+        print("[INFO] AI adapter service is available.")
+        print("[INFO] No inspection operation is currently exposed.")
+        _print_footer()
+        return 0
+
+    print(result)
+
+    _print_footer()
+    return 0
+
+
+def _add_version_arguments(
+    parser: argparse.ArgumentParser,
+) -> None:
+    parser.add_argument(
+        "--current",
+        default="1.0.0",
+        help="Current contract version.",
+    )
+
+    parser.add_argument(
+        "--target",
+        default="1.0.0",
+        help="Target contract version.",
+    )
+
+
+def _build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        prog="eaos",
+        description="EAOS Developer Experience System",
+    )
+
+    parser.add_argument(
+        "--root",
+        type=Path,
+        default=None,
+        help="EAOS repository root.",
+    )
+
+    subparsers = parser.add_subparsers(
+        dest="command",
+        required=True,
+    )
+
+    # --------------------------------------------------------
+    # Repository lifecycle
+    # --------------------------------------------------------
+
+    subparsers.add_parser(
+        "doctor",
+        help="Inspect EAOS repository sources.",
+    )
+
+    subparsers.add_parser(
+        "discover",
+        help="Discover the EAOS repository and workspace.",
+    )
+
+    subparsers.add_parser(
+        "validate",
+        help="Validate EAOS repository sources.",
+    )
+
+    subparsers.add_parser(
+        "diagnose",
+        aliases=["diag"],
+        help="Run deterministic DXS diagnostics.",
+    )
+
+    subparsers.add_parser(
+        "health",
+        help="Inspect DXS health.",
+    )
+
+    subparsers.add_parser(
+        "evidence",
+        help="Inspect DXS evidence.",
+    )
+
+    # --------------------------------------------------------
+    # Contract lifecycle
+    # --------------------------------------------------------
+
+    compatibility = subparsers.add_parser(
+        "compatibility",
+        help="Check contract version compatibility.",
+    )
+
+    _add_version_arguments(compatibility)
+
+    migration = subparsers.add_parser(
+        "migration",
+        help="Plan a contract migration.",
+    )
+
+    _add_version_arguments(migration)
+
+    subparsers.add_parser(
+        "evolution",
+        aliases=["evo"],
+        help="Inspect evolutionary readiness.",
+    )
+
+    subparsers.add_parser(
+        "remediation",
+        aliases=["remediate"],
+        help="Inspect or execute remediation workflows.",
+    )
+
+    subparsers.add_parser(
+        "scaffold",
+        help="Inspect or execute DXS scaffolding.",
+    )
+
+    # --------------------------------------------------------
+    # Developer experience
+    # --------------------------------------------------------
+
+    subparsers.add_parser(
+        "workspace",
+        help="Inspect EAOS workspace structure.",
+    )
+
+    subparsers.add_parser(
+        "documentation",
+        help="Inspect authoritative EAOS documentation.",
+    )
+
+    subparsers.add_parser(
+        "ide",
+        help="Inspect IDE configuration.",
+    )
+
+    subparsers.add_parser(
+        "integrations",
+        help="Inspect integration configuration.",
+    )
+
+    # --------------------------------------------------------
+    # AI
+    # --------------------------------------------------------
+
+    ai_parser = subparsers.add_parser(
+        "ai",
+        help="EAOS AI services.",
+    )
+
+    ai_subparsers = ai_parser.add_subparsers(
+        dest="ai_command",
+        required=True,
+    )
+
+    ai_subparsers.add_parser(
+        "capability",
+        help="Inspect AI capabilities.",
+    )
+
+    ai_subparsers.add_parser(
+        "policy",
+        help="Inspect AI policies.",
+    )
+
+    ai_subparsers.add_parser(
+        "adapter",
+        help="Inspect AI adapters.",
+    )
+
+    # --------------------------------------------------------
+    # Platform governance
+    # --------------------------------------------------------
+
+    subparsers.add_parser(
+        "policies",
+        help="Inspect DXS policies.",
+    )
+
+    subparsers.add_parser(
+        "governance",
+        help="Inspect DXS governance.",
+    )
+
+    subparsers.add_parser(
+        "orchestration",
+        help="Inspect DXS orchestration.",
+    )
+
+    subparsers.add_parser(
+        "observability",
+        help="Inspect DXS observability.",
+    )
+
+    # --------------------------------------------------------
+    # Self diagnostics
+    # --------------------------------------------------------
+
+    subparsers.add_parser(
+        "self-diagnostics",
+        aliases=["selfcheck"],
+        help="Run DXS self-diagnostics and architecture checks.",
+    )
+
+    return parser
+
+
+def _dispatch(
+    args: argparse.Namespace,
+    root: Path,
+) -> int:
+    command = COMMAND_ALIASES.get(args.command, args.command)
+
+    if command == "doctor":
+        return _doctor(root)
+
+    if command == "discover":
+        return _discover(root)
+
+    if command == "validate":
+        return _validate(root)
+
+    if command == "diagnose":
+        return _diagnose(root)
+
+    if command == "health":
+        return _health(root)
+
+    if command == "evidence":
+        return _evidence(root)
+
+    if command == "compatibility":
+        return _compatibility(
+            args.current,
+            args.target,
+        )
+
+    if command == "migration":
+        return _migration(
+            args.current,
+            args.target,
+        )
+
+    if command == "evolution":
+        return _evolution(root)
+
+    if command == "remediation":
+        return _remediation(root)
+
+    if command == "scaffold":
+        return _scaffold(root)
+
+    if command == "workspace":
+        return _workspace(root)
+
+    if command == "documentation":
+        return _documentation(root)
+
+    if command == "ide":
+        return _ide(root)
+
+    if command == "integrations":
+        return _integrations(root)
+
+    if command == "policies":
+        return _policies(root)
+
+    if command == "governance":
+        return _governance(root)
+
+    if command == "orchestration":
+        return _orchestration(root)
+
+    if command == "observability":
+        return _observability(root)
+
+    if command == "self-diagnostics":
+        return _self_diagnostics(root)
+
+    if command == "ai":
+        if args.ai_command == "capability":
+            return _ai_capability(root)
+
+        if args.ai_command == "policy":
+            return _ai_policy(root)
+
+        if args.ai_command == "adapter":
+            return _ai_adapter(root)
+
+        raise ValueError(f"Unknown AI command: {args.ai_command}")
+
+    raise ValueError(f"Unknown command: {args.command}")
+
+
+def main() -> int:
+    parser = _build_parser()
+    args = parser.parse_args()
+
+    root = args.root.resolve() if args.root is not None else discover_repository()
+
+    return _dispatch(args, root)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

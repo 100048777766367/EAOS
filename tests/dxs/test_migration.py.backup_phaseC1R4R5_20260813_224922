@@ -1,0 +1,62 @@
+from dxs.adapters.compatibility import CompatibilityAdapter
+from dxs.application.compatibility_service import CompatibilityService
+from dxs.ports.compatibility import CompatibilityChecker
+from dxs.application.migration_service import MigrationService
+from dxs.domain.migration import MigrationRequest
+
+
+def test_same_version_is_noop() -> None:
+    service = MigrationService(CompatibilityService(CompatibilityChecker()))
+
+    result = service.plan(
+        MigrationRequest(
+            current_version="1.0.0",
+            target_version="1.0.0",
+        )
+    )
+
+    assert result.compatible is True
+    assert result.status == "NOOP"
+
+
+def test_patch_migration_is_ready() -> None:
+    service = MigrationService(CompatibilityService(CompatibilityChecker()))
+
+    result = service.plan(
+        MigrationRequest(
+            current_version="1.0.0",
+            target_version="1.0.1",
+        )
+    )
+
+    assert result.compatible is True
+    assert result.status == "READY"
+
+
+def test_minor_migration_is_ready() -> None:
+    service = MigrationService(CompatibilityService(CompatibilityChecker()))
+
+    result = service.plan(
+        MigrationRequest(
+            current_version="1.0.0",
+            target_version="1.1.0",
+        )
+    )
+
+    assert result.compatible is True
+    assert result.status == "READY"
+
+
+def test_major_migration_is_blocked() -> None:
+    service = MigrationService(CompatibilityService(CompatibilityChecker()))
+
+    result = service.plan(
+        MigrationRequest(
+            current_version="1.0.0",
+            target_version="2.0.0",
+        )
+    )
+
+    assert result.compatible is False
+    assert result.status == "BLOCKED"
+

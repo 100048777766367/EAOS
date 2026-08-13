@@ -1,8 +1,8 @@
-"""Finance & FinOps Domain Model for EAOS Capability App."""
-
 from datetime import UTC, datetime
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Finance & FinOps Domain Model for EAOS Capability App."""
 
 
 class FinancialLedgerEntry(BaseModel):

@@ -1,10 +1,11 @@
-"""API Application Lifespan Events Manager."""
-
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
 import structlog
 from fastapi import FastAPI
+
+"""API Application Lifespan Events Manager."""
+
 
 logger = structlog.get_logger()
 

@@ -15,14 +15,14 @@ class MetricDatapoint(BaseModel):
 
 
 class HistoricalMetricsPayload(BaseModel):
-    """Dá»¯ liá»‡u chuá»—i thá»i gian lá»‹ch sá»­ truyá»n vÃ o Ä‘á»ƒ dá»± bÃ¡o."""
+    """Dá»¯ liá»‡u chuá»—i thá»i gian lá»‹ch sá»­ truyá»n vÃ o Ä‘á»ƒ dá»± bÃ¡o."""
 
     metric_name: str
     datapoints: list[MetricDatapoint]
 
 
 class RunPredictionUseCase:
-    """Application Service phÃ¢n tÃ­ch xu hÆ°á»›ng lá»‹ch sá»­ vÃ  ngoáº¡i suy rá»§i ro."""
+    """Application Service phÃ¢n tÃ­ch xu hÆ°á»›ng lá»‹ch sá»­ vÃ  ngoáº¡i suy rá»§i ro."""
 
     def __init__(self, repo: PredictionRepository) -> None:
         self.repo = repo
@@ -86,7 +86,7 @@ class RunPredictionUseCase:
                 )
             )
         else:
-            # Náº¿u chá»‰ sá»‘ an toÃ n á»•n Ä‘á»‹nh
+            # Náº¿u chá»‰ sá»‘ an toÃ n á»•n Ä‘á»‹nh
             target_date = datetime.now(UTC) + timedelta(days=90)
             forecasts.append(
                 Forecast(

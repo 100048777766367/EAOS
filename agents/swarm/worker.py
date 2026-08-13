@@ -1,6 +1,6 @@
-"""Worker module for swarm."""
-
 from __future__ import annotations
+
+"""Worker module for swarm."""
 
 
 class SwarmWorker:

@@ -1,10 +1,11 @@
-"""Presenter rendering Jinja2 HTML Templates cho apps/web/app."""
-
 from pathlib import Path
 from typing import Any
 
 from fastapi import Request
 from fastapi.templating import Jinja2Templates
+
+"""Presenter rendering Jinja2 HTML Templates cho apps/web/app."""
+
 
 TEMPLATES_DIR = Path(__file__).resolve().parents[1] / "templates"
 templates = Jinja2Templates(directory=str(TEMPLATES_DIR))

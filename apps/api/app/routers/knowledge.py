@@ -3,7 +3,10 @@
 from typing import Any
 
 from fastapi import APIRouter, HTTPException
-from packages.knowledge.application.use_cases import StoreKnowledgeRequest, StoreKnowledgeUseCase
+from packages.knowledge.application.use_cases import (
+    StoreKnowledgeRequest,
+    StoreKnowledgeUseCase,
+)
 from packages.knowledge.domain.models import KnowledgeArtifact
 
 from apps.api.app.container import knowledge_repo
@@ -11,7 +14,14 @@ from apps.api.app.container import knowledge_repo
 router = APIRouter(tags=["Knowledge"])
 
 VALID_KNOWLEDGE_CATEGORIES = {
-    "SERVICE", "DOMAIN", "CAPABILITY", "API", "COMPONENT", "INFRASTRUCTURE", "SECURITY", "ARCHITECTURE"
+    "SERVICE",
+    "DOMAIN",
+    "CAPABILITY",
+    "API",
+    "COMPONENT",
+    "INFRASTRUCTURE",
+    "SECURITY",
+    "ARCHITECTURE",
 }
 
 

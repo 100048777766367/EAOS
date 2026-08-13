@@ -1,0 +1,10 @@
+[project]
+name = "eaos-harness"
+version = "0.1.0"
+description = "EAOS Enterprise Harness Package"
+requires-python = ">=3.10"
+dependencies = []
+
+[build-system]
+requires = ["hatchling>=1.18.0"]
+build-backend = "hatchling.build"

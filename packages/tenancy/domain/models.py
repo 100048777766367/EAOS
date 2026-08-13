@@ -14,7 +14,7 @@ class TenantPolicyOverride(BaseModel):
 
 
 class TenantContext(BaseModel):
-    """Aggregate Root quáº£n lÃ½ ngá»¯ cáº£nh an toÃ n cá»§a tá»«ng doanh nghiá»‡p cÃ´ láº­p."""
+    """Aggregate Root quáº£n lÃ½ ngá»¯ cáº£nh an toÃ n cá»§a tá»«ng doanh nghiá»‡p cÃ´ láº­p."""
 
     tenant_id: str = Field(..., description="MÃ£ phÃ¢n má»¥c doanh nghiá»‡p")
     domain_name: str = Field(..., description="TÃªn miá»n doanh nghiá»‡p")

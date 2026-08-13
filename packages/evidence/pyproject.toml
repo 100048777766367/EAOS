@@ -1,0 +1,13 @@
+[project]
+name = "eaos-evidence"
+version = "2.0.0"
+description = "EAOS Enterprise Evidence Package v2"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pydantic>=2.0.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

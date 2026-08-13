@@ -1,6 +1,6 @@
-"""Infrastructure storage adapters for Security context."""
-
 from packages.security.domain.models import SecurityEntity
+
+"""Infrastructure storage adapters for Security context."""
 
 
 class InMemorySecurityRepository:

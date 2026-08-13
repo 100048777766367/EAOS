@@ -1,9 +1,9 @@
-"""Visual asset loader module."""
-
 from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+
+"""Visual asset loader module."""
 
 
 @dataclass

@@ -8,7 +8,7 @@ from packages.federation.domain.models import (
 
 
 class FederationRepositoryPort(Protocol):
-    """Port Ä‘á»‹nh nghÄ©a cÃ¡c hÃ nh vi káº¿t ná»‘i vÃ  khÃ¡m phÃ¡ chÃ©o há»‡ sinh thÃ¡i."""
+    """Port Ä‘á»‹nh nghÄ©a cÃ¡c hÃ nh vi káº¿t ná»‘i vÃ  khÃ¡m phÃ¡ chÃ©o há»‡ sinh thÃ¡i."""
 
     def register_member(self, member: EcosystemMember) -> EcosystemMember: ...
 

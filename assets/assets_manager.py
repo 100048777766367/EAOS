@@ -1,8 +1,8 @@
-"""Assets manager."""
-
 from __future__ import annotations
 
 from .diagrams.diagram_manager import DiagramManager
+
+"""Assets manager."""
 
 
 class AssetsManager:

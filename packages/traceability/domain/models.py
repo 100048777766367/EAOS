@@ -1,9 +1,9 @@
-"""Domain models for Traceability context."""
-
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from enum import Enum, auto
 from pathlib import Path
+
+"""Domain models for Traceability context."""
 
 
 class CausalNodeType(Enum):

@@ -1,8 +1,8 @@
 # Identity Domain Bounded Context Spec
 
-> **Specification ID:** SPEC-DOMAINS-001  
-> **Status:** ACTIVE  
-> **Governance:** ARCHITECTURE_CONSTITUTION.md v2.0  
+> **Specification ID:** SPEC-DOMAINS-001
+> **Status:** ACTIVE
+> **Governance:** ARCHITECTURE_CONSTITUTION.md v2.0
 
 ---
 

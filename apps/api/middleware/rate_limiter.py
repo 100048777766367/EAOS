@@ -1,7 +1,7 @@
-"""Token Bucket Rate Limiter for API Security."""
-
 import time
 from dataclasses import dataclass
+
+"""Token Bucket Rate Limiter for API Security."""
 
 
 @dataclass

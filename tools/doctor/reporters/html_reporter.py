@@ -1,8 +1,8 @@
-"""HTML Formatter for Enterprise Doctor Report."""
-
 from __future__ import annotations
 
 from tools.doctor.dto import DiagnosticReportDTO
+
+"""HTML Formatter for Enterprise Doctor Report."""
 
 
 class HTMLReporter:

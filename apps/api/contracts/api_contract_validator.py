@@ -1,6 +1,6 @@
-"""API Contract Validator."""
-
 from typing import Any
+
+"""API Contract Validator."""
 
 
 class APIContractValidator:

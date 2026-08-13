@@ -1,10 +1,10 @@
-"""Enterprise Task Planner Domain Models (Phase 2)."""
-
 from __future__ import annotations
 
 from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Enterprise Task Planner Domain Models (Phase 2)."""
 
 
 class ApprovalMode(StrEnum):

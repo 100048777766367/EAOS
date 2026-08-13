@@ -81,4 +81,3 @@ graph TD
     agent["agent"]
     accounting["accounting"]
 ```
-

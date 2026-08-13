@@ -1,8 +1,8 @@
-"""Strategic 6-Horizons Roadmap Planner Engine."""
-
 from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Strategic 6-Horizons Roadmap Planner Engine."""
 
 
 class HorizonDTO(BaseModel):

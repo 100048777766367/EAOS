@@ -1,8 +1,8 @@
-"""Application use cases for EAOS Self-Hosting Engine."""
-
 from pathlib import Path
 
 from packages.self_hosting.domain.models import EAOSRepositoryHealth
+
+"""Application use cases for EAOS Self-Hosting Engine."""
 
 
 class ExecuteSelfAuditUseCase:

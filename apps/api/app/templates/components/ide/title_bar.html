@@ -1,0 +1,37 @@
+<header class="eaos-ide-header bg-[#060a12] border-b border-slate-800/80 px-3 flex items-center justify-between text-xs font-sans shrink-0 z-20">
+    <div class="eaos-header-left flex items-center space-x-3">
+        <div class="flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse"></span>
+            <span class="font-bold tracking-wider text-slate-100 font-mono">EAOS IDE</span>
+        </div>
+        <span class="text-slate-600">|</span>
+        <span class="text-slate-400 font-mono text-[11px]">D:\EAOS</span>
+    </div>
+
+    <div class="eaos-header-center flex items-center space-x-4 text-slate-400 font-medium">
+        <button class="hover:text-cyan-400 transition">File</button>
+        <button class="hover:text-cyan-400 transition">Edit</button>
+        <button class="hover:text-cyan-400 transition">View</button>
+        <button class="hover:text-cyan-400 transition">Terminal</button>
+        <a href="http://127.0.0.1:3002/control-room" target="_blank" class="text-cyan-400 hover:underline flex items-center space-x-1">
+            <span>🖥️ Control Room</span>
+        </a>
+    </div>
+
+    <div class="eaos-header-right flex items-center space-x-2 font-mono text-[11px]">
+        <button class="eaos-header-control" id="btn-toggle-left" title="Ẩn/Hiện Cột Trái (Ctrl+B)" class="p-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded border border-slate-700 transition cursor-pointer">
+            📂 Left
+        </button>
+        <button class="eaos-header-control" id="btn-toggle-terminal" title="Ẩn/Hiện Terminal (Ctrl+~)" class="p-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded border border-slate-700 transition cursor-pointer">
+            ⚡ Terminal
+        </button>
+        <button class="eaos-header-control" id="btn-toggle-right" title="Ẩn/Hiện Cột Phải (Ctrl+Shift+L)" class="p-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded border border-slate-700 transition cursor-pointer">
+            💬 Right
+        </button>
+        <button id="btn-focus-mode" title="Chế độ Tập Trung (Ctrl+Shift+F)" class="p-1 bg-cyan-950 hover:bg-cyan-900 text-cyan-400 border border-cyan-800 rounded transition font-bold cursor-pointer">
+            🎯 Focus
+        </button>
+        <span class="text-slate-700">|</span>
+        <a href="/workspace" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded">Fullscreen ↗</a>
+    </div>
+</header>

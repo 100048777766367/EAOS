@@ -1,6 +1,6 @@
-"""Worker module for automation."""
-
 from __future__ import annotations
+
+"""Worker module for automation."""
 
 
 class AutomationWorker:

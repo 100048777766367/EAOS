@@ -16,10 +16,10 @@ class RootCause(BaseModel):
 
 
 class Recommendation(BaseModel):
-    """Khuyáº¿n nghá»‹ hÃ nh Ä‘á»™ng kháº¯c phá»¥c lá»—i Ä‘Æ°á»£c Ä‘á» xuáº¥t bá»Ÿi Reflection."""
+    """Khuyáº¿n nghá»‹ hÃ nh Ä‘á»™ng kháº¯c phá»¥c lá»—i Ä‘Æ°á»£c Ä‘á» xuáº¥t bá»Ÿi Reflection."""
 
     priority: str = Field(..., description="Má»©c Ä‘á»™ Æ°u tiÃªn (HIGH/MEDIUM/LOW)")
-    action: str = Field(..., description="HÃ nh Ä‘á»™ng sá»­a Ä‘á»•i cáº§n thá»±c hiá»‡n")
+    action: str = Field(..., description="HÃ nh Ä‘á»™ng sá»­a Ä‘á»•i cáº§n thá»±c hiá»‡n")
     reason: str = Field(..., description="LÃ½ do Ä‘á» xuáº¥t")
     risk: str = Field(..., description="Rá»§i ro Ä‘i kÃ¨m khi thá»±c thi")
 
@@ -27,7 +27,7 @@ class Recommendation(BaseModel):
 
 
 class ReflectionReport(BaseModel):
-    """BÃ¡o cÃ¡o tá»± suy ngáº«m vÃ  cháº©n Ä‘oÃ¡n sá»± cá»‘ hoÃ n chá»‰nh cá»§a EAOS."""
+    """BÃ¡o cÃ¡o tá»± suy ngáº«m vÃ  cháº©n Ä‘oÃ¡n sá»± cá»‘ hoÃ n chá»‰nh cá»§a EAOS."""
 
     id: str = Field(..., description="MÃ£ bÃ¡o cÃ¡o duy nháº¥t")
     subject: str = Field(..., description="MÃ£ Ä‘á»‘i tÆ°á»£ng kiá»ƒm tra (artifact_id)")

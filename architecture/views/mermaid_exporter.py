@@ -1,10 +1,10 @@
-"""Mermaid diagram exporter."""
-
 from __future__ import annotations
 
 from collections.abc import Sequence
 
 from architecture.models.c4_model import C4Element
+
+"""Mermaid diagram exporter."""
 
 
 class MermaidExporter:

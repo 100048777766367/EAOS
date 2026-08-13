@@ -1,11 +1,12 @@
-"""Web UI Health and Telemetry Router."""
-
 from typing import Any
 
 from fastapi import APIRouter
 from pydantic import BaseModel, ConfigDict
 
 from apps.web.app.settings import web_settings
+
+"""Web UI Health and Telemetry Router."""
+
 
 router = APIRouter(prefix="/health", tags=["Health & Status"])
 

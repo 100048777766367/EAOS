@@ -1,10 +1,10 @@
-"""Engine exporter compiling architectural artifacts across 7 formats."""
-
 import json
 from pathlib import Path
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict
+
+"""Engine exporter compiling architectural artifacts across 7 formats."""
 
 
 class ExportedArtifactDTO(BaseModel):

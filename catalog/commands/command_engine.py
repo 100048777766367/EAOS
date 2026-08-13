@@ -1,6 +1,6 @@
-"""Động cơ kiểm toán CQRS Commands."""
-
 from __future__ import annotations
+
+"""Động cơ kiểm toán CQRS Commands."""
 
 
 class CommandEngine:

@@ -1,9 +1,9 @@
-"""Mô hình DTO cho hệ thống Danh mục Phần tử Domain (CATALOG)."""
-
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import StrEnum
+
+"""Mô hình DTO cho hệ thống Danh mục Phần tử Domain (CATALOG)."""
 
 
 class CatalogElementType(StrEnum):

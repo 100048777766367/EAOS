@@ -39,12 +39,13 @@ exporters:
   prometheus:
     endpoint: "0.0.0.0:8889"
 
-  logging:
-    loglevel: info
+  debug:
+    verbosity: basic
 
 service:
   pipelines:
     metrics:
       receivers: [otlp, prometheus]
       processors: [memory_limiter, batch]
-      exporters: [prometheus, logging]
+      exporters: [prometheus, debug]
+

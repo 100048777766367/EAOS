@@ -1,6 +1,6 @@
-"""Động cơ xử lý biểu tượng SVG Icons."""
-
 from __future__ import annotations
+
+"""Động cơ xử lý biểu tượng SVG Icons."""
 
 
 class IconEngine:

@@ -1,8 +1,8 @@
-"""Drive D: Environment Variable & Path Inspector for EAOS."""
-
 import os
 
 from pydantic import BaseModel, ConfigDict
+
+"""Drive D: Environment Variable & Path Inspector for EAOS."""
 
 
 class DriveDEnvCheckDTO(BaseModel):

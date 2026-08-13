@@ -1,6 +1,6 @@
-"""Infrastructure adapters for knowledge repository persistence."""
-
 from typing import Any
+
+"""Infrastructure adapters for knowledge repository persistence."""
 
 
 class PostgresKnowledgeRepository:

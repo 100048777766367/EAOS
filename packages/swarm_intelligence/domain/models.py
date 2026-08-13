@@ -1,9 +1,9 @@
-"""Swarm Intelligence & Biomimetic Domain Models for EAOS Platform."""
-
 from datetime import UTC, datetime
 from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Swarm Intelligence & Biomimetic Domain Models for EAOS Platform."""
 
 
 class InsectRoleEnum(StrEnum):

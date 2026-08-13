@@ -1,0 +1,24 @@
+from __future__ import annotations
+
+from dxs.adapters.compatibility import CompatibilityAdapter
+from dxs.adapters.repository_context import RepositoryContextProvider
+from dxs.application.compatibility_service import CompatibilityService
+from dxs.application.repository_service import RepositoryApplication
+
+
+def create_repository_application() -> RepositoryApplication:
+    """Build the DXS repository application composition root."""
+
+    context_provider = RepositoryContextProvider()
+
+    compatibility_service = CompatibilityService(
+        checker=CompatibilityAdapter(),
+    )
+
+    return RepositoryApplication(
+        context_provider=context_provider,
+        compatibility_service=compatibility_service,
+    )
+
+
+__all__ = ["create_repository_application"]

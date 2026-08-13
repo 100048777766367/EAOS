@@ -1,8 +1,8 @@
-"""Application use cases for Monetization & Token Billing."""
-
 import uuid
 
 from packages.monetization.domain.models import TokenUsageLedgerEntry
+
+"""Application use cases for Monetization & Token Billing."""
 
 
 class BillTenantUsageUseCase:

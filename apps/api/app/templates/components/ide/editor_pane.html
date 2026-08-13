@@ -1,0 +1,52 @@
+<section
+    class="eaos-editor-pane"
+    data-eaos-pane="editor"
+    data-eaos-role="editor"
+    aria-label="EAOS Code Editor"
+>
+    <!-- ======================================================
+         EDITOR TABS
+         ====================================================== -->
+
+    <div
+        class="h-8 bg-[#060b17] border-b border-slate-800 flex items-center px-2 space-x-1 shrink-0 font-mono text-xs"
+        data-editor-region="tabs"
+        role="tablist"
+        aria-label="Open files"
+    >
+        <div
+            class="px-3 py-1 bg-[#030712] text-cyan-400 border-t-2 border-cyan-400 rounded-t flex items-center space-x-2"
+            role="tab"
+            aria-selected="true"
+            tabindex="0"
+            data-editor-tab="active"
+        >
+            <span
+                class="text-blue-400"
+                aria-hidden="true"
+            >
+                📄
+            </span>
+
+            <span
+                id="active-filename"
+                data-editor-runtime="filename"
+            >
+                apps/api/app/main.py
+            </span>
+        </div>
+    </div>
+
+    <!-- ======================================================
+         MONACO HOST
+         ====================================================== -->
+
+    <div
+        id="monaco-editor-container"
+        class="flex-1 min-h-0 bg-[#030712]"
+        data-editor-host="monaco"
+        role="textbox"
+        aria-label="Code editor"
+        aria-multiline="true"
+    ></div>
+</section>

@@ -1,8 +1,8 @@
-"""Infrastructure Connector inspecting exact user-defined Docker services."""
-
 import os
 
 from pydantic import BaseModel, ConfigDict
+
+"""Infrastructure Connector inspecting exact user-defined Docker services."""
 
 
 class ServiceConnectionCheckDTO(BaseModel):

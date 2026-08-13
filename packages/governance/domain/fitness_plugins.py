@@ -1,11 +1,11 @@
-"""Plugin Registry supporting Multi-Artifact Architecture Rules."""
-
 from abc import ABC, abstractmethod
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict
 
 from packages.governance.domain.ports import KnowledgeGraphPort
+
+"""Plugin Registry supporting Multi-Artifact Architecture Rules."""
 
 
 class FitnessRuleMetadata(BaseModel):

@@ -1,0 +1,814 @@
+# ============================================================================
+# EAOS REPOSITORY CONTRACT
+# ============================================================================
+#
+# Contract ID:
+#   EAOS-REPOSITORY-CONTRACT
+#
+# Version:
+#   2.0.0
+#
+# Purpose:
+#   Machine-readable governance contract for the EAOS repository.
+#
+# Authority:
+#   ARCHITECTURE_CONSTITUTION.md
+#
+# This contract defines:
+#   - repository identity
+#   - authoritative documents
+#   - package boundaries
+#   - source-of-truth hierarchy
+#   - architecture invariants
+#   - engineering gates
+#   - validation gates
+#   - test gates
+#   - documentation obligations
+#   - change management
+#   - governance rules
+#   - DXS responsibilities
+#   - failure semantics
+#   - evidence requirements
+#
+# ============================================================================
+
+contract:
+  id: EAOS-REPOSITORY-CONTRACT
+  name: EAOS Repository Contract
+  version: "2.0.0"
+  status: active
+  maturity: enterprise
+  enforcement: mandatory
+
+  description: >
+    Machine-readable contract governing the structural, architectural,
+    engineering, documentation, validation, testing, and governance
+    properties of the EAOS repository.
+
+  repository_root:
+    expected: "D:\\EAOS"
+
+  language:
+    primary: python
+    configuration:
+      - yaml
+      - toml
+      - json
+      - markdown
+
+# ============================================================================
+# 1. GOVERNANCE AUTHORITY
+# ============================================================================
+
+authority:
+
+  supreme_source_of_truth:
+    id: architecture_constitution
+    path: ARCHITECTURE_CONSTITUTION.md
+    role: supreme_source_of_truth
+    required: true
+    precedence: 100
+
+  engineering_standard:
+    id: engineering_guide
+    path: ENGINEERING_GUIDE.md
+    role: engineering_standard
+    required: true
+    precedence: 90
+
+  governance:
+    id: governance
+    path: GOVERNANCE.md
+    role: repository_governance
+    required: true
+    precedence: 85
+
+  project_context:
+    id: project_context
+    path: docs/PROJECT_CONTEXT.md
+    role: project_context
+    required: true
+    precedence: 80
+
+  current_context:
+    id: current_context
+    path: docs/CURRENT_CONTEXT.md
+    role: current_state
+    required: true
+    precedence: 75
+
+  task:
+    id: task
+    path: docs/TASK.md
+    role: execution_plan
+    required: true
+    precedence: 70
+
+  adr_index:
+    id: adr_index
+    path: docs/ADR_INDEX.md
+    role: architecture_decisions
+    required: true
+    precedence: 65
+
+  roadmap:
+    id: roadmap
+    path: docs/ROADMAP.md
+    role: strategic_direction
+    required: true
+    precedence: 60
+
+  repository_specification:
+    id: repository_specification
+    path: specifications/repository-spec.md
+    role: repository_specification
+    required: true
+    precedence: 55
+
+  repository_contract:
+    id: repository_contract
+    path: .eaos/contracts/repository-contract.yaml
+    role: executable_repository_contract
+    required: true
+    precedence: 50
+
+# ============================================================================
+# 2. SOURCE OF TRUTH HIERARCHY
+# ============================================================================
+
+source_of_truth:
+
+  hierarchy:
+
+    - rank: 1
+      source: ARCHITECTURE_CONSTITUTION.md
+      authority: supreme
+
+    - rank: 2
+      source: ENGINEERING_GUIDE.md
+      authority: engineering
+
+    - rank: 3
+      source: GOVERNANCE.md
+      authority: governance
+
+    - rank: 4
+      source: docs/PROJECT_CONTEXT.md
+      authority: project
+
+    - rank: 5
+      source: docs/CURRENT_CONTEXT.md
+      authority: current_state
+
+    - rank: 6
+      source: docs/TASK.md
+      authority: execution
+
+    - rank: 7
+      source: docs/ADR_INDEX.md
+      authority: decisions
+
+    - rank: 8
+      source: docs/ROADMAP.md
+      authority: strategic
+
+    - rank: 9
+      source: specifications/repository-spec.md
+      authority: specification
+
+    - rank: 10
+      source: .eaos/contracts/repository-contract.yaml
+      authority: executable_contract
+
+  conflict_resolution:
+    rule: higher_authority_wins
+    undocumented_conflict: fail_validation
+    silent_override: forbidden
+
+# ============================================================================
+# 3. REQUIRED REPOSITORY DOCUMENTS
+# ============================================================================
+
+required_documents:
+
+  - id: architecture_constitution
+    path: ARCHITECTURE_CONSTITUTION.md
+    required: true
+    non_empty: true
+    readable: true
+
+  - id: engineering_guide
+    path: ENGINEERING_GUIDE.md
+    required: true
+    non_empty: true
+    readable: true
+
+  - id: project_context
+    path: docs/PROJECT_CONTEXT.md
+    required: true
+    non_empty: true
+    readable: true
+
+  - id: current_context
+    path: docs/CURRENT_CONTEXT.md
+    required: true
+    non_empty: true
+    readable: true
+
+  - id: task
+    path: docs/TASK.md
+    required: true
+    non_empty: true
+    readable: true
+
+  - id: adr_index
+    path: docs/ADR_INDEX.md
+    required: true
+    non_empty: true
+    readable: true
+
+  - id: roadmap
+    path: docs/ROADMAP.md
+    required: true
+    non_empty: true
+    readable: true
+
+  - id: governance
+    path: GOVERNANCE.md
+    required: true
+    non_empty: true
+    readable: true
+
+  - id: repository_specification
+    path: specifications/repository-spec.md
+    required: true
+    non_empty: true
+    readable: true
+
+  - id: repository_contract
+    path: .eaos/contracts/repository-contract.yaml
+    required: true
+    non_empty: true
+    readable: true
+
+# ============================================================================
+# 4. REQUIRED DXS PACKAGE BOUNDARIES
+# ============================================================================
+
+architecture:
+
+  architecture_checker:
+    module: dxs.application.architecture_checker
+    executable: true
+    purpose: repository_architecture_validation
+
+  package_boundaries:
+
+    domain:
+      path: dxs/domain
+      responsibility:
+        - domain_model
+        - domain_rules
+        - domain_policies
+      may_depend_on:
+        - standard_library
+      forbidden_dependencies:
+        - cli
+        - adapters
+        - infrastructure
+
+    ports:
+      path: dxs/ports
+      responsibility:
+        - interfaces
+        - contracts
+        - dependency_inversion
+      may_depend_on:
+        - domain
+      forbidden_dependencies:
+        - cli
+        - concrete_adapters
+
+    application:
+      path: dxs/application
+      responsibility:
+        - use_cases
+        - orchestration
+        - validation
+        - architecture_checks
+      may_depend_on:
+        - domain
+        - ports
+      forbidden_dependencies:
+        - cli_specific_implementation
+
+    adapters:
+      path: dxs/adapters
+      responsibility:
+        - filesystem
+        - repository_access
+        - external_integrations
+      may_depend_on:
+        - domain
+        - ports
+        - application
+      forbidden_dependencies:
+        - cli
+
+    cli:
+      path: dxs/cli
+      responsibility:
+        - command_line_interface
+        - user_interaction
+        - presentation
+      may_depend_on:
+        - application
+        - domain
+      forbidden_dependencies:
+        - direct_domain_mutation
+
+# ============================================================================
+# 5. ARCHITECTURAL INVARIANTS
+# ============================================================================
+
+invariants:
+
+  - id: EAOS-INV-001
+    name: authoritative-constitution
+    severity: critical
+    rule: >
+      ARCHITECTURE_CONSTITUTION.md remains the supreme architectural
+      source of truth.
+    violation: fail
+
+  - id: EAOS-INV-002
+    name: repository-contract-present
+    severity: critical
+    rule: >
+      .eaos/contracts/repository-contract.yaml must exist and be readable.
+    violation: fail
+
+  - id: EAOS-INV-003
+    name: domain-isolation
+    severity: critical
+    rule: >
+      Domain code must remain independent from CLI and concrete adapters.
+    violation: fail
+
+  - id: EAOS-INV-004
+    name: dependency-direction
+    severity: critical
+    rule: >
+      Dependencies must move toward stable abstractions and domain rules.
+    violation: fail
+
+  - id: EAOS-INV-005
+    name: no-hidden-architecture
+    severity: high
+    rule: >
+      Architectural behavior must not exist only as undocumented conventions.
+    violation: fail
+
+  - id: EAOS-INV-006
+    name: evidence-based-validation
+    severity: high
+    rule: >
+      Repository claims must be backed by observable repository evidence.
+    violation: fail
+
+  - id: EAOS-INV-007
+    name: deterministic-doctor
+    severity: high
+    rule: >
+      Repository Doctor must produce deterministic validation results.
+    violation: fail
+
+  - id: EAOS-INV-008
+    name: contract-consistency
+    severity: high
+    rule: >
+      Executable repository behavior must remain consistent with this contract.
+    violation: fail
+
+  - id: EAOS-INV-009
+    name: documentation-integrity
+    severity: medium
+    rule: >
+      Required governance and context documents must remain readable and non-empty.
+    violation: fail
+
+  - id: EAOS-INV-010
+    name: no-silent-breaking-change
+    severity: critical
+    rule: >
+      Breaking architectural changes require an ADR and explicit governance evidence.
+    violation: fail
+
+# ============================================================================
+# 6. ENGINEERING QUALITY GATES
+# ============================================================================
+
+quality_gates:
+
+  syntax:
+    command: python -m compileall dxs
+    required: true
+    blocking: true
+
+  lint:
+    command: ruff check dxs
+    required: true
+    blocking: true
+    max_errors: 0
+
+  typing:
+    command: mypy dxs
+    required: true
+    blocking: true
+    max_errors: 0
+
+  architecture:
+    command: python -m dxs.application.architecture_checker
+    required: true
+    blocking: true
+    minimum_pass_rate: 1.0
+
+  context:
+    command: python -m dxs.cli.main context --root D:\\EAOS
+    required: true
+    blocking: true
+
+  doctor:
+    command: python -m dxs.cli.main doctor --root D:\\EAOS
+    required: true
+    blocking: true
+    minimum_pass_rate: 1.0
+
+  repository_validation:
+    command: python -m dxs.cli.main validate --root D:\\EAOS
+    required: true
+    blocking: true
+
+# ============================================================================
+# 7. TESTING POLICY
+# ============================================================================
+
+testing:
+
+  framework:
+    primary: pytest
+
+  categories:
+
+    unit:
+      path: tests/unit
+      required: true
+
+    integration:
+      path: tests/integration
+      required: true
+
+    e2e:
+      path: tests/e2e
+      required: true
+
+  pass_policy:
+    target: 100
+    blocking_failures: true
+
+  failure_classification:
+
+    product_failure:
+      examples:
+        - assertion_error
+        - incorrect_business_behavior
+        - incorrect_runtime_behavior
+      action: fix_source_or_test
+
+    infrastructure_failure:
+      examples:
+        - browser_not_ready
+        - service_unavailable
+        - missing_dependency
+      action: repair_test_environment
+
+    event_loop_failure:
+      examples:
+        - "Cannot run the event loop while another loop is running"
+        - "Runner is closed"
+        - "asyncio.run() cannot be called from a running event loop"
+      action: isolate_asyncio_configuration
+
+    frontend_visibility_failure:
+      examples:
+        - "Locator expected to be visible"
+        - "Actual value: hidden"
+      action: inspect_ui_layout_and_runtime_state
+
+  evidence:
+    test_count: required
+    passed_count: required
+    failed_count: required
+    skipped_count: required
+    duration: required
+
+# ============================================================================
+# 8. ASYNC TESTING CONTRACT
+# ============================================================================
+
+async_testing:
+
+  principle:
+    name: single-event-loop-per-test-runtime
+    required: true
+
+  forbidden:
+
+    - nested_asyncio_run_inside_async_test
+    - competing_event_loop_runners
+    - closing_shared_event_loop
+    - mixing_incompatible_anyio_and_playwright_runners
+
+  known_failure_signatures:
+
+    - "Cannot run the event loop while another loop is running"
+    - "Runner is closed"
+    - "asyncio.run() cannot be called from a running event loop"
+
+  remediation_requirements:
+
+    - inspect_pytest_plugins
+    - inspect_anyio_configuration
+    - inspect_asyncio_mode
+    - inspect_playwright_fixtures
+    - inspect_test_helpers_using_asyncio_run
+
+# ============================================================================
+# 9. FRONTEND / E2E CONTRACT
+# ============================================================================
+
+e2e:
+
+  application:
+    name: EAOS IDE
+
+  required_surfaces:
+
+    - editor
+    - explorer
+    - terminal
+    - copilot
+    - control_room
+
+  monaco:
+
+    host_id: monaco-editor-container
+    role: textbox
+    aria_label: Code editor
+    required_visible: true
+
+  chat:
+
+    required: true
+    send_event_required: true
+
+  runtime_health:
+
+    required: true
+    indicators:
+      - ruff
+      - pytest
+      - overall
+
+  failure_policy:
+    hidden_required_ui: blocking
+    failed_chat_event: blocking
+
+# ============================================================================
+# 10. DXS RESPONSIBILITIES
+# ============================================================================
+
+dxs:
+
+  responsibilities:
+
+    context:
+      command: context
+      purpose: discover authoritative repository context
+
+    doctor:
+      command: doctor
+      purpose: verify repository structure and governance sources
+
+    validate:
+      command: validate
+      purpose: validate repository contract and authoritative sources
+
+    architecture_checker:
+      module: dxs.application.architecture_checker
+      purpose: enforce architecture boundaries
+
+  expected_statuses:
+    success:
+      - PASS
+      - FOUND
+
+    failure:
+      - FAIL
+      - MISSING
+      - ERROR
+
+  deterministic_output:
+    required: true
+
+# ============================================================================
+# 11. CHANGE MANAGEMENT
+# ============================================================================
+
+change_management:
+
+  architectural_change:
+    requires:
+      - ADR
+      - architecture_constitution_review
+      - repository_contract_review
+      - tests
+      - validation
+
+  contract_change:
+    requires:
+      - backup
+      - version_increment
+      - validation
+      - doctor
+      - architecture_check
+
+  breaking_change:
+    requires:
+      - ADR
+      - migration_plan
+      - compatibility_analysis
+      - test_evidence
+      - rollback_plan
+
+  emergency_change:
+    allowed: true
+    requires:
+      - incident_record
+      - post_change_review
+      - retrospective_adr_if_architectural
+
+# ============================================================================
+# 12. BACKUP AND RECOVERY
+# ============================================================================
+
+recovery:
+
+  contract_backup:
+    enabled: true
+    directory: .eaos/contracts/backups
+
+  before_contract_replacement:
+    required: true
+
+  rollback:
+    supported: true
+    mechanism: restore_previous_contract_version
+
+  destructive_operations:
+    confirmation_required: true
+
+# ============================================================================
+# 13. EVIDENCE MODEL
+# ============================================================================
+
+evidence:
+
+  required_for_pass:
+    - source_exists
+    - source_readable
+    - source_non_empty
+    - command_executed
+    - command_result_recorded
+
+  architecture_evidence:
+    required:
+      - package_boundaries
+      - dependency_direction
+      - architecture_checker_result
+
+  quality_evidence:
+    required:
+      - ruff
+      - mypy
+      - pytest
+
+  governance_evidence:
+    required:
+      - constitution
+      - governance
+      - adr_index
+      - repository_contract
+
+# ============================================================================
+# 14. FAILURE POLICY
+# ============================================================================
+
+failure_policy:
+
+  fail_closed: true
+
+  critical_failure:
+    blocks_release: true
+    blocks_architecture_approval: true
+
+  high_failure:
+    blocks_release: true
+
+  medium_failure:
+    blocks_release: false
+    requires_tracking: true
+
+  low_failure:
+    requires_tracking: true
+
+  no_silent_pass:
+    enabled: true
+
+  no_false_green:
+    enabled: true
+
+# ============================================================================
+# 15. RELEASE GATE
+# ============================================================================
+
+release:
+
+  required:
+
+    - repository_context_valid
+    - repository_doctor_pass
+    - repository_validation_pass
+    - architecture_checker_pass
+    - ruff_pass
+    - mypy_pass
+    - pytest_pass
+
+  minimum:
+    architecture_pass_rate: 1.0
+    doctor_pass_rate: 1.0
+    validation_pass_rate: 1.0
+    pytest_pass_rate: 1.0
+    lint_errors: 0
+    typing_errors: 0
+
+  status_values:
+    - PASS
+    - BLOCKED
+
+# ============================================================================
+# 16. VERSIONING
+# ============================================================================
+
+versioning:
+
+  scheme: semantic
+
+  major:
+    meaning: incompatible_contract_change
+
+  minor:
+    meaning: backward_compatible_contract_capability
+
+  patch:
+    meaning: clarification_or_non_semantic_fix
+
+  current:
+    contract: "2.0.0"
+
+# ============================================================================
+# 17. GOVERNANCE PRINCIPLE
+# ============================================================================
+
+governance_principle:
+
+  statement: >
+    EAOS repository structure, architecture, engineering quality,
+    documentation, tests, and operational behavior must remain
+    observable, deterministic, evidence-based, and governed by
+    explicit contracts.
+
+  mandatory_properties:
+
+    - explicit
+    - observable
+    - deterministic
+    - testable
+    - auditable
+    - recoverable
+    - versioned
+    - evidence_based
+
+# ============================================================================
+# END OF EAOS REPOSITORY CONTRACT
+# ============================================================================

@@ -1,9 +1,9 @@
-"""IT Management & Governance Frameworks Domain Model for EAOS."""
-
 from datetime import UTC, datetime
 from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""IT Management & Governance Frameworks Domain Model for EAOS."""
 
 
 class ITGovernanceFrameworkType(StrEnum):

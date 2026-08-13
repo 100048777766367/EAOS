@@ -63,40 +63,26 @@ class RunCounterfactualResearchUseCase:
         self._sandbox.create_snapshot(snapshot_id, base_state)
 
         alpha_id = f"BRANCH-ALPHA-{uuid.uuid4().hex[:6].upper()}"
-        self._sandbox.fork_branch(
-            snapshot_id, alpha_id, BranchEnvironmentType.BASELINE_ALPHA
-        )
+        self._sandbox.fork_branch(snapshot_id, alpha_id, BranchEnvironmentType.BASELINE_ALPHA)
 
         beta_id = f"BRANCH-BETA-{uuid.uuid4().hex[:6].upper()}"
-        self._sandbox.fork_branch(
-            snapshot_id, beta_id, BranchEnvironmentType.EXPERIMENTAL_BETA
-        )
+        self._sandbox.fork_branch(snapshot_id, beta_id, BranchEnvironmentType.EXPERIMENTAL_BETA)
 
-        alpha_evidence = self._sandbox.execute_workload(
-            alpha_id, workload_payload
-        )
+        alpha_evidence = self._sandbox.execute_workload(alpha_id, workload_payload)
 
         mutated_workload = workload_payload.copy()
         mutated_workload["_mutation"] = beta_mutation
-        beta_evidence = self._sandbox.execute_workload(
-            beta_id, mutated_workload
-        )
+        beta_evidence = self._sandbox.execute_workload(beta_id, mutated_workload)
 
         deltas = self._calculate_deltas(alpha_evidence, beta_evidence)
 
         fitness_delta_pct = round(
-            (
-                (beta_evidence.fitness_score - alpha_evidence.fitness_score)
-                / max(0.001, alpha_evidence.fitness_score)
-            )
+            ((beta_evidence.fitness_score - alpha_evidence.fitness_score) / max(0.001, alpha_evidence.fitness_score))
             * 100.0,
             2,
         )
 
-        if (
-            fitness_delta_pct > 0
-            and beta_evidence.error_count <= alpha_evidence.error_count
-        ):
+        if fitness_delta_pct > 0 and beta_evidence.error_count <= alpha_evidence.error_count:
             recommendation = (
                 f"KHUYẾN NGHỊ ÁP DỤNG: Nhánh Beta cải thiện +{fitness_delta_pct}% "
                 f"điểm thể lực kiến trúc và không phát sinh lỗi."
@@ -119,15 +105,11 @@ class RunCounterfactualResearchUseCase:
 
         return self._report_repo.save_report(report)
 
-    def _calculate_deltas(
-        self, alpha: EmpiricalEvidence, beta: EmpiricalEvidence
-    ) -> list[MetricDelta]:
+    def _calculate_deltas(self, alpha: EmpiricalEvidence, beta: EmpiricalEvidence) -> list[MetricDelta]:
         deltas: list[MetricDelta] = []
 
         time_diff = beta.execution_time_ms - alpha.execution_time_ms
-        time_pct = (
-            time_diff / max(0.001, alpha.execution_time_ms)
-        ) * 100.0
+        time_pct = (time_diff / max(0.001, alpha.execution_time_ms)) * 100.0
         deltas.append(
             MetricDelta(
                 metric_name="Execution Time (ms)",

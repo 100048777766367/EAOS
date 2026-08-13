@@ -1,9 +1,9 @@
-"""Architecture template engine."""
-
 from __future__ import annotations
 
 from pathlib import Path
 from typing import Any
+
+"""Architecture template engine."""
 
 
 class ArchitectureTemplateEngine:

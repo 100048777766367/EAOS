@@ -1,8 +1,3 @@
-"""Directory Completeness Auditor for EAOS Monorepo.
-
-Validates that zero empty or hollow directories exist and analyzes directory splitting conflicts.
-"""
-
 from __future__ import annotations
 
 import argparse
@@ -14,6 +9,12 @@ from pathlib import Path
 from typing import Any, Final
 
 from pydantic import BaseModel, Field
+
+"""Directory Completeness Auditor for EAOS Monorepo.
+
+Validates that zero empty or hollow directories exist and analyzes directory splitting conflicts.
+"""
+
 
 DEFAULT_IGNORED_DIRS: Final[set[str]] = {
     ".git",

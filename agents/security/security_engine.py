@@ -1,6 +1,6 @@
-"""Động cơ an ninh của Security Agent."""
-
 from __future__ import annotations
+
+"""Động cơ an ninh của Security Agent."""
 
 
 class SecurityEngine:

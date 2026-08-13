@@ -1,0 +1,36 @@
+{
+  "evidence_id": {
+    "value": "E-00000001"
+  },
+  "evidence_type": "USER_MESSAGE",
+  "user_id": "user-A",
+  "session_id": "S-1",
+  "turn_id": 1,
+  "source": {
+    "source_name": "USER",
+    "uri": "",
+    "actor": "user-A"
+  },
+  "content": {
+    "raw_content": "test text",
+    "mime_type": "text/plain",
+    "encoding": "utf-8",
+    "size_bytes": 9
+  },
+  "metadata": {
+    "entries": [
+      [
+        "role",
+        "USER"
+      ]
+    ]
+  },
+  "integrity": {
+    "algorithm": "SHA-256",
+    "canonical_hash": "66f8b5872ebb618611a7bf694cfe197d9c9be66bd96a3a4d9adb3d98a0046f4e",
+    "previous_hash": null,
+    "chain_hash": "2498a76c7bd16aa0c23ec592f8323f7d83f57d596c0f48b46e69b5d1e857f46f",
+    "status": "CAPTURED"
+  },
+  "captured_at": "2026-08-13T15:39:33.555457Z"
+}

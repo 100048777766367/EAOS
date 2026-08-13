@@ -1,12 +1,10 @@
-"""API Exception Handlers."""
-
 from fastapi import Request, status
 from fastapi.responses import JSONResponse
 
+"""API Exception Handlers."""
 
-async def custom_api_exception_handler(
-    request: Request, exc: Exception
-) -> JSONResponse:
+
+async def custom_api_exception_handler(request: Request, exc: Exception) -> JSONResponse:
     """Handles API exceptions returning JSON error payloads."""
     status_code = getattr(exc, "status_code", status.HTTP_500_INTERNAL_SERVER_ERROR)
     detail = getattr(exc, "detail", str(exc))

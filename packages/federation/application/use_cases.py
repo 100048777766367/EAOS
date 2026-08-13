@@ -14,7 +14,7 @@ from packages.federation.domain.ports import FederationRepositoryPort
 
 
 class CollectiveEvolutionUseCase:
-    """Application Service Ä‘iá»u phá»‘i viá»‡c tiáº¿p nháº­n vÃ  giáº£ láº­p há»c há»i táº­p thá»ƒ."""
+    """Application Service Ä‘iá»u phá»‘i viá»‡c tiáº¿p nháº­n vÃ  giáº£ láº­p há»c há»i táº­p thá»ƒ."""
 
     def __init__(
         self,
@@ -27,7 +27,7 @@ class CollectiveEvolutionUseCase:
     def process_shared_knowledge(self, receiver_id: str, packet: SharedKnowledgePacket) -> CollectiveEvolutionReport:
         member = self.registry.find_member_by_id(receiver_id)
         if not member:
-            raise ValueError(f"KhÃ´ng tÃ¬m tháº¥y thÃ nh viÃªn: {receiver_id}")
+            raise ValueError(f"KhÃ´ng tÃ¬m tháº¥y thÃ nh viÃªn: {receiver_id}")
 
         simulated_proposal = {
             "package_name": f"evolved-{packet.heuristic_id.lower()}",
@@ -41,7 +41,7 @@ class CollectiveEvolutionUseCase:
         if twin_result["status"] == "APPROVED":
             status = "ADOPTED"
             reason = (
-                f"Há»c há»i thÃ nh cÃ´ng tá»« {packet.sender_id}. "
+                f"Há»c há»i thÃ nh cÃ´ng tá»« {packet.sender_id}. "
                 "Cáº¥u hÃ¬nh tÆ°Æ¡ng thÃ­ch 100% vá»›i hiáº¿n phÃ¡p cá»¥c bá»™."
             )
         else:
@@ -89,7 +89,7 @@ class ExecuteFederatedGovernanceUseCase:
 
 
 class HeartbeatUseCase:
-    """Application Service chá»‹u trÃ¡ch nhiá»‡m ghi nháº­n Heartbeat vÃ  kiá»ƒm tra Health."""
+    """Application Service chá»‹u trÃ¡ch nhiá»‡m ghi nháº­n Heartbeat vÃ  kiá»ƒm tra Health."""
 
     def __init__(self, registry: FederationRepositoryPort) -> None:
         self.registry = registry
@@ -97,7 +97,7 @@ class HeartbeatUseCase:
     def execute_heartbeat(self, member_id: str) -> EcosystemMember:
         member = self.registry.find_member_by_id(member_id)
         if not member:
-            raise ValueError(f"KhÃ´ng tÃ¬m tháº¥y thÃ nh viÃªn: {member_id}")
+            raise ValueError(f"KhÃ´ng tÃ¬m tháº¥y thÃ nh viÃªn: {member_id}")
 
         # Tá»± cháº©n Ä‘oÃ¡n Health status dá»±a trÃªn Capability Index
         simulated_health = "HEALTHY"

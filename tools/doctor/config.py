@@ -1,5 +1,3 @@
-"""Declarative Configuration for Enterprise Doctor."""
-
 from __future__ import annotations
 
 from pathlib import Path
@@ -7,6 +5,8 @@ from typing import Any
 
 import yaml
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Declarative Configuration for Enterprise Doctor."""
 
 
 class CategoryWeightConfig(BaseModel):

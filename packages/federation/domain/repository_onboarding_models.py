@@ -1,11 +1,11 @@
-"""External Repository Onboarding Domain Models."""
-
 from __future__ import annotations
 
 from datetime import UTC, datetime
 from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""External Repository Onboarding Domain Models."""
 
 
 class StackType(StrEnum):

@@ -1,10 +1,10 @@
-"""Base Command Protocol for EAOS CLI."""
-
 from __future__ import annotations
 
 from typing import Protocol, runtime_checkable
 
 from tools.cli.dto import CLIContextDTO, CLIExitCode
+
+"""Base Command Protocol for EAOS CLI."""
 
 
 @runtime_checkable

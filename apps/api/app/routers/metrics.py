@@ -1,5 +1,3 @@
-"""Prometheus Metrics scraping router."""
-
 from __future__ import annotations
 
 from typing import Any
@@ -8,6 +6,9 @@ from fastapi import APIRouter
 from fastapi.responses import PlainTextResponse
 
 from apps.api.bootstrap.container import prometheus_exporter
+
+"""Prometheus Metrics scraping router."""
+
 
 router = APIRouter(tags=["Telemetry"])
 

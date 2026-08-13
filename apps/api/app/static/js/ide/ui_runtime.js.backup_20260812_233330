@@ -1,0 +1,402 @@
+/**
+ * EAOS IDE UI Runtime
+ *
+ * Application/UI integration layer.
+ *
+ * Owns:
+ * - Activity Bar -> UI response
+ * - Chat input/send interaction
+ * - Execution trace visibility
+ * - Editor UI synchronization
+ *
+ * Does NOT own:
+ * - pane visibility
+ * - pane dimensions
+ * - Monaco lifecycle
+ * - WebSocket transport
+ * - AI runtime
+ */
+
+(function () {
+    "use strict";
+
+    const STORAGE_KEY = "eaos.ide.ui";
+
+    const state = {
+        activity: "explorer",
+        executionTrace: true,
+    };
+
+    function readState() {
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+
+            if (!raw) {
+                return;
+            }
+
+            const saved = JSON.parse(raw);
+
+            if (
+                saved &&
+                typeof saved.activity === "string"
+            ) {
+                state.activity = saved.activity;
+            }
+
+            if (
+                saved &&
+                typeof saved.executionTrace === "boolean"
+            ) {
+                state.executionTrace =
+                    saved.executionTrace;
+            }
+        } catch {
+            // Corrupt persistence must not break IDE.
+        }
+    }
+
+    function saveState() {
+        try {
+            localStorage.setItem(
+                STORAGE_KEY,
+                JSON.stringify(state)
+            );
+        } catch {
+            // Persistence is optional.
+        }
+    }
+
+    function emit(name, detail) {
+        document.dispatchEvent(
+            new CustomEvent(
+                name,
+                {
+                    detail: detail || {},
+                }
+            )
+        );
+    }
+
+    function setActivity(activity) {
+        if (!activity) {
+            return;
+        }
+
+        state.activity = activity;
+
+        applyActivity(activity);
+        saveState();
+
+        emit(
+            "eaos:activity-ui",
+            {
+                activity,
+            }
+        );
+    }
+
+    function applyActivity(activity) {
+        const activityButtons =
+            document.querySelectorAll(
+                "[data-activity]"
+            );
+
+        activityButtons.forEach(
+            (button) => {
+                const active =
+                    button.dataset.activity ===
+                    activity;
+
+                button.classList.toggle(
+                    "active",
+                    active
+                );
+
+                button.classList.toggle(
+                    "bg-cyan-500/10",
+                    active
+                );
+
+                button.classList.toggle(
+                    "text-cyan-400",
+                    active
+                );
+
+                button.classList.toggle(
+                    "border-cyan-500/30",
+                    active
+                );
+
+                button.setAttribute(
+                    "aria-pressed",
+                    String(active)
+                );
+            }
+        );
+
+        /*
+         * Activity Bar is an application navigation controller.
+         * We do not mutate pane visibility here.
+         */
+        document
+            .querySelectorAll(
+                "[data-eaos-activity-region]"
+            )
+            .forEach(
+                (region) => {
+                    region.hidden =
+                        region.dataset.eaosActivityRegion !==
+                        activity;
+                }
+            );
+    }
+
+    function setupActivityBridge() {
+        document.addEventListener(
+            "eaos:activity-change",
+            (event) => {
+                setActivity(
+                    event.detail &&
+                    event.detail.activity
+                );
+            }
+        );
+    }
+
+    function setupExecutionTrace() {
+        const button =
+            document.getElementById(
+                "btn-toggle-execution"
+            );
+
+        const trace =
+            document.getElementById(
+                "execution-trace"
+            );
+
+        if (!button || !trace) {
+            return;
+        }
+
+        function render() {
+            trace.hidden =
+                !state.executionTrace;
+
+            button.setAttribute(
+                "aria-expanded",
+                String(
+                    state.executionTrace
+                )
+            );
+
+            button.classList.toggle(
+                "is-expanded",
+                state.executionTrace
+            );
+        }
+
+        button.addEventListener(
+            "click",
+            () => {
+                state.executionTrace =
+                    !state.executionTrace;
+
+                render();
+                saveState();
+
+                emit(
+                    "eaos:execution-trace",
+                    {
+                        expanded:
+                            state.executionTrace,
+                    }
+                );
+            }
+        );
+
+        render();
+    }
+
+    function setupChat() {
+        const form =
+            document.getElementById(
+                "chat-form"
+            );
+
+        const input =
+            document.getElementById(
+                "chat-input"
+            );
+
+        const send =
+            document.getElementById(
+                "btn-send-chat"
+            );
+
+        if (!form || !input) {
+            return;
+        }
+
+        /*
+         * Do not replace the existing AI/WebSocket handler.
+         * We only normalize submit behavior and expose the event.
+         */
+        form.addEventListener(
+            "submit",
+            (event) => {
+                const value =
+                    input.value.trim();
+
+                if (!value) {
+                    event.preventDefault();
+                    return;
+                }
+
+                emit(
+                    "eaos:chat-submit",
+                    {
+                        value,
+                        input,
+                        send,
+                        form,
+                    }
+                );
+            },
+            true
+        );
+
+        input.addEventListener(
+            "keydown",
+            (event) => {
+                if (
+                    event.key === "Enter" &&
+                    !event.shiftKey
+                ) {
+                    event.preventDefault();
+
+                    if (
+                        typeof form.requestSubmit ===
+                        "function"
+                    ) {
+                        form.requestSubmit();
+                    } else {
+                        form.dispatchEvent(
+                            new Event(
+                                "submit",
+                                {
+                                    bubbles: true,
+                                    cancelable: true,
+                                }
+                            )
+                        );
+                    }
+                }
+            }
+        );
+    }
+
+    function setupEditorBridge() {
+        const host =
+            document.querySelector(
+                '[data-editor-host="monaco"]'
+            ) ||
+            document.getElementById(
+                "monaco-editor-container"
+            );
+
+        if (!host) {
+            return;
+        }
+
+        host.addEventListener(
+            "eaos:editor-focus",
+            () => {
+                emit(
+                    "eaos:editor-ready",
+                    {
+                        host,
+                    }
+                );
+            }
+        );
+    }
+
+    function exposeAPI() {
+        window.EAOS =
+            window.EAOS || {};
+
+        window.EAOS.ui = {
+            getState() {
+                return {
+                    ...state,
+                };
+            },
+
+            setActivity,
+
+            toggleExecutionTrace() {
+                state.executionTrace =
+                    !state.executionTrace;
+
+                saveState();
+
+                const button =
+                    document.getElementById(
+                        "btn-toggle-execution"
+                    );
+
+                const trace =
+                    document.getElementById(
+                        "execution-trace"
+                    );
+
+                if (trace) {
+                    trace.hidden =
+                        !state.executionTrace;
+                }
+
+                if (button) {
+                    button.setAttribute(
+                        "aria-expanded",
+                        String(
+                            state.executionTrace
+                        )
+                    );
+                }
+
+                return state.executionTrace;
+            },
+        };
+    }
+
+    function init() {
+        readState();
+        setupActivityBridge();
+        setupExecutionTrace();
+        setupChat();
+        setupEditorBridge();
+        exposeAPI();
+        applyActivity(state.activity);
+
+        console.debug(
+            "[EAOS] UI runtime initialized",
+            state
+        );
+    }
+
+    if (
+        document.readyState ===
+        "loading"
+    ) {
+        document.addEventListener(
+            "DOMContentLoaded",
+            init,
+            {
+                once: true,
+            }
+        );
+    } else {
+        init();
+    }
+})();

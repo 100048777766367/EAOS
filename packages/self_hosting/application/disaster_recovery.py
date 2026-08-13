@@ -1,9 +1,9 @@
-"""Zero-Server Disaster Recovery & Re-hydration Engine for EAOS."""
-
 import uuid
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict
+
+"""Zero-Server Disaster Recovery & Re-hydration Engine for EAOS."""
 
 
 class RecoverySnapshotDTO(BaseModel):

@@ -1,10 +1,10 @@
-"""Autonomous Task Planner Engine for Cybernetic Execution."""
-
 from __future__ import annotations
 
 import uuid
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Autonomous Task Planner Engine for Cybernetic Execution."""
 
 
 class PlannedTaskDTO(BaseModel):

@@ -1,10 +1,10 @@
-"""Enterprise Model Compiler Domain Models (Phase 3)."""
-
 from __future__ import annotations
 
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Enterprise Model Compiler Domain Models (Phase 3)."""
 
 
 class DecisionCondition(BaseModel):

@@ -1,8 +1,8 @@
-"""Automated code and patch generator engine for self-rewrite cycles."""
-
 import time
 
 from pydantic import BaseModel, ConfigDict
+
+"""Automated code and patch generator engine for self-rewrite cycles."""
 
 
 class GenerationSpecDTO(BaseModel):

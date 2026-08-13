@@ -1,9 +1,9 @@
-"""Tự dọn dẹp thư mục rác __pycache__ và phục hồi tệp thiếu."""
-
 from __future__ import annotations
 
 import shutil
 from pathlib import Path
+
+"""Tự dọn dẹp thư mục rác __pycache__ và phục hồi tệp thiếu."""
 
 
 class SelfHealingArchiver:

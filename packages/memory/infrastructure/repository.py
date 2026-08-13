@@ -1,6 +1,6 @@
-"""InMemory Memory Repository implementation."""
-
 from packages.memory.domain.entities import MemoryRecord
+
+"""InMemory Memory Repository implementation."""
 
 
 class InMemoryMemoryRepository:
@@ -37,11 +37,7 @@ class InMemoryMemoryRepository:
         results: list[MemoryRecord] = []
         q = query.lower()
         for record in self._storage.values():
-            if (
-                not q
-                or q in record.lesson_learned.lower()
-                or q in record.evidence_summary.lower()
-            ):
+            if not q or q in record.lesson_learned.lower() or q in record.evidence_summary.lower():
                 results.append(record)
             if len(results) >= limit:
                 break

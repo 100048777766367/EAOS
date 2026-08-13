@@ -1,9 +1,9 @@
-"""EAOS Topography Mapper & Architectural Ring Auditor."""
-
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
 from typing import ClassVar  # Import ClassVar
+
+"""EAOS Topography Mapper & Architectural Ring Auditor."""
 
 
 class ArchitectureRing(Enum):
@@ -54,16 +54,12 @@ class EAOSTopographyAuditor:
         "tests": ArchitectureRing.RING_3_GOVERNANCE,
     }
 
-    def audit_workspace_root(
-        self, root_path: Path
-    ) -> list[TopographyDirectoryInfo]:
+    def audit_workspace_root(self, root_path: Path) -> list[TopographyDirectoryInfo]:
         """Phân loại toàn bộ các thư mục tại gốc D:\\EAOS."""
         results: list[TopographyDirectoryInfo] = []
         for item in root_path.iterdir():
             if item.is_dir():
-                ring = self.RING_MAPPING.get(
-                    item.name, ArchitectureRing.RING_3_GOVERNANCE
-                )
+                ring = self.RING_MAPPING.get(item.name, ArchitectureRing.RING_3_GOVERNANCE)
                 results.append(
                     TopographyDirectoryInfo(
                         name=item.name,

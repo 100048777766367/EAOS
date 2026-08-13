@@ -12,7 +12,7 @@ class KnowledgeArtifact(BaseModel):
     author: str = Field(..., description="TÃ¡c giáº£ khá»Ÿi táº¡o")
     created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
-    model_config = ConfigDict(frozen=True)  # Entity lÃ  báº¥t biáº¿n (Immutable)
+    model_config = ConfigDict(frozen=True)  # Entity lÃ  báº¥t biáº¿n (Immutable)
 
 
 class AuditLogEntry(BaseModel):

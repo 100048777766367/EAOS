@@ -1,8 +1,8 @@
-"""Ecosystem Enterprise Node Registry Engine."""
-
 from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Ecosystem Enterprise Node Registry Engine."""
 
 
 class EcosystemMemberDTO(BaseModel):

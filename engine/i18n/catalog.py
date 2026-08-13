@@ -1,8 +1,9 @@
-"""I18n Catalog Engine Implementation."""
-
 from dataclasses import dataclass, field
 from enum import StrEnum
 from typing import Final, Protocol, override
+
+"""I18n Catalog Engine Implementation."""
+
 
 __all__ = ["I18nCatalogEngine", "SupportedLocale", "TranslationCatalogProtocol"]
 

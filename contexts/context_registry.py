@@ -1,11 +1,11 @@
-"""Master DDD Bounded Context Registry and Context Map Engine."""
-
 from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field
 
 from contexts.crm.crm_context import BoundedContextDTO, CRMContextRegistry
 from contexts.sales.sales_context import SalesContextRegistry
+
+"""Master DDD Bounded Context Registry and Context Map Engine."""
 
 
 class ContextMapRelationshipDTO(BaseModel):

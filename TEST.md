@@ -1,6 +1,6 @@
 # EAOS Test Execution Runbook
 
-> **Target Platform:** Pytest 9.x / Python 3.14  
+> **Target Platform:** Pytest 9.x / Python 3.14
 
 ---
 

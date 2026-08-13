@@ -1,0 +1,82 @@
+from __future__ import annotations
+
+import pytest
+from dxs.application.compatibility_service import CompatibilityService
+from dxs.contracts.versioning import ContractVersion
+from dxs.domain.compatibility import CompatibilityPolicy
+
+
+def test_contract_version_parses_semantic_version() -> None:
+    version = ContractVersion.parse("1.2.3")
+
+    assert version.major == 1
+    assert version.minor == 2
+    assert version.patch == 3
+    assert str(version) == "1.2.3"
+
+
+def test_contract_version_rejects_invalid_version() -> None:
+    with pytest.raises(ValueError):
+        ContractVersion.parse("1.2")
+
+
+def test_same_version_is_compatible() -> None:
+    service = CompatibilityService()
+
+    result = service.check(
+        ContractVersion(1, 0, 0),
+        ContractVersion(1, 0, 0),
+    )
+
+    assert result.compatible is True
+    assert result.status == "compatible"
+
+
+def test_minor_upgrade_is_compatible_by_default() -> None:
+    service = CompatibilityService()
+
+    result = service.check(
+        ContractVersion(1, 0, 0),
+        ContractVersion(1, 1, 0),
+    )
+
+    assert result.compatible is True
+
+
+def test_major_upgrade_is_incompatible() -> None:
+    service = CompatibilityService()
+
+    result = service.check(
+        ContractVersion(1, 0, 0),
+        ContractVersion(2, 0, 0),
+    )
+
+    assert result.compatible is False
+    assert result.status == "incompatible"
+
+
+def test_policy_can_disable_minor_upgrade() -> None:
+    service = CompatibilityService()
+
+    policy = CompatibilityPolicy(
+        allow_minor_upgrade=False,
+    )
+
+    result = service.check(
+        ContractVersion(1, 0, 0),
+        ContractVersion(1, 1, 0),
+        policy,
+    )
+
+    assert result.compatible is False
+
+
+def test_patch_upgrade_is_supported() -> None:
+    service = CompatibilityService()
+
+    result = service.check(
+        ContractVersion(1, 0, 0),
+        ContractVersion(1, 0, 1),
+    )
+
+    assert result.compatible is True

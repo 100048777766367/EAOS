@@ -1,2 +1,1 @@
-﻿# Auto-generated __init__.py for rdf
-
+# Auto-generated __init__.py for rdf

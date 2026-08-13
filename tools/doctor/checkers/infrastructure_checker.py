@@ -1,5 +1,3 @@
-"""Infrastructure Checker with Deep Application Probes."""
-
 from __future__ import annotations
 
 import socket
@@ -7,6 +5,8 @@ import urllib.request
 from typing import ClassVar
 
 from tools.doctor.dto import DiagnosticCheckDTO, SeverityLevel
+
+"""Infrastructure Checker with Deep Application Probes."""
 
 
 class InfrastructureChecker:

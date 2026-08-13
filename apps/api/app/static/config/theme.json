@@ -1,0 +1,10 @@
+﻿{
+  "themeName": "EAOS Cyberpunk Dark",
+  "colors": {
+    "background": "#030712",
+    "surface": "#060b17",
+    "border": "#1e293b",
+    "primary": "#00f0ff",
+    "success": "#10b981"
+  }
+}

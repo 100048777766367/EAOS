@@ -1,11 +1,11 @@
-"""Sổ cái vết quyết định kiến trúc chống lượng tử."""
-
 from __future__ import annotations
 
 import hashlib
 import json
 import time
 from typing import Any
+
+"""Sổ cái vết quyết định kiến trúc chống lượng tử."""
 
 
 class QuantumArchitectureLedger:

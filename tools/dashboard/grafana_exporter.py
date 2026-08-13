@@ -1,10 +1,10 @@
-"""Grafana dashboard exporter for EAOS Observability metrics."""
-
 from collections.abc import Sized
 from pathlib import Path
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict
+
+"""Grafana dashboard exporter for EAOS Observability metrics."""
 
 
 class DashboardExportSummaryDTO(BaseModel):

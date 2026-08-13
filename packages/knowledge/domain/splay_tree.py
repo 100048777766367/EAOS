@@ -53,7 +53,7 @@ class SplayTree[T]:
         x.parent = y
 
     def _splay(self, x: SplayNode[T]) -> None:
-        """ÄÆ°a nÃºt x vá»«a truy cáº­p lÃªn lÃ m gá»‘c cá»§a cÃ¢y."""
+        """ÄÆ°a nÃºt x vá»«a truy cáº­p lÃªn lÃ m gá»‘c cá»§a cÃ¢y."""
         while x.parent is not None:
             p = x.parent
             g = p.parent
@@ -81,7 +81,7 @@ class SplayTree[T]:
                 self._left_rotate(p)
 
     def search(self, key: str) -> SplayNode[T] | None:
-        """TÃ¬m kiáº¿m khÃ³a vÃ  tá»± Ä‘á»™ng splay nÃºt tÃ¬m tháº¥y lÃªn lÃ m gá»‘c."""
+        """TÃ¬m kiáº¿m khÃ³a vÃ  tá»± Ä‘á»™ng splay nÃºt tÃ¬m tháº¥y lÃªn lÃ m gá»‘c."""
         x = self.root
         while x is not None:
             if key < x.key:
@@ -100,12 +100,12 @@ class SplayTree[T]:
         return None
 
     def insert(self, key: str, value: T) -> None:
-        """ChÃ¨n pháº§n tá»­ má»›i vÃ o cÃ¢y nhá»‹ phÃ¢n vÃ  splay lÃªn lÃ m Root."""
+        """ChÃ¨n pháº§n tá»­ má»›i vÃ o cÃ¢y nhá»‹ phÃ¢n vÃ  splay lÃªn lÃ m Root."""
         if self.root is None:
             self.root = SplayNode(key, value)
             return
 
-        # Khai bÃ¡o kiá»ƒu tÆ°á»ng minh cho phÃ©p x vÃ  parent nháº­n giÃ¡ trá»‹ None (Sá»­a lá»—i Mypy)
+        # Khai bÃ¡o kiá»ƒu tÆ°á»ng minh cho phÃ©p x vÃ  parent nháº­n giÃ¡ trá»‹ None (Sá»­a lá»—i Mypy)
         x: SplayNode[T] | None = self.root
         parent: SplayNode[T] | None = None
 
@@ -133,7 +133,7 @@ class SplayTree[T]:
         self._splay(node)
 
     def delete(self, key: str) -> bool:
-        """XÃ³a pháº§n tá»­ vÃ  splay tÃ¡i sáº¯p xáº¿p láº¡i hai nhÃ¡nh cá»§a cÃ¢y."""
+        """XÃ³a pháº§n tá»­ vÃ  splay tÃ¡i sáº¯p xáº¿p láº¡i hai nhÃ¡nh cá»§a cÃ¢y."""
         node = self.search(key)
         if node is None or node.key != key:
             return False

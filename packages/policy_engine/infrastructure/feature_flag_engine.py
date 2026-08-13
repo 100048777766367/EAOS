@@ -1,8 +1,8 @@
-"""Dynamic feature flag evaluation engine."""
-
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict
+
+"""Dynamic feature flag evaluation engine."""
 
 
 class FeatureFlagEvaluationDTO(BaseModel):

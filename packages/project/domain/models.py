@@ -1,8 +1,8 @@
-"""Project Management Capability Domain Models for EAOS."""
-
 from datetime import UTC, datetime
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Project Management Capability Domain Models for EAOS."""
 
 
 class ProjectTask(BaseModel):

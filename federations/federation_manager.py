@@ -1,8 +1,8 @@
-"""Federation manager."""
-
 from __future__ import annotations
 
 from .bft.synod_bft import SynodBft
+
+"""Federation manager."""
 
 
 class FederationManager:

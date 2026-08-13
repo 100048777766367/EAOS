@@ -1,8 +1,8 @@
-"""Native Rego Policy Compiler implementation for EAOS."""
-
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict
+
+"""Native Rego Policy Compiler implementation for EAOS."""
 
 
 class RegoRuleResult(BaseModel):

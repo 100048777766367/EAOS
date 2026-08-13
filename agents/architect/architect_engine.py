@@ -1,6 +1,6 @@
-"""Động cơ thiết kế kiến trúc của Architect Agent."""
-
 from __future__ import annotations
+
+"""Động cơ thiết kế kiến trúc của Architect Agent."""
 
 
 class ArchitectEngine:

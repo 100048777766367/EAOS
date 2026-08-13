@@ -1,8 +1,8 @@
-"""Aggregate catalog module."""
-
 from __future__ import annotations
 
 from typing import Any
+
+"""Aggregate catalog module."""
 
 
 class AggregateCatalogEngine:

@@ -1,6 +1,6 @@
-"""Động cơ kiểm thử của Tester Agent."""
-
 from __future__ import annotations
+
+"""Động cơ kiểm thử của Tester Agent."""
 
 
 class TesterEngine:

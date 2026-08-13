@@ -1,5 +1,3 @@
-"""Tools Manager module."""
-
 from __future__ import annotations
 
 from pathlib import Path
@@ -9,6 +7,8 @@ from .automation.dry_run_tools_simulator import DryRunToolsSimulator
 from .doctor.engine import EAOSDoctorEngine as DoctorEngine
 from .ledger.quantum_tools_ledger import QuantumToolsLedger
 from .validate.architecture_validator import ArchitectureValidator
+
+"""Tools Manager module."""
 
 
 class ToolsManager:

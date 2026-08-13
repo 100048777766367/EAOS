@@ -1,6 +1,6 @@
-"""Động cơ ứng dụng Desktop Client."""
-
 from __future__ import annotations
+
+"""Động cơ ứng dụng Desktop Client."""
 
 
 class DesktopAppEngine:

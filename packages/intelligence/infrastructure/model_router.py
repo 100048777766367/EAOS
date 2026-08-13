@@ -1,8 +1,8 @@
-"""FinOps AI Model Router and cost/latency optimizer for EAOS intelligence."""
-
 from typing import ClassVar
 
 from pydantic import BaseModel, ConfigDict
+
+"""FinOps AI Model Router and cost/latency optimizer for EAOS intelligence."""
 
 
 class ModelRoutingDecision(BaseModel):

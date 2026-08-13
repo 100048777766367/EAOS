@@ -1,8 +1,8 @@
 # API Gateway Specification
 
-> **Specification ID:** SPEC-APIS-001  
-> **Status:** ACTIVE  
-> **Governance:** ARCHITECTURE_CONSTITUTION.md v2.0  
+> **Specification ID:** SPEC-APIS-001
+> **Status:** ACTIVE
+> **Governance:** ARCHITECTURE_CONSTITUTION.md v2.0
 
 ---
 

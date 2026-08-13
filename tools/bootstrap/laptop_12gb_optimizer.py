@@ -1,6 +1,6 @@
-"""12GB RAM Laptop Hardware Optimizer & Lightweight Mode Configurator."""
-
 from pydantic import BaseModel, ConfigDict
+
+"""12GB RAM Laptop Hardware Optimizer & Lightweight Mode Configurator."""
 
 
 class HardwareOptimizationProfileDTO(BaseModel):

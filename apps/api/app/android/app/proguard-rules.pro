@@ -1,0 +1,3 @@
+﻿-keepclassmembers class okhttp3.internal.** { *; }
+-dontwarn okhttp3.internal.**
+-keep class com.eaos.aiide.model.** { *; }

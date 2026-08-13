@@ -1,8 +1,8 @@
-"""AI model provider types."""
-
 from __future__ import annotations
 
 from enum import StrEnum
+
+"""AI model provider types."""
 
 
 class AIProviderType(StrEnum):

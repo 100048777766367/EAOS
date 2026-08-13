@@ -1,8 +1,8 @@
-"""CRM Bounded Context Definition (DDD Pattern)."""
-
 from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""CRM Bounded Context Definition (DDD Pattern)."""
 
 
 class BoundedContextDTO(BaseModel):

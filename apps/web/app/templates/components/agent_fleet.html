@@ -11,7 +11,7 @@
             const res = await fetch("http://localhost:8000/dashboard/telemetry");
             if (!res.ok) return;
             const data = await res.json();
-            
+
             const agentList = document.getElementById('agent-list');
             agentList.innerHTML = data.active_agents.map(a => `
                 <div class="flex items-center justify-between p-3 bg-slate-950 rounded border border-slate-800/80">

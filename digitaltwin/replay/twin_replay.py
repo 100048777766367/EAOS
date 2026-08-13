@@ -1,8 +1,8 @@
-"""Event Replay Engine for Digital Twin."""
-
 from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Event Replay Engine for Digital Twin."""
 
 
 class ReplayResultDTO(BaseModel):

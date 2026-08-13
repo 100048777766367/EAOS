@@ -1,11 +1,12 @@
-"""Dynamic hot-plug loader for EAOS capability packs."""
-
 import importlib
 import sys
 from pathlib import Path
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict
+
+"""Dynamic hot-plug loader for EAOS capability packs."""
+
 
 ROOT_PATH = Path(__file__).resolve().parents[2]
 

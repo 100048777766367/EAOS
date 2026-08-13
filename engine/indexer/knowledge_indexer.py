@@ -1,8 +1,8 @@
-"""Knowledge indexing engine for architectural artifacts and Splay cache."""
-
 import time
 
 from pydantic import BaseModel, ConfigDict
+
+"""Knowledge indexing engine for architectural artifacts and Splay cache."""
 
 
 class IndexEntryDTO(BaseModel):

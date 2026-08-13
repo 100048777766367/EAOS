@@ -1,6 +1,6 @@
-"""Domain entities and value objects for Security context."""
-
 from pydantic import BaseModel, ConfigDict
+
+"""Domain entities and value objects for Security context."""
 
 
 class SecurityStatusVO(BaseModel):

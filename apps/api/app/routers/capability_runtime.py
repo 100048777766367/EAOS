@@ -1,9 +1,10 @@
-"""Capability Runtime Router."""
-
 from fastapi import APIRouter
 from packages.capability.domain.models import BusinessCapability
 
 from apps.api.app.container import capability_registry
+
+"""Capability Runtime Router."""
+
 
 router = APIRouter(prefix="/v1/capabilities", tags=["Capability Runtime"])
 

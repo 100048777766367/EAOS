@@ -1,10 +1,10 @@
-"""Adaptive Hardware & Environment Profiler for EAOS Platform."""
-
 from datetime import UTC, datetime
 from enum import StrEnum
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Adaptive Hardware & Environment Profiler for EAOS Platform."""
 
 
 class ExecutionModeEnum(StrEnum):

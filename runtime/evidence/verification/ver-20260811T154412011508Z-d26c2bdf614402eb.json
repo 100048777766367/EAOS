@@ -1,0 +1,26 @@
+{
+  "evidence_id": "ver-20260811T154412011508Z-d26c2bdf614402eb",
+  "created_at": "2026-08-11T15:44:12.011684+00:00",
+  "result": {
+    "status": "PASSED",
+    "runs": [
+      {
+        "name": "ruff",
+        "status": "PASSED",
+        "returncode": 0,
+        "output": "All checks passed!",
+        "duration_seconds": 0.13364569999976084,
+        "error": null
+      },
+      {
+        "name": "pytest",
+        "status": "PASSED",
+        "returncode": 0,
+        "output": "........................................................................ [ 43%]\n........................................................................ [ 87%]\n....................                                                     [100%]",
+        "duration_seconds": 19.163810599999124,
+        "error": null
+      }
+    ],
+    "evidence_id": null
+  }
+}

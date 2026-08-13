@@ -1,7 +1,7 @@
 # EAOS Operations Manual & DevSecOps Runbooks Suite v1.0
 
-> **Authority:** Enterprise Architecture Review Board (ARB)  
-> **Classification:** Operational Governance  
+> **Authority:** Enterprise Architecture Review Board (ARB)
+> **Classification:** Operational Governance
 
 ## Operations Document Index
 

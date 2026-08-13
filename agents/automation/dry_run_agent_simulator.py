@@ -1,8 +1,8 @@
-"""Dry run agent simulator module."""
-
 from __future__ import annotations
 
 from typing import Any
+
+"""Dry run agent simulator module."""
 
 
 class DryRunAgentSimulator:

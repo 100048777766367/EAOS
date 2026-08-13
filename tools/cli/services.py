@@ -3,10 +3,8 @@
 from __future__ import annotations
 
 import asyncio
-import inspect
 import subprocess
 from pathlib import Path
-from typing import Any
 
 import tools.validate.architecture_validator as val_mod
 from tools.cli.dto import CLIContextDTO, CLIExitCode
@@ -48,32 +46,22 @@ class ValidateCLIService:
     def run_validation(self, ctx: CLIContextDTO) -> CLIExitCode:
         root = Path(ctx.workspace_root)
 
-        val_classes: list[Any] = [
-            obj
-            for _, obj in inspect.getmembers(val_mod, inspect.isclass)
-            if obj.__module__ == "tools.validate.architecture_validator"
-        ]
-
-        if not val_classes:
-            print("Error: Validator class missing")
+        # Directly import the ArchitectureValidator class from the module
+        validator_cls = getattr(val_mod, "ArchitectureValidator", None)
+        if validator_cls is None:
+            print("Error: ArchitectureValidator class missing")
             return CLIExitCode.INTERNAL_ERROR
-
-        validator_cls: Any = val_classes[0]
         validator = validator_cls(root)
 
-        val_method = getattr(
-            validator,
-            "validate_architecture",
-            getattr(validator, "validate", None),
-        )
-
-        if not val_method:
-            print("Error: Validation method missing")
+        # Use the explicit validate_architecture method if available
+        val_method = getattr(validator, "validate_architecture", None)
+        if val_method is None:
+            print("Error: validate_architecture method missing")
             return CLIExitCode.INTERNAL_ERROR
 
         report = val_method()
-        compliant = getattr(report, "compliant", True)
-        violations = getattr(report, "violations", [])
+        compliant = getattr(report, "passed", True)  # Adjusted attribute name
+        violations = getattr(report, "errors", [])
 
         status_str = "PASS" if compliant else "FAIL"
         print(f"Architecture Validator: {status_str}")

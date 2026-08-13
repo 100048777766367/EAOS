@@ -44,15 +44,11 @@ class ExternalRepositoryManagerAdapter(RepositoryOnboardingPort):
         stack = self._detect_stack(target_path)
         log_lines.append(f"Detected Stack: {stack}")
 
-        if (
-            stack == StackType.PYTHON
-            and (
-                (target_path / "pyproject.toml").exists()
-                or (target_path / "setup.py").exists()
-            )
+        if stack == StackType.PYTHON and (
+            (target_path / "pyproject.toml").exists() or (target_path / "setup.py").exists()
         ):
-                res = self._run_cmd(["uv", "pip", "install", "-e", str(target_path)])
-                log_lines.append(f"UV Pip Install: {res[:200]}")
+            res = self._run_cmd(["uv", "pip", "install", "-e", str(target_path)])
+            log_lines.append(f"UV Pip Install: {res[:200]}")
 
         repo_dto = ExternalRepositoryDTO(
             repo_name=repo_name,

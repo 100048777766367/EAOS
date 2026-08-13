@@ -10,7 +10,7 @@ Status: Accepted
 Thiết lập quy trình 4 bước bắt buộc (Consensus and Rebuttal Protocol) cho mọi thay đổi cấu trúc:
 
 ```text
-Kiến nghị (Proposal - PR) 
+Kiến nghị (Proposal - PR)
        │
        ▼
 Ý kiến Phản biện (Objections / Rebuttals)

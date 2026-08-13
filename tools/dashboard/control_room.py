@@ -1,8 +1,8 @@
-"""Control Room Dashboard Renderer Module."""
-
 from __future__ import annotations
 
 from pathlib import Path
+
+"""Control Room Dashboard Renderer Module."""
 
 
 class ControlRoomDashboard:

@@ -11,7 +11,7 @@ class LoadCapabilityRequest(BaseModel):
 
 
 class RegisterCapabilityUseCase:
-    """Application Service chá»‹u trÃ¡ch nhiá»‡m biÃªn dá»‹ch vÃ  náº¡p nÄƒng lá»±c nghiá»‡p vá»¥."""
+    """Application Service chá»‹u trÃ¡ch nhiá»‡m biÃªn dá»‹ch vÃ  náº¡p nÄƒng lá»±c nghiá»‡p vá»¥."""
 
     def __init__(self, registry: CapabilityRegistryPort) -> None:
         self.registry = registry

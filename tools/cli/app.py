@@ -1,5 +1,3 @@
-"""Main CLI Application Driver for EAOS Human API."""
-
 from __future__ import annotations
 
 import argparse
@@ -7,6 +5,8 @@ from pathlib import Path
 
 from tools.cli.dto import CLIContextDTO, CLIExitCode
 from tools.cli.registry import CLICommandRegistry
+
+"""Main CLI Application Driver for EAOS Human API."""
 
 
 class EAOSCLIApp:

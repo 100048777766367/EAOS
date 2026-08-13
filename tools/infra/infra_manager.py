@@ -1,8 +1,8 @@
-"""Infrastructure as Code (IaC) manager and service health inspector."""
-
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict
+
+"""Infrastructure as Code (IaC) manager and service health inspector."""
 
 
 class InfraServiceHealthDTO(BaseModel):

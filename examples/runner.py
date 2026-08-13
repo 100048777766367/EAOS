@@ -1,5 +1,3 @@
-"""Master Executable Examples Runner."""
-
 from __future__ import annotations
 
 from decimal import Decimal
@@ -11,6 +9,8 @@ from examples.knowledge.knowledge_example import run_knowledge_example
 from examples.policy.policy_example import run_policy_example
 from examples.services.service_example import run_service_example
 from examples.workflow.workflow_example import run_workflow_example
+
+"""Master Executable Examples Runner."""
 
 
 class ExamplesExecutionSummaryDTO(BaseModel):
@@ -30,7 +30,7 @@ class EAOSExamplesRunner:
         res1 = run_hello_eaos_example()
         res2 = run_knowledge_example("Banking")
         res3 = run_policy_example("DEPLOY")
-        res4 = run_service_example(Decimal("10000000"))
+        res4 = run_service_example(Decimal(10000000))
         res5 = run_workflow_example("Refactor Auth")
 
         passed = (

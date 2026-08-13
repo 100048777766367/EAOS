@@ -1,13 +1,13 @@
 # EAOS Meta-Architecture Specification
 
-> **System ID:** EAOS-META-ARCH-001  
-> **Governance:** ARCHITECTURE_CONSTITUTION.md v2.0  
-> **Status:** ACTIVE  
+> **System ID:** EAOS-META-ARCH-001
+> **Governance:** ARCHITECTURE_CONSTITUTION.md v2.0
+> **Status:** ACTIVE
 
 ---
 
 ## 1. System Overview
-EAOS is an AI-native Enterprise Architecture Operating System that transforms 
+EAOS is an AI-native Enterprise Architecture Operating System that transforms
 enterprise architecture from static documentation into executable software.
 
 ## 2. Layering & Boundaries

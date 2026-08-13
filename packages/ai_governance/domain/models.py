@@ -1,9 +1,9 @@
-"""AI Architecture & AI Governance Frameworks Domain Model for EAOS."""
-
 from datetime import UTC, datetime
 from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""AI Architecture & AI Governance Frameworks Domain Model for EAOS."""
 
 
 class AIGovernanceFrameworkType(StrEnum):

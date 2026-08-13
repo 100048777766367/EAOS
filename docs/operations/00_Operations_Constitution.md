@@ -1,8 +1,8 @@
 # EAOS Operations Constitution v1.0
 
-> **Status:** FROZEN (CENTENNIAL EDITION)  
-> **Authority:** Supreme Source of Operational Truth  
-> **Effective Date:** 2026-07-31  
+> **Status:** FROZEN (CENTENNIAL EDITION)
+> **Authority:** Supreme Source of Operational Truth
+> **Effective Date:** 2026-07-31
 
 ## Preamble
 

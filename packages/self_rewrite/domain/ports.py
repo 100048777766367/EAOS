@@ -1,8 +1,8 @@
-"""Domain ports for Self Rewrite context."""
-
 from typing import Protocol
 
 from packages.self_rewrite.domain.models import Patch, SelfRewriteJob
+
+"""Domain ports for Self Rewrite context."""
 
 
 class SelfRewriteRepository(Protocol):

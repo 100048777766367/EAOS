@@ -1,5 +1,3 @@
-"""CLI Entrypoint for EAOS Enterprise Doctor."""
-
 from __future__ import annotations
 
 import argparse
@@ -10,6 +8,8 @@ from tools.doctor.engine import EAOSDoctorEngine
 from tools.doctor.reporters.console_reporter import ConsoleReporter
 from tools.doctor.reporters.json_reporter import JSONReporter
 from tools.doctor.reporters.markdown_reporter import MarkdownReporter
+
+"""CLI Entrypoint for EAOS Enterprise Doctor."""
 
 
 def main() -> None:

@@ -1,6 +1,6 @@
-"""Động cơ ứng dụng Web SPA Dashboard."""
-
 from __future__ import annotations
+
+"""Động cơ ứng dụng Web SPA Dashboard."""
 
 
 class WebAppEngine:

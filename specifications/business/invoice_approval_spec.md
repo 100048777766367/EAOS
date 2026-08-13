@@ -1,8 +1,8 @@
 # Invoice Approval Specification
 
-> **Specification ID:** SPEC-BUSINESS-001  
-> **Status:** ACTIVE  
-> **Governance:** ARCHITECTURE_CONSTITUTION.md v2.0  
+> **Specification ID:** SPEC-BUSINESS-001
+> **Status:** ACTIVE
+> **Governance:** ARCHITECTURE_CONSTITUTION.md v2.0
 
 ---
 

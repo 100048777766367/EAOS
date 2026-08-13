@@ -1,8 +1,8 @@
-"""Web Application Exception Handlers."""
-
 from fastapi import Request, status
 from fastapi.responses import HTMLResponse, JSONResponse
 from starlette.responses import Response
+
+"""Web Application Exception Handlers."""
 
 
 async def custom_http_exception_handler(

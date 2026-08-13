@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark h-full">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>{{ title | default("EAOS Enterprise AI IDE Studio") }}</title>
+
+    <link rel="stylesheet" href="/static/css/chat.css"/>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        code,
+        pre,
+        .font-mono {
+            font-family: 'Fira Code', monospace;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #030712;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+    </style>
+</head>
+
+<body class="bg-[#030712] text-slate-200 h-screen flex flex-col overflow-hidden select-none">
+
+    <!-- =========================================================
+         1. TITLE BAR
+         ========================================================= -->
+    {% include 'components/ide/title_bar.html' %}
+
+
+    <!-- =========================================================
+         2. MAIN EAOS IDE WORKSPACE
+         ========================================================= -->
+    <div
+        class="eaos-workspace-shell flex-1 flex min-h-0 relative overflow-hidden"
+    >
+
+        <!-- =====================================================
+             LEFT REGION
+             Activity Bar + Explorer
+             ===================================================== -->
+
+        {% include 'components/ide/activity_bar.html' %}
+
+        {% include 'components/ide/explorer_sidebar.html' %}
+
+        <div
+            id="resizer-explorer"
+            class="eaos-pane-resizer eaos-horizontal-resizer"
+            role="separator"
+            aria-orientation="vertical"
+            tabindex="0"
+            aria-label="Resize Explorer"
+        ></div>
+
+
+        <!-- =====================================================
+             CENTER REGION
+             Monaco Editor + Terminal
+             ===================================================== -->
+
+        <main
+            class="eaos-center-workspace flex-1 flex flex-col min-w-0 min-h-0 bg-[#030712] border-r border-slate-800/80"
+        >
+
+            <!-- Monaco Editor -->
+            <div
+                class="eaos-editor-pane flex-1 min-h-0 flex flex-col bg-[#030712]"
+            >
+                {% include 'components/ide/editor_pane.html' %}
+            </div>
+
+
+            <!-- Terminal Resizer -->
+            <div
+                id="resizer-terminal"
+                class="eaos-pane-resizer eaos-vertical-resizer"
+                role="separator"
+                aria-orientation="horizontal"
+                tabindex="0"
+                aria-label="Resize Terminal"
+            ></div>
+
+
+            <!-- Terminal -->
+            {% include 'components/ide/terminal_pane.html' %}
+
+        </main>
+
+
+        <!-- =====================================================
+             RIGHT REGION
+             AI Copilot + Inspector
+             ===================================================== -->
+
+        <div
+            id="resizer-copilot"
+            class="eaos-pane-resizer eaos-horizontal-resizer"
+            role="separator"
+            aria-orientation="vertical"
+            tabindex="0"
+            aria-label="Resize Copilot"
+        ></div>
+
+        <aside
+            id="pane-right-inspector"
+            class="eaos-copilot-shell w-80 flex flex-col shrink-0 min-h-0 bg-[#060b17] border-l border-slate-800/80 overflow-hidden"
+        >
+
+            <!-- AI Copilot -->
+            {% include 'components/ide/chat_pane.html' %}
+
+            <!-- Inspector -->
+            {% include 'components/ide/inspector_sidebar.html' %}
+
+        </aside>
+
+    </div>
+
+
+    <!-- =========================================================
+         3. STATUS BAR
+         ========================================================= -->
+
+    {% include 'partials/status_bar.html' %}
+
+
+    <!-- =========================================================
+         4. JAVASCRIPT ENTRY
+         ========================================================= -->
+
+    <script
+        type="module"
+        src="/static/js/main.js"
+    ></script>
+
+    <script type="module" src="/static/js/ide/activity_bar.js"></script>
+    <script type="module" src="/static/js/ide/pane_toggles.js"></script>
+    <script type="module" src="/static/js/ide/layout_resizer.js"></script>
+</body>
+</html>
+

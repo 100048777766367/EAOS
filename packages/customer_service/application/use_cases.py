@@ -1,8 +1,8 @@
-"""Application use cases for Customer Service and Support Handling."""
-
 import uuid
 
 from packages.customer_service.domain.models import SupportTicket
+
+"""Application use cases for Customer Service and Support Handling."""
 
 
 class OpenSupportTicketUseCase:

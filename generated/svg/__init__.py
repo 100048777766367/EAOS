@@ -1,2 +1,1 @@
-﻿# Auto-generated __init__.py for svg
-
+# Auto-generated __init__.py for svg

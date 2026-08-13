@@ -1,9 +1,9 @@
-"""Mô hình DTO cho hệ thống Trí tuệ Nhân tạo Doanh nghiệp (AI)."""
-
 from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import StrEnum
+
+"""Mô hình DTO cho hệ thống Trí tuệ Nhân tạo Doanh nghiệp (AI)."""
 
 
 class ModelTier(StrEnum):

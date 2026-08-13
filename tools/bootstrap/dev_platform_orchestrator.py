@@ -1,9 +1,9 @@
-"""Development Platform Orchestrator for Laptop Environment Setup."""
-
 import shutil
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict
+
+"""Development Platform Orchestrator for Laptop Environment Setup."""
 
 
 class DevToolStatusDTO(BaseModel):

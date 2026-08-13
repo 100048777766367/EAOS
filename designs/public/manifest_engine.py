@@ -1,8 +1,8 @@
-"""Static Asset and PWA Manifest Manager."""
-
 import json
 
 from pydantic import BaseModel, ConfigDict
+
+"""Static Asset and PWA Manifest Manager."""
 
 
 class PWAManifestDTO(BaseModel):

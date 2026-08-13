@@ -1,10 +1,10 @@
-"""Enterprise Intelligence Economy Domain Models (v5.x)."""
-
 from __future__ import annotations
 
 from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Enterprise Intelligence Economy Domain Models (v5.x)."""
 
 
 class KnowledgeDNA(BaseModel):

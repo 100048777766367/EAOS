@@ -1,9 +1,9 @@
-"""Mô hình DTO cho hệ thống Multi-Agent Swarm (AGENTS)."""
-
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import StrEnum
+
+"""Mô hình DTO cho hệ thống Multi-Agent Swarm (AGENTS)."""
 
 
 class AgentRole(StrEnum):

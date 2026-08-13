@@ -1,8 +1,8 @@
-"""Customer Service and Support Domain Model for EAOS."""
-
 from datetime import UTC, datetime
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Customer Service and Support Domain Model for EAOS."""
 
 
 class SupportTicket(BaseModel):

@@ -1,6 +1,6 @@
-"""Động cơ đánh giá chất lượng phản hồi ai."""
-
 from __future__ import annotations
+
+"""Động cơ đánh giá chất lượng phản hồi ai."""
 
 
 class EvaluationEngine:

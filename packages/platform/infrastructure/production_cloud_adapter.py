@@ -1,6 +1,6 @@
-"""Production Cloud & Public Domain Deployment Adapter for EAOS."""
-
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Production Cloud & Public Domain Deployment Adapter for EAOS."""
 
 
 class CloudDeploymentConfigDTO(BaseModel):

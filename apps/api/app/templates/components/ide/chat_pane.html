@@ -1,0 +1,363 @@
+<section
+    id="pane-chat-pane"
+    class="eaos-copilot-pane"
+    data-eaos-pane="chat"
+    data-eaos-role="chat"
+    aria-label="EAOS AI Copilot"
+>
+    <!-- ======================================================
+         CHAT HEADER
+         ====================================================== -->
+
+    <header
+        class="eaos-copilot-header"
+        data-chat-region="header"
+    >
+        <div class="eaos-copilot-brand">
+            <div
+                class="eaos-copilot-icon"
+                aria-hidden="true"
+            >
+                AI
+            </div>
+
+            <div class="min-w-0">
+                <div
+                    class="eaos-copilot-title"
+                    data-chat-element="title"
+                >
+                    EAOS Copilot
+                </div>
+
+                <div
+                    id="copilot-subtitle"
+                    class="eaos-copilot-subtitle"
+                    data-chat-element="subtitle"
+                >
+                    Enterprise Architecture Assistant
+                </div>
+            </div>
+        </div>
+
+        <div class="eaos-copilot-header-right">
+            <span
+                id="copilot-connection"
+                class="eaos-status-chip status-ready"
+                data-chat-runtime="connection"
+                role="status"
+                aria-live="polite"
+            >
+                Ready
+            </span>
+
+            <button
+                id="btn-clear-chat"
+                type="button"
+                class="eaos-icon-button"
+                title="Clear chat"
+                aria-label="Clear chat"
+                data-chat-action="clear"
+            >
+                ×
+            </button>
+        </div>
+    </header>
+
+    <!-- ======================================================
+         RUNTIME MODEL STRIP
+         ====================================================== -->
+
+    <section
+        class="eaos-model-strip"
+        data-chat-region="runtime"
+        aria-label="AI runtime"
+    >
+        <div class="eaos-model-item">
+            <span class="eaos-model-label">
+                Provider
+            </span>
+
+            <span
+                id="runtime-provider"
+                class="eaos-model-value"
+                data-chat-runtime="provider"
+            >
+                —
+            </span>
+        </div>
+
+        <div
+            class="eaos-model-divider"
+            aria-hidden="true"
+        ></div>
+
+        <div class="eaos-model-item">
+            <span class="eaos-model-label">
+                Model
+            </span>
+
+            <span
+                id="runtime-model"
+                class="eaos-model-value"
+                data-chat-runtime="model"
+            >
+                —
+            </span>
+        </div>
+    </section>
+
+    <!-- ======================================================
+         ACTIVE TASK
+         ====================================================== -->
+
+    <section
+        id="active-task-card"
+        class="eaos-task-card"
+        data-chat-region="task"
+        aria-label="Active task"
+    >
+        <div class="eaos-section-header">
+            <span class="eaos-section-title">
+                Active Task
+            </span>
+
+            <span
+                id="task-state-chip"
+                class="eaos-status-chip status-idle"
+                data-chat-runtime="task-state"
+                role="status"
+                aria-live="polite"
+            >
+                Idle
+            </span>
+        </div>
+
+        <div class="eaos-task-grid">
+            <div class="eaos-task-label">
+                Task
+            </div>
+
+            <div
+                id="runtime-task"
+                class="eaos-task-value"
+                data-chat-runtime="task"
+            >
+                —
+            </div>
+
+            <div class="eaos-task-label">
+                Agent
+            </div>
+
+            <div
+                id="runtime-agent"
+                class="eaos-task-value"
+                data-chat-runtime="agent"
+            >
+                —
+            </div>
+
+            <div class="eaos-task-label">
+                Evidence
+            </div>
+
+            <div
+                id="runtime-evidence"
+                class="eaos-task-value"
+                data-chat-runtime="evidence"
+            >
+                —
+            </div>
+
+            <div class="eaos-task-label">
+                Latency
+            </div>
+
+            <div
+                id="runtime-latency"
+                class="eaos-task-value"
+                data-chat-runtime="latency"
+            >
+                —
+            </div>
+        </div>
+    </section>
+
+    <!-- ======================================================
+         CHAT STREAM
+         ====================================================== -->
+
+    <section
+        id="chat-stream"
+        class="eaos-chat-stream"
+        data-chat-region="messages"
+        role="log"
+        aria-label="Chat messages"
+        aria-live="polite"
+        aria-relevant="additions"
+    >
+        <article
+            class="eaos-chat-message eaos-chat-assistant"
+            data-chat-message="system"
+        >
+            <div class="eaos-chat-label">
+                EAOS Copilot
+            </div>
+
+            <div class="eaos-chat-body">
+                Ready.
+            </div>
+        </article>
+    </section>
+
+    <!-- ======================================================
+         EXECUTION TRACE
+         ====================================================== -->
+
+    <section
+        class="eaos-trace-section"
+        data-chat-region="trace"
+        aria-label="Execution trace"
+    >
+        <div class="eaos-trace-header">
+            <div>
+                <div class="eaos-section-title">
+                    Execution Trace
+                </div>
+
+                <div
+                    id="trace-summary"
+                    class="eaos-section-subtitle"
+                    data-chat-runtime="trace-summary"
+                >
+                    No active execution
+                </div>
+            </div>
+
+            <button
+                id="btn-toggle-execution"
+                type="button"
+                class="eaos-trace-toggle"
+                data-chat-action="toggle-trace"
+                aria-expanded="true"
+                aria-controls="execution-trace"
+            >
+                Trace
+            </button>
+        </div>
+
+        <div
+            id="execution-trace"
+            class="eaos-trace"
+            data-chat-region="trace-list"
+        >
+            <div class="eaos-timeline-item">
+                <div class="eaos-timeline-marker">
+                    <span class="eaos-timeline-dot"></span>
+                    <span class="eaos-timeline-line"></span>
+                </div>
+
+                <div class="eaos-timeline-content">
+                    <div class="eaos-timeline-title">
+                        System ready
+                    </div>
+
+                    <div class="eaos-timeline-meta">
+                        Waiting for task
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======================================================
+         QUICK STATUS
+         ====================================================== -->
+
+    <section
+        class="eaos-quick-status"
+        data-chat-region="health"
+        aria-label="Runtime health"
+    >
+        <div class="eaos-quick-item">
+            <span class="eaos-quick-label">
+                Ruff
+            </span>
+
+            <span
+                id="runtime-ruff"
+                class="eaos-quick-value idle"
+                data-chat-runtime="ruff"
+            >
+                —
+            </span>
+        </div>
+
+        <div class="eaos-quick-item">
+            <span class="eaos-quick-label">
+                Pytest
+            </span>
+
+            <span
+                id="runtime-pytest"
+                class="eaos-quick-value idle"
+                data-chat-runtime="pytest"
+            >
+                —
+            </span>
+        </div>
+
+        <div class="eaos-quick-item">
+            <span class="eaos-quick-label">
+                Overall
+            </span>
+
+            <span
+                id="runtime-overall"
+                class="eaos-quick-value idle"
+                data-chat-runtime="overall"
+            >
+                —
+            </span>
+        </div>
+    </section>
+
+    <!-- ======================================================
+         CHAT INPUT
+         ====================================================== -->
+
+    <form
+        id="chat-form"
+        class="eaos-chat-input"
+        data-chat-region="input"
+        autocomplete="off"
+    >
+        <textarea
+            id="chat-input"
+            name="message"
+            rows="3"
+            data-chat-input="message"
+            aria-label="Chat message"
+            placeholder="Ask EAOS Copilot..."
+            spellcheck="true"
+        ></textarea>
+
+        <div class="eaos-chat-input-footer">
+            <div
+                class="eaos-input-hint"
+                data-chat-element="input-hint"
+            >
+                Enter to send · Shift+Enter for newline
+            </div>
+
+            <button
+                id="btn-send-chat"
+                type="submit"
+                class="eaos-send-button"
+                data-chat-action="send"
+            >
+                Send
+            </button>
+        </div>
+    </form>
+</section>

@@ -27,7 +27,7 @@ def retry_with_backoff(
                     except Exception as e:
                         retries += 1
                         last_error = e
-                        logger.warn(
+                        logger.warning(
                             "Transient async error, retrying...",
                             func=func.__name__,
                             retries=retries,
@@ -52,7 +52,7 @@ def retry_with_backoff(
                 except Exception as e:
                     retries += 1
                     last_error = e
-                    logger.warn(
+                    logger.warning(
                         "Transient sync error, retrying...",
                         func=func.__name__,
                         retries=retries,

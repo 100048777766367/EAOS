@@ -3748,5 +3748,3 @@ A well-maintained ADR system enables:
 It transforms architectural decisions from isolated discussions into durable organizational knowledge, ensuring that every significant change to the enterprise architecture is intentional, traceable, reviewable, and aligned with the long-term vision of EAOS.
 
 Together with the Constitution, Engineering Guide, Project Context, Current Context, Task, and Roadmap documents, it forms a complete documentation architecture that enables both humans and AI agents to collaboratively design, govern, evolve, and implement a computational enterprise architecture in a disciplined and transparent manner.
-
-

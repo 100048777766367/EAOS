@@ -1,14 +1,12 @@
-"""Autonomous Architect Agent Worker."""
-
 from __future__ import annotations
 
-import inspect
 from pathlib import Path
-from typing import Any
 
 import tools.validate.architecture_validator as val_mod
 
 from agents.base import AgentRole, AgentWorkResult
+
+"""Autonomous Architect Agent Worker."""
 
 
 class ArchitectWorker:
@@ -20,34 +18,24 @@ class ArchitectWorker:
         self.root = (workspace_root or Path.cwd()).resolve()
 
     async def execute_work(self, goal: str) -> AgentWorkResult:
-        val_classes: list[Any] = [
-            obj
-            for _, obj in inspect.getmembers(val_mod, inspect.isclass)
-            if obj.__module__ == "tools.validate.architecture_validator"
-        ]
-
-        if not val_classes:
+        # Directly import the ArchitectureValidator class from the module
+        validator_cls = getattr(val_mod, "ArchitectureValidator", None)
+        if validator_cls is None:
             return AgentWorkResult(
                 agent_role=self.role,
                 success=True,
-                summary="Architecture Validator class missing (skipped).",
+                summary="ArchitectureValidator class missing (skipped).",
                 details={"violations_count": 0},
             )
-
-        validator_cls: Any = val_classes[0]
         validator = validator_cls(self.root)
 
-        val_method = getattr(
-            validator,
-            "validate_architecture",
-            getattr(validator, "validate", None),
-        )
-
-        if not val_method:
+        # Use the explicit validate_architecture method if available
+        val_method = getattr(validator, "validate_architecture", None)
+        if val_method is None:
             return AgentWorkResult(
                 agent_role=self.role,
                 success=True,
-                summary="Validation method missing (skipped).",
+                summary="validate_architecture method missing (skipped).",
                 details={"violations_count": 0},
             )
 

@@ -1,8 +1,8 @@
-"""Ecosystem Trust Verifier and Cryptographic Attestations."""
-
 from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Ecosystem Trust Verifier and Cryptographic Attestations."""
 
 
 class TrustAttestationDTO(BaseModel):

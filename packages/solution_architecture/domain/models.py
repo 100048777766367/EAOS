@@ -1,9 +1,9 @@
-"""Solution & Software Architecture Frameworks Domain Model."""
-
 from datetime import UTC, datetime
 from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Solution & Software Architecture Frameworks Domain Model."""
 
 
 class SolutionPatternType(StrEnum):

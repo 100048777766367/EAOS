@@ -1,0 +1,46 @@
+============================================================
+DXS PHASE D.1-R4 — CLI VALIDATION EVIDENCE
+============================================================
+
+RESULT: PASS
+
+RESTORE-FIRST:
+PASS - D.0 baseline restored before modification.
+
+AST PATCH:
+PASS - AttributeError handlers removed.
+PASS - _scaffold(root, name) installed.
+PASS - scaffold parser resolved without assignment assumption.
+PASS - scaffold --name registered.
+PASS - dispatch passes args.name.
+PASS - scaffold_capability(root, name) wired.
+
+TESTS:
+PASS - focused enterprise CLI tests.
+PASS - focused DXS CLI tests.
+PASS - focused scaffold tests.
+
+COMPILE:
+PASS - dxs/cli/main.py.
+PASS - dxs/scaffolding/service.py.
+PASS - focused CLI tests.
+
+NOT MODIFIED:
+PASS - dxs/scaffolding/service.py.
+
+NOT RUN:
+- full pytest
+- async suite
+- E2E
+- Playwright
+- application servers
+- unrelated integration suites
+
+BACKUPS:
+D:\EAOS\dxs\cli\main.py.backup_phaseD1R4_20260813_230137
+D:\EAOS\tests\unit\tools\test_enterprise_cli.py.backup_phaseD1R4_20260813_230137
+D:\EAOS\dxs\tests\test_cli.py.backup_phaseD1R4_20260813_230137
+
+============================================================
+PHASE D.1-R4 PASS
+============================================================

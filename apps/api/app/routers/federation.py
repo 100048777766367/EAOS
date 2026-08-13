@@ -3,8 +3,13 @@
 from typing import Annotated, Any
 
 from fastapi import APIRouter, Body
+from kernel.federation.cross_region_sync import CRDTStateSyncEngine
 from kernel.federation.raft import RaftConsensusNode
-from kernel.federation.synod_protocol import BFTSynodProtocolEngine, SynodProposal, SynodQuorumResult
+from kernel.federation.synod_protocol import (
+    BFTSynodProtocolEngine,
+    SynodProposal,
+    SynodQuorumResult,
+)
 from packages.federation.domain.models import EcosystemMember
 
 from apps.api.app.container import federation_registry
@@ -28,13 +33,14 @@ async def sync_crdt_delta(
     if isinstance(request, dict) and not d_data:
         d_data = request.get("delta", {})
 
-    from kernel.federation.cross_region_sync import CRDTStateSyncEngine
     engine = CRDTStateSyncEngine(node_id="node_us_east_1", region="us-east-1")
     return engine.merge_delta(d_data or {})
 
 
 @router.post("/raft/propose")
-async def propose_raft_consensus(request: RaftProposeRequest | dict[str, Any]) -> dict[str, Any]:
+async def propose_raft_consensus(
+    request: RaftProposeRequest | dict[str, Any],
+) -> dict[str, Any]:
     node_id = str(request.get("node_id", "node_1")) if isinstance(request, dict) else request.node_id
     tx_id = str(request.get("transaction_id", "tx_001")) if isinstance(request, dict) else request.transaction_id
 

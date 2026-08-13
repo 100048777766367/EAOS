@@ -1,7 +1,7 @@
 # EAOS Frozen Core Kernel (`kernel/`)
 
-> **Status:** FROZEN (CENTENNIAL EDITION)  
-> **Authority:** Supreme Source of Kernel Truth  
+> **Status:** FROZEN (CENTENNIAL EDITION)
+> **Authority:** Supreme Source of Kernel Truth
 
 ## Business Capability
 Frozen Core Kernel providing zero-dependency primitives, Merkle governance ledgers, event bus streaming, Raft & Synod BFT federation, and closed cybernetic runtime loops.

@@ -1,6 +1,6 @@
-"""Động cơ kiểm toán CQRS Queries."""
-
 from __future__ import annotations
+
+"""Động cơ kiểm toán CQRS Queries."""
 
 
 class QueryEngine:

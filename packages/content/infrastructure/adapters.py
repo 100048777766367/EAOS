@@ -1,6 +1,6 @@
-"""Infrastructure storage adapters for Content context."""
-
 from packages.content.domain.models import ContentEntity
+
+"""Infrastructure storage adapters for Content context."""
 
 
 class InMemoryContentRepository:

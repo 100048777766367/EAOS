@@ -1,9 +1,10 @@
-"""AI Agent Execution router."""
-
 import time
 
 from fastapi import APIRouter
 from pydantic import BaseModel, ConfigDict
+
+"""AI Agent Execution router."""
+
 
 router = APIRouter(tags=["AI Agents"])
 

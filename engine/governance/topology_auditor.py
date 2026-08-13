@@ -1,10 +1,10 @@
-"""Dynamic Real-Time Architecture & Topology Auditor Engine for EAOS."""
-
 import ast
 import os
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict
+
+"""Dynamic Real-Time Architecture & Topology Auditor Engine for EAOS."""
 
 
 class RealTopologyAuditResult(BaseModel):

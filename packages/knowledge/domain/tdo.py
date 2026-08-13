@@ -7,14 +7,14 @@ from packages.knowledge.domain.models import KnowledgeArtifact
 
 
 class TDOFixity(BaseModel):
-    """MÃ£ Hash báº£o Ä‘áº£m tÃ­nh toÃ n váº¹n (Fixity Proof) chá»‘ng sá»­a Ä‘á»•i tá»‡p."""
+    """MÃ£ Hash báº£o Ä‘áº£m tÃ­nh toÃ n váº¹n (Fixity Proof) chá»‘ng sá»­a Ä‘á»•i tá»‡p."""
 
     algorithm: str = "SHA-256"
     value: str
 
 
 class TDOPromptProvenance(BaseModel):
-    """Nguá»“n gá»‘c lá»‹ch sá»­ khá»Ÿi táº¡o tÃ i liá»‡u chuáº©n bá»Ÿi Con ngÆ°á»i hay ai."""
+    """Nguá»“n gá»‘c lá»‹ch sá»­ khá»Ÿi táº¡o tÃ i liá»‡u chuáº©n bá»Ÿi Con ngÆ°á»i hay ai."""
 
     author: str
     timestamp: datetime = Field(default_factory=lambda: datetime.now(UTC))
@@ -37,7 +37,7 @@ class TrustworthyDigitalObject(BaseModel):
 
 
 def encapsulate_artifact(artifact: KnowledgeArtifact, author: str) -> TrustworthyDigitalObject:
-    """ÄÃ³ng gÃ³i dá»¯ liá»‡u tri thá»©c thÃ´ thÃ nh TDO tá»± mÃ´ táº£ chuáº©n má»±c."""
+    """ÄÃ³ng gÃ³i dá»¯ liá»‡u tri thá»©c thÃ´ thÃ nh TDO tá»± mÃ´ táº£ chuáº©n má»±c."""
     # Táº¡o mÃ£ Ä‘á»‹nh danh ngá»¯ nghÄ©a duy nháº¥t
     raw_payload = f"{artifact.title}|{artifact.content}|{artifact.author}"
     sha256_hash = hashlib.sha256(raw_payload.encode("utf-8")).hexdigest()

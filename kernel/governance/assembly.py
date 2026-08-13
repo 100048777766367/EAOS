@@ -86,8 +86,7 @@ class ArchitectureAssembly:
                     compacted_txs.append(tx_data)
 
         with open(self.ledger_path, "w", encoding="utf-8") as f:
-            for tx in compacted_txs:
-                f.write(json.dumps(tx) + "\n")
+            f.writelines(json.dumps(tx) + "\n" for tx in compacted_txs)
 
     def list_transactions(self) -> list[dict[str, Any]]:
         """Đọc lịch sử giao dịch từ tệp tin thuần bằng List Comprehension."""

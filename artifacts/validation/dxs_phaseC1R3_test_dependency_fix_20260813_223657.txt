@@ -1,0 +1,108 @@
+[1/10] Checking repository state...
+[PASS] Required implementation and test files found.
+
+[2/10] Inspecting actual constructors and adapter...
+=== PYTHON ROOT ===
+D:\EAOS
+
+=== CompatibilityService ===
+class: <class 'dxs.application.compatibility_service.CompatibilityService'>
+signature: (checker: 'CompatibilityChecker') -> 'None'
+__init__: (self, checker: 'CompatibilityChecker') -> 'None'
+
+=== MigrationService ===
+class: <class 'dxs.application.migration_service.MigrationService'>
+signature: (compatibility_service: 'CompatibilityService') -> 'None'
+__init__: (self, compatibility_service: 'CompatibilityService') -> 'None'
+
+=== CompatibilityAdapter ===
+class: <class 'dxs.adapters.compatibility.CompatibilityAdapter'>
+signature: ()
+__init__: (self, /, *args, **kwargs)
+
+=== PUBLIC MEMBERS ===
+CompatibilityAdapter:
+   check
+
+[PASS] Actual constructors inspected successfully.
+
+[3/10] Restoring test files from C.1-R2 backups...
+[RESTORE] D:\EAOS\tests\dxs\test_compatibility.py.backup_phaseC1R2_20260813_223558
+[RESTORE] D:\EAOS\tests\dxs\test_migration.py.backup_phaseC1R2_20260813_223558
+[PASS] Original test structure restored.
+
+[4/10] Creating C.1-R3 backups...
+[BACKUP] D:\EAOS\tests\dxs\test_compatibility.py.backup_phaseC1R3_20260813_223657
+[BACKUP] D:\EAOS\tests\dxs\test_migration.py.backup_phaseC1R3_20260813_223657
+
+[5/10] Inspecting test assumptions before modification...
+[PASS] Compatibility test has future import.
+[INFO] Migration test has no future import.
+
+--- Compatibility test header ---
+from __future__ import annotations
+
+import pytest
+from dxs.application.compatibility_service import CompatibilityService
+from dxs.contracts.versioning import ContractVersion
+from dxs.domain.compatibility import CompatibilityPolicy
+
+
+def test_contract_version_parses_semantic_version() -> None:
+    version = ContractVersion.parse("1.2.3")
+
+    assert version.major == 1
+    assert version.minor == 2
+    assert version.patch == 3
+    assert str(version) == "1.2.3"
+
+
+def test_contract_version_rejects_invalid_version() -> None:
+    with pytest.raises(ValueError):
+        ContractVersion.parse("1.2")
+
+
+def test_same_version_is_compatible() -> None:
+    service = CompatibilityService()
+
+
+--- Migration test header ---
+from dxs.application.migration_service import MigrationService
+from dxs.domain.migration import MigrationRequest
+
+
+def test_same_version_is_noop() -> None:
+    service = MigrationService()
+
+    result = service.plan(
+        MigrationRequest(
+            current_version="1.0.0",
+            target_version="1.0.0",
+        )
+    )
+
+    assert result.compatible is True
+    assert result.status == "NOOP"
+
+
+def test_patch_migration_is_ready() -> None:
+    service = MigrationService()
+
+    result = service.plan(
+        MigrationRequest(
+            current_version="1.0.0",
+            target_version="1.0.1",
+
+[6/10] Applying dependency injection without breaking imports...
+Compatibility test patched safely.
+
+Migration test patched safely.
+
+
+[7/10] Verifying syntax and focused tests...
+[PASS] Import ordering valid: D:\EAOS\tests\dxs\test_compatibility.py
+[PASS] Import ordering valid: D:\EAOS\tests\dxs\test_migration.py
+
+>>> Compatibility tests
+>>> pytest tests/dxs/test_compatibility.py -q
+[FAIL] Compatibility tests failed with exit code 2.

@@ -15,7 +15,7 @@ class Forecast(BaseModel):
 
 
 class Risk(BaseModel):
-    """Rá»§i ro kiáº¿n trÃºc hoáº·c váº­n hÃ nh phÃ¡t hiá»‡n Ä‘Æ°á»£c tá»« dá»± bÃ¡o."""
+    """Rá»§i ro kiáº¿n trÃºc hoáº·c váº­n hÃ nh phÃ¡t hiá»‡n Ä‘Æ°á»£c tá»« dá»± bÃ¡o."""
 
     id: str
     title: str
@@ -38,7 +38,7 @@ class Trend(BaseModel):
 
 
 class Prediction(BaseModel):
-    """Thá»±c thá»ƒ Dá»± Ä‘oÃ¡n cháº©n Ä‘oÃ¡n sá»›m cá»§a há»‡ Ä‘iá»u hÃ nh EAOS."""
+    """Thá»±c thá»ƒ Dá»± Ä‘oÃ¡n cháº©n Ä‘oÃ¡n sá»›m cá»§a há»‡ Ä‘iá»u hÃ nh EAOS."""
 
     id: str
     created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))

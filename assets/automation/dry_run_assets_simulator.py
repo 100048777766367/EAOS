@@ -1,8 +1,8 @@
-"""Mô phỏng dựng tài sản an toàn."""
-
 from __future__ import annotations
 
 from typing import Any
+
+"""Mô phỏng dựng tài sản an toàn."""
 
 
 class DryRunAssetsSimulator:

@@ -1,10 +1,11 @@
-"""Unified Capability Runtime Engine executing business commands."""
-
 import logging
 import time
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Unified Capability Runtime Engine executing business commands."""
+
 
 logger = logging.getLogger(__name__)
 

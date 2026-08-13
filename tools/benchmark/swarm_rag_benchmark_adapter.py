@@ -1,11 +1,11 @@
-"""Swarm and RAG Performance Benchmark Adapter."""
-
 from __future__ import annotations
 
 import time
 import uuid
 
 from tools.chaos.dto import BenchmarkMetricDTO
+
+"""Swarm and RAG Performance Benchmark Adapter."""
 
 
 class SwarmRAGBenchmarkAdapter:

@@ -1,10 +1,10 @@
-"""Enterprise Operations Architecture (EOA) Domain Models."""
-
 from __future__ import annotations
 
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Enterprise Operations Architecture (EOA) Domain Models."""
 
 
 class OpsRuleDTO(BaseModel):

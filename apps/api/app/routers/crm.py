@@ -1,10 +1,11 @@
-"""FastAPI Router for CRM Capability Application."""
-
 from typing import Any
 
 from fastapi import APIRouter
 from packages.crm.application.use_cases import IngestLeadUseCase
 from pydantic import BaseModel, ConfigDict
+
+"""FastAPI Router for CRM Capability Application."""
+
 
 router = APIRouter(prefix="/v1/crm", tags=["CRM Capability"])
 

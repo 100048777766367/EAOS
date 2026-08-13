@@ -1,10 +1,10 @@
-"""Workspace Checker inspecting core enterprise files."""
-
 from __future__ import annotations
 
 from pathlib import Path
 
 from tools.doctor.dto import DiagnosticCheckDTO, SeverityLevel
+
+"""Workspace Checker inspecting core enterprise files."""
 
 
 class WorkspaceChecker:

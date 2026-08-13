@@ -1,11 +1,11 @@
-"""Docker Container Daemon Checker for EAOS Canonical Stack."""
-
 from __future__ import annotations
 
 import subprocess
 from typing import ClassVar
 
 from tools.doctor.dto import DiagnosticCheckDTO, SeverityLevel
+
+"""Docker Container Daemon Checker for EAOS Canonical Stack."""
 
 
 class DockerChecker:

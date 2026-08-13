@@ -17,14 +17,15 @@ class DigitalTwinSandboxPort(Protocol):
         ...
 
     def fork_branch(
-        self, parent_snapshot_id: str, branch_id: str, branch_type: BranchEnvironmentType
+        self,
+        parent_snapshot_id: str,
+        branch_id: str,
+        branch_type: BranchEnvironmentType,
     ) -> str:
         """Fork an isolated branch from a parent snapshot."""
         ...
 
-    def execute_workload(
-        self, branch_id: str, workload_payload: dict[str, Any]
-    ) -> EmpiricalEvidence:
+    def execute_workload(self, branch_id: str, workload_payload: dict[str, Any]) -> EmpiricalEvidence:
         """Run empirical workload against a specific branch and collect evidence."""
         ...
 
@@ -32,14 +33,10 @@ class DigitalTwinSandboxPort(Protocol):
 class ResearchReportRepositoryPort(Protocol):
     """Port for storing and retrieving empirical research reports."""
 
-    def save_report(
-        self, report: ComparativeResearchReport
-    ) -> ComparativeResearchReport:
+    def save_report(self, report: ComparativeResearchReport) -> ComparativeResearchReport:
         """Persist comparative research report."""
         ...
 
-    def find_report_by_id(
-        self, report_id: str
-    ) -> ComparativeResearchReport | None:
+    def find_report_by_id(self, report_id: str) -> ComparativeResearchReport | None:
         """Retrieve report by ID."""
         ...

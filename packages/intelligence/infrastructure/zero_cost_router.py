@@ -1,6 +1,6 @@
-"""Zero-Cost FinOps Router enforcing $0 USD AI inference budget."""
-
 from pydantic import BaseModel, ConfigDict
+
+"""Zero-Cost FinOps Router enforcing $0 USD AI inference budget."""
 
 
 class ZeroCostRoutingResultDTO(BaseModel):

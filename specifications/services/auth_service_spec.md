@@ -1,8 +1,8 @@
 # Auth Service Specification
 
-> **Specification ID:** SPEC-SERVICES-001  
-> **Status:** ACTIVE  
-> **Governance:** ARCHITECTURE_CONSTITUTION.md v2.0  
+> **Specification ID:** SPEC-SERVICES-001
+> **Status:** ACTIVE
+> **Governance:** ARCHITECTURE_CONSTITUTION.md v2.0
 
 ---
 

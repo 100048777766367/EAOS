@@ -53,6 +53,6 @@ Chạy giả lập trên Bản sao số (Digital Twin) đạt kết quả:
 ---
 
 ## 5. KẾT LUẬN & SÁP NHẬP (COMMIT)
-Đề xuất đạt **3/3 phiếu thuận (100% đồng thuận)**. 
+Đề xuất đạt **3/3 phiếu thuận (100% đồng thuận)**.
 * Giao dịch ký sổ số cái liên bang: **`TX-EVO-MEM-1002`**.
 * Trạng thái sáp nhập: **SUCCESSFUL**.

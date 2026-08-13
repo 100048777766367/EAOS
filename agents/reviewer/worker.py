@@ -1,6 +1,6 @@
-"""Reviewer worker module."""
-
 from __future__ import annotations
+
+"""Reviewer worker module."""
 
 
 class ReviewerWorker:

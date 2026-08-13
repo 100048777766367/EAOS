@@ -1,8 +1,8 @@
-"""Product & Pricing Catalog Domain Model for EAOS."""
-
 from datetime import UTC, datetime
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Product & Pricing Catalog Domain Model for EAOS."""
 
 
 class ProductCatalogItem(BaseModel):

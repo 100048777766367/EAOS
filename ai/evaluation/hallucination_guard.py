@@ -1,8 +1,8 @@
-"""Hallucination guard."""
-
 from __future__ import annotations
 
 from dataclasses import dataclass
+
+"""Hallucination guard."""
 
 
 @dataclass

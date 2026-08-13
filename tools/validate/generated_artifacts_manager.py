@@ -1,10 +1,10 @@
-"""Generated Artifacts Lifecycle and Time Machine Manager Engine."""
-
 from __future__ import annotations
 
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Generated Artifacts Lifecycle and Time Machine Manager Engine."""
 
 
 class TimeMachineSnapshotDTO(BaseModel):

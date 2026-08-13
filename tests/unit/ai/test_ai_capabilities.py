@@ -32,5 +32,3 @@ def test_hallucination_guard() -> None:
     res = guard.evaluate_output("Valid response text")
     assert res.is_valid is True
     assert res.hallucination_risk_score == 0.0
-
-

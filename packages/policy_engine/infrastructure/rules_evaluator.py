@@ -1,9 +1,9 @@
-"""Local operational rule evaluator engine for EAOS rules catalog."""
-
 from pathlib import Path
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict
+
+"""Local operational rule evaluator engine for EAOS rules catalog."""
 
 
 class RuleDefinitionDTO(BaseModel):

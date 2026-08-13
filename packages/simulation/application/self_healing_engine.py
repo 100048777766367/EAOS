@@ -1,10 +1,11 @@
-"""Production-grade Self-Healing Multi-Agent Engine with Docker Sandbox."""
-
 import asyncio
 import os
 import subprocess
 
 from google import genai
+
+"""Production-grade Self-Healing Multi-Agent Engine with Docker Sandbox."""
+
 
 # Khởi tạo Client GenAI chuẩn (Sử dụng biến môi trường GEMINI_API_KEY)
 client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
@@ -43,7 +44,7 @@ class ManagerAgent:
     """Agent 2 (SẾP): Phân tích chiến lược và định hướng nhiệm vụ."""
 
     async def run(self, state: SystemState) -> SystemState:
-        print("\n👨‍💼 [Manager Agent] Đang phân tích sự cố và lập kế hoạch kỹ thuật...")
+        print("\n👨💼 [Manager Agent] Đang phân tích sự cố và lập kế hoạch kỹ thuật...")
         prompt = f"""
         Bạn là Kiến trúc sư trưởng hệ thống EAOS.
         Dữ liệu giám sát: {state.logs}
@@ -67,7 +68,7 @@ class CoderAgent:
         Bạn là Chuyên gia Lập trình hệ thống cấp cao.
         Nhiệm vụ: {state.issue_description}
         Phản hồi kiểm thử từ lần trước (nếu có): {state.test_results}
-        
+
         Yêu cầu: Viết đoạn mã Python tối ưu. Chỉ trả về mã Python thô trong khối ```python ... ```
         """
         response = client.models.generate_content(
@@ -84,7 +85,7 @@ class TesterAgent:
 
     async def run(self, state: SystemState) -> SystemState:
         print("\n🧪 [Tester Agent] Đang cô lập và chạy kiểm thử trong Docker Sandbox...")
-        
+
         # 1. Ghi code đề xuất vào tệp tạm thời trong sandbox mount
         sandbox_path = "/tmp/eaos_sandbox_patch.py"
         clean_code = state.proposed_code
@@ -99,11 +100,14 @@ class TesterAgent:
         # 2. Thực thi kiểm thử thực tế qua Docker SDK / Subprocess cách ly
         try:
             cmd = [
-                "docker", "exec", state.sandbox_container_id,
-                "pytest", "/workspace/tests/unit/test_digital_twin_research.py"
+                "docker",
+                "exec",
+                state.sandbox_container_id,
+                "pytest",
+                "/workspace/tests/unit/test_digital_twin_research.py",
             ]
             result = subprocess.run(cmd, capture_output=True, text=True, timeout=15)
-            
+
             if result.returncode == 0:
                 state.test_results = f"PASS: {result.stdout[-300:]}"
                 print("✅ Test Sandbox thành công! Đạt chuẩn chất lượng.")

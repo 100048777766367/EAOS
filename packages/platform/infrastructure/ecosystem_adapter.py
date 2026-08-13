@@ -1,8 +1,8 @@
-"""Ecosystem Adapter managing platform infrastructure registry."""
-
 from typing import ClassVar
 
 from pydantic import BaseModel, ConfigDict
+
+"""Ecosystem Adapter managing platform infrastructure registry."""
 
 
 class EcosystemMemberDTO(BaseModel):

@@ -1,6 +1,6 @@
-"""AI Model Hallucination and Semantic Drift Guard for EAOS intelligence."""
-
 from pydantic import BaseModel, ConfigDict
+
+"""AI Model Hallucination and Semantic Drift Guard for EAOS intelligence."""
 
 
 class DriftEvaluationResult(BaseModel):

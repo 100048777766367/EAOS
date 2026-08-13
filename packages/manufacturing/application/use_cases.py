@@ -1,8 +1,8 @@
-"""Application use cases for Manufacturing Order Execution."""
-
 import uuid
 
 from packages.manufacturing.domain.models import ProductionOrder
+
+"""Application use cases for Manufacturing Order Execution."""
 
 
 class ProcessProductionOrderUseCase:

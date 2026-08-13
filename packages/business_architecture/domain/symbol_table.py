@@ -1,8 +1,8 @@
-"""Compiler Symbol Table and Type System (Sprint 3.2)."""
-
 from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Compiler Symbol Table and Type System (Sprint 3.2)."""
 
 
 class SymbolEntry(BaseModel):

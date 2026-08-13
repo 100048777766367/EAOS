@@ -1,7 +1,7 @@
-"""Infrastructure adapters for capability registry storage."""
-
 from packages.capability.domain.models import BusinessCapability
 from packages.capability.domain.ports import CapabilityRegistryPort
+
+"""Infrastructure adapters for capability registry storage."""
 
 
 class InMemoryCapabilityRegistry(CapabilityRegistryPort):

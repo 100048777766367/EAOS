@@ -1,8 +1,8 @@
-"""Policy Evaluator Helper Adapter for Governance & Master Routes."""
-
 from __future__ import annotations
 
 from typing import Any
+
+"""Policy Evaluator Helper Adapter for Governance & Master Routes."""
 
 
 class PolicyEvaluator:

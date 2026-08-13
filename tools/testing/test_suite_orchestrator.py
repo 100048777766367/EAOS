@@ -1,8 +1,8 @@
-"""Test suite auditor engine analyzing multi-tier testing pyramid tiers."""
-
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict
+
+"""Test suite auditor engine analyzing multi-tier testing pyramid tiers."""
 
 
 class TestSuiteSummaryDTO(BaseModel):

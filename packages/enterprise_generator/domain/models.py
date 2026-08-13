@@ -1,8 +1,8 @@
-"""Enterprise Generator Domain Models for EAOS."""
-
 from datetime import UTC, datetime
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Enterprise Generator Domain Models for EAOS."""
 
 
 class EnterpriseBlueprintSpec(BaseModel):

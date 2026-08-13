@@ -1,11 +1,11 @@
-"""Decoupled Enterprise Intermediate Representation (IR) (Sprint 3.3)."""
-
 from __future__ import annotations
 
 from enum import StrEnum
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Decoupled Enterprise Intermediate Representation (IR) (Sprint 3.3)."""
 
 
 class IRNodeType(StrEnum):

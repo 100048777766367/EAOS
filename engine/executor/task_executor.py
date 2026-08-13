@@ -1,9 +1,9 @@
-"""Asynchronous task execution engine for EAOS workflows."""
-
 import time
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict
+
+"""Asynchronous task execution engine for EAOS workflows."""
 
 
 class ExecutionTaskDTO(BaseModel):

@@ -1,8 +1,8 @@
-"""Policy-to-Code compiler engine for EAOS executable governance."""
-
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict
+
+"""Policy-to-Code compiler engine for EAOS executable governance."""
 
 
 class CompiledPolicyDTO(BaseModel):

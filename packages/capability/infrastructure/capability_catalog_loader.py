@@ -1,8 +1,8 @@
-"""Infrastructure adapter for scanning and loading Business Capability YAMLs."""
-
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict
+
+"""Infrastructure adapter for scanning and loading Business Capability YAMLs."""
 
 
 class CapabilityManifestDTO(BaseModel):

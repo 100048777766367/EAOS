@@ -39,7 +39,7 @@ class VersionHeaderRule(Rule):
 
 
 class CriticalityEnvironmentRule(Rule):
-    """MÃ´i trÆ°á»ng production báº¯t buá»™c Ä‘á»™ nghiÃªm trá»ng pháº£i lÃ  high."""
+    """MÃ´i trÆ°á»ng production báº¯t buá»™c Ä‘á»™ nghiÃªm trá»ng pháº£i lÃ  high."""
 
     def evaluate(self, obj: EvolutionObject) -> RuleResult:
         env = obj.metadata.environment
@@ -58,7 +58,7 @@ class CriticalityEnvironmentRule(Rule):
 
 
 class PolicyEngine:
-    """Äá»™ng cÆ¡ gom cÃ¡c luáº­t (Rules) thÃ nh cÃ¡c ChÃ­nh sÃ¡ch lá»›n (Policies)."""
+    """Äá»™ng cÆ¡ gom cÃ¡c luáº­t (Rules) thÃ nh cÃ¡c ChÃ­nh sÃ¡ch lá»›n (Policies)."""
 
     def __init__(self, name: str, rules: list[Rule]) -> None:
         self.name = name

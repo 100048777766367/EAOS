@@ -1,6 +1,6 @@
-"""Động cơ ứng dụng CLI Console."""
-
 from __future__ import annotations
+
+"""Động cơ ứng dụng CLI Console."""
 
 
 class CliAppEngine:

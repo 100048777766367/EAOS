@@ -1,8 +1,8 @@
-"""Monetization & Usage-Based Billing Domain Models for EAOS."""
-
 from datetime import UTC, datetime
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Monetization & Usage-Based Billing Domain Models for EAOS."""
 
 
 class TokenUsageLedgerEntry(BaseModel):

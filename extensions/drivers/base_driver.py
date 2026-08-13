@@ -1,10 +1,10 @@
-"""Base Driver Protocol for Hardware and Infrastructure Drivers."""
-
 from __future__ import annotations
 
 from typing import Protocol, runtime_checkable
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Base Driver Protocol for Hardware and Infrastructure Drivers."""
 
 
 class DriverStatusDTO(BaseModel):

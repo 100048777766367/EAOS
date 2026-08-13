@@ -1,9 +1,9 @@
-"""Data Architecture Frameworks & Paradigms Domain Model."""
-
 from datetime import UTC, datetime
 from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Data Architecture Frameworks & Paradigms Domain Model."""
 
 
 class DataFrameworkType(StrEnum):

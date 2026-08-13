@@ -1,10 +1,10 @@
-"""Data Transfer Objects for Policy Engine application layer."""
-
 from typing import Any
 
 from pydantic import BaseModel, Field
 
 from packages.policy_engine.domain.models import Operator, PolicyEffect
+
+"""Data Transfer Objects for Policy Engine application layer."""
 
 
 class ConditionDTO(BaseModel):

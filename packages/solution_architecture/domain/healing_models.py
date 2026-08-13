@@ -1,8 +1,8 @@
-"""Self-Healing Loop Domain Models (Phase 2)."""
-
 from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Self-Healing Loop Domain Models (Phase 2)."""
 
 
 class TracebackAnalysis(BaseModel):

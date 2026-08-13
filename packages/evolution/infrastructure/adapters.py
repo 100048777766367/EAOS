@@ -1,6 +1,6 @@
-"""Infrastructure adapters for evolution domain repositories."""
-
 from typing import Any
+
+"""Infrastructure adapters for evolution domain repositories."""
 
 
 class InMemoryEvolutionRepository:

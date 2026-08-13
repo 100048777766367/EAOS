@@ -1,10 +1,10 @@
-"""Data Transfer Objects for Traceability application layer."""
-
 from pathlib import Path
 
 from pydantic import BaseModel, Field
 
 from packages.traceability.domain.models import CausalNodeType
+
+"""Data Transfer Objects for Traceability application layer."""
 
 
 class CausalNodeDTO(BaseModel):

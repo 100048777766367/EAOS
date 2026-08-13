@@ -1,8 +1,8 @@
-"""Synthetic load tester and performance benchmark tool for EAOS [R19]."""
-
 import time
 
 from pydantic import BaseModel, ConfigDict
+
+"""Synthetic load tester and performance benchmark tool for EAOS [R19]."""
 
 
 class BenchmarkResultDTO(BaseModel):

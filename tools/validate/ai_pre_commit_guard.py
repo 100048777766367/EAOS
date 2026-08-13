@@ -1,9 +1,9 @@
-"""AI Pre-Commit Guard verifying code before AI Agents write to disk."""
-
 import ast
 from typing import ClassVar
 
 from pydantic import BaseModel, ConfigDict
+
+"""AI Pre-Commit Guard verifying code before AI Agents write to disk."""
 
 
 class GuardEvaluationDTO(BaseModel):

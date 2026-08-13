@@ -1,6 +1,6 @@
-"""User domain entity for identity context."""
-
 from pydantic import BaseModel, ConfigDict
+
+"""User domain entity for identity context."""
 
 
 class User(BaseModel):

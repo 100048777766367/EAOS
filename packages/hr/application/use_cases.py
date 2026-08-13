@@ -1,8 +1,8 @@
-"""Application use cases for HR & People Management."""
-
 import uuid
 
 from packages.hr.domain.models import EmployeeProfile
+
+"""Application use cases for HR & People Management."""
 
 
 class OnboardEmployeeUseCase:

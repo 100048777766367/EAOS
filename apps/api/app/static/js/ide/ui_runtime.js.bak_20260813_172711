@@ -1,0 +1,772 @@
+/**
+ * EAOS IDE UI Runtime
+ *
+ * Application/UI integration layer.
+ *
+ * Owns:
+ * - Activity Bar -> UI response
+ * - Chat input/send interaction
+ * - Execution trace visibility
+ * - Editor UI synchronization
+ *
+ * Does NOT own:
+ * - pane visibility
+ * - pane dimensions
+ * - Monaco lifecycle
+ * - WebSocket transport
+ * - AI runtime
+ */
+
+(function () {
+    "use strict";
+
+    const STORAGE_KEY = "eaos.ide.ui";
+
+    const state = {
+        activity: "explorer",
+        executionTrace: true,
+    };
+
+    function readState() {
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+
+            if (!raw) {
+                return;
+            }
+
+            const saved = JSON.parse(raw);
+
+            if (
+                saved &&
+                typeof saved.activity === "string"
+            ) {
+                state.activity = saved.activity;
+            }
+
+            if (
+                saved &&
+                typeof saved.executionTrace === "boolean"
+            ) {
+                state.executionTrace =
+                    saved.executionTrace;
+            }
+        } catch {
+            // Corrupt persistence must not break IDE.
+        }
+    }
+
+    function saveState() {
+        try {
+            localStorage.setItem(
+                STORAGE_KEY,
+                JSON.stringify(state)
+            );
+        } catch {
+            // Persistence is optional.
+        }
+    }
+
+    function emit(name, detail) {
+        document.dispatchEvent(
+            new CustomEvent(
+                name,
+                {
+                    detail: detail || {},
+                }
+            )
+        );
+    }
+
+    function setActivity(activity) {
+        if (!activity) {
+            return;
+        }
+
+        state.activity = activity;
+
+        applyActivity(activity);
+        saveState();
+
+        emit(
+            "eaos:activity-ui",
+            {
+                activity,
+            }
+        );
+    }
+
+    function applyActivity(activity) {
+        const activityButtons =
+            document.querySelectorAll(
+                "[data-activity]"
+            );
+
+        activityButtons.forEach(
+            (button) => {
+                const active =
+                    button.dataset.activity ===
+                    activity;
+
+                button.classList.toggle(
+                    "active",
+                    active
+                );
+
+                button.classList.toggle(
+                    "bg-cyan-500/10",
+                    active
+                );
+
+                button.classList.toggle(
+                    "text-cyan-400",
+                    active
+                );
+
+                button.classList.toggle(
+                    "border-cyan-500/30",
+                    active
+                );
+
+                button.setAttribute(
+                    "aria-pressed",
+                    String(active)
+                );
+            }
+        );
+
+        /*
+         * Activity Bar is an application navigation controller.
+         * We do not mutate pane visibility here.
+         */
+        document
+            .querySelectorAll(
+                "[data-eaos-activity-region]"
+            )
+            .forEach(
+                (region) => {
+                    region.hidden =
+                        region.dataset.eaosActivityRegion !==
+                        activity;
+                }
+            );
+    }
+
+    function setupActivityBridge() {
+        document.addEventListener(
+            "eaos:activity-change",
+            (event) => {
+                setActivity(
+                    event.detail &&
+                    event.detail.activity
+                );
+            }
+        );
+    }
+
+    function setupExecutionTrace() {
+        const button =
+            document.getElementById(
+                "btn-toggle-execution"
+            );
+
+        const trace =
+            document.getElementById(
+                "execution-trace"
+            );
+
+        if (!button || !trace) {
+            return;
+        }
+
+        function render() {
+            trace.hidden =
+                !state.executionTrace;
+
+            button.setAttribute(
+                "aria-expanded",
+                String(
+                    state.executionTrace
+                )
+            );
+
+            button.classList.toggle(
+                "is-expanded",
+                state.executionTrace
+            );
+        }
+
+        button.addEventListener(
+            "click",
+            () => {
+                state.executionTrace =
+                    !state.executionTrace;
+
+                render();
+                saveState();
+
+                emit(
+                    "eaos:execution-trace",
+                    {
+                        expanded:
+                            state.executionTrace,
+                    }
+                );
+            }
+        );
+
+        render();
+    }
+
+    function setupChat() {
+        const form =
+            document.getElementById(
+                "chat-form"
+            );
+
+        const input =
+            document.getElementById(
+                "chat-input"
+            );
+
+        const send =
+            document.getElementById(
+                "btn-send-chat"
+            );
+
+        if (!form || !input) {
+            return;
+        }
+
+        /*
+         * Do not replace the existing AI/WebSocket handler.
+         * We only normalize submit behavior and expose the event.
+         */
+        form.addEventListener(
+            "submit",
+            (event) => {
+                const value =
+                    input.value.trim();
+
+                if (!value) {
+                    event.preventDefault();
+                    return;
+                }
+
+                emit(
+                    "eaos:chat-submit",
+                    {
+                        value,
+                        input,
+                        send,
+                        form,
+                    }
+                );
+            },
+            true
+        );
+
+        input.addEventListener(
+            "keydown",
+            (event) => {
+                if (
+                    event.key === "Enter" &&
+                    !event.shiftKey
+                ) {
+                    event.preventDefault();
+
+                    if (
+                        typeof form.requestSubmit ===
+                        "function"
+                    ) {
+                        form.requestSubmit();
+                    } else {
+                        form.dispatchEvent(
+                            new Event(
+                                "submit",
+                                {
+                                    bubbles: true,
+                                    cancelable: true,
+                                }
+                            )
+                        );
+                    }
+                }
+            }
+        );
+    }
+
+    function setupEditorBridge() {
+        const host =
+            document.querySelector(
+                '[data-editor-host="monaco"]'
+            ) ||
+            document.getElementById(
+                "monaco-editor-container"
+            );
+
+        if (!host) {
+            return;
+        }
+
+        host.addEventListener(
+            "eaos:editor-focus",
+            () => {
+                emit(
+                    "eaos:editor-ready",
+                    {
+                        host,
+                    }
+                );
+            }
+        );
+    }
+
+    function exposeAPI() {
+        window.EAOS =
+            window.EAOS || {};
+
+        window.EAOS.ui = {
+            getState() {
+                return {
+                    ...state,
+                };
+            },
+
+            setActivity,
+
+            toggleExecutionTrace() {
+                state.executionTrace =
+                    !state.executionTrace;
+
+                saveState();
+
+                const button =
+                    document.getElementById(
+                        "btn-toggle-execution"
+                    );
+
+                const trace =
+                    document.getElementById(
+                        "execution-trace"
+                    );
+
+                if (trace) {
+                    trace.hidden =
+                        !state.executionTrace;
+                }
+
+                if (button) {
+                    button.setAttribute(
+                        "aria-expanded",
+                        String(
+                            state.executionTrace
+                        )
+                    );
+                }
+
+                return state.executionTrace;
+            },
+        };
+    }
+
+    function init() {
+        readState();
+        setupActivityBridge();
+        setupExecutionTrace();
+        setupChat();
+        setupEditorBridge();
+        exposeAPI();
+        applyActivity(state.activity);
+
+        console.debug(
+            "[EAOS] UI runtime initialized",
+            state
+        );
+    }
+
+    if (
+        document.readyState ===
+        "loading"
+    ) {
+        document.addEventListener(
+            "DOMContentLoaded",
+            init,
+            {
+                once: true,
+            }
+        );
+    } else {
+        init();
+    }
+})();
+
+/* EAOS_UI_RUNTIME_REPAIR_V2 */
+(function () {
+    const EAOS_UI_RUNTIME_REPAIR_V2 = true;
+
+    function getMonacoHost() {
+        return document.querySelector(
+            '#monaco-editor-container[data-editor-host="monaco"]'
+        );
+    }
+
+    function revealMonacoHost() {
+        const host = getMonacoHost();
+
+        if (!host) {
+            return false;
+        }
+
+        /*
+         * The IDE DOM contract says the Monaco host itself must remain
+         * available to the application. A stale hidden attribute must
+         * never permanently hide the editor after initialization.
+         */
+        host.removeAttribute('hidden');
+
+        if (host.getAttribute('aria-hidden') === 'true') {
+            host.setAttribute('aria-hidden', 'false');
+        }
+
+        if (host.style.display === 'none') {
+            host.style.removeProperty('display');
+        }
+
+        if (host.style.visibility === 'hidden') {
+            host.style.removeProperty('visibility');
+        }
+
+        if (host.style.opacity === '0') {
+            host.style.removeProperty('opacity');
+        }
+
+        return true;
+    }
+
+    function bindChatRuntime() {
+        const form = document.querySelector('#chat-form');
+        const input = document.querySelector('#chat-input');
+
+        if (!form) {
+            return false;
+        }
+
+        if (form.dataset.eaosRuntimeBound === 'true') {
+            return true;
+        }
+
+        form.dataset.eaosRuntimeBound = 'true';
+
+        form.addEventListener(
+            'submit',
+            function (event) {
+
+                const value = input
+                    ? String(input.value || '').trim()
+                    : '';
+
+                /*
+                 * Application/UI integration event.
+                 *
+                 * This does NOT replace the existing chat runtime.
+                 * It only publishes the UI-level event.
+                 */
+                window.dispatchEvent(
+                    new CustomEvent(
+                        'eaos:chat-submit',
+                        {
+                            detail: {
+                                message: value,
+                                input: input,
+                                form: form,
+                                source: 'chat-form'
+                            }
+                        }
+                    )
+                );
+            },
+            true
+        );
+
+        return true;
+    }
+
+    function bindActivityBridge() {
+        if (
+            window.__EAOS_ACTIVITY_UI_BRIDGE_BOUND__
+        ) {
+            return;
+        }
+
+        window.__EAOS_ACTIVITY_UI_BRIDGE_BOUND__ = true;
+
+        window.addEventListener(
+            'eaos:activity-change',
+            function (event) {
+
+                const detail =
+                    event && event.detail
+                        ? event.detail
+                        : {};
+
+                window.EAOS =
+                    window.EAOS || {};
+
+                window.EAOS.ui =
+                    window.EAOS.ui || {};
+
+                window.EAOS.ui.lastActivity =
+                    detail.activity ||
+                    detail.name ||
+                    null;
+
+                window.EAOS.ui.activityEvent =
+                    detail;
+            }
+        );
+    }
+
+    function initRuntimeRepair() {
+
+        window.EAOS =
+            window.EAOS || {};
+
+        window.EAOS.ui =
+            window.EAOS.ui || {};
+
+        window.EAOS.ui.runtimeRepair =
+            true;
+
+        revealMonacoHost();
+        bindChatRuntime();
+        bindActivityBridge();
+
+        /*
+         * Monaco may initialize asynchronously.
+         * Re-check without touching Monaco internals.
+         */
+        window.setTimeout(
+            revealMonacoHost,
+            250
+        );
+
+        window.setTimeout(
+            revealMonacoHost,
+            1000
+        );
+
+        window.setTimeout(
+            bindChatRuntime,
+            250
+        );
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener(
+            'DOMContentLoaded',
+            initRuntimeRepair,
+            { once: true }
+        );
+    } else {
+        initRuntimeRepair();
+    }
+})();
+/*
+ * EAOS_MONACO_VISIBILITY_GUARD
+ *
+ * Monaco ownership remains in main.js.
+ * This guard only repairs stale DOM visibility state.
+ *
+ * Boundary:
+ *   main.js       -> Monaco runtime
+ *   ui_runtime.js -> DOM/application integration
+ */
+(function installEAOSMonacoVisibilityGuard() {
+    "use strict";
+
+    function reveal() {
+        const host = document.querySelector("#monaco-editor-container");
+
+        if (!host) {
+            return;
+        }
+
+        const editorPane =
+            host.closest('[data-eaos-pane="editor"]') ||
+            host.closest(".eaos-editor-pane") ||
+            host.parentElement;
+
+        /*
+         * If the editor host exists, it must not retain a stale
+         * hidden attribute from a previous pane state.
+         */
+        host.hidden = false;
+        host.removeAttribute("hidden");
+
+        host.style.visibility = "visible";
+        host.style.display = "";
+
+        if (editorPane) {
+            editorPane.hidden = false;
+            editorPane.removeAttribute("hidden");
+        }
+
+        if (window.monaco) {
+            window.dispatchEvent(new CustomEvent("eaos:monaco-visibility-ready", {
+                detail: {
+                    host: host
+                }
+            }));
+        }
+    }
+
+    function install() {
+        if (window.__EAOS_MONACO_VISIBILITY_GUARD__) {
+            return;
+        }
+
+        window.__EAOS_MONACO_VISIBILITY_GUARD__ = true;
+
+        reveal();
+
+        /*
+         * main.js may initialize Monaco after this module.
+         * Re-check after runtime initialization.
+         */
+        requestAnimationFrame(reveal);
+        setTimeout(reveal, 100);
+        setTimeout(reveal, 500);
+        setTimeout(reveal, 1000);
+
+        /*
+         * Protect against stale hidden state being reapplied
+         * during application initialization.
+         */
+        const observer = new MutationObserver(() => {
+            const host = document.querySelector("#monaco-editor-container");
+
+            if (!host) {
+                return;
+            }
+
+            if (host.hidden || host.style.visibility === "hidden") {
+                reveal();
+            }
+        });
+
+        observer.observe(document.documentElement, {
+            subtree: true,
+            attributes: true,
+            attributeFilter: [
+                "hidden",
+                "style",
+                "class"
+            ]
+        });
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", install, { once: true });
+    } else {
+        install();
+    }
+})();
+/*
+ * EAOS_CHAT_SUBMIT_FINAL_BRIDGE
+ *
+ * Contract:
+ *
+ *   chat_pane.html
+ *          |
+ *          v
+ *      chat-form
+ *          |
+ *          v
+ *   eaos:chat-submit
+ *          |
+ *          v
+ *   application/UI layer
+ *
+ * This bridge does NOT own AI execution.
+ * It only exposes the submit event.
+ */
+(function installEAOSChatSubmitFinalBridge() {
+    "use strict";
+
+    function install() {
+        if (window.__EAOS_CHAT_SUBMIT_FINAL_BRIDGE__) {
+            return;
+        }
+
+        const form = document.querySelector("#chat-form");
+
+        if (!form) {
+            return;
+        }
+
+        window.__EAOS_CHAT_SUBMIT_FINAL_BRIDGE__ = true;
+
+        form.addEventListener("submit", function (event) {
+            const input = document.querySelector("#chat-input");
+
+            const message = input
+                ? String(input.value || "").trim()
+                : "";
+
+            const detail = {
+                message: message,
+                source: "chat-form",
+                timestamp: Date.now()
+            };
+
+            /*
+             * Explicit E2E/application observable state.
+             */
+            window.__eaosChatSubmit = true;
+            window.__EAOS_LAST_CHAT_SUBMIT__ = detail;
+
+            /*
+             * Form-local event.
+             */
+            form.dispatchEvent(new CustomEvent("eaos:chat-submit", {
+                bubbles: true,
+                detail: detail
+            }));
+
+            /*
+             * Application-wide event.
+             */
+            document.dispatchEvent(new CustomEvent("eaos:chat-submit", {
+                bubbles: true,
+                detail: detail
+            }));
+
+            window.dispatchEvent(new CustomEvent("eaos:chat-submit", {
+                detail: detail
+            }));
+        });
+
+        /*
+         * Explicit runtime contract.
+         */
+        window.EAOS = window.EAOS || {};
+        window.EAOS.ui = window.EAOS.ui || {};
+        window.EAOS.ui.chat = window.EAOS.ui.chat || {};
+
+        window.EAOS.ui.chat.submit = function () {
+            if (!form) {
+                return false;
+            }
+
+            form.requestSubmit();
+            return true;
+        };
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", install, { once: true });
+    } else {
+        install();
+    }
+})();

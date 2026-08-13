@@ -1,8 +1,8 @@
-"""Agent configuration validator verifying local LLM agent setups."""
-
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict
+
+"""Agent configuration validator verifying local LLM agent setups."""
 
 
 class AgentConfigAuditDTO(BaseModel):

@@ -1,9 +1,9 @@
-"""EAOS Constitutional Axioms Proof Engine executing empirical evidence validation."""
-
 from pathlib import Path
 from typing import ClassVar
 
 from pydantic import BaseModel, ConfigDict
+
+"""EAOS Constitutional Axioms Proof Engine executing empirical evidence validation."""
 
 
 class AxiomProofResultDTO(BaseModel):

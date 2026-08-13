@@ -48,12 +48,10 @@ class EnterpriseGraphTopology(BaseModel):
     total_nodes: int = 0
     total_relationships: int = 0
 
-    @computed_field  # type: ignore[prop-decorator]
-    @property
+    @computed_field
     def node_count(self) -> int:
         return self.total_nodes or len(self.nodes)
 
-    @computed_field  # type: ignore[prop-decorator]
-    @property
+    @computed_field
     def relationship_count(self) -> int:
         return self.total_relationships or len(self.relationships)

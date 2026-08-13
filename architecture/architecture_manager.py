@@ -1,8 +1,8 @@
-"""Architecture manager."""
-
 from __future__ import annotations
 
 from .decisions.adr_manager import ADRManager
+
+"""Architecture manager."""
 
 
 class ArchitectureManager:

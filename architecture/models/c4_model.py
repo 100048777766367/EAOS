@@ -1,9 +1,9 @@
-"""C4 model definitions."""
-
 from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import StrEnum
+
+"""C4 model definitions."""
 
 
 class C4LayerType(StrEnum):

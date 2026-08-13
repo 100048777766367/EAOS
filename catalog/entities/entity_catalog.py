@@ -1,8 +1,8 @@
-"""Domain Entities Catalog (DDD Pattern)."""
-
 from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Domain Entities Catalog (DDD Pattern)."""
 
 
 class EntityElementDTO(BaseModel):

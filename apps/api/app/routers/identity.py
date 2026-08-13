@@ -1,9 +1,10 @@
-"""Identity API Router."""
-
 from typing import Final
 
 from fastapi import APIRouter, HTTPException, status
 from packages.identity.domain.schemas import UserRegisterRequest, UserResponse, UserRole
+
+"""Identity API Router."""
+
 
 __all__ = ["router"]
 

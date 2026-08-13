@@ -1,8 +1,8 @@
-"""Domain models for Enterprise Metrics Engine context."""
-
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from enum import Enum, auto
+
+"""Domain models for Enterprise Metrics Engine context."""
 
 
 class MetricType(Enum):

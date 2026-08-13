@@ -1,8 +1,8 @@
-"""Workflow state machine domain entities and value objects."""
-
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict
+
+"""Workflow state machine domain entities and value objects."""
 
 
 class Transition(BaseModel):

@@ -1,8 +1,8 @@
-"""Knowledge store engine scanning and indexing organizational memory."""
-
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict
+
+"""Knowledge store engine scanning and indexing organizational memory."""
 
 
 class KnowledgeArtifactDTO(BaseModel):

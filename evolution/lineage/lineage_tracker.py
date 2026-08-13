@@ -1,10 +1,10 @@
-"""Architectural Lineage and Provenance Tracking Engine."""
-
 from __future__ import annotations
 
 from datetime import UTC, datetime
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Architectural Lineage and Provenance Tracking Engine."""
 
 
 class LineageRecordDTO(BaseModel):

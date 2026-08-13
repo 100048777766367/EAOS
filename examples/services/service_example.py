@@ -1,10 +1,10 @@
-"""Business Capability Service Executable Example."""
-
 from __future__ import annotations
 
 from decimal import Decimal
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Business Capability Service Executable Example."""
 
 
 class ServiceExampleResultDTO(BaseModel):
@@ -19,7 +19,7 @@ class ServiceExampleResultDTO(BaseModel):
 
 def run_service_example(order_total: Decimal) -> ServiceExampleResultDTO:
     """Execute Sales Discount Business Capability example."""
-    discount = min(order_total * Decimal("0.25"), Decimal("3000000"))
+    discount = min(order_total * Decimal("0.25"), Decimal(3000000))
     return ServiceExampleResultDTO(
         capability_id="sales_discount",
         discount_amount=discount,

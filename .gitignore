@@ -221,3 +221,19 @@ runtime/tmp/*
 runtime/traces/*
 runtime/backups/*
 generated/architecture/time_machine/*
+
+# ============================================================
+# EAOS INTERNAL RECOVERY / EPHEMERAL ARTIFACTS
+# ============================================================
+
+# Historical backups — local recovery material
+.eaos/backups/
+
+# Build/recovery checkpoints — local recovery material
+.eaos/checkpoints/
+
+# Generated repair snapshots
+.eaos/repairs/
+
+# Live runtime state — never commit mutable runtime state
+.eaos/runtime/

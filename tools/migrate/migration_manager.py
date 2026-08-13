@@ -1,8 +1,8 @@
-"""Database migration manager for PostgreSQL and pgvector schema setups."""
-
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict
+
+"""Database migration manager for PostgreSQL and pgvector schema setups."""
 
 
 class MigrationStatusDTO(BaseModel):

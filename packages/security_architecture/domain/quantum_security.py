@@ -1,11 +1,11 @@
+import datetime
+from dataclasses import dataclass, field
+from enum import Enum, auto
+
 """
 Quantum Security Domain Module.
 Quản lý các đối tượng domain liên quan đến an ninh bảo mật hậu lượng tử (Post-Quantum Cryptography - PQC).
 """
-
-import datetime
-from dataclasses import dataclass, field
-from enum import Enum, auto
 
 
 class QuantumAlgorithmType(Enum):

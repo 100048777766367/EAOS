@@ -1,0 +1,67 @@
+**********************
+PowerShell transcript start
+Start time: 20260813222750
+Username: DESKTOP-V613H5K\admin
+RunAs User: DESKTOP-V613H5K\admin
+Configuration Name: 
+Machine: DESKTOP-V613H5K (Microsoft Windows NT 10.0.26200.0)
+Host Application: C:\Program Files\WindowsApps\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\pwsh.dll -noexit -command try { . "d:\Microsoft VS Code\a5b5009513\resources\app\out\vs\workbench\contrib\terminal\common\scripts\shellIntegration.ps1" } catch {}
+Process ID: 21264
+PSVersion: 7.6.4
+PSEdition: Core
+GitCommitId: 7.6.4
+OS: Microsoft Windows 10.0.26200
+Platform: Win32NT
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1, 6.0, 7.0
+PSRemotingProtocolVersion: 2.4
+SerializationVersion: 1.1.0.1
+WSManStackVersion: 3.0
+**********************
+
+[1/7] Checking Phase A files...
+[PASS] dxs\application\repository_service.py
+[PASS] dxs\bootstrap\composition.py
+[PASS] dxs\health\service.py
+[PASS] dxs\health\model.py
+[PASS] dxs\evidence\service.py
+[PASS] dxs\evidence\model.py
+[PASS] dxs\remediation\service.py
+[PASS] dxs\remediation\model.py
+[PASS] dxs\scaffolding\service.py
+[PASS] dxs\contracts\scaffolding.py
+
+[2/7] Checking RepositoryApplication contract...
+[PASS] RepositoryApplication.discover()
+[PASS] RepositoryApplication.inspect()
+[PASS] RepositoryApplication.validate()
+[PASS] RepositoryApplication.compatibility()
+[PASS] RepositoryApplication.health()
+[PASS] RepositoryApplication.evidence()
+[PASS] RepositoryApplication.remediation()
+[PASS] RepositoryApplication.scaffold()
+
+[3/7] Checking bootstrap composition...
+[PASS] Bootstrap contains HealthService
+[PASS] Bootstrap contains EvidenceService
+[PASS] Bootstrap contains RemediationService
+[PASS] Bootstrap contains RepositoryApplication
+
+[4/7] Checking service boundaries...
+[PASS] HealthService
+[PASS] EvidenceService
+[PASS] RemediationService
+[PASS] scaffold_capability
+
+[5/7] Running direct application contract integration test...
+[PASS] Application integration test.
+
+[6/7] Checking scaffold boundary without creating files...
+[PASS] Scaffold service exposes ScaffoldResult boundary.
+
+[7/7] Running Python compile verification...
+
+[PASS] Python compile verification.
+**********************
+PowerShell transcript end
+End time: 20260813222751
+**********************

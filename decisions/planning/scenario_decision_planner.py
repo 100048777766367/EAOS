@@ -1,8 +1,8 @@
-"""Scenario Decision Planner Engine."""
-
 from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Scenario Decision Planner Engine."""
 
 
 class DecisionScenarioPlanDTO(BaseModel):

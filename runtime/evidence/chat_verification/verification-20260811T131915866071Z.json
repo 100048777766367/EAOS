@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-08-11T13:19:15.866121+00:00",
+  "result": {
+    "status": "FAILED",
+    "runners": [
+      {
+        "name": "ruff",
+        "status": "FAILED",
+        "returncode": 1,
+        "output": "apps\\api\\app\\services\\chat\\verification\\coordinator.py:88:13: PERF401 Use `list.extend` to create a transformed list\nFound 1 error.",
+        "duration_seconds": 0.15902830000050017
+      },
+      {
+        "name": "pytest",
+        "status": "PASSED",
+        "returncode": 0,
+        "output": "........................................................................ [ 43%]\n........................................................................ [ 87%]\n....................                                                     [100%]",
+        "duration_seconds": 25.237870099997963
+      }
+    ],
+    "evidence_path": null
+  }
+}

@@ -1,8 +1,9 @@
-"""AI planner package."""
-
 from __future__ import annotations
 
 from .task_decomposer import AITaskDecomposer
+
+"""AI planner package."""
+
 
 TaskDecomposer = AITaskDecomposer
 

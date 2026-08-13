@@ -1,6 +1,6 @@
-"""Infrastructure storage adapters for Finance context."""
-
 from packages.finance.domain.models import FinanceEntity
+
+"""Infrastructure storage adapters for Finance context."""
 
 
 class InMemoryFinanceRepository:

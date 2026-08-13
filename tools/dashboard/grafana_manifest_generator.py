@@ -1,9 +1,9 @@
-"""Grafana Community Dashboard Manifest Generator for EAOS Observability."""
-
 import json
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict
+
+"""Grafana Community Dashboard Manifest Generator for EAOS Observability."""
 
 
 class GrafanaDashboardPanelDTO(BaseModel):

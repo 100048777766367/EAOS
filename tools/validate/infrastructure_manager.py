@@ -1,11 +1,11 @@
-"""Infrastructure-as-Code (IaC) & Deployment Manager Engine."""
-
 from __future__ import annotations
 
 import shutil
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Infrastructure-as-Code (IaC) & Deployment Manager Engine."""
 
 
 class IaCManifestDTO(BaseModel):

@@ -1,6 +1,6 @@
-"""Động cơ xuất chiếu View sơ đồ kiến trúc."""
-
 from __future__ import annotations
+
+"""Động cơ xuất chiếu View sơ đồ kiến trúc."""
 
 
 class ViewEngine:

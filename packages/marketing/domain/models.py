@@ -1,9 +1,3 @@
-"""Marketing Capability Domain Models.
-
-Hexagonal Rule: This module MUST NOT import from application/ or infrastructure/.
-All models are pure value objects and entities with zero infrastructure coupling.
-"""
-
 from __future__ import annotations
 
 from datetime import UTC, datetime
@@ -11,6 +5,13 @@ from enum import StrEnum
 from typing import Final
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Marketing Capability Domain Models.
+
+Hexagonal Rule: This module MUST NOT import from application/ or infrastructure/.
+All models are pure value objects and entities with zero infrastructure coupling.
+"""
+
 
 # ---------------------------------------------------------------------------
 # Enumerations — strongly-typed domain vocabulary

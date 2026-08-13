@@ -1,10 +1,10 @@
-"""Data Transfer Objects and Exit Codes for EAOS CLI."""
-
 from __future__ import annotations
 
 from enum import IntEnum
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Data Transfer Objects and Exit Codes for EAOS CLI."""
 
 
 class CLIExitCode(IntEnum):

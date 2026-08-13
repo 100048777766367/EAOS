@@ -1,8 +1,8 @@
-"""Self-Hosting & Dogfooding Domain Model for EAOS Platform."""
-
 from datetime import UTC, datetime
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Self-Hosting & Dogfooding Domain Model for EAOS Platform."""
 
 
 class EAOSRepositoryHealth(BaseModel):

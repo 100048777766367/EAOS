@@ -1,11 +1,11 @@
-"""Planner worker module."""
-
 from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
 
 from agents.base import AgentRole
+
+"""Planner worker module."""
 
 
 @dataclass

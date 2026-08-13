@@ -1,8 +1,8 @@
-"""Zero-Downtime Architectural Migration Engine."""
-
 from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Zero-Downtime Architectural Migration Engine."""
 
 
 class MigrationStepResultDTO(BaseModel):

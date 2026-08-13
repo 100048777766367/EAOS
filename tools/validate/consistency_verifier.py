@@ -1,9 +1,9 @@
-"""Consistency verifier inspecting capability line-of-sight mapping."""
-
 import json
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict
+
+"""Consistency verifier inspecting capability line-of-sight mapping."""
 
 
 class ConsistencyReportDTO(BaseModel):

@@ -1,6 +1,6 @@
-"""Động cơ Tree-of-Thought (ToT)."""
-
 from __future__ import annotations
+
+"""Động cơ Tree-of-Thought (ToT)."""
 
 
 class ReasoningEngine:

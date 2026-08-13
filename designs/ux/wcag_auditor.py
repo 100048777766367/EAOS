@@ -1,6 +1,6 @@
-"""WCAG 2.1 Accessibility Color Contrast Auditor."""
-
 from pydantic import BaseModel, ConfigDict
+
+"""WCAG 2.1 Accessibility Color Contrast Auditor."""
 
 
 class WCAGAuditResult(BaseModel):
@@ -38,9 +38,7 @@ class WCAGAuditor:
                 channels.append(c / 12.92)
             else:
                 channels.append(((c + 0.055) / 1.055) ** 2.4)
-        return (
-            0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2]
-        )
+        return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2]
 
     @classmethod
     def audit_contrast(cls, fg_hex: str, bg_hex: str) -> WCAGAuditResult:

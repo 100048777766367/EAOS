@@ -1,0 +1,4 @@
+﻿[
+  { "command": "ide.action.runGoal", "key": "Ctrl+Enter" },
+  { "command": "ide.action.runDoctorAudit", "key": "Ctrl+Shift+D" }
+]

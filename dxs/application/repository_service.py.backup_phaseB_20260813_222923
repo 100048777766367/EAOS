@@ -1,0 +1,146 @@
+from __future__ import annotations
+
+from pathlib import Path
+
+from dxs.application.compatibility_service import CompatibilityService
+from dxs.application.repository_doctor import RepositoryDoctor
+from dxs.application.validate_repository import RepositoryValidator
+from dxs.contracts.scaffolding import ScaffoldResult
+from dxs.contracts.versioning import ContractVersion
+from dxs.domain.compatibility import CompatibilityResult
+from dxs.domain.repository import RepositoryContext
+from dxs.domain.validation import ValidationResult
+from dxs.evidence.model import Evidence
+from dxs.evidence.service import EvidenceService
+from dxs.health.model import HealthReport
+from dxs.health.service import HealthService
+from dxs.ports.repository_context import RepositoryContextProvider
+from dxs.remediation.model import Remediation
+from dxs.remediation.service import RemediationService
+from dxs.scaffolding.service import scaffold_capability
+
+
+class RepositoryApplication:
+    """Application facade for DXS repository operations."""
+
+    def __init__(
+        self,
+        context_provider: RepositoryContextProvider,
+        compatibility_service: CompatibilityService,
+        health_service: HealthService | None = None,
+        evidence_service: EvidenceService | None = None,
+        remediation_service: RemediationService | None = None,
+    ) -> None:
+        self._context_provider = context_provider
+        self._doctor = RepositoryDoctor()
+        self._validator = RepositoryValidator()
+        self._compatibility = compatibility_service
+
+        self._health = health_service or HealthService()
+        self._evidence = evidence_service or EvidenceService()
+        self._remediation = remediation_service or RemediationService()
+
+    def discover(
+        self,
+        root: Path,
+    ) -> RepositoryContext:
+        """Discover repository context."""
+        return self._context_provider.discover(root)
+
+    def inspect(
+        self,
+        root: Path,
+    ) -> list[str]:
+        """Run repository doctor inspection."""
+        context = self.discover(root)
+        return self._doctor.inspect(context)
+
+    def validate(
+        self,
+        root: Path,
+    ) -> list[ValidationResult]:
+        """Validate repository sources."""
+        context = self.discover(root)
+        return self._validator.validate(context)
+
+    def compatibility(
+        self,
+        current: ContractVersion,
+        target: ContractVersion,
+    ) -> CompatibilityResult:
+        """Check contract compatibility."""
+        return self._compatibility.check(
+            current=current,
+            target=target,
+        )
+
+    def health(
+        self,
+        root: Path,
+    ) -> HealthReport:
+        """Evaluate repository health from doctor results."""
+        results = self.inspect(root)
+
+        passed = sum(
+            1
+            for result in results
+            if not result.startswith(("[WARN]", "[FAIL]"))
+        )
+
+        failed = len(results) - passed
+
+        return self._health.evaluate(
+            passed=passed,
+            failed=failed,
+        )
+
+    def evidence(
+        self,
+        root: Path,
+    ) -> list[Evidence]:
+        """Capture deterministic evidence from repository inspection."""
+        results = self.inspect(root)
+
+        evidence: list[Evidence] = []
+
+        for index, result in enumerate(results, start=1):
+            evidence.append(
+                self._evidence.capture(
+                    key=f"repository-diagnostic-{index}",
+                    value=result,
+                    source="repository-doctor",
+                )
+            )
+
+        return evidence
+
+    def remediation(
+        self,
+        root: Path,
+    ) -> list[Remediation]:
+        """Create remediation records for failed repository findings."""
+        results = self.inspect(root)
+
+        remediation: list[Remediation] = []
+
+        for index, result in enumerate(results, start=1):
+            if result.startswith(("[WARN]", "[FAIL]")):
+                remediation.append(
+                    self._remediation.create(
+                        key=f"repository-remediation-{index}",
+                        description=result,
+                    )
+                )
+
+        return remediation
+
+    def scaffold(
+        self,
+        root: Path,
+        name: str = "capability",
+    ) -> ScaffoldResult:
+        """Create a DXS capability scaffold."""
+        return scaffold_capability(
+            root=root,
+            name=name,
+        )

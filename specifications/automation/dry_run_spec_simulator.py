@@ -9,7 +9,9 @@ class DryRunSpecSimulator:
     """Mô phỏng nguy cơ trôi dạt đặc tả."""
 
     @staticmethod
-    def simulate_drift(spec_id: str, proposed_changes: dict[str, Any]) -> dict[str, Any]:
+    def simulate_drift(
+        spec_id: str, proposed_changes: dict[str, Any]
+    ) -> dict[str, Any]:
         """Mô phỏng biến động đặc tả."""
         return {
             "spec_id": spec_id,

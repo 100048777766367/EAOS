@@ -1,9 +1,9 @@
-"""Security Architecture Frameworks & Standards Domain Model."""
-
 from datetime import UTC, datetime
 from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Security Architecture Frameworks & Standards Domain Model."""
 
 
 class SecurityFrameworkType(StrEnum):

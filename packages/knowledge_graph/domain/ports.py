@@ -1,8 +1,8 @@
-"""Domain ports for Knowledge Graph context."""
-
 from typing import Protocol
 
 from packages.knowledge_graph.domain.models import KnowledgeGraphAggregate
+
+"""Domain ports for Knowledge Graph context."""
 
 
 class KnowledgeGraphRepositoryPort(Protocol):

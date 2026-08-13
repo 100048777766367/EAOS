@@ -1,8 +1,8 @@
-"""AI Digital Solopreneur Content Agency Domain Models for EAOS."""
-
 from datetime import UTC, datetime
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""AI Digital Solopreneur Content Agency Domain Models for EAOS."""
 
 
 class EndToEndBusinessFlowResult(BaseModel):

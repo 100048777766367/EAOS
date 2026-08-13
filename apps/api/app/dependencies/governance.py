@@ -1,6 +1,6 @@
-"""Governance FastAPI Dependencies."""
-
 from typing import Any
+
+"""Governance FastAPI Dependencies."""
 
 
 def get_governance_context() -> dict[str, Any]:

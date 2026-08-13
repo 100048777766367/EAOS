@@ -17,7 +17,7 @@ def test_web_settings_defaults() -> None:
     """Test default values of Web UI Settings."""
     assert web_settings.title == "EAOS Web UI Gateway"
     assert web_settings.version == "0.2.0"
-    assert web_settings.port == 3000
+    assert web_settings.port == 3002
     assert web_settings.host == "127.0.0.1"
 
 

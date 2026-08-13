@@ -1,8 +1,8 @@
-"""Service Delivery & SLA Domain Model for EAOS Capability App."""
-
 from datetime import UTC, datetime
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Service Delivery & SLA Domain Model for EAOS Capability App."""
 
 
 class ServiceEngagement(BaseModel):

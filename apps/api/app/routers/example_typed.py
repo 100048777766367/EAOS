@@ -1,9 +1,9 @@
-"""Sample strict-typed router for EAOS API Gateway."""
-
 from typing import Annotated, Any
 
 from fastapi import APIRouter, Body, HTTPException, status
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Sample strict-typed router for EAOS API Gateway."""
 
 
 class TypedRequestDTO(BaseModel):

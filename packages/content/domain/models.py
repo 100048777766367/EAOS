@@ -1,9 +1,9 @@
-"""Content Capability Domain Models for EAOS Digital Assets."""
-
 import uuid
 from datetime import UTC, datetime
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Content Capability Domain Models for EAOS Digital Assets."""
 
 
 class ContentStatusVO(BaseModel):

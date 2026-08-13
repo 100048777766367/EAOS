@@ -4,7 +4,10 @@ from typing import Annotated, Any, cast
 
 from engine.sandbox.wasm_runtime import SandboxExecutionResult
 from fastapi import APIRouter, Body, HTTPException
-from packages.autonomous.application.use_cases import LoopCycleRequest, RunAutonomousLoopUseCase
+from packages.autonomous.application.use_cases import (
+    LoopCycleRequest,
+    RunAutonomousLoopUseCase,
+)
 from packages.autonomous.domain.models import LoopCycle
 from packages.reflection.application.use_cases import AnalyzeReflectionUseCase
 from packages.reflection.domain.models import ReflectionReport
@@ -40,9 +43,7 @@ async def analyze_reflection_report(
     passed_checks: Annotated[bool, Body(embed=True)],
 ) -> ReflectionReport:
     use_case = AnalyzeReflectionUseCase(reflection_repo)
-    return use_case.execute(
-        subject_id=subject_id, trigger_event=trigger_event, passed_checks=passed_checks
-    )
+    return use_case.execute(subject_id=subject_id, trigger_event=trigger_event, passed_checks=passed_checks)
 
 
 @router.post("/evolution/propose", status_code=201)
@@ -54,7 +55,11 @@ async def propose_evolution(
     target_id = obj_id
     if not target_id and isinstance(request, dict):
         target_id = str(request.get("obj_id", "EVO-001"))
-    return {"status": "PROPOSED", "obj_id": target_id or "EVO-001", "proposal_id": "EVO-001"}
+    return {
+        "status": "PROPOSED",
+        "obj_id": target_id or "EVO-001",
+        "proposal_id": "EVO-001",
+    }
 
 
 @router.post("/evolution/evaluate-fitness/{evolution_id}")
@@ -63,7 +68,9 @@ async def evaluate_evolution_fitness(evolution_id: str) -> dict[str, Any]:
 
 
 @router.post("/learning/ingest", status_code=201)
-async def ingest_learning_experience(request: dict[str, Any] | None = None) -> dict[str, Any]:
+async def ingest_learning_experience(
+    request: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     exp_id = "EXP-001"
     if isinstance(request, dict):
         exp_id = str(request.get("experience_id", "EXP-001"))
@@ -77,9 +84,14 @@ async def run_self_rewrite_engine(request: SelfRewriteRequest) -> SelfRewriteJob
 
 
 @router.post("/sandbox/wasm/execute")
-async def execute_wasm_sandbox(request: WasmExecuteRequest | dict[str, Any]) -> SandboxExecutionResult:
+async def execute_wasm_sandbox(
+    request: WasmExecuteRequest | dict[str, Any],
+) -> SandboxExecutionResult:
     code = str(request.get("patch_code", "")) if isinstance(request, dict) else request.patch_code
-    return cast(SandboxExecutionResult, self_rewrite_repo.execute_isolated_patch(patch_code=code))
+    return cast(
+        SandboxExecutionResult,
+        self_rewrite_repo.execute_isolated_patch(patch_code=code),
+    )
 
 
 @router.post("/autonomous/run-cycle", response_model=LoopCycle, status_code=201)

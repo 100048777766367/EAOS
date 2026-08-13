@@ -1,10 +1,10 @@
-"""Knowledge Compaction and Eviction Domain Models (100-Year Anti-Bloat)."""
-
 from __future__ import annotations
 
 from datetime import UTC, datetime
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Knowledge Compaction and Eviction Domain Models (100-Year Anti-Bloat)."""
 
 
 class RawObservation(BaseModel):

@@ -1,9 +1,9 @@
-"""Async Read-Write Lock Splay Cache Evictor for zero loop blocking."""
-
 import asyncio
 import time
 
 from pydantic import BaseModel, ConfigDict
+
+"""Async Read-Write Lock Splay Cache Evictor for zero loop blocking."""
 
 
 class EvictionResult(BaseModel):

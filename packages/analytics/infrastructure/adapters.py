@@ -1,8 +1,8 @@
-"""Infrastructure storage adapters for Analytics bounded context."""
-
 from typing import Any
 
 from packages.analytics.domain.models import AnalyticsMetricEntity
+
+"""Infrastructure storage adapters for Analytics bounded context."""
 
 
 class InMemoryAnalyticsRepository:

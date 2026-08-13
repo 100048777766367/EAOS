@@ -1,0 +1,26 @@
+{
+  "evidence_id": "ver-20260812T021920630189Z-83d2277070851884",
+  "created_at": "2026-08-12T02:19:20.630350+00:00",
+  "result": {
+    "status": "FAILED",
+    "runs": [
+      {
+        "name": "ruff",
+        "status": "PASSED",
+        "returncode": 0,
+        "output": "All checks passed!",
+        "duration_seconds": 4.207573299999694,
+        "error": null
+      },
+      {
+        "name": "pytest",
+        "status": "FAILED",
+        "returncode": 2,
+        "output": "=================================== ERRORS ====================================\n_________ ERROR collecting tests/unit/agents_execution/test_engine.py _________\nImportError while importing test module 'D:\\EAOS\\tests\\unit\\agents_execution\\test_engine.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\nC:\\Users\\admin\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\importlib\\__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntests\\unit\\agents_execution\\test_engine.py:5: in <module>\n    from AGENTS.execution.domain.models import (\nE   ModuleNotFoundError: No module named 'AGENTS'\n------------------------------- Captured stdout -------------------------------\n[LLM] provider=gemini gemini_model=gemini-flash-latest gemini_keys=3 ollama_model=nemotron-mini:latest\n________ ERROR collecting tests/unit/agents_execution/test_imports.py _________\nImportError while importing test module 'D:\\EAOS\\tests\\unit\\agents_execution\\test_imports.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\nC:\\Users\\admin\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\importlib\\__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntests\\unit\\agents_execution\\test_imports.py:3: in <module>\n    from AGENTS.execution import (\nE   ModuleNotFoundError: No module named 'AGENTS'\n=========================== short test summary info ===========================\nERROR tests/unit/agents_execution/test_engine.py\nERROR tests/unit/agents_execution/test_imports.py\n!!!!!!!!!!!!!!!!!!! Interrupted: 2 errors during collection !!!!!!!!!!!!!!!!!!!",
+        "duration_seconds": 3.561045099999774,
+        "error": null
+      }
+    ],
+    "evidence_id": null
+  }
+}

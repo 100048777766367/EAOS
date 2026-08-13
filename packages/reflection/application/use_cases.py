@@ -30,7 +30,7 @@ class AnalyzeReflectionUseCase:
                     type="BoundaryViolation",
                     description=(
                         "PhÃ¡t hiá»‡n import sai lá»›p phÃ¢n tÃ¡ch. Táº§ng dÆ°á»›i "
-                        "Ä‘ang phá»¥ thuá»™c trá»±c tiáº¿p vÃ o táº§ng trÃªn."
+                        "Ä‘ang phá»¥ thuá»™c trá»±c tiáº¿p vÃ o táº§ng trÃªn."
                     ),
                     probability=0.95,
                     evidence=[f"Module: {subject_id} contains illegal imports"],
@@ -40,7 +40,7 @@ class AnalyzeReflectionUseCase:
                 Recommendation(
                     priority="HIGH",
                     action="Äiá»u hÆ°á»›ng láº¡i ranh giá»›i dependencies.",
-                    reason=("Giá»¯ cho nhÃ¢n Kernel sáº¡ch sáº½, khÃ´ng bá»‹ phá»¥ thuá»™c vÃ o lá»›p ngoáº¡i biÃªn."),
+                    reason=("Giá»¯ cho nhÃ¢n Kernel sáº¡ch sáº½, khÃ´ng bá»‹ phá»¥ thuá»™c vÃ o lá»›p ngoáº¡i biÃªn."),
                     risk="CÃ³ thá»ƒ tÄƒng nháº¹ thá»i gian refactor code.",
                 )
             )
@@ -52,7 +52,7 @@ class AnalyzeReflectionUseCase:
                     priority="LOW",
                     action="Duy trÃ¬ tráº¡ng thÃ¡i cáº¥u hÃ¬nh hiá»‡n táº¡i.",
                     reason="Táº¥t cáº£ cÃ¡c ranh giá»›i kiáº¿n trÃºc Ä‘áº¡t chuáº©n tá»‘i Æ°u.",
-                    risk="KhÃ´ng cÃ³ rá»§i ro nÃ o Ä‘Æ°á»£c phÃ¡t hiá»‡n.",
+                    risk="KhÃ´ng cÃ³ rá»§i ro nÃ o Ä‘Æ°á»£c phÃ¡t hiá»‡n.",
                 )
             )
             confidence = 1.0

@@ -1,36 +1,45 @@
-"""Autonomous agent swarm orchestrator."""
+"""Top-level agent task orchestration."""
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from collections.abc import AsyncIterator
 from pathlib import Path
 
-from agents.base import AgentRole
+from .task_execution.execution.executor import TaskExecutor
+from .task_execution.models import AgentTask, TaskState
+from .task_execution.task_manager import TaskManager
 
 
-@dataclass
-class SwarmResultDTO:
-    """Swarm result DTO."""
+class AgentOrchestrator:
+    """Coordinate task creation and governed execution."""
 
-    agent_role: AgentRole
-    status: str = "SUCCESS"
+    def __init__(self, project_root: Path) -> None:
+        self.project_root = project_root.resolve()
+        self.manager = TaskManager()
+        self.executor = TaskExecutor()
 
+    def create_task(
+        self,
+        goal: str,
+        agent_id: str = "coder",
+    ) -> AgentTask:
+        """Create a task without executing it."""
+        return self.manager.create(goal, agent_id)
 
-class AutonomousAgentSwarm:
-    """Autonomous agent swarm."""
+    async def execute(
+        self,
+        task: AgentTask,
+    ) -> AsyncIterator[dict[str, object]]:
+        """Execute a task through the execution boundary."""
+        yield {
+            "type": "agent_task",
+            "state": TaskState.CREATED.value,
+            "task_id": task.task_id,
+            "agent_id": task.agent_id,
+        }
 
-    def __init__(self, workspace_root: Path | None = None) -> None:
-        self.workspace_root = workspace_root or Path(".")
-
-    async def run_full_swarm(self, prompt: str, mode: str = "AUTO") -> list[SwarmResultDTO]:
-        """Run full swarm pipeline."""
-        return [
-            SwarmResultDTO(agent_role=AgentRole.PLANNER),
-            SwarmResultDTO(agent_role=AgentRole.ARCHITECT),
-            SwarmResultDTO(agent_role=AgentRole.SECURITY),
-            SwarmResultDTO(agent_role=AgentRole.CODER),
-            SwarmResultDTO(agent_role=AgentRole.TESTER),
-        ]
-
-
-AgentSwarm = AutonomousAgentSwarm
+        async for event in self.executor.execute(
+            task,
+            self.project_root,
+        ):
+            yield event

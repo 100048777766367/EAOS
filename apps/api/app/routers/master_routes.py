@@ -1,5 +1,3 @@
-"""Master Router aggregating all sub-routers for apps/api."""
-
 from fastapi import APIRouter
 
 from apps.api.app.routers.autonomous import router as autonomous_router
@@ -14,6 +12,9 @@ from apps.api.app.routers.memory_knowledge import router as memory_router
 from apps.api.app.routers.security import router as security_router
 from apps.api.app.routers.telemetry_performance import router as telemetry_router
 from apps.api.app.routers.tenancy import router as tenancy_router
+
+"""Master Router aggregating all sub-routers for apps/api."""
+
 
 master_router = APIRouter()
 

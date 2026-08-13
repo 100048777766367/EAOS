@@ -1,8 +1,8 @@
-"""Cybernetic task scheduler for 3-nested feedback loops."""
-
 import time
 
 from pydantic import BaseModel, ConfigDict
+
+"""Cybernetic task scheduler for 3-nested feedback loops."""
 
 
 class ScheduledJobDTO(BaseModel):

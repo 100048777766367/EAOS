@@ -21,8 +21,8 @@ related_documents:
 
 # EAOS Engineering Guide
 
-> **Version:** 2.0  
-> **Status:** LIVING  
+> **Version:** 2.0
+> **Status:** LIVING
 > **Authority:** Enterprise Engineering Standard
 
 ---
@@ -5382,30 +5382,3 @@ The Constitution provides the immutable principles.
 The Engineering Guide provides the implementation discipline.
 
 Together they form the operational foundation of the Enterprise Architecture Operating System.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

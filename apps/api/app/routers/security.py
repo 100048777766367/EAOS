@@ -3,11 +3,19 @@
 from typing import Annotated, Any
 
 from fastapi import APIRouter, Body, HTTPException, status
-from platforms.security.post_quantum_signer import PostQuantumSignerEngine, ZKAttestationProof
+from platforms.security.post_quantum_signer import (
+    PostQuantumSignerEngine,
+    ZKAttestationProof,
+)
 from platforms.security.quantum_envelope import EncryptedEnvelopeDTO
 from platforms.security.vault_ephemeral import VaultEphemeralSigner
 
-from apps.api.app.container import global_rate_limiter, global_syslog_adapter, global_waf_driver, quantum_engine
+from apps.api.app.container import (
+    global_rate_limiter,
+    global_syslog_adapter,
+    global_waf_driver,
+    quantum_engine,
+)
 
 router = APIRouter(prefix="/security", tags=["Security"])
 
@@ -25,9 +33,7 @@ async def encrypt_quantum_envelope(
             secret = str(request.get("secret_data", ""))
         if not fingerprint:
             fingerprint = str(request.get("public_key_fingerprint", ""))
-    return quantum_engine.encrypt_secret_payload(
-        secret_data=secret or "", public_key_fingerprint=fingerprint or ""
-    )
+    return quantum_engine.encrypt_secret_payload(secret_data=secret or "", public_key_fingerprint=fingerprint or "")
 
 
 @router.post("/wazuh/syslog-hmac")
@@ -44,9 +50,7 @@ async def sign_wazuh_syslog_payload(
         if not key:
             key = str(request.get("secret_key", "default_secret"))
 
-    return global_syslog_adapter.format_signed_syslog(
-        log_data=data or {}, secret_key=key or "default_secret"
-    )
+    return global_syslog_adapter.format_signed_syslog(log_data=data or {}, secret_key=key or "default_secret")
 
 
 @router.post("/cloudflare/block-cooldown")
@@ -71,9 +75,7 @@ async def block_cloudflare_ip_cooldown(
             detail="Rate limit exceeded on security endpoint.",
         )
 
-    return global_waf_driver.block_ip_with_cooldown(
-        ip=target_ip, ttl_seconds=ttl if ttl is not None else 3600
-    )
+    return global_waf_driver.block_ip_with_cooldown(ip=target_ip, ttl_seconds=ttl if ttl is not None else 3600)
 
 
 @router.post("/wazuh/stream-event")
@@ -83,7 +85,9 @@ async def stream_wazuh_siem_event(event_payload: dict[str, Any]) -> dict[str, An
 
 
 @router.post("/cloudflare/block-ip")
-async def block_cloudflare_ip(ip_address: Annotated[str, Body(embed=True)]) -> dict[str, Any]:
+async def block_cloudflare_ip(
+    ip_address: Annotated[str, Body(embed=True)],
+) -> dict[str, Any]:
     rule = global_waf_driver.block_malicious_ip(ip_address)
     return {"status": "BLOCKED", "rule": rule.model_dump()}
 
@@ -124,6 +128,4 @@ async def generate_zkp_attest_proof(
             p_load = str(request.get("payload", "dummy_payload"))
 
     signer = PostQuantumSignerEngine()
-    return signer.generate_compliance_proof(
-        artifact_id=a_id or "artifact_1", payload_data=p_load or "dummy_payload"
-    )
+    return signer.generate_compliance_proof(artifact_id=a_id or "artifact_1", payload_data=p_load or "dummy_payload")

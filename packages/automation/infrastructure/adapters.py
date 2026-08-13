@@ -1,6 +1,6 @@
-"""Infrastructure storage adapters for Automation context."""
-
 from packages.automation.domain.models import AutomationEntity
+
+"""Infrastructure storage adapters for Automation context."""
 
 
 class InMemoryAutomationRepository:

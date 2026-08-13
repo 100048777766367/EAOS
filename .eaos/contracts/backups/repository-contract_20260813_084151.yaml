@@ -1,0 +1,586 @@
+# EAOS Repository Contract
+# Version: 2.0
+# Status: ACTIVE
+# Authority: Repository Governance Contract
+# Owner: EAOS Architecture / Engineering Governance
+#
+# This contract is executable repository metadata. It does not replace the
+# Architecture Constitution, ADRs, Engineering Guide, or Project Context.
+# Those documents remain authoritative for their respective responsibilities.
+
+apiVersion: eaos.io/v2
+kind: RepositoryContract
+
+metadata:
+  name: eaos-repository
+  title: EAOS Enterprise Repository Contract
+  version: "2.0"
+  status: active
+  classification: constitutional-derived
+  owner: EAOS Architecture and Engineering Governance
+  maintained_by:
+    - Architecture Review Board
+    - EAOS Engineering Team
+    - Repository Governance
+  purpose: >
+    Define the machine-readable contract for repository identity, authoritative
+    sources, boundaries, required structure, quality gates, evidence,
+    traceability, change control, and automated governance.
+  effective_date: "2026-08-13"
+  compatibility:
+    policy: backward-compatible-by-default
+    breaking_change_requires_adr: true
+    migration_required_for_breaking_change: true
+
+authority:
+  hierarchy:
+    - ARCHITECTURE_CONSTITUTION.md
+    - docs/adr/
+    - ENGINEERING_GUIDE.md
+    - docs/PROJECT_CONTEXT.md
+    - docs/CURRENT_CONTEXT.md
+    - docs/TASK.md
+    - repository-contract.yaml
+    - source_code
+    - generated_artifacts
+  authoritative_documents:
+    architecture:
+      path: ARCHITECTURE_CONSTITUTION.md
+      role: supreme_source_of_truth
+    engineering:
+      path: ENGINEERING_GUIDE.md
+      role: engineering_standard
+    project_context:
+      path: docs/PROJECT_CONTEXT.md
+      role: project_context
+    current_context:
+      path: docs/CURRENT_CONTEXT.md
+      role: current_operational_state
+    adr_index:
+      path: docs/ADR_INDEX.md
+      role: architecture_decision_registry
+    repository_contract:
+      path: .eaos/contracts/repository-contract.yaml
+      role: executable_repository_contract
+    repository_specification:
+      path: specifications/repository-spec.md
+      role: repository_specification
+    governance:
+      path: GOVERNANCE.md
+      role: repository_governance
+  conflict_resolution:
+    rule: >
+      A lower-level artifact must not override a higher-level authoritative
+      source. Conflicts must be resolved by updating the lower-level artifact
+      or by an approved ADR when architecture itself changes.
+  single_source_of_truth:
+    required: true
+    duplicate_authoritative_definitions: prohibited
+    derived_artifacts_must_reference_authority: true
+
+identity:
+  repository: EAOS
+  full_name: Enterprise Architecture Operating System
+  repository_root: .
+  primary_language: Python
+  package_manager: uv
+  source_control: Git
+  development_environment:
+    - Python
+    - uv
+    - Git
+    - Docker
+    - Visual Studio Code
+
+architecture:
+  style:
+    - domain_driven_design
+    - hexagonal_architecture
+    - clean_architecture
+    - capability_oriented_architecture
+    - modular_monolith
+    - evolutionary_architecture
+    - executable_architecture
+  principles:
+    - enterprise_first
+    - business_first
+    - capability_first
+    - stable_core_flexible_edge
+    - explicit_boundaries
+    - dependency_inversion
+    - single_responsibility
+    - separation_of_concerns
+    - loose_coupling
+    - high_cohesion
+    - technology_independence
+    - continuous_evolution
+  dependency_direction:
+    allowed_flow:
+      - infrastructure_to_application
+      - application_to_domain
+    domain_must_not_depend_on:
+      - infrastructure
+      - frameworks
+      - external_services
+      - databases
+      - ai_providers
+  evolution:
+    architecture_changes_require:
+      - problem_statement
+      - evidence
+      - architectural_analysis
+      - tradeoff_analysis
+      - adr
+      - architecture_review
+      - approval
+      - implementation
+      - validation
+      - observation
+    silent_architecture_changes: prohibited
+
+repository:
+  root_must_exist: true
+  required_files:
+    - ARCHITECTURE_CONSTITUTION.md
+    - ENGINEERING_GUIDE.md
+    - GOVERNANCE.md
+    - docs/PROJECT_CONTEXT.md
+    - docs/CURRENT_CONTEXT.md
+    - docs/TASK.md
+    - docs/ADR_INDEX.md
+    - docs/ROADMAP.md
+    - .eaos/contracts/repository-contract.yaml
+    - specifications/repository-spec.md
+  required_directories:
+    - apps
+    - packages
+    - tests
+    - configs
+    - scripts
+    - tools
+    - docs
+    - specifications
+    - policies
+    - runtime
+  directory_responsibilities:
+    docs: architectural_and_project_knowledge
+    apps: deployable_applications
+    packages: reusable_business_and_technical_components
+    tests: automated_verification
+    configs: configuration_only
+    scripts: engineering_automation
+    tools: internal_engineering_tooling
+    specifications: executable_and_documented_specifications
+    policies: policy_definitions
+    runtime: runtime_services_and_control
+  prohibited:
+    - duplicate_authoritative_documentation
+    - business_logic_in_cli
+    - business_logic_in_ui
+    - business_logic_in_framework_adapters
+    - domain_dependency_on_infrastructure
+    - credentials_in_source_control
+    - secrets_in_logs
+    - generated_artifacts_as_sources_of_truth
+    - silent_architectural_changes
+
+package_rules:
+  capability_orientation: required
+  layer_model:
+    required_layers:
+      - domain
+      - application
+      - infrastructure
+    optional_layers:
+      - ports
+      - adapters
+      - interfaces
+  domain:
+    must_be_framework_independent: true
+    must_be_infrastructure_independent: true
+    owns_business_rules: true
+  application:
+    coordinates_use_cases: true
+    owns_business_decisions: false
+    may_depend_on_domain: true
+  infrastructure:
+    may_depend_on_application: true
+    may_depend_on_domain: true
+    must_not_be_required_by_domain: true
+  interfaces:
+    may_depend_on_application: true
+    must_not_contain_business_rules: true
+  module_responsibility:
+    single_responsibility: required
+    high_cohesion: required
+    loose_coupling: required
+
+testing:
+  mandatory: true
+  categories:
+    - unit
+    - integration
+    - architecture
+    - contract
+    - e2e
+    - security
+  principles:
+    - behavior_over_implementation
+    - deterministic_where_practical
+    - independent_tests
+    - regression_protection
+    - automation_by_default
+  unit:
+    external_network_allowed: false
+    external_ai_provider_allowed: false
+    database_dependency_allowed: false
+  architecture:
+    required: true
+    examples:
+      - dependency_direction
+      - layer_boundaries
+      - import_boundaries
+      - package_boundaries
+      - circular_dependency_detection
+  contract:
+    required_for_service_boundaries: true
+    validate_schema_compatibility: true
+  regression:
+    defect_requires_regression_test: true
+  ai:
+    output_schema_validation: required
+    safety_validation: required
+    probabilistic_outputs_must_not_be_treated_as_deterministic: true
+
+quality_gates:
+  required_for_pull_request:
+    - repository_contract_validation
+    - architecture_validation
+    - lint
+    - type_check
+    - unit_tests
+    - relevant_integration_tests
+    - security_checks
+  required_for_release:
+    - all_pull_request_gates
+    - full_test_suite
+    - architecture_compliance
+    - dependency_security_review
+    - evidence_artifact
+    - repository_cleanliness_check
+  tools:
+    lint:
+      tool: ruff
+      command: ruff check .
+    type_check:
+      tool: mypy
+      command: mypy .
+    tests:
+      tool: pytest
+      command: pytest
+  gate_policy:
+    fail_closed: true
+    warnings_may_be_accepted_only_when:
+      - explicitly classified
+      - documented
+      - owner_assigned
+      - risk_accepted
+      - non_blocking_by_policy
+    unverified_pass: prohibited
+
+governance:
+  model:
+    architecture: governs
+    engineering: executes
+    operations: observes
+    evidence: informs_evolution
+  change_control:
+    documentation_change:
+      requires: source_owner_review
+    engineering_standard_change:
+      requires: engineering_review
+    architecture_change:
+      requires: adr_and_architecture_review
+    constitutional_change:
+      requires: constitutional_governance
+  adr:
+    required_for:
+      - architecture_changes
+      - new_architectural_boundaries
+      - breaking_contract_changes
+      - major_dependency_direction_changes
+      - significant_repository_reorganization
+    implementation_without_required_adr: prohibited
+  repository_contract:
+    changes:
+      compatibility_check_required: true
+      validation_required: true
+      review_required: true
+    breaking_change:
+      requires_adr: true
+      requires_migration_plan: true
+      requires_rollback_plan: true
+  adoption:
+    decision_order:
+      - adopt
+      - adapt
+      - build
+    build_requires_evidence: true
+
+security:
+  principles:
+    - least_privilege
+    - secure_defaults
+    - defense_in_depth
+    - zero_trust
+    - dependency_security
+    - secret_management
+  required_controls:
+    secret_detection: true
+    dependency_scanning: true
+    static_security_analysis: true
+    authentication_validation: true
+    authorization_validation: true
+  prohibited:
+    - plaintext_credentials
+    - committed_private_keys
+    - secrets_in_configuration_templates
+    - sensitive_data_in_debug_logs
+
+evidence:
+  principle: evidence_before_evolution
+  required_for:
+    - architecture_changes
+    - governance_exceptions
+    - release_acceptance
+    - automated_repair
+    - self_modification
+  evidence_types:
+    - test_result
+    - architecture_check
+    - validation_result
+    - static_analysis
+    - security_scan
+    - benchmark
+    - runtime_observation
+    - audit_event
+  integrity:
+    immutable_after_commit: preferred
+    hashable: required
+    provenance: required
+    timestamp: required
+    producer: required
+  generated_evidence:
+    must_identify_source: true
+    must_not_be_authoritative: true
+
+traceability:
+  required: true
+  chain:
+    - enterprise_goal
+    - architecture_principle
+    - adr
+    - engineering_rule
+    - task
+    - implementation
+    - test
+    - validation
+    - evidence
+    - observation
+  source_to_change:
+    required: true
+  change_to_source:
+    required: true
+  commit_reference:
+    recommended: true
+
+ai_governance:
+  architecture_sensitive_work:
+    required_reading_order:
+      - ARCHITECTURE_CONSTITUTION.md
+      - docs/ADR_INDEX.md
+      - ENGINEERING_GUIDE.md
+      - docs/PROJECT_CONTEXT.md
+      - docs/CURRENT_CONTEXT.md
+      - docs/TASK.md
+      - source_code
+  principles:
+    - human_governance
+    - explicit_authority
+    - evidence_before_evolution
+    - reversible_changes
+    - validation_before_acceptance
+  autonomous_changes:
+    allowed_only_within_defined_scope: true
+    architecture_change_requires_human_governance: true
+    destructive_change_requires_explicit_authorization: true
+    generated_code_requires_validation: true
+    generated_documents_must_declare_provenance: true
+
+developer_experience:
+  repository_discovery:
+    required: true
+  developer_tools:
+    - repository_context
+    - repository_doctor
+    - repository_validator
+    - architecture_checker
+  diagnostics:
+    must_be_actionable: true
+    must_identify_check: true
+    must_identify_path_when_relevant: true
+    must_distinguish_warn_from_fail: true
+  local_verification:
+    expected_commands:
+      - python -m dxs.cli.main context --root .
+      - python -m dxs.cli.main doctor --root .
+      - python -m dxs.cli.main validate --root .
+      - python -m dxs.application.architecture_checker
+      - ruff check dxs
+      - mypy dxs
+      - pytest
+
+dxs_contract:
+  purpose: >
+    Provide a repository-aware governance and validation boundary for EAOS.
+  layers:
+    domain:
+      responsibility: repository_context_and_validation_models
+    application:
+      responsibility: doctor_validator_and_architecture_checks
+    adapters:
+      responsibility: filesystem_and_repository_discovery
+    cli:
+      responsibility: human_and_automation_entrypoints
+  required_properties:
+    deterministic: true
+    explainable: true
+    testable: true
+    fail_closed_for_governance_failures: true
+  validator_behavior:
+    missing_authoritative_source: fail
+    unreadable_source: fail
+    empty_authoritative_source: fail
+    invalid_contract: fail
+    missing_optional_document: warn
+  doctor_behavior:
+    purpose: discovery_and_health_diagnostics
+    existence_only_pass: prohibited
+    empty_source_must_not_be_reported_as_healthy: true
+
+observability:
+  required:
+    - structured_diagnostics
+    - validation_results
+    - architecture_results
+    - test_results
+  status_vocabulary:
+    - PASS
+    - WARN
+    - FAIL
+    - SKIP
+    - NOT_APPLICABLE
+  reports:
+    human_readable: required
+    machine_readable: recommended
+    evidence_link: recommended
+
+lifecycle:
+  states:
+    - proposed
+    - active
+    - deprecated
+    - superseded
+    - retired
+  transition_rules:
+    proposed_to_active:
+      requires:
+        - review
+        - validation
+    active_to_deprecated:
+      requires:
+        - replacement_or_reason
+        - migration_guidance
+    deprecated_to_superseded:
+      requires:
+        - successor_reference
+    active_to_retired:
+      requires:
+        - approval
+        - evidence_no_longer_required
+  repository_contract:
+    current_state: active
+
+compatibility:
+  policy:
+    preserve_existing_valid_behavior: true
+    additive_changes_preferred: true
+    breaking_changes_explicit: true
+  semantic_versioning:
+    major: breaking_contract_or_governance_change
+    minor: backward_compatible_contract_extension
+    patch: clarification_or_non_semantic_correction
+
+validation:
+  schema:
+    format: yaml
+    top_level_kind: RepositoryContract
+    required_sections:
+      - apiVersion
+      - kind
+      - metadata
+      - authority
+      - identity
+      - architecture
+      - repository
+      - package_rules
+      - testing
+      - quality_gates
+      - governance
+      - security
+      - evidence
+      - traceability
+      - ai_governance
+      - lifecycle
+  rules:
+    contract_must_be_non_empty: true
+    yaml_must_parse: true
+    authoritative_paths_must_exist: true
+    required_paths_must_exist: true
+    no_duplicate_authoritative_sources: true
+    architecture_change_requires_adr: true
+    release_requires_quality_gates: true
+    governance_failures_fail_closed: true
+
+maintenance:
+  owner: EAOS Architecture and Engineering Governance
+  review_triggers:
+    - architecture_baseline_change
+    - repository_layout_change
+    - new_governance_rule
+    - quality_gate_change
+    - security_policy_change
+    - DXS_validation_behavior_change
+    - major_dependency_change
+  review_frequency:
+    routine: quarterly
+    immediate: on_material_architecture_or_governance_change
+  update_policy:
+    change_contract_first_when_governance_changes: true
+    validate_after_change: true
+    update_adr_when_architecture_changes: true
+    update_current_context_when_operational_state_changes: true
+
+notes:
+  authority_boundary: >
+    This contract governs repository structure and executable repository
+    validation. It must not redefine constitutional principles. Where this
+    file and the Constitution differ, the Constitution prevails.
+  current_implementation_note: >
+    The DXS repository doctor currently discovers authoritative sources while
+    RepositoryValidator performs content-level validation. The contract
+    requires the final system behavior to distinguish discovery health from
+    semantic governance compliance.
+  long_term_goal: >
+    Make repository governance executable, observable, evidence-backed,
+    reversible, and maintainable across long-term EAOS evolution.

@@ -1,9 +1,9 @@
-"""Mô hình DTO cho hệ thống Kiến trúc Doanh nghiệp (ARCHITECTURE)."""
-
 from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import StrEnum
+
+"""Mô hình DTO cho hệ thống Kiến trúc Doanh nghiệp (ARCHITECTURE)."""
 
 
 class C4Level(StrEnum):

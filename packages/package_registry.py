@@ -1,10 +1,10 @@
-"""Monorepo Package Registry and Governance Audit Engine."""
-
 from __future__ import annotations
 
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Monorepo Package Registry and Governance Audit Engine."""
 
 
 class MonorepoPackageSpecDTO(BaseModel):

@@ -1,5 +1,3 @@
-"""Runtime Checker inspecting executables and minimum versions."""
-
 from __future__ import annotations
 
 import shutil
@@ -7,6 +5,8 @@ import subprocess
 import sys
 
 from tools.doctor.dto import DiagnosticCheckDTO, SeverityLevel
+
+"""Runtime Checker inspecting executables and minimum versions."""
 
 
 class RuntimeChecker:

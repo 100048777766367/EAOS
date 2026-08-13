@@ -1,10 +1,10 @@
-"""Decision Rules Evaluator Engine (DMN Pattern)."""
-
 from __future__ import annotations
 
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Decision Rules Evaluator Engine (DMN Pattern)."""
 
 
 class RuleConditionDTO(BaseModel):

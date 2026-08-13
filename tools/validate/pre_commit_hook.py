@@ -1,9 +1,3 @@
-"""OS-level Git pre-commit hook installer and AST enforcement engine.
-
-Enforces EAOS Architecture Constitution v3.0 rules directly at the
-AST level (Domain Purity, Layer Isolation, and Type Safety).
-"""
-
 import ast
 import subprocess
 import sys
@@ -11,6 +5,12 @@ from pathlib import Path
 from typing import Final
 
 from pydantic import BaseModel, ConfigDict
+
+"""OS-level Git pre-commit hook installer and AST enforcement engine.
+
+Enforces EAOS Architecture Constitution v3.0 rules directly at the
+AST level (Domain Purity, Layer Isolation, and Type Safety).
+"""
 
 
 class HookInstallationResult(BaseModel):
@@ -68,12 +68,12 @@ class PreCommitASTHookEngine:
             "# EAOS Constitution Gatekeeper - STRICT\n"
             "# ========================================\n"
             "echo 'Running EAOS AST Validation...'\n"
-            "python -c \"from tools.validate.pre_commit_hook "
+            'python -c "from tools.validate.pre_commit_hook '
             "import PreCommitASTHookEngine; "
             "import sys; "
             "engine = PreCommitASTHookEngine(); "
             "success = engine.run_pre_commit_validation(); "
-            "sys.exit(0 if success else 1)\"\n"
+            'sys.exit(0 if success else 1)"\n'
             "if [ $? -ne 0 ]; then\n"
             "  echo '========================================'\n"
             "  echo 'EAOS AST VALIDATION FAILED. BLOCKED.'\n"
@@ -119,14 +119,10 @@ class PreCommitASTHookEngine:
                 tree = ast.parse(code, filename=str(file_path))
 
                 if "domain" in file_path.parts:
-                    domain_violations = self._check_domain_purity(
-                        tree, file_path
-                    )
+                    domain_violations = self._check_domain_purity(tree, file_path)
                     violations.extend(domain_violations)
 
-                type_violations = self._check_type_annotations(
-                    tree, file_path
-                )
+                type_violations = self._check_type_annotations(tree, file_path)
                 violations.extend(type_violations)
 
             except SyntaxError as se:
@@ -179,23 +175,15 @@ class PreCommitASTHookEngine:
                 text=True,
                 check=True,
             )
-            return [
-                Path(line.strip())
-                for line in result.stdout.splitlines()
-                if line.strip().endswith(".py")
-            ]
+            return [Path(line.strip()) for line in result.stdout.splitlines() if line.strip().endswith(".py")]
         except Exception:
             return [
                 p.relative_to(root_path)
                 for p in root_path.rglob("*.py")
-                if ".venv" not in p.parts
-                and "build" not in p.parts
-                and "dist" not in p.parts
+                if ".venv" not in p.parts and "build" not in p.parts and "dist" not in p.parts
             ]
 
-    def _check_domain_purity(
-        self, tree: ast.Module, file_path: Path
-    ) -> list[ASTViolation]:
+    def _check_domain_purity(self, tree: ast.Module, file_path: Path) -> list[ASTViolation]:
         """Enforces Rule R4: Domain Purity."""
         violations: list[ASTViolation] = []
         for node in ast.walk(tree):
@@ -203,10 +191,7 @@ class PreCommitASTHookEngine:
                 for alias in node.names:
                     base_mod = alias.name.split(".")[0]
                     if base_mod in self.FORBIDDEN_DOMAIN_IMPORTS:
-                        msg = (
-                            f"Domain Purity Violation: Domain imports "
-                            f"forbidden module '{alias.name}'."
-                        )
+                        msg = f"Domain Purity Violation: Domain imports forbidden module '{alias.name}'."
                         violations.append(
                             ASTViolation(
                                 file_path=str(file_path),
@@ -218,10 +203,7 @@ class PreCommitASTHookEngine:
             elif isinstance(node, ast.ImportFrom) and node.module:
                 base_mod = node.module.split(".")[0]
                 if base_mod in self.FORBIDDEN_DOMAIN_IMPORTS:
-                    msg = (
-                        f"Domain Purity Violation: Domain imports "
-                        f"from forbidden module '{node.module}'."
-                    )
+                    msg = f"Domain Purity Violation: Domain imports from forbidden module '{node.module}'."
                     violations.append(
                         ASTViolation(
                             file_path=str(file_path),
@@ -232,9 +214,7 @@ class PreCommitASTHookEngine:
                     )
         return violations
 
-    def _check_type_annotations(
-        self, tree: ast.Module, file_path: Path
-    ) -> list[ASTViolation]:
+    def _check_type_annotations(self, tree: ast.Module, file_path: Path) -> list[ASTViolation]:
         """Enforces strict type safety annotations."""
         violations: list[ASTViolation] = []
         if "tests" in file_path.parts:
@@ -244,15 +224,8 @@ class PreCommitASTHookEngine:
             if isinstance(node, ast.FunctionDef):
                 if node.name.startswith("_") and node.name != "__init__":
                     continue
-                if (
-                    node.returns is None
-                    and node.name != "__init__"
-                    and not node.name.startswith("test_")
-                ):
-                    msg = (
-                        f"Strict Type Safety Violation: Function "
-                        f"'{node.name}' lacks return type annotation."
-                    )
+                if node.returns is None and node.name != "__init__" and not node.name.startswith("test_"):
+                    msg = f"Strict Type Safety Violation: Function '{node.name}' lacks return type annotation."
                     violations.append(
                         ASTViolation(
                             file_path=str(file_path),

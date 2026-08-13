@@ -1,8 +1,8 @@
-"""Mô phỏng thay đổi cấu trúc kiến trúc an toàn."""
-
 from __future__ import annotations
 
 from typing import Any
+
+"""Mô phỏng thay đổi cấu trúc kiến trúc an toàn."""
 
 
 class DryRunArchSimulator:

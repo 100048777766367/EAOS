@@ -3,7 +3,6 @@
 import sys
 from pathlib import Path
 
-# Add root workspace directory D:\EAOS to sys.path for standalone execution
 ROOT_PATH = Path(__file__).resolve().parent.parent.parent
 if str(ROOT_PATH) not in sys.path:
     sys.path.insert(0, str(ROOT_PATH))

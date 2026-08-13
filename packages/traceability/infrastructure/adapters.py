@@ -1,9 +1,9 @@
-"""Infrastructure adapters for Traceability repository."""
-
 from pathlib import Path
 
 from packages.traceability.domain.models import TraceabilityChainAggregate
 from packages.traceability.domain.ports import TraceabilityRepositoryPort
+
+"""Infrastructure adapters for Traceability repository."""
 
 
 class InMemoryTraceabilityRepository(TraceabilityRepositoryPort):

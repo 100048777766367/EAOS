@@ -1,8 +1,8 @@
-"""Documentation lifecycle validator and compliance scanner for EAOS."""
-
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict
+
+"""Documentation lifecycle validator and compliance scanner for EAOS."""
 
 
 class DocumentationAuditDTO(BaseModel):

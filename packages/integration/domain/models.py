@@ -1,6 +1,6 @@
-"""Domain entities and value objects for Integration context."""
-
 from pydantic import BaseModel, ConfigDict
+
+"""Domain entities and value objects for Integration context."""
 
 
 class IntegrationStatusVO(BaseModel):

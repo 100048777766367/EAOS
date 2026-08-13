@@ -1,6 +1,6 @@
-"""Infrastructure Adapters for Autonomous Package."""
-
 from typing import Any
+
+"""Infrastructure Adapters for Autonomous Package."""
 
 
 class PostgresAutonomousRepository:

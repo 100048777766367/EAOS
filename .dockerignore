@@ -1,0 +1,27 @@
+# Môi trường ảo và bộ nhớ cache Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.pytest_tmp/
+.coverage
+htmlcov/
+
+# Nhật ký và tệp tạm hệ thống
+*.log
+.env
+dist/
+build/
+*.egg-info/
+
+# Quản lý phiên bản và tài liệu cục bộ
+.git/
+.github/
+README.md
+**/__pycache__
+**/.pytest_cache
+**/.venv
+.git
+.github

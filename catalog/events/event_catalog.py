@@ -1,8 +1,8 @@
-"""Domain Events Catalog (EDA Pattern)."""
-
 from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Domain Events Catalog (EDA Pattern)."""
 
 
 class EventElementDTO(BaseModel):

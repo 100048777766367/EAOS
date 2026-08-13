@@ -1,8 +1,8 @@
-"""JSON Formatter for EAOS Doctor Report."""
-
 from __future__ import annotations
 
 from tools.doctor.dto import DiagnosticReportDTO
+
+"""JSON Formatter for EAOS Doctor Report."""
 
 
 class JSONReporter:

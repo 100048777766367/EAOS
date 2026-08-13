@@ -1,6 +1,6 @@
-"""EAOS Doctor v2 Health & Validation CLI."""
-
 import sys
+
+"""EAOS Doctor v2 Health & Validation CLI."""
 
 
 def run_doctor() -> None:

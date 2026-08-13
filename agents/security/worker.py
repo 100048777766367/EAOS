@@ -1,10 +1,10 @@
-"""Autonomous Security Agent Worker."""
-
 from __future__ import annotations
 
 from pathlib import Path
 
 from agents.base import AgentRole, AgentWorkResult
+
+"""Autonomous Security Agent Worker."""
 
 
 class SecurityWorker:

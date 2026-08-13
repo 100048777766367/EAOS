@@ -1,6 +1,6 @@
-"""Automated chaos engineering daemon executing background fault injections."""
-
 from pydantic import BaseModel, ConfigDict
+
+"""Automated chaos engineering daemon executing background fault injections."""
 
 
 class ChaosDaemonStatusDTO(BaseModel):

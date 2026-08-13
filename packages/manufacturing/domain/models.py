@@ -1,8 +1,8 @@
-"""Manufacturing & Supply Chain Domain Model for EAOS Capability App."""
-
 from datetime import UTC, datetime
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Manufacturing & Supply Chain Domain Model for EAOS Capability App."""
 
 
 class ProductionOrder(BaseModel):

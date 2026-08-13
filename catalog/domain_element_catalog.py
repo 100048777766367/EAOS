@@ -1,9 +1,9 @@
-"""Domain element catalog module."""
-
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import Any
+
+"""Domain element catalog module."""
 
 
 @dataclass

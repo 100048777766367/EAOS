@@ -24,11 +24,7 @@ class GeminiKeyRotator:
     """Manages atomic Round-Robin key rotation for Gemini API Keys."""
 
     def __init__(self, keys_str: str, single_key: str = "") -> None:
-        parsed = [
-            k.strip()
-            for k in keys_str.split(",")
-            if k.strip() and not k.strip().startswith("toi-da-co")
-        ]
+        parsed = [k.strip() for k in keys_str.split(",") if k.strip() and not k.strip().startswith("toi-da-co")]
         if not parsed and single_key and not single_key.startswith("toi-da-co"):
             parsed = [single_key.strip()]
 
@@ -69,10 +65,7 @@ class MultiProviderResilientGateway:
                 )
 
         # 2. Secondary: Groq
-        if (
-            self.settings.groq_api_key
-            and not self.settings.groq_api_key.startswith("toi-da-co")
-        ):
+        if self.settings.groq_api_key and not self.settings.groq_api_key.startswith("toi-da-co"):
             return LLMResponseDTO(
                 provider_used="groq",
                 model_used="llama3-70b-8832",
@@ -81,10 +74,7 @@ class MultiProviderResilientGateway:
             )
 
         # 3. Tertiary: OpenRouter
-        if (
-            self.settings.openrouter_api_key
-            and not self.settings.openrouter_api_key.startswith("toi-da-co")
-        ):
+        if self.settings.openrouter_api_key and not self.settings.openrouter_api_key.startswith("toi-da-co"):
             return LLMResponseDTO(
                 provider_used="openrouter",
                 model_used="auto",
@@ -96,9 +86,6 @@ class MultiProviderResilientGateway:
         return LLMResponseDTO(
             provider_used="ollama_local",
             model_used=self.settings.ollama_model,
-            content=(
-                f"[Ollama Offline Local Answer via "
-                f"{self.settings.ollama_base_url} for: {prompt[:20]}...]"
-            ),
+            content=(f"[Ollama Offline Local Answer via {self.settings.ollama_base_url} for: {prompt[:20]}...]"),
             fallback_triggered=True,
         )

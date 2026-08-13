@@ -1,6 +1,6 @@
-"""Quantum capability ledger module."""
-
 from __future__ import annotations
+
+"""Quantum capability ledger module."""
 
 
 class QuantumCapabilityLedger:

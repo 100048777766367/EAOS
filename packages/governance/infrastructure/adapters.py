@@ -139,16 +139,8 @@ class Neo4jRestAdapter(KnowledgeGraphPort):
         """Đưa logic truy vấn từ __init__ về đúng phương thức này."""
         try:
             auth_str = f"{self.auth[0]}:{self.auth[1]}"
-            b64_auth = base64.b64encode(auth_str.encode("utf-8")).decode(
-                "utf-8"
-            )
-            payload = json.dumps(
-                {
-                    "statements": [
-                        {"statement": "MATCH (n) RETURN count(n) AS c"}
-                    ]
-                }
-            ).encode("utf-8")
+            b64_auth = base64.b64encode(auth_str.encode("utf-8")).decode("utf-8")
+            payload = json.dumps({"statements": [{"statement": "MATCH (n) RETURN count(n) AS c"}]}).encode("utf-8")
 
             req = urllib.request.Request(
                 self.url,

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import cast
+
 from tools.cli.base import BaseCLICommand
 from tools.cli.dto import CLIContextDTO, CLIExitCode
 from tools.cli.services import (
@@ -64,6 +66,27 @@ class BenchmarkCommand:
         return self.service.run_benchmark_suite(ctx)
 
 
+class ControlPlaneCommand:
+    """CLI Command for EAOS Control Plane Execution & Audit."""
+
+    command_name = "control-plane"
+    help_text = "Execute EAOS Control Plane state machine, audit & strategy evaluation"
+
+    def execute(self, ctx: CLIContextDTO) -> CLIExitCode:
+        from kernel.control_plane.cli import EAOSControlPlaneCLI
+
+        cli = EAOSControlPlaneCLI(workspace_root=ctx.workspace_root)
+        res = cli.run_control_plane_audit()
+        print("==========================================")
+        print("     EAOS CONTROL PLANE AUDIT REPORT      ")
+        print("==========================================")
+        for k, v in res.items():
+            print(f"  {k:<20}: {v}")
+        print("==========================================")
+        val = 0 if res["status"] == "PASS" else 1
+        return cast(CLIExitCode, val)
+
+
 class CLICommandRegistry:
     """Registry providing extensible CLI commands."""
 
@@ -76,6 +99,7 @@ class CLICommandRegistry:
         self.register(ValidateCommand())
         self.register(RuntimeCommand())
         self.register(BenchmarkCommand())
+        self.register(ControlPlaneCommand())
 
     def register(self, command: BaseCLICommand) -> None:
         """Register a new CLI command dynamically."""

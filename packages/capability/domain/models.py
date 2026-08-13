@@ -1,10 +1,10 @@
-"""Evidence-Based Public Contract Baseline for Capability Domain."""
-
 import uuid
 from datetime import UTC, datetime
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Evidence-Based Public Contract Baseline for Capability Domain."""
 
 
 class CapabilityContract(BaseModel):

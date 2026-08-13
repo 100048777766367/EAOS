@@ -4,7 +4,7 @@ from packages.learning.domain.models import Experience
 
 
 class ExperienceRepository(Protocol):
-    """Port Ä‘á»‹nh nghÄ©a cÃ¡c hÃ nh vi lÆ°u trá»¯ tri thá»©c kinh nghiá»‡m."""
+    """Port Ä‘á»‹nh nghÄ©a cÃ¡c hÃ nh vi lÆ°u trá»¯ tri thá»©c kinh nghiá»‡m."""
 
     def save(self, exp: Experience) -> Experience: ...
 

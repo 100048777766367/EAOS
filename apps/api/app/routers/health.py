@@ -1,5 +1,3 @@
-"""Health and System Status Router."""
-
 from typing import Any
 
 from fastapi import APIRouter
@@ -8,6 +6,9 @@ from tools.dashboard.control_room import ControlRoomDashboard
 
 from apps.api.app.container import ROOT_PATH
 from apps.api.app.dto.api_response_dto import HealthResponse
+
+"""Health and System Status Router."""
+
 
 router = APIRouter(tags=["Health & Status"])
 

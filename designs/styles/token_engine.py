@@ -1,9 +1,9 @@
-"""Design Token Engine converting tokens to CSS Variables and Tailwind Config."""
-
 import json
 from pathlib import Path
 
 from pydantic import BaseModel, Field
+
+"""Design Token Engine converting tokens to CSS Variables and Tailwind Config."""
 
 
 class ColorTokens(BaseModel):

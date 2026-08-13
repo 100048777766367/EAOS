@@ -1,8 +1,8 @@
-"""Application use cases for Financial Accounting and FinOps."""
-
 import uuid
 
 from packages.finance.domain.models import FinancialLedgerEntry
+
+"""Application use cases for Financial Accounting and FinOps."""
 
 
 class RecordFinancialTransactionUseCase:

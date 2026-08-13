@@ -1,10 +1,10 @@
-"""Extensible Kubernetes Cluster Checker Placeholder."""
-
 from __future__ import annotations
 
 import shutil
 
 from tools.doctor.dto import DiagnosticCheckDTO, SeverityLevel
+
+"""Extensible Kubernetes Cluster Checker Placeholder."""
 
 
 class KubernetesChecker:

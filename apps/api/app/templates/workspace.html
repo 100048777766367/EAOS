@@ -1,0 +1,173 @@
+﻿<!DOCTYPE html>
+<html lang="vi" class="dark h-full">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>{{ title | default("EAOS Fullscreen Workspace") }}</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Monaco Editor Loader CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        code, pre, .font-mono { font-family: 'Fira Code', monospace; }
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: #030712; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+    </style>
+</head>
+<body class="bg-[#030712] text-slate-100 h-screen overflow-hidden flex flex-col select-none">
+
+    <!-- 1. FULLSCREEN TOP TOOLBAR -->
+    <header class="h-11 bg-[#060b17] border-b border-slate-800/80 px-4 flex justify-between items-center shrink-0 z-20">
+        <!-- Left Title & File Breadcrumb -->
+        <div class="flex items-center space-x-3">
+            <h1 class="text-xs font-bold font-mono text-cyan-400 flex items-center space-x-2">
+                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                <span>🖥️ FULLSCREEN IDE MODE</span>
+            </h1>
+            <span class="text-slate-700">|</span>
+            <div id="full-file-breadcrumb" class="text-xs font-mono text-slate-300 bg-slate-900/80 px-2.5 py-1 rounded border border-slate-800">
+                apps/api/app/routers/chat.py
+            </div>
+        </div>
+
+        <!-- Middle Quick Toolbar -->
+        <div class="flex items-center space-x-2 font-mono text-xs">
+            <button onclick="saveFullscreenFile()" class="px-3 py-1 bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-800/80 text-emerald-300 rounded font-semibold transition flex items-center space-x-1">
+                <span>💾 Save (Ctrl+S)</span>
+            </button>
+            <button onclick="formatFullscreenCode()" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 rounded transition">
+                <span>⚡ Format Code</span>
+            </button>
+            <select id="language-select" onchange="changeLanguage()" class="bg-slate-900 border border-slate-700 text-slate-300 text-xs rounded px-2.5 py-1 focus:outline-none">
+                <option value="python">Python</option>
+                <option value="javascript">JavaScript</option>
+                <option value="json">JSON</option>
+                <option value="html">HTML</option>
+            </select>
+        </div>
+
+        <!-- Right Return Link -->
+        <div class="flex items-center space-x-3">
+            <a href="/chat" class="px-3 py-1 bg-cyan-950 hover:bg-cyan-900 border border-cyan-800 text-cyan-300 text-xs font-semibold rounded transition flex items-center space-x-1">
+                <span>← Quay lại Workbench</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- 2. MONACO EDITOR CONTAINER -->
+    <main class="flex-1 min-h-0 relative bg-[#030712]">
+        <div id="monaco-full-container" class="absolute inset-0"></div>
+    </main>
+
+    <!-- 3. FOOTER STATUS BAR -->
+    <footer class="h-6 bg-[#040710] border-t border-slate-800/80 px-4 flex justify-between items-center text-[11px] font-mono text-slate-500 shrink-0">
+        <div class="flex items-center space-x-4">
+            <span id="editor-pos" class="text-slate-400">Ln 1, Col 1</span>
+            <span>UTF-8</span>
+            <span>Spaces: 4</span>
+        </div>
+        <div class="flex items-center space-x-4">
+            <span class="text-emerald-400">● Post-Quantum Ledger Active</span>
+            <span class="text-cyan-400">EAOS v0.1.0</span>
+        </div>
+    </footer>
+
+    <!-- 4. JAVASCRIPT INITIALIZATION ENGINE -->
+    <script>
+        let fullEditorInstance = null;
+        let activePath = "apps/api/app/routers/chat.py";
+
+        // Khởi tạo Monaco Editor Fullscreen
+        require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' } });
+        require(['vs/editor/editor.main'], function () {
+            fullEditorInstance = monaco.editor.create(document.getElementById('monaco-full-container'), {
+                value: '# EAOS Fullscreen IDE Engine Loading...\n',
+                language: 'python',
+                theme: 'vs-dark',
+                automaticLayout: true,
+                fontSize: 14,
+                fontFamily: 'Fira Code',
+                minimap: { enabled: true },
+                lineNumbers: 'on',
+                scrollBeyondLastLine: false,
+                padding: { top: 12 }
+            });
+
+            // Lắng nghe vị trí con trỏ chuột (Cursor Position)
+            fullEditorInstance.onDidChangeCursorPosition((e) => {
+                document.getElementById('editor-pos').innerText = `Ln ${e.position.lineNumber}, Col ${e.position.column}`;
+            });
+
+            // Lắng nghe phím tắt Ctrl + S để lưu file thật
+            fullEditorInstance.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, function () {
+                saveFullscreenFile();
+            });
+
+            // Tải nội dung file thật khi khởi tạo
+            loadFullscreenFile(activePath);
+        });
+
+        // Tải nội dung file thật từ ổ đĩa (/api/files/content)
+        async function loadFullscreenFile(filePath) {
+            try {
+                const res = await fetch(`/api/files/content?path=${encodeURIComponent(filePath)}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (fullEditorInstance) {
+                        fullEditorInstance.setValue(data.content);
+                    }
+                }
+            } catch (err) {
+                console.error("Lỗi nạp file:", err);
+            }
+        }
+
+        // Lưu file thật về đĩa (/api/files/save)
+        async function saveFullscreenFile() {
+            if (!fullEditorInstance) return;
+            const content = fullEditorInstance.getValue();
+
+            try {
+                const res = await fetch('/api/files/save', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ path: activePath, content: content })
+                });
+
+                if (res.ok) {
+                    showFullscreenToast("✔ Đã lưu file thành công về đĩa cứng!");
+                }
+            } catch (err) {
+                console.error("Lỗi lưu file:", err);
+            }
+        }
+
+        // Định dạng code
+        function formatFullscreenCode() {
+            if (fullEditorInstance) {
+                fullEditorInstance.getAction('editor.action.formatDocument').run();
+            }
+        }
+
+        // Đổi ngôn ngữ
+        function changeLanguage() {
+            const lang = document.getElementById('language-select').value;
+            if (fullEditorInstance) {
+                monaco.editor.setModelLanguage(fullEditorInstance.getModel(), lang);
+            }
+        }
+
+        // Hiển thị thông báo Toast
+        function showFullscreenToast(text) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-8 right-8 px-4 py-2 bg-emerald-500 text-slate-950 font-bold font-sans text-xs rounded-lg shadow-2xl z-50 animate-bounce';
+            toast.innerText = text;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2500);
+        }
+    </script>
+</body>
+</html>

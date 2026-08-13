@@ -1,8 +1,8 @@
-"""Git Agent Domain Models (Phase 4 / Level 10)."""
-
 from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Git Agent Domain Models (Phase 4 / Level 10)."""
 
 
 class GitOperationResult(BaseModel):

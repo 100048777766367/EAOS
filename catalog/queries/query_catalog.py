@@ -1,8 +1,8 @@
-"""CQRS Queries Catalog (CQRS Pattern)."""
-
 from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""CQRS Queries Catalog (CQRS Pattern)."""
 
 
 class QueryElementDTO(BaseModel):

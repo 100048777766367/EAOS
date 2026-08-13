@@ -1,6 +1,6 @@
-"""Giao thức truyền thông điệp Swarm Message Bus."""
-
 from __future__ import annotations
+
+"""Giao thức truyền thông điệp Swarm Message Bus."""
 
 
 class SwarmProtocol:

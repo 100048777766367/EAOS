@@ -1,10 +1,10 @@
-"""Agent base definitions."""
-
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import StrEnum
 from typing import Any
+
+"""Agent base definitions."""
 
 
 class AgentRole(StrEnum):

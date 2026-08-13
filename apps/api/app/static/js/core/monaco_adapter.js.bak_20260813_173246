@@ -1,0 +1,247 @@
+let monacoEditor = null;
+
+function getContainer(containerId) {
+    return document.getElementById(containerId);
+}
+
+function revealEditorHost(container) {
+    if (!container) {
+        return;
+    }
+
+    /*
+     * The editor host must be layout-visible before Monaco measures it.
+     *
+     * Tailwind's `hidden` class uses display:none and is NOT cleared by
+     * setting element.hidden = false. This was the important failure mode
+     * observed by the Playwright test.
+     */
+    container.hidden = false;
+    container.removeAttribute('hidden');
+    container.classList.remove('hidden');
+
+    if (container.style.display === 'none') {
+        container.style.removeProperty('display');
+    }
+
+    if (container.style.visibility === 'hidden') {
+        container.style.removeProperty('visibility');
+    }
+
+    container.style.width = '100%';
+    container.style.height = '100%';
+    container.style.minHeight = '250px';
+    container.style.visibility = 'visible';
+
+    /*
+     * Do not indiscriminately reveal arbitrary ancestors.
+     * Only reveal the known editor pane when one exists.
+     */
+    const editorPane =
+        container.closest('[data-eaos-pane="editor"]') ||
+        container.closest('.eaos-editor-pane');
+
+    if (editorPane) {
+        editorPane.hidden = false;
+        editorPane.removeAttribute('hidden');
+        editorPane.classList.remove('hidden');
+
+        if (editorPane.style.display === 'none') {
+            editorPane.style.removeProperty('display');
+        }
+
+        if (editorPane.style.visibility === 'hidden') {
+            editorPane.style.removeProperty('visibility');
+        }
+    }
+}
+
+function dispatchEditorVisibilityReady(container) {
+    if (!container) {
+        return;
+    }
+
+    window.dispatchEvent(
+        new CustomEvent('eaos:monaco-visibility-ready', {
+            detail: {
+                host: container
+            }
+        })
+    );
+}
+
+export function initMonacoAdapter(
+    containerId,
+    initialCode = '',
+    language = 'python'
+) {
+    return new Promise((resolve) => {
+        const container = getContainer(containerId);
+
+        if (!container) {
+            console.error(
+                `[EAOS Monaco] Container not found: ${containerId}`
+            );
+
+            resolve();
+            return;
+        }
+
+        revealEditorHost(container);
+
+        const initialize = () => {
+            revealEditorHost(container);
+
+            setupMonaco(
+                containerId,
+                initialCode,
+                language
+            );
+
+            revealEditorHost(container);
+            dispatchEditorVisibilityReady(container);
+
+            /*
+             * Monaco's automaticLayout normally handles this, but an
+             * explicit layout after the browser has painted prevents a
+             * zero-sized editor when the pane was previously hidden.
+             */
+            requestAnimationFrame(() => {
+                revealEditorHost(container);
+
+                if (monacoEditor) {
+                    monacoEditor.layout();
+                }
+            });
+
+            resolve();
+        };
+
+        if (window.monaco) {
+            initialize();
+            return;
+        }
+
+        if (!window.require) {
+            const script = document.createElement('script');
+
+            script.src =
+                'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js';
+
+            script.onload = () => {
+                window.require.config({
+                    paths: {
+                        vs:
+                            'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs'
+                    }
+                });
+
+                window.require(
+                    ['vs/editor/editor.main'],
+                    initialize
+                );
+            };
+
+            script.onerror = () => {
+                console.error(
+                    '[EAOS Monaco] Failed to load Monaco loader.'
+                );
+
+                resolve();
+            };
+
+            document.head.appendChild(script);
+        } else {
+            window.require(
+                ['vs/editor/editor.main'],
+                initialize
+            );
+        }
+    });
+}
+
+function setupMonaco(
+    containerId,
+    initialCode,
+    language
+) {
+    const container = getContainer(containerId);
+
+    if (!container) {
+        return;
+    }
+
+    revealEditorHost(container);
+
+    if (monacoEditor) {
+        monacoEditor.dispose();
+        monacoEditor = null;
+    }
+
+    container.innerHTML = '';
+
+    monacoEditor = monaco.editor.create(
+        container,
+        {
+            value: initialCode,
+            language: language,
+            theme: 'vs-dark',
+            automaticLayout: true,
+            fontSize: 12,
+            fontFamily: "'Fira Code', monospace",
+            minimap: {
+                enabled: false
+            },
+            scrollBeyondLastLine: false,
+            readOnly: false
+        }
+    );
+
+    /*
+     * Make the editor available to E2E/application integration.
+     */
+    container.setAttribute(
+        'data-editor-ready',
+        'true'
+    );
+
+    requestAnimationFrame(() => {
+        revealEditorHost(container);
+
+        if (monacoEditor) {
+            monacoEditor.layout();
+        }
+    });
+}
+
+export function updateMonacoCode(
+    code,
+    language = 'python'
+) {
+    if (!monacoEditor) {
+        return;
+    }
+
+    const oldModel =
+        monacoEditor.getModel();
+
+    const model =
+        monaco.editor.createModel(
+            code,
+            language
+        );
+
+    monacoEditor.setModel(model);
+
+    if (oldModel) {
+        oldModel.dispose();
+    }
+
+    monacoEditor.layout();
+}
+
+export function getMonacoCode() {
+    return monacoEditor
+        ? monacoEditor.getValue()
+        : '';
+}

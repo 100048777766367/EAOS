@@ -1,9 +1,9 @@
-"""Domain Ports and DTOs for Governance Package."""
-
 from datetime import UTC, datetime
 from typing import Any, Protocol
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Domain Ports and DTOs for Governance Package."""
 
 
 class ScanDiagnostic(BaseModel):
@@ -32,9 +32,7 @@ class AuditSnapshotDTO(BaseModel):
     instability_index: float = Field(default=0.0)
     package_cohesion: float = Field(default=1.0)
     diagnostics_summary: list[Any] = Field(default_factory=list)
-    timestamp: datetime | float = Field(
-        default_factory=lambda: datetime.now(UTC)
-    )
+    timestamp: datetime | float = Field(default_factory=lambda: datetime.now(UTC))
 
     model_config = ConfigDict(frozen=True)
 

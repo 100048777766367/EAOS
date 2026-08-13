@@ -1,6 +1,6 @@
-"""Executable entrypoint for EAOS Desktop Application."""
-
 from __future__ import annotations
+
+"""Executable entrypoint for EAOS Desktop Application."""
 
 
 def main() -> None:

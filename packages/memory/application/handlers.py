@@ -1,10 +1,10 @@
-"""Memory Application Handlers."""
-
 import uuid
 
 from packages.memory.application.dto import MemoryResponse, StoreMemoryCommand
 from packages.memory.domain.entities import MemoryRecord
 from packages.memory.domain.ports import MemoryRepositoryPort
+
+"""Memory Application Handlers."""
 
 
 class StoreMemoryHandler:

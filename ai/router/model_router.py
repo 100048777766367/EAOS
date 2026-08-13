@@ -1,10 +1,10 @@
-"""FinOps model router."""
-
 from __future__ import annotations
 
 from dataclasses import dataclass
 
 from ai.models.model_provider import AIProviderType
+
+"""FinOps model router."""
 
 
 @dataclass

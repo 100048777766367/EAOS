@@ -1,8 +1,8 @@
-"""Change Propagation Domain Models (Phase 3)."""
-
 from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Change Propagation Domain Models (Phase 3)."""
 
 
 class AffectedArtifact(BaseModel):

@@ -1,8 +1,8 @@
-"""Framework View Translator rendering EAOS into TOGAF/ArchiMate/Zachman."""
-
 from typing import ClassVar
 
 from pydantic import BaseModel, ConfigDict
+
+"""Framework View Translator rendering EAOS into TOGAF/ArchiMate/Zachman."""
 
 
 class FrameworkViewProjectionDTO(BaseModel):

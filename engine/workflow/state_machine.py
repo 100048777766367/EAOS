@@ -1,6 +1,6 @@
-"""Finite State Machine (FSM) workflow engine with stuck auto-rescue."""
-
 from pydantic import BaseModel, ConfigDict
+
+"""Finite State Machine (FSM) workflow engine with stuck auto-rescue."""
 
 
 class StateTransitionDTO(BaseModel):

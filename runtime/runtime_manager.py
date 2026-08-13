@@ -4,26 +4,27 @@ from __future__ import annotations
 
 from typing import Any
 
-from automation.dry_run_runtime_simulator import (
+from runtime.automation.dry_run_runtime_simulator import (
     DryRunRuntimeSimulator,
 )
-from cache.cache_engine import CacheEngine
-from events.event_mesh_engine import EventMeshEngine
-from governance.governance_runtime_engine import (
+from runtime.cache.cache_engine import CacheEngine
+from runtime.events.event_mesh_engine import EventMeshEngine
+from runtime.governance.governance_runtime_engine import (
     GovernanceRuntimeEngine,
 )
-from inventory.inventory_engine import InventoryEngine
-from logs.logging_engine import LoggingEngine
-from metrics.metrics_engine import MetricsEngine
-from models import RuntimeStateSnapshot
-from policies.policy_runtime_engine import PolicyRuntimeEngine
-from registry.service_registry_engine import (
+from runtime.inventory.inventory_engine import InventoryEngine
+from runtime.logs.logging_engine import LoggingEngine
+from runtime.metrics.metrics_engine import MetricsEngine
+from runtime.models import RuntimeStateSnapshot
+from runtime.policies.policy_runtime_engine import PolicyRuntimeEngine
+from runtime.registry.service_registry_engine import (
     ServiceRegistryEngine,
 )
-from sessions.session_engine import SessionEngine
-from state.fsm_state_engine import FsmStateEngine
-from traces.quantum_runtime_ledger import QuantumRuntimeLedger
-from traces.trace_engine import TraceEngine
+from runtime.runtime_control_plane import RuntimeControlPlane
+from runtime.sessions.session_engine import SessionEngine
+from runtime.state.fsm_state_engine import FsmStateEngine
+from runtime.traces.quantum_runtime_ledger import QuantumRuntimeLedger
+from runtime.traces.trace_engine import TraceEngine
 
 
 class RuntimeManager:
@@ -41,6 +42,7 @@ class RuntimeManager:
         self.sessions = SessionEngine()
         self.fsm = FsmStateEngine()
         self.traces = TraceEngine()
+        self.control_plane = RuntimeControlPlane()
 
     def capture_runtime_snapshot(self) -> RuntimeStateSnapshot:
         """Chụp ảnh trạng thái vận hành thời gian thực."""

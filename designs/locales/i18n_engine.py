@@ -1,8 +1,9 @@
-"""I18n Catalog Engine Implementation."""
-
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Final
+from typing import Any, Final
+
+"""I18n Catalog Engine Implementation."""
+
 
 __all__ = ["I18nCatalogEngine"]
 
@@ -32,9 +33,7 @@ class I18nCatalogEngine:
 
     def translate(self, lang: str, key: str, **kwargs: str) -> str:
         """Translate key for given language: translate(lang, key)."""
-        catalog: Final[dict[str, str]] = self._catalogs.get(
-            lang, self._catalogs.get("vi", {})
-        )
+        catalog: Final[dict[str, str]] = self._catalogs.get(lang, self._catalogs.get("vi", {}))
         val = catalog.get(key, key)
         if kwargs and isinstance(val, str):
             for k, v in kwargs.items():
@@ -46,3 +45,14 @@ class I18nCatalogEngine:
 
     def get(self, key: str, locale: str = "vi") -> str:
         return self.translate(locale, key)
+
+
+class I18nEngine:
+    """Internationalization engine for UI components and localization catalog."""
+
+    def __init__(self, catalog: Any = None) -> None:
+        self.catalog = catalog or {}
+
+    def translate(self, key: str, **kwargs: Any) -> str:
+        """Translate a localization key."""
+        return self.catalog.get(key, key)

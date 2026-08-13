@@ -1,5 +1,3 @@
-"""Application Services for EAOS Memory Domain (CQRS Segregated)."""
-
 import uuid
 from datetime import UTC, datetime
 
@@ -8,6 +6,9 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from packages.memory.domain.entities import MemoryRecord
 from packages.memory.domain.ports import MemoryRepositoryPort
+
+"""Application Services for EAOS Memory Domain (CQRS Segregated)."""
+
 
 logger = structlog.get_logger()
 

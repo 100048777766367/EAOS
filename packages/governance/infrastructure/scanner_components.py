@@ -1,10 +1,10 @@
-"""Single Responsibility Sub-components for Workspace and AST Scanning."""
-
 import ast
 import os
 from pathlib import Path
 
 from packages.governance.domain.ports import ScanDiagnostic
+
+"""Single Responsibility Sub-components for Workspace and AST Scanning."""
 
 
 class WorkspaceWalker:

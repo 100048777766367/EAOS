@@ -1,10 +1,10 @@
-"""Executable entrypoint for EAOS CLI Application."""
-
 from __future__ import annotations
 
 import sys
 
 from tools.cli.app import EAOSCLIApp
+
+"""Executable entrypoint for EAOS CLI Application."""
 
 
 def main() -> None:

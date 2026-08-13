@@ -1,8 +1,8 @@
-"""AI Agent Management Domain Models for EAOS."""
-
 from datetime import UTC, datetime
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""AI Agent Management Domain Models for EAOS."""
 
 
 class AIAgentProfile(BaseModel):

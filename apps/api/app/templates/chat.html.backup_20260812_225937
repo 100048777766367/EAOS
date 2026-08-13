@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark h-full">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>{{ title | default("EAOS Enterprise AI IDE Studio") }}</title>
+    <link rel="stylesheet" href="/static/css/chat.css"/>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        code, pre, .font-mono { font-family: 'Fira Code', monospace; }
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: #030712; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #334155; }
+    </style>
+</head>
+<body class="bg-[#030712] text-slate-200 h-screen flex flex-col overflow-hidden select-none">
+
+    <!-- 1. TITLE BAR (TOP HEADER) -->
+    {% include 'components/ide/title_bar.html' %}
+
+    <!-- 2. MAIN WORKSPACE -->
+    <div class="flex-1 flex min-h-0 relative overflow-hidden eaos-workspace-shell">
+        
+        <!-- CỘT TRÁI: ACTIVITY BAR & FILE EXPLORER -->
+        {% include 'components/ide/activity_bar.html' %}
+        {% include 'components/ide/explorer_sidebar.html' %}
+<div id="resizer-explorer" class="eaos-pane-resizer eaos-horizontal-resizer" role="separator" aria-orientation="vertical"></div>
+
+        <!-- CỘT TRUNG TÂM: MONACO EDITOR (CHIẾM 100% DIỆN TÍCH TRUNG TÂM) + TERMINAL -->
+        <main class="eaos-center-workspace flex-1 flex flex-col min-w-0 bg-[#030712] border-r border-slate-800/80">
+            <!-- MONACO CODE EDITOR (KHUNG CHÍNH GIỮA) -->
+            <div class="eaos-editor-pane flex-1 min-h-0 flex flex-col bg-[#030712]">
+                {% include 'components/ide/editor_pane.html' %}
+            </div>
+            
+            <!-- TERMINAL CONSOLE (KHUNG BÊN DƯỚI) -->
+            <div id="resizer-terminal" class="eaos-pane-resizer eaos-vertical-resizer" role="separator" aria-orientation="horizontal"></div>
+{% include 'components/ide/terminal_pane.html' %}
+        </main>
+
+        <!-- CỘT PHẢI: AI COPILOT CHAT & INSPECTOR SIDEBAR -->
+        <div id="resizer-copilot" class="eaos-pane-resizer eaos-horizontal-resizer" role="separator" aria-orientation="vertical"></div>
+<div id="pane-right-inspector" class="eaos-copilot-shell w-80 flex flex-col shrink-0 bg-[#060b17] border-l border-slate-800/80 overflow-y-auto space-y-3 p-2">
+            {% include 'components/ide/chat_pane.html' %}
+            {% include 'components/ide/inspector_sidebar.html' %}
+        </div>
+
+    </div>
+
+    <!-- 3. FOOTER STATUS BAR -->
+    {% include 'partials/status_bar.html' %}
+
+    <!-- 4. JAVASCRIPT ENTRY MODULE -->
+    <script type="module" src="/static/js/main.js"></script>
+</body>
+</html>

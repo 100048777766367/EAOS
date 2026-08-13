@@ -1,8 +1,8 @@
-"""Domain ports for Enterprise Metrics Engine context."""
-
 from typing import Any, Protocol
 
 from packages.metrics_engine.domain.models import ArchitectureHealthAggregate
+
+"""Domain ports for Enterprise Metrics Engine context."""
 
 
 class MetricsRepositoryPort(Protocol):

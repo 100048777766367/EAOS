@@ -1,8 +1,8 @@
-"""Domain ports for Policy Engine context."""
-
 from typing import Any, Protocol
 
 from packages.policy_engine.domain.models import PolicyDocumentAggregate
+
+"""Domain ports for Policy Engine context."""
 
 
 class PolicyRepositoryPort(Protocol):

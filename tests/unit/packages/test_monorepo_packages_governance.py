@@ -1,10 +1,10 @@
-"""Unit tests for packages/ monorepo governance scanner."""
-
 from __future__ import annotations
 
 from pathlib import Path
 
 from packages.package_registry import MonorepoPackageRegistryEngine
+
+"""Unit tests for packages/ monorepo governance scanner."""
 
 
 def test_monorepo_package_registry_audit(tmp_path: Path) -> None:

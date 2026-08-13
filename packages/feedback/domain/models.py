@@ -1,8 +1,8 @@
-"""Domain models for the Feedback Loop bounded context."""
-
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from enum import Enum, auto
+
+"""Domain models for the Feedback Loop bounded context."""
 
 
 class FeedbackSource(Enum):

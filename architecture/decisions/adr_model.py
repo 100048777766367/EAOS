@@ -1,11 +1,11 @@
-"""Architecture Decision Records (ADR) Domain Models."""
-
 from __future__ import annotations
 
 from datetime import UTC, datetime
 from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Architecture Decision Records (ADR) Domain Models."""
 
 
 class ADRStatus(StrEnum):

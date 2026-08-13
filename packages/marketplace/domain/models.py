@@ -17,7 +17,7 @@ class MarketplaceAsset(BaseModel):
     )
     pricing: float = Field(default=0.0, description="GiÃ¡ dá»‹ch vá»¥ tÃ­nh theo Token")
     license_type: str = Field(default="MIT", description="Máº«u Giáº¥y phÃ©p")
-    publisher_id: str = Field(..., description="MÃ£ doanh nghiá»‡p phÃ¡t hÃ nh")
+    publisher_id: str = Field(..., description="MÃ£ doanh nghiá»‡p phÃ¡t hÃ nh")
     rating: float = Field(default=5.0, description="Äiá»ƒm sá»‘ Ä‘Ã¡nh giÃ¡ tá»« liÃªn bang")
     manifest_payload: dict[str, str] = Field(..., description="MÃ´ táº£ cáº¥u trÃºc")
     published_at: datetime = Field(default_factory=lambda: datetime.now(UTC))

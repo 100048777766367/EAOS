@@ -1,10 +1,10 @@
-"""Enterprise Meta-Model Specifications (Sprint 3.1)."""
-
 from __future__ import annotations
 
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Enterprise Meta-Model Specifications (Sprint 3.1)."""
 
 
 class AttributeMeta(BaseModel):

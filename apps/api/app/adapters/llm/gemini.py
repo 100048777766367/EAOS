@@ -1,0 +1,452 @@
+"""Gemini and Ollama streaming adapter."""
+
+from __future__ import annotations
+
+import json
+import os
+from collections.abc import AsyncIterator, Iterable
+from typing import Any
+
+import httpx
+from apps.api.app.adapters.llm.base import BaseLLMAdapter
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
+class GeminiAdapter(BaseLLMAdapter):
+    """Gemini primary adapter with Ollama fallback."""
+
+    GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models"
+    DEFAULT_GEMINI_MODEL = "gemini-3.6-flash"
+    DEFAULT_OLLAMA_URL = "http://localhost:11434"
+    DEFAULT_OLLAMA_MODEL = "nemotron-mini:latest"
+
+    def __init__(self) -> None:
+        """Load provider configuration."""
+        load_dotenv(override=False)
+
+        self.provider = (
+            os.getenv(
+                "DEFAULT_AI_PROVIDER",
+                "gemini",
+            )
+            .strip()
+            .lower()
+        )
+
+        self.gemini_model = os.getenv(
+            "GEMINI_MODEL",
+            self.DEFAULT_GEMINI_MODEL,
+        ).strip()
+        self.gemini_model = self.gemini_model.removeprefix("models/")
+
+        self.gemini_thinking_level = (
+            os.getenv(
+                "GEMINI_THINKING_LEVEL",
+                "low",
+            )
+            .strip()
+            .lower()
+        )
+
+        if self.gemini_thinking_level not in {
+            "minimal",
+            "low",
+            "medium",
+            "high",
+        }:
+            self.gemini_thinking_level = "low"
+
+        self.ollama_url = (
+            os.getenv(
+                "OLLAMA_BASE_URL",
+                self.DEFAULT_OLLAMA_URL,
+            )
+            .strip()
+            .rstrip("/")
+        )
+
+        self.ollama_model = os.getenv(
+            "OLLAMA_MODEL",
+            self.DEFAULT_OLLAMA_MODEL,
+        ).strip()
+
+        self.gemini_keys = self._load_keys()
+
+        print(
+            "[LLM] provider="
+            f"{self.provider} "
+            f"gemini_model={self.gemini_model} "
+            f"thinking={self.gemini_thinking_level} "
+            f"gemini_keys={len(self.gemini_keys)} "
+            f"ollama_model={self.ollama_model}"
+        )
+
+    @staticmethod
+    def _load_keys() -> list[str]:
+        """Load unique Gemini keys."""
+        keys: list[str] = []
+
+        single = os.getenv("GEMINI_API_KEY", "").strip()
+
+        if single:
+            keys.append(single)
+
+        multiple = os.getenv("GEMINI_API_KEYS", "")
+
+        for value in multiple.split(","):
+            key = value.strip()
+
+            if key and key not in keys:
+                keys.append(key)
+
+        return keys
+
+    @staticmethod
+    def _normalize(
+        messages: Iterable[dict[str, Any]],
+    ) -> list[dict[str, str]]:
+        """Normalize chat messages."""
+        result: list[dict[str, str]] = []
+
+        for message in messages:
+            role = str(message.get("role", "user")).strip()
+            content = str(message.get("content", ""))
+
+            if not content:
+                continue
+
+            if role not in {"system", "user", "assistant"}:
+                role = "user"
+
+            result.append(
+                {
+                    "role": role,
+                    "content": content,
+                }
+            )
+
+        return result
+
+    def _gemini_payload(
+        self,
+        messages: list[dict[str, str]],
+        temperature: float,
+        max_output_tokens: int,
+        json_mode: bool,
+    ) -> dict[str, Any]:
+        """Build Gemini request payload."""
+        system_parts: list[str] = []
+        contents: list[dict[str, Any]] = []
+
+        for message in messages:
+            role = message["role"]
+            content = message["content"]
+
+            if role == "system":
+                system_parts.append(content)
+                continue
+
+            gemini_role = "model" if role == "assistant" else "user"
+
+            contents.append(
+                {
+                    "role": gemini_role,
+                    "parts": [{"text": content}],
+                }
+            )
+
+        if not contents:
+            contents = [
+                {
+                    "role": "user",
+                    "parts": [{"text": "Hello."}],
+                }
+            ]
+
+        config: dict[str, Any] = {
+            "maxOutputTokens": max_output_tokens,
+        }
+
+        if json_mode:
+            config["responseMimeType"] = "application/json"
+
+        payload: dict[str, Any] = {
+            "contents": contents,
+            "generationConfig": config,
+        }
+
+        if system_parts:
+            payload["systemInstruction"] = {
+                "parts": [{"text": "\n\n".join(system_parts)}],
+            }
+
+        return payload
+
+    async def generate_stream(
+        self,
+        messages: list[dict[str, Any]],
+        temperature: float = 0.7,
+        max_output_tokens: int = 4096,
+        json_mode: bool = False,
+    ) -> AsyncIterator[str]:
+        """Generate a streaming response."""
+        normalized = self._normalize(messages)
+
+        if self.provider == "ollama":
+            async for chunk in self._ollama_stream(
+                normalized,
+                temperature,
+                max_output_tokens,
+                json_mode,
+            ):
+                yield chunk
+            return
+
+        if not self.gemini_keys:
+            raise RuntimeError("GEMINI_API_KEY/GEMINI_API_KEYS is not configured.")
+
+        last_error: Exception | None = None
+
+        for index, key in enumerate(self.gemini_keys, start=1):
+            try:
+                print(f"[LLM] Gemini key {index}/{len(self.gemini_keys)}")
+
+                emitted = False
+
+                async for chunk in self._gemini_stream(
+                    normalized,
+                    temperature,
+                    max_output_tokens,
+                    json_mode,
+                    key,
+                ):
+                    emitted = True
+                    yield chunk
+
+                if emitted:
+                    print("[LLM] Gemini stream completed.")
+                    return
+
+                raise RuntimeError("Gemini returned HTTP 200 but no text content.")
+
+            except Exception as exc:
+                last_error = exc
+                print(f"[LLM] Gemini key {index} failed: {exc}")
+
+        print("[LLM] All Gemini keys failed.")
+
+        if last_error is not None:
+            print("[LLM] Falling back to Ollama.")
+
+        async for chunk in self._ollama_stream(
+            normalized,
+            temperature,
+            max_output_tokens,
+            json_mode,
+        ):
+            yield chunk
+
+    async def _gemini_stream(
+        self,
+        messages: list[dict[str, str]],
+        temperature: float,
+        max_output_tokens: int,
+        json_mode: bool,
+        api_key: str,
+    ) -> AsyncIterator[str]:
+        """Stream Gemini SSE response."""
+        payload = self._gemini_payload(
+            messages,
+            temperature,
+            max_output_tokens,
+            json_mode,
+        )
+
+        url = f"{self.GEMINI_URL}/{self.gemini_model}:streamGenerateContent"
+
+        params = {
+            "key": api_key,
+            "alt": "sse",
+        }
+
+        timeout = httpx.Timeout(
+            connect=15.0,
+            read=180.0,
+            write=30.0,
+            pool=30.0,
+        )
+
+        async with (
+            httpx.AsyncClient(
+                timeout=timeout,
+            ) as client,
+            client.stream(
+                "POST",
+                url,
+                params=params,
+                json=payload,
+            ) as response,
+        ):
+            if response.status_code >= 400:
+                body = await response.aread()
+
+                raise RuntimeError(f"Gemini HTTP {response.status_code}: {body.decode('utf-8', errors='replace')}")
+
+            async for line in response.aiter_lines():
+                if not line:
+                    continue
+
+                raw = line.strip()
+
+                if raw.startswith("data:"):
+                    raw = raw[5:].strip()
+
+                if not raw or raw == "[DONE]":
+                    continue
+
+                try:
+                    data = json.loads(raw)
+                except json.JSONDecodeError:
+                    continue
+
+                self._log_gemini_metadata(data)
+
+                text = self._extract_text(data)
+
+                if text:
+                    print(f"[LLM] Gemini chunk: {len(text)} chars")
+                    yield text
+
+    @staticmethod
+    def _log_gemini_metadata(
+        payload: dict[str, Any],
+    ) -> None:
+        """Log useful Gemini completion metadata."""
+        candidates = payload.get("candidates")
+
+        if not isinstance(candidates, list) or not candidates:
+            return
+
+        candidate = candidates[0]
+
+        if not isinstance(candidate, dict):
+            return
+
+        finish_reason = candidate.get("finishReason")
+
+        if finish_reason:
+            print(f"[LLM] Gemini finishReason={finish_reason}")
+
+        usage = payload.get("usageMetadata")
+
+        if isinstance(usage, dict):
+            print(f"[LLM] Gemini usageMetadata={usage}")
+
+    @staticmethod
+    def _extract_text(
+        payload: dict[str, Any],
+    ) -> str:
+        """Extract normal response text from Gemini."""
+        candidates = payload.get("candidates", [])
+
+        if not isinstance(candidates, list):
+            return ""
+
+        if not candidates:
+            return ""
+
+        candidate = candidates[0]
+
+        if not isinstance(candidate, dict):
+            return ""
+
+        content = candidate.get("content", {})
+
+        if not isinstance(content, dict):
+            return ""
+
+        parts = content.get("parts", [])
+
+        if not isinstance(parts, list):
+            return ""
+
+        result: list[str] = []
+
+        for part in parts:
+            if not isinstance(part, dict):
+                continue
+
+            if part.get("thought") is True:
+                continue
+
+            text = part.get("text")
+
+            if isinstance(text, str):
+                result.append(text)
+
+        return "".join(result)
+
+    async def _ollama_stream(
+        self,
+        messages: list[dict[str, str]],
+        temperature: float,
+        max_output_tokens: int,
+        json_mode: bool,
+    ) -> AsyncIterator[str]:
+        """Stream from local Ollama."""
+        payload: dict[str, Any] = {
+            "model": self.ollama_model,
+            "messages": messages,
+            "stream": True,
+            "options": {
+                "temperature": temperature,
+                "num_predict": max_output_tokens,
+            },
+        }
+
+        if json_mode:
+            payload["format"] = "json"
+
+        timeout = httpx.Timeout(
+            connect=10.0,
+            read=300.0,
+            write=30.0,
+            pool=30.0,
+        )
+
+        async with (
+            httpx.AsyncClient(
+                timeout=timeout,
+            ) as client,
+            client.stream(
+                "POST",
+                f"{self.ollama_url}/api/chat",
+                json=payload,
+            ) as response,
+        ):
+            if response.status_code >= 400:
+                body = await response.aread()
+
+                raise RuntimeError(f"Ollama HTTP {response.status_code}: {body.decode('utf-8', errors='replace')}")
+
+            async for line in response.aiter_lines():
+                if not line:
+                    continue
+
+                try:
+                    data = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+
+                message = data.get("message", {})
+
+                if isinstance(message, dict):
+                    content = message.get("content")
+
+                    if isinstance(content, str) and content:
+                        yield content
+
+                if data.get("done") is True:
+                    break

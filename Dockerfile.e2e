@@ -1,0 +1,58 @@
+# ==============================================================================
+# EAOS Enterprise E2E Testing Dockerfile (Tối ưu hóa Workspace & Clean Cache)
+# ==============================================================================
+
+FROM python:3.12-slim
+
+# Thiết lập biến môi trường hệ thống tối ưu cho Python và UV
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    UV_SYSTEM_PYTHON=0 \
+    DEBIAN_FRONTEND=noninteractive
+
+# Tích hợp công cụ quản lý gói siêu tốc uv từ official binary
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+# Thiết lập thư mục làm việc mặc định trong container
+WORKDIR /app
+
+# Cài đặt các thư viện chia sẻ hệ thống cần thiết cho Chromium Headless
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libnss3 \
+    libatk1.0-0 \
+    libatk-bridge2.0-0 \
+    libcups2 \
+    libdrm2 \
+    libxkbcommon0 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxfixes3 \
+    libxrandr2 \
+    libgbm1 \
+    libpango-1.0-0 \
+    libcairo2 \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Thiết lập phân quyền bảo mật Least Privilege
+RUN useradd -ms /bin/bash e2e-runner \
+    && chown -R e2e-runner:e2e-runner /app
+
+USER e2e-runner
+
+# Sao chép toàn bộ mã nguồn vào container
+COPY --chown=e2e-runner:e2e-runner . /app
+
+# --- BẢO MẬT & HIỆU NĂNG: Xóa bỏ triệt để các thư mục cache rác nội bộ ---
+RUN find /app -type d -name "__pycache__" -exec rm -rf {} + \
+    && find /app -type d -name ".pytest_cache" -exec rm -rf {} + \
+    && find /app -type d -name ".venv" -exec rm -rf {} +
+
+# Đồng bộ hóa dependencies: UV tự động tải CPython 3.14.7 và build workspace chuẩn xác
+RUN uv sync --frozen
+
+# Cài đặt trình duyệt Chromium chuyên dụng cho Playwright trong container
+RUN uv run playwright install chromium
+
+# Điểm vào mặc định thực thi toàn bộ bộ kiểm thử E2E
+CMD ["uv", "run", "pytest", "tests/e2e", "-v"]

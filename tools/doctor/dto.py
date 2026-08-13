@@ -1,10 +1,10 @@
-"""Data Transfer Objects for EAOS Doctor (SOLID OCP)."""
-
 from __future__ import annotations
 
 from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Data Transfer Objects for EAOS Doctor (SOLID OCP)."""
 
 
 class SeverityLevel(StrEnum):

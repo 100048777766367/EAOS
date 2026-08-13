@@ -1,8 +1,8 @@
-"""Unit test suite for Docker Checker."""
-
 from __future__ import annotations
 
 from tools.doctor.checkers.docker_checker import DockerChecker
+
+"""Unit test suite for Docker Checker."""
 
 
 def test_docker_checker_run() -> None:

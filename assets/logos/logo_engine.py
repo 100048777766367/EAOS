@@ -1,6 +1,6 @@
-"""Động cơ tiêm theme Dark/Light Mode cho SVG Logos."""
-
 from __future__ import annotations
+
+"""Động cơ tiêm theme Dark/Light Mode cho SVG Logos."""
 
 
 class LogoEngine:

@@ -13,7 +13,7 @@ from packages.reflection.domain.ports import ReflectionRepository
 
 
 class IngestLearningUseCase:
-    """Application Service Ä‘iá»u phá»‘i viá»‡c chuyá»ƒn dá»‹ch cháº©n Ä‘oÃ¡n thÃ nh Kinh nghiá»‡m."""
+    """Application Service Ä‘iá»u phá»‘i viá»‡c chuyá»ƒn dá»‹ch cháº©n Ä‘oÃ¡n thÃ nh Kinh nghiá»‡m."""
 
     def __init__(
         self,
@@ -35,7 +35,7 @@ class IngestLearningUseCase:
         lessons = [
             Lesson(
                 id="L-01",
-                takeaway=("KhÃ´ng bao giá» Ä‘á»ƒ táº§ng Domain phá»¥ thuá»™c vÃ o Infrastructure."),
+                takeaway=("KhÃ´ng bao giá» Ä‘á»ƒ táº§ng Domain phá»¥ thuá»™c vÃ o Infrastructure."),
                 action_item="Sá»­ dá»¥ng Ports & Adapters Ä‘á»ƒ Ä‘áº£o ngÆ°á»£c phá»¥ thuá»™c.",
             )
             for rc in report.root_causes
@@ -46,7 +46,7 @@ class IngestLearningUseCase:
             AntiPattern(
                 id="AP-01",
                 name="Database Leak in Domain",
-                avoid_reason="LÃ m bÃ¡m cháº·t mÃ£ nguá»“n vÃ o thÆ° viá»‡n cÆ¡ sá»Ÿ dá»¯ liá»‡u.",
+                avoid_reason="LÃ m bÃ¡m cháº·t mÃ£ nguá»“n vÃ o thÆ° viá»‡n cÆ¡ sá»Ÿ dá»¯ liá»‡u.",
             )
             for rc in report.root_causes
             if rc.type == "BoundaryViolation"
@@ -56,7 +56,7 @@ class IngestLearningUseCase:
             Pattern(
                 id="PT-01",
                 name="Hexagonal Boundary Protection",
-                description="Bá»c ngoÃ i báº±ng Ports Ä‘á»ƒ cÃ´ láº­p nhÃ¢n nghiá»‡p vá»¥.",
+                description="Bá»c ngoÃ i báº±ng Ports Ä‘á»ƒ cÃ´ láº­p nhÃ¢n nghiá»‡p vá»¥.",
             )
             for rc in report.root_causes
             if rc.type == "BoundaryViolation"
@@ -72,7 +72,7 @@ class IngestLearningUseCase:
             if rc.type == "BoundaryViolation"
         ]
 
-        # 3. ÄÃ³ng gÃ³i thÃ nh Experience hoÃ n chá»‰nh
+        # 3. ÄÃ³ng gÃ³i thÃ nh Experience hoÃ n chá»‰nh
         exp = Experience(
             id=exp_id,
             reflection_id=reflection_id,

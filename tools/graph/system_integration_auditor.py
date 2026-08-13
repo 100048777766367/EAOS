@@ -1,8 +1,8 @@
-"""Topological auditor verifying 100% active integration across root dirs."""
-
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict
+
+"""Topological auditor verifying 100% active integration across root dirs."""
 
 
 class RootDirectoryConnectivityDTO(BaseModel):

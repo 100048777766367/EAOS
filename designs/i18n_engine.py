@@ -1,8 +1,9 @@
-"""I18n Catalog Engine Implementation."""
-
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Final
+
+"""I18n Catalog Engine Implementation."""
+
 
 __all__ = ["I18nCatalogEngine"]
 
@@ -32,9 +33,7 @@ class I18nCatalogEngine:
 
     def translate(self, lang: str, key: str, **kwargs: str) -> str:
         """Translate key for given language: translate(lang, key)."""
-        catalog: Final[dict[str, str]] = self._catalogs.get(
-            lang, self._catalogs.get("vi", {})
-        )
+        catalog: Final[dict[str, str]] = self._catalogs.get(lang, self._catalogs.get("vi", {}))
         val = catalog.get(key, key)
         if kwargs and isinstance(val, str):
             for k, v in kwargs.items():

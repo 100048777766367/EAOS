@@ -1,8 +1,8 @@
 # EAOS Architecture Document Template
 
-> **Document ID:** DOC-TEMPLATE-001  
-> **Status:** DRAFT  
-> **Governance:** ARCHITECTURE_CONSTITUTION.md v2.0  
+> **Document ID:** DOC-TEMPLATE-001
+> **Status:** DRAFT
+> **Governance:** ARCHITECTURE_CONSTITUTION.md v2.0
 
 ---
 

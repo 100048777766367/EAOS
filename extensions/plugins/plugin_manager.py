@@ -1,10 +1,10 @@
-"""Dynamic Plugin Discovery and Management Engine."""
-
 from __future__ import annotations
 
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Dynamic Plugin Discovery and Management Engine."""
 
 
 class ExtensionPluginDTO(BaseModel):

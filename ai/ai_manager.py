@@ -1,11 +1,11 @@
-"""AI manager module."""
-
 from __future__ import annotations
 
 from .automation.dry_run_ai_simulator import DryRunAiSimulator
 from .evaluation.hallucination_guard import HallucinationGuard
 from .planner.task_decomposer import AITaskDecomposer
 from .router.model_router import FinOpsModelRouter
+
+"""AI manager module."""
 
 
 class AiManager:

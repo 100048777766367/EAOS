@@ -1,8 +1,8 @@
-"""Ecosystem Multi-Enterprise Capability Marketplace."""
-
 from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Ecosystem Multi-Enterprise Capability Marketplace."""
 
 
 class PublishedCapabilityDTO(BaseModel):

@@ -1,10 +1,10 @@
-"""Chaos Engineering and Benchmark DTOs (Option 2)."""
-
 from __future__ import annotations
 
 from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Chaos Engineering and Benchmark DTOs (Option 2)."""
 
 
 class FaultType(StrEnum):

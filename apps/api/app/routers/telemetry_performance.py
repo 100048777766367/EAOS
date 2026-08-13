@@ -1,5 +1,3 @@
-"""Telemetry, OTLP and Performance Tuning Router."""
-
 from typing import Annotated, Any
 
 from fastapi import APIRouter, Body
@@ -8,6 +6,9 @@ from platforms.telemetry.otlp_exporter import OTLPSpanExportDTO
 from platforms.telemetry.telemetry_fitness import TelemetryFitnessBridge
 
 from apps.api.app.container import global_splay_cache, otlp_exporter
+
+"""Telemetry, OTLP and Performance Tuning Router."""
+
 
 router = APIRouter(tags=["Telemetry & Performance"])
 

@@ -1,11 +1,11 @@
-"""Observability Checker for Prometheus, Grafana, and OTLP."""
-
 from __future__ import annotations
 
 import urllib.request
 from typing import ClassVar
 
 from tools.doctor.dto import DiagnosticCheckDTO, SeverityLevel
+
+"""Observability Checker for Prometheus, Grafana, and OTLP."""
 
 
 class ObservabilityChecker:

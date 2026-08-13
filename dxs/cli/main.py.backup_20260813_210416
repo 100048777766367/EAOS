@@ -1,0 +1,307 @@
+from __future__ import annotations
+
+import argparse
+from pathlib import Path
+
+from dxs.adapters.compatibility import CompatibilityAdapter
+from dxs.application.compatibility_service import CompatibilityService
+from dxs.application.ide_service import IdeService
+from dxs.application.integration_service import IntegrationService
+from dxs.application.migration_service import MigrationService
+from dxs.bootstrap import create_repository_application
+from dxs.contracts.versioning import ContractVersion
+from dxs.doctor.context import discover_repository
+from dxs.domain.debugging import DebuggingService
+from dxs.domain.documentation import DocumentationService
+from dxs.domain.migration import MigrationRequest
+
+
+def _print_header(title: str) -> None:
+    print()
+    print("=" * 72)
+    print(title)
+    print("=" * 72)
+
+
+def _doctor(root: Path) -> int:
+    application = create_repository_application()
+    results = application.inspect(root)
+
+    _print_header("EAOS — DXS REPOSITORY DOCTOR")
+
+    failed = False
+
+    for result in results:
+        print(result)
+        failed |= result.startswith(("[WARN]", "[FAIL]"))
+
+    print("=" * 72)
+
+    return int(failed)
+
+
+def _validate(root: Path) -> int:
+    application = create_repository_application()
+    results = application.validate(root)
+
+    _print_header("EAOS — DXS REPOSITORY VALIDATION")
+
+    failed = False
+
+    for result in results:
+        status = result.status.value
+        print(f"[{status}] {result.check}: {result.message}")
+        failed |= status == "fail"
+
+    print("=" * 72)
+
+    return int(failed)
+
+
+def _compatibility(
+    current_value: str,
+    target_value: str,
+) -> int:
+    current = ContractVersion.parse(current_value)
+    target = ContractVersion.parse(target_value)
+
+    application = create_repository_application()
+    result = application.compatibility(
+        current=current,
+        target=target,
+    )
+
+    _print_header("EAOS — DXS CONTRACT COMPATIBILITY")
+
+    print(f"Current : {result.current_version}")
+    print(f"Target  : {result.target_version}")
+    print(
+        "Policy  : "
+        f"minor={result.policy.allow_minor_upgrade}, "
+        f"patch={result.policy.allow_patch_upgrade}"
+    )
+    print(f"Status  : {result.status.upper()}")
+    print(f"Reason  : {result.reason}")
+    print("=" * 72)
+
+    return 0 if result.compatible else 1
+
+
+def _debug(root: Path) -> int:
+    service = DebuggingService()
+    results = service.inspect(root)
+
+    _print_header("EAOS — DXS DEBUGGING")
+
+    failed = False
+
+    for result in results:
+        print(result)
+        failed |= not result.passed
+
+    print("=" * 72)
+
+    return int(failed)
+
+
+def _documentation(root: Path) -> int:
+    service = DocumentationService()
+    results = service.inspect(root)
+
+    _print_header("EAOS — DXS DOCUMENTATION")
+
+    failed = False
+
+    for result in results:
+        print(result)
+        failed |= not result.passed
+
+    print("=" * 72)
+
+    return int(failed)
+
+
+def _ide(root: Path) -> int:
+    report = IdeService().inspect(root)
+
+    _print_header("EAOS — DXS IDE")
+
+    for check in report.checks:
+        status = "PASS" if check.exists else "FAIL"
+        print(f"[{status}] {check.name}: {check.path}")
+
+    print("=" * 72)
+
+    return 0 if report.passed else 1
+
+
+def _integrations(root: Path) -> int:
+    report = IntegrationService().inspect(root)
+
+    _print_header("EAOS — DXS INTEGRATIONS")
+
+    for check in report.checks:
+        status = "PASS" if check.exists else "FAIL"
+        print(f"[{status}] {check.name}: {check.path}")
+
+    print("=" * 72)
+
+    return 0 if report.passed else 1
+
+
+def _migration(
+    current_value: str,
+    target_value: str,
+) -> int:
+    checker = CompatibilityAdapter()
+    compatibility_service = CompatibilityService(checker)
+    service = MigrationService(compatibility_service)
+
+    result = service.plan(
+        MigrationRequest(
+            current_version=current_value,
+            target_version=target_value,
+        )
+    )
+
+    _print_header("EAOS — DXS CONTRACT MIGRATION")
+
+    print(f"Current : {result.current_version}")
+    print(f"Target  : {result.target_version}")
+    print(f"Status  : {result.status}")
+    print(f"Reason  : {result.reason}")
+    print("=" * 72)
+
+    return 0 if result.compatible else 1
+
+
+def _add_version_arguments(
+    parser: argparse.ArgumentParser,
+) -> None:
+    parser.add_argument(
+        "--current",
+        default="1.0.0",
+        help="Current contract version.",
+    )
+    parser.add_argument(
+        "--target",
+        default="1.0.0",
+        help="Target contract version.",
+    )
+
+
+def _build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        prog="eaos",
+        description="EAOS Developer Experience System",
+    )
+
+    parser.add_argument(
+        "--root",
+        type=Path,
+        default=None,
+        help="EAOS repository root.",
+    )
+
+    subparsers = parser.add_subparsers(
+        dest="command",
+        required=True,
+    )
+
+    subparsers.add_parser(
+        "doctor",
+        help="Inspect EAOS repository sources.",
+    )
+
+    subparsers.add_parser(
+        "validate",
+        help="Validate EAOS repository sources.",
+    )
+
+    compatibility = subparsers.add_parser(
+        "compatibility",
+        help="Check contract version compatibility.",
+    )
+    _add_version_arguments(compatibility)
+
+    migration = subparsers.add_parser(
+        "migration",
+        help="Plan a contract migration.",
+    )
+    _add_version_arguments(migration)
+
+    subparsers.add_parser(
+        "debug",
+        help="Run deterministic DXS debugging checks.",
+    )
+
+    subparsers.add_parser(
+        "documentation",
+        help="Inspect authoritative EAOS documentation.",
+    )
+
+    subparsers.add_parser(
+        "ide",
+        help="Inspect IDE configuration.",
+    )
+
+    subparsers.add_parser(
+        "integrations",
+        help="Inspect integration configuration.",
+    )
+
+    return parser
+
+
+def _dispatch(
+    args: argparse.Namespace,
+    root: Path,
+) -> int:
+    if args.command == "doctor":
+        return _doctor(root)
+
+    if args.command == "validate":
+        return _validate(root)
+
+    if args.command == "compatibility":
+        return _compatibility(
+            args.current,
+            args.target,
+        )
+
+    if args.command == "migration":
+        return _migration(
+            args.current,
+            args.target,
+        )
+
+    if args.command == "debug":
+        return _debug(root)
+
+    if args.command == "documentation":
+        return _documentation(root)
+
+    if args.command == "ide":
+        return _ide(root)
+
+    if args.command == "integrations":
+        return _integrations(root)
+
+    raise ValueError(f"Unknown command: {args.command}")
+
+
+def main() -> int:
+    parser = _build_parser()
+    args = parser.parse_args()
+
+    root = (
+        args.root.resolve()
+        if args.root is not None
+        else discover_repository()
+    )
+
+    return _dispatch(args, root)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

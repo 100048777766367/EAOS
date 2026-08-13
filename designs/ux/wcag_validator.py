@@ -1,6 +1,6 @@
-"""WCAG 2.1 Color Contrast Ratio Auditor Engine."""
-
 from dataclasses import dataclass
+
+"""WCAG 2.1 Color Contrast Ratio Auditor Engine."""
 
 
 @dataclass(frozen=True, slots=True)
@@ -38,9 +38,7 @@ class WCAGAuditor:
 
         return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2]
 
-    def audit_contrast(
-        self, foreground_hex: str, background_hex: str
-    ) -> WCAGContrastReport:
+    def audit_contrast(self, foreground_hex: str, background_hex: str) -> WCAGContrastReport:
         """Đánh giá tỷ lệ tương phản giữa hai màu HEX."""
         rgb_fg = self._hex_to_rgb(foreground_hex)
         rgb_bg = self._hex_to_rgb(background_hex)

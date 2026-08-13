@@ -1,6 +1,6 @@
-"""Động cơ vận hành SRE của Operator Agent."""
-
 from __future__ import annotations
+
+"""Động cơ vận hành SRE của Operator Agent."""
 
 
 class OperatorEngine:

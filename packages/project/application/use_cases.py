@@ -1,8 +1,8 @@
-"""Application use cases for Project Management Capability."""
-
 import uuid
 
 from packages.project.domain.models import ProjectTask
+
+"""Application use cases for Project Management Capability."""
 
 
 class CreateProjectTaskUseCase:

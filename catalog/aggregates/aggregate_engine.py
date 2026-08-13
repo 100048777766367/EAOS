@@ -1,6 +1,6 @@
-"""Động cơ kiểm toán Aggregate Roots."""
-
 from __future__ import annotations
+
+"""Động cơ kiểm toán Aggregate Roots."""
 
 
 class AggregateEngine:

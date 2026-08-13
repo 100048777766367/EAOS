@@ -1,11 +1,11 @@
-"""EAOS Interaction Architecture Domain Contracts (ADR-UI-001)."""
-
 from __future__ import annotations
 
 from datetime import UTC, datetime
 from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""EAOS Interaction Architecture Domain Contracts (ADR-UI-001)."""
 
 
 class InteractionState(StrEnum):

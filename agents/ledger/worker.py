@@ -1,6 +1,6 @@
-"""Worker module for ledger."""
-
 from __future__ import annotations
+
+"""Worker module for ledger."""
 
 
 class LedgerWorker:

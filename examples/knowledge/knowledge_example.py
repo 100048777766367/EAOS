@@ -1,8 +1,8 @@
-"""Knowledge Graph and RAG Query Executable Example."""
-
 from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Knowledge Graph and RAG Query Executable Example."""
 
 
 class KnowledgeExampleResultDTO(BaseModel):

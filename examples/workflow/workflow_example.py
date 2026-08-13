@@ -1,8 +1,8 @@
-"""Multi-Agent Swarm Workflow Executable Example."""
-
 from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Multi-Agent Swarm Workflow Executable Example."""
 
 
 class WorkflowExampleResultDTO(BaseModel):

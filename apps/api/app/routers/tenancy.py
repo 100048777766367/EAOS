@@ -4,7 +4,10 @@ from typing import Annotated, Any
 
 from fastapi import APIRouter, Body
 from packages.tenancy.infrastructure.rls_adapter import RLSContextDTO
-from packages.tenancy.infrastructure.tenant_metering import TenantMeteringGuard, TenantQuotaCheck
+from packages.tenancy.infrastructure.tenant_metering import (
+    TenantMeteringGuard,
+    TenantQuotaCheck,
+)
 
 from apps.api.app.container import rls_adapter
 

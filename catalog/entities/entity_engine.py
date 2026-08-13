@@ -1,6 +1,6 @@
-"""Động cơ kiểm toán DDD Entities."""
-
 from __future__ import annotations
+
+"""Động cơ kiểm toán DDD Entities."""
 
 
 class EntityEngine:

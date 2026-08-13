@@ -4,7 +4,7 @@ from packages.prediction.domain.models import Prediction
 
 
 class PredictionRepository(Protocol):
-    """Port Ä‘á»‹nh nghÄ©a cÃ¡c hÃ nh vi lÆ°u trá»¯ vÃ  truy váº¥n dá»± Ä‘oÃ¡n."""
+    """Port Ä‘á»‹nh nghÄ©a cÃ¡c hÃ nh vi lÆ°u trá»¯ vÃ  truy váº¥n dá»± Ä‘oÃ¡n."""
 
     def save(self, pred: Prediction) -> Prediction: ...
 

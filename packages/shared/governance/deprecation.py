@@ -1,9 +1,10 @@
-"""Deprecation & Sunset Policy Engine for EAOS Governance."""
-
 import warnings
 from collections.abc import Callable
 from functools import wraps
 from typing import Any, TypeVar
+
+"""Deprecation & Sunset Policy Engine for EAOS Governance."""
+
 
 F = TypeVar("F", bound=Callable[..., Any])
 

@@ -1,8 +1,8 @@
-"""Domain models for Architecture Memory context."""
-
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from enum import Enum, auto
+
+"""Domain models for Architecture Memory context."""
 
 
 class MemoryTier(Enum):

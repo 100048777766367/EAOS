@@ -1,8 +1,8 @@
-"""Non-destructive compatibility layer for legacy capability contracts."""
-
 import uuid
 
 from pydantic import BaseModel, ConfigDict, Field
+
+"""Non-destructive compatibility layer for legacy capability contracts."""
 
 
 class BusinessCapability(BaseModel):

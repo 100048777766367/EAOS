@@ -1,9 +1,9 @@
-"""Mô hình DTO cho hệ thống Công cụ và Tiện ích Kiến trúc (TOOLS)."""
-
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import StrEnum
+
+"""Mô hình DTO cho hệ thống Công cụ và Tiện ích Kiến trúc (TOOLS)."""
 
 
 class ToolCategory(StrEnum):

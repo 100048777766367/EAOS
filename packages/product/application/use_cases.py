@@ -1,8 +1,8 @@
-"""Application use cases for Product Management."""
-
 import uuid
 
 from packages.product.domain.models import ProductCatalogItem
+
+"""Application use cases for Product Management."""
 
 
 class RegisterProductUseCase:

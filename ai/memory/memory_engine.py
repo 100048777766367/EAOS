@@ -1,6 +1,6 @@
-"""Động cơ bộ nhớ trượt ai."""
-
 from __future__ import annotations
+
+"""Động cơ bộ nhớ trượt ai."""
 
 
 class MemoryEngine:

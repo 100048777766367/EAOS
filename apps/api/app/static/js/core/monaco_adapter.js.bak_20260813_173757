@@ -1,0 +1,296 @@
+let monacoEditor = null;
+
+let monacoReadyPromise = null;
+
+
+/**
+ * Keep the editor host structurally visible.
+ *
+ * Monaco owns the editor instance.
+ * This adapter owns only Monaco initialization and model updates.
+ */
+function ensureContainerVisible(container) {
+    if (!container) {
+        return;
+    }
+
+    container.hidden = false;
+    container.removeAttribute('hidden');
+
+    container.style.removeProperty('display');
+    container.style.removeProperty('visibility');
+    container.style.removeProperty('opacity');
+
+    /*
+     * Do not use classList.remove('hidden') blindly on ancestors.
+     * Pane/layout ownership belongs to the layout layer.
+     */
+}
+
+
+/**
+ * Wait until Monaco AMD loader is available.
+ */
+function loadMonacoLoader() {
+    if (window.monaco) {
+        return Promise.resolve();
+    }
+
+    if (window.require && window.require.config) {
+        return Promise.resolve();
+    }
+
+    return new Promise((resolve, reject) => {
+        const existing = document.querySelector(
+            'script[data-eaos-monaco-loader="true"]'
+        );
+
+        if (existing) {
+            existing.addEventListener('load', resolve, { once: true });
+            existing.addEventListener('error', reject, { once: true });
+            return;
+        }
+
+        const script = document.createElement('script');
+
+        script.src =
+            'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js';
+
+        script.dataset.eaosMonacoLoader = 'true';
+
+        script.onload = () => {
+            if (!window.require || !window.require.config) {
+                reject(
+                    new Error(
+                        'Monaco loader loaded but AMD require is unavailable'
+                    )
+                );
+                return;
+            }
+
+            window.require.config({
+                paths: {
+                    vs:
+                        'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs'
+                }
+            });
+
+            resolve();
+        };
+
+        script.onerror = () => {
+            reject(
+                new Error('Failed to load Monaco loader')
+            );
+        };
+
+        document.head.appendChild(script);
+    });
+}
+
+
+/**
+ * Load Monaco editor.main exactly once.
+ */
+function loadMonacoEditor() {
+    if (window.monaco) {
+        return Promise.resolve(window.monaco);
+    }
+
+    if (monacoReadyPromise) {
+        return monacoReadyPromise;
+    }
+
+    monacoReadyPromise = loadMonacoLoader()
+        .then(
+            () =>
+                new Promise((resolve, reject) => {
+                    window.require(
+                        ['vs/editor/editor.main'],
+                        () => {
+                            if (!window.monaco) {
+                                reject(
+                                    new Error(
+                                        'Monaco editor.main loaded without window.monaco'
+                                    )
+                                );
+                                return;
+                            }
+
+                            resolve(window.monaco);
+                        }
+                    );
+                })
+        )
+        .catch((error) => {
+            monacoReadyPromise = null;
+            throw error;
+        });
+
+    return monacoReadyPromise;
+}
+
+
+/**
+ * Create the Monaco instance.
+ */
+function setupMonaco(
+    containerId,
+    initialCode,
+    language
+) {
+    const container =
+        document.getElementById(containerId);
+
+    if (!container) {
+        throw new Error(
+            `Monaco container not found: #${containerId}`
+        );
+    }
+
+    ensureContainerVisible(container);
+
+    if (monacoEditor) {
+        monacoEditor.dispose();
+        monacoEditor = null;
+    }
+
+    container.innerHTML = '';
+
+    const editor = window.monaco.editor.create(
+        container,
+        {
+            value: initialCode,
+            language,
+            theme: 'vs-dark',
+            automaticLayout: true,
+            fontSize: 12,
+            fontFamily: "'Fira Code', monospace",
+            minimap: {
+                enabled: false
+            },
+            scrollBeyondLastLine: false,
+            readOnly: false
+        }
+    );
+
+    monacoEditor = editor;
+
+    /*
+     * Make the runtime observable to E2E and application code.
+     */
+    window.EAOS = window.EAOS || {};
+    window.EAOS.monaco = window.EAOS.monaco || {};
+
+    window.EAOS.monaco.editor = editor;
+    window.EAOS.monaco.ready = true;
+
+    window.dispatchEvent(
+        new CustomEvent(
+            'eaos:monaco-ready',
+            {
+                detail: {
+                    container,
+                    editor
+                }
+            }
+        )
+    );
+
+    /*
+     * Layout may finish after Monaco creation.
+     * Force a layout pass after the browser has painted.
+     */
+    requestAnimationFrame(() => {
+        ensureContainerVisible(container);
+
+        try {
+            editor.layout();
+        } catch {
+            // Editor may already be disposed.
+        }
+    });
+
+    setTimeout(() => {
+        ensureContainerVisible(container);
+
+        try {
+            editor.layout();
+        } catch {
+            // Editor may already be disposed.
+        }
+    }, 100);
+
+    return editor;
+}
+
+
+export async function initMonacoAdapter(
+    containerId,
+    initialCode = '',
+    language = 'python'
+) {
+    const container =
+        document.getElementById(containerId);
+
+    if (!container) {
+        throw new Error(
+            `Monaco container not found: #${containerId}`
+        );
+    }
+
+    ensureContainerVisible(container);
+
+    await loadMonacoEditor();
+
+    return setupMonaco(
+        containerId,
+        initialCode,
+        language
+    );
+}
+
+
+export function updateMonacoCode(
+    code,
+    language = 'python'
+) {
+    if (!monacoEditor) {
+        return false;
+    }
+
+    const value = String(code ?? '');
+
+    const currentModel =
+        monacoEditor.getModel();
+
+    if (
+        currentModel &&
+        currentModel.getLanguageId() === language
+    ) {
+        monacoEditor.setValue(value);
+        return true;
+    }
+
+    const model =
+        window.monaco.editor.createModel(
+            value,
+            language
+        );
+
+    monacoEditor.setModel(model);
+
+    return true;
+}
+
+
+export function getMonacoCode() {
+    return monacoEditor
+        ? monacoEditor.getValue()
+        : '';
+}
+
+
+export function getMonacoEditor() {
+    return monacoEditor;
+}

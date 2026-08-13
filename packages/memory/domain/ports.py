@@ -1,8 +1,8 @@
-"""Memory Domain Ports."""
-
 from typing import Protocol
 
 from packages.memory.domain.entities import MemoryRecord
+
+"""Memory Domain Ports."""
 
 
 class MemoryRepositoryPort(Protocol):

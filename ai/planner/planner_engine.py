@@ -1,6 +1,6 @@
-"""Động cơ lập kế hoạch ai."""
-
 from __future__ import annotations
+
+"""Động cơ lập kế hoạch ai."""
 
 
 class PlannerEngine:

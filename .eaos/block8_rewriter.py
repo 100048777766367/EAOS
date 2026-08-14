@@ -1,3 +1,5 @@
+# ruff: noqa: E501
+
 from pathlib import Path
 
 
@@ -10,10 +12,7 @@ def rewrite(path: str, replacements: list[tuple[str, str]]) -> None:
         count = text.count(old)
 
         if count != 1:
-            raise RuntimeError(
-                f"{path}: expected exactly 1 match, found {count}\n"
-                f"Fragment:\n{old}"
-            )
+            raise RuntimeError(f"{path}: expected exactly 1 match, found {count}\nFragment:\n{old}")
 
         text = text.replace(old, new)
 

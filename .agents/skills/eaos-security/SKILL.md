@@ -47,4 +47,3 @@ Before marking a change complete, execute security verification:
 2. **Review Command Interfaces**: Verify all spawned processes use safe argument arrays.
 3. **Verify Auth Contracts**: Ensure API and WebSocket endpoints maintain required auth middleware.
 4. **Record Evidence**: Log security audit results in the Evidence Ledger (`PASS` / `FAIL`).
-

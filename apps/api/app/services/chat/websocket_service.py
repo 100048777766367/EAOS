@@ -148,9 +148,7 @@ async def websocket_chat_endpoint(
                     ),
                 ):
                     event["task_id"] = ctx.task_id
-                    event["proof_hash"] = (
-                        ctx.generate_proof_hash()
-                    )
+                    event["proof_hash"] = ctx.generate_proof_hash()
 
                     if not await _safe_send(
                         websocket,
@@ -190,12 +188,10 @@ async def websocket_chat_endpoint(
                 return
 
             except Exception as exc:
-                failure, outcome = (
-                    control_plane.handle_runtime_failure(
-                        ctx.task_id,
-                        exc,
-                        "chat_orchestrator",
-                    )
+                failure, outcome = control_plane.handle_runtime_failure(
+                    ctx.task_id,
+                    exc,
+                    "chat_orchestrator",
                 )
 
                 await _safe_send(
@@ -204,9 +200,7 @@ async def websocket_chat_endpoint(
                         "type": "task_lifecycle",
                         "state": fsm.current_state.value,
                         "correlation": ctx.__dict__,
-                        "proof_hash": (
-                            ctx.generate_proof_hash()
-                        ),
+                        "proof_hash": (ctx.generate_proof_hash()),
                         "failure": failure.__dict__,
                         "recovery_outcome": outcome.__dict__,
                     },

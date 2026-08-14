@@ -63,4 +63,3 @@ Verify CLI exit code is 0 and no boundary errors are reported.
 5. Run static analysis & type checks (`ruff`, `mypy`).
 6. Run `validate_architecture()`.
 7. Report boundary verification status in the Evidence Ledger.
-

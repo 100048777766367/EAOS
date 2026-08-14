@@ -24,7 +24,7 @@
             // Highlight icon được chọn trên Activity Bar
             actButtons.forEach(b => b.classList.remove('bg-cyan-500/10', 'text-cyan-400', 'border', 'border-cyan-500/30'));
             actButtons.forEach(b => b.classList.add('hover:bg-slate-800/80', 'hover:text-slate-200'));
-            
+
             btn.classList.add('bg-cyan-500/10', 'text-cyan-400', 'border', 'border-cyan-500/30');
             btn.classList.remove('hover:bg-slate-800/80', 'hover:text-slate-200');
 

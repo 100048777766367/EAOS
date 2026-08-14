@@ -23,7 +23,7 @@ export function initExplorer() {
             console.log(`[Explorer] Fetching file content for: ${filePath}`);
             const res = await fetch(`/api/files/content?path=${encodeURIComponent(filePath)}`);
             if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-            
+
             const data = await res.json();
 
             let lang = 'python';

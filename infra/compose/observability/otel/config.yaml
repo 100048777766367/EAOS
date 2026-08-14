@@ -48,4 +48,3 @@ service:
       receivers: [otlp, prometheus]
       processors: [memory_limiter, batch]
       exporters: [prometheus, debug]
-

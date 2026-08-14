@@ -64,12 +64,8 @@ async def websocket_chat_endpoint(
                 )
                 continue
 
-            conversation_id = str(
-                data.get("conversation_id", "conv-001")
-            )
-            agent_role = str(
-                data.get("agent_role", "agent-coder")
-            )
+            conversation_id = str(data.get("conversation_id", "conv-001"))
+            agent_role = str(data.get("agent_role", "agent-coder"))
 
             fsm, ctx = control_plane.create_task(
                 user_request_id=conversation_id,
@@ -102,29 +98,19 @@ async def websocket_chat_endpoint(
                 async for event in orchestrator.process_goal(
                     conversation_id=conversation_id,
                     message=str(data.get("message", "")),
-                    system_instruction=str(
-                        data.get("system_instruction", "")
-                    ),
+                    system_instruction=str(data.get("system_instruction", "")),
                     active_file=str(
                         data.get(
                             "active_file",
                             "apps/api/app/routers/chat.py",
                         )
                     ),
-                    temperature=float(
-                        data.get("temperature", 0.7)
-                    ),
-                    max_output_tokens=int(
-                        data.get("max_output_tokens", 4096)
-                    ),
-                    json_mode=bool(
-                        data.get("json_mode", False)
-                    ),
+                    temperature=float(data.get("temperature", 0.7)),
+                    max_output_tokens=int(data.get("max_output_tokens", 4096)),
+                    json_mode=bool(data.get("json_mode", False)),
                 ):
                     event["task_id"] = ctx.task_id
-                    event["proof_hash"] = (
-                        ctx.generate_proof_hash()
-                    )
+                    event["proof_hash"] = ctx.generate_proof_hash()
 
                     if not await _safe_send(
                         websocket,
@@ -164,12 +150,10 @@ async def websocket_chat_endpoint(
                 return
 
             except Exception as exc:
-                failure, outcome = (
-                    control_plane.handle_runtime_failure(
-                        ctx.task_id,
-                        exc,
-                        "chat_orchestrator",
-                    )
+                failure, outcome = control_plane.handle_runtime_failure(
+                    ctx.task_id,
+                    exc,
+                    "chat_orchestrator",
                 )
 
                 await _safe_send(

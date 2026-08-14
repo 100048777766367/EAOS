@@ -58,5 +58,3 @@ def test_major_migration_is_blocked() -> None:
 
     assert result.compatible is False
     assert result.status == "BLOCKED"
-
-

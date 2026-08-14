@@ -60,4 +60,3 @@ Classify contract failures as:
 - WebSocket handshake timeout.
 
 Record exact failure classification and root cause in the Evidence Ledger.
-

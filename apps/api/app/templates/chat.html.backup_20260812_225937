@@ -24,7 +24,7 @@
 
     <!-- 2. MAIN WORKSPACE -->
     <div class="flex-1 flex min-h-0 relative overflow-hidden eaos-workspace-shell">
-        
+
         <!-- CỘT TRÁI: ACTIVITY BAR & FILE EXPLORER -->
         {% include 'components/ide/activity_bar.html' %}
         {% include 'components/ide/explorer_sidebar.html' %}
@@ -36,7 +36,7 @@
             <div class="eaos-editor-pane flex-1 min-h-0 flex flex-col bg-[#030712]">
                 {% include 'components/ide/editor_pane.html' %}
             </div>
-            
+
             <!-- TERMINAL CONSOLE (KHUNG BÊN DƯỚI) -->
             <div id="resizer-terminal" class="eaos-pane-resizer eaos-vertical-resizer" role="separator" aria-orientation="horizontal"></div>
 {% include 'components/ide/terminal_pane.html' %}

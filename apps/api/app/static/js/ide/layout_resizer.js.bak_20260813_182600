@@ -1066,8 +1066,3 @@ export function initIDELayoutResizers() {
         )
     );
 }
-
-
-
-
-

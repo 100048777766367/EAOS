@@ -12,26 +12,26 @@ _________________ test_activity_keyboard_navigation[chromium] _________________
 tests\e2e\test_chat_ide_runtime.py:174: in test_activity_keyboard_navigation
     expect(focused).to_have_attribute(
 E   AssertionError: Locator expected to have attribute 'search'
-E   Actual value: ai-studio 
+E   Actual value: ai-studio
 E   Call log:
 E     - Expect "to_have_attribute" with timeout 5000ms
 E     - waiting for locator(":focus")
 E       14 ╫ locator resolved to <button type="button" tabindex="-1" id="act-ai-studio" aria-pressed="false" title="AI Studio Hub" data-activity="ai-studio" aria-label="AI Studio Hub" class="act-btn w-9 h-9 rounded-lg hover:bg-slate-800/80 hover:text-slate-200 flex items-center justify-center border border-transparent transition-all">à</button>
 E          - unexpected value "ai-studio"
-E   
+E
 E   Aria snapshot:
 E   - button "AI Studio Hub"
 ________________________ test_monaco_editor[chromium] _________________________
 tests\e2e\test_chat_ide_runtime.py:395: in test_monaco_editor
     expect(host).to_be_visible()
 E   AssertionError: Locator expected to be visible
-E   Actual value: hidden 
+E   Actual value: hidden
 E   Call log:
 E     - Expect "to_be_visible" with timeout 5000ms
 E     - waiting for locator("#monaco-editor-container")
 E       13 ╫ locator resolved to <div role="textbox" aria-multiline="true" aria-label="Code editor" data-editor-host="monaco" id="monaco-editor-container" class="flex-1 min-h-0 bg-[#030712]"></div>
 E          - unexpected value "hidden"
-E   
+E
 E   Aria snapshot:
 E   - banner:
 E     - text: EAOS IDE | D:\EAOS

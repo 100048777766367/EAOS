@@ -74,4 +74,3 @@ A runtime verification is `PASS` ONLY when:
 3. Health endpoint (`/health`) returns HTTP 200;
 4. Required WebSocket routes complete successful handshake and frame exchange;
 5. All observations are recorded in the Evidence Ledger.
-

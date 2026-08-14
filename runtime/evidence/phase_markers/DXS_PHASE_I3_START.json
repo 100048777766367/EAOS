@@ -1,0 +1,12 @@
+{
+  "phase": "DXS_PHASE_I3",
+  "name": "Stabilization / Evolution Gate",
+  "previous_phase": "DXS_PHASE_I2",
+  "status": "INITIALIZED",
+  "purpose": [
+    "workspace stabilization",
+    "evidence hardening",
+    "runtime evolution preparation",
+    "governance continuity"
+  ]
+}

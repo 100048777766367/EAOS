@@ -136,4 +136,3 @@ Record every stage in the Evidence Ledger:
 - Result (`PASS` / `FAIL` / `UNVERIFIED`)
 
 `PASS` requires executable evidence for all mandatory stages.
-

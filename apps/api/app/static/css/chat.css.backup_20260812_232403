@@ -1523,4 +1523,3 @@ body.eaos-resizing-terminal * {
 .eaos-pane-resizer.eaos-pane-hidden {
     display: none !important;
 }
-

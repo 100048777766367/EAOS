@@ -8,7 +8,7 @@
 </head>
 <body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen p-6 flex flex-col">
     <div class="max-w-7xl mx-auto w-full flex-1 flex flex-col space-y-4">
-        
+
         <!-- Header -->
         <header class="flex items-center justify-between border-b border-slate-800 pb-3">
             <div>
@@ -20,14 +20,14 @@
                 </p>
             </div>
             <div class="flex items-center gap-2">
-                <select id="agent-role-select" 
+                <select id="agent-role-select"
                         class="bg-slate-900 border border-slate-800 rounded px-2.5 py-1 text-xs text-slate-200 focus:outline-none focus:border-cyan-500 font-mono">
                     <option value="coder">Coder Agent</option>
                     <option value="architect">Architect Agent</option>
                     <option value="security">Security Agent</option>
                     <option value="doctor">Doctor Agent</option>
                 </select>
-                <span id="exec-status" 
+                <span id="exec-status"
                       class="px-2.5 py-1 text-xs rounded font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                     Idle
                 </span>
@@ -36,7 +36,7 @@
 
         <!-- Main IDE Layout -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 flex-1">
-            
+
             <!-- Chat Stream Column -->
             <div class="lg:col-span-1 bg-slate-900 border border-slate-800 rounded-lg flex flex-col justify-between p-4 h-[620px]">
                 <div id="chat-stream" aria-live="polite" class="flex-1 overflow-y-auto space-y-3 pr-2 font-mono text-xs">
@@ -47,10 +47,10 @@
 
                 <form id="chat-form" class="mt-3 flex gap-2">
                     <label for="chat-input" class="sr-only">Nội dung hội thoại</label>
-                    <input id="chat-input" type="text" 
-                           placeholder="Enter goal or task command..." 
+                    <input id="chat-input" type="text"
+                           placeholder="Enter goal or task command..."
                            class="flex-1 bg-slate-950 border border-slate-800 rounded px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500 font-mono"/>
-                    <button type="submit" 
+                    <button type="submit"
                             class="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-xs font-semibold rounded text-white transition-colors">
                         Send
                     </button>
@@ -64,7 +64,7 @@
                         <span>Generated Patch Diff</span>
                         <span class="text-[10px] text-cyan-400 font-mono">Self-Rewrite Engine</span>
                     </h2>
-                    <pre id="patch-diff-box" 
+                    <pre id="patch-diff-box"
                          class="flex-1 mt-2 p-3 bg-slate-950 rounded border border-slate-800 font-mono text-[11px] text-cyan-300 overflow-auto">No patch generated yet.</pre>
                 </div>
 
@@ -73,7 +73,7 @@
                         <span>Task Execution Result (Ruff / Mypy / Pytest)</span>
                         <span class="text-[10px] text-emerald-400 font-mono">Verification Gate</span>
                     </h2>
-                    <pre id="exec-result-box" 
+                    <pre id="exec-result-box"
                          class="flex-1 mt-2 p-3 bg-slate-950 rounded border border-slate-800 font-mono text-[11px] text-emerald-400 overflow-auto">No task execution logs yet.</pre>
                 </div>
             </div>

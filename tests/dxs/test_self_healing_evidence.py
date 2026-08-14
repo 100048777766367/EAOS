@@ -5,7 +5,6 @@ from dxs.self_healing.model import HealingAction
 
 
 def test_evidence_backed_healing(tmp_path: Path):
-
     engine = SelfHealingEngine(tmp_path)
 
     result = engine.execute(

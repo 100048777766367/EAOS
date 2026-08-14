@@ -82,4 +82,3 @@ def test_patch_upgrade_is_supported() -> None:
     )
 
     assert result.compatible is True
-

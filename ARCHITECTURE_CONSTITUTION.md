@@ -5074,10 +5074,10 @@ Constitutional amendments shall therefore be rare, deliberate, evidence-based, a
 
 Every participant contributing to EAOS accepts the following commitment:
 
-> We build technology to serve architecture.  
-> We build architecture to serve business.  
-> We build business to fulfill enterprise purpose.  
-> We preserve constitutional integrity above implementation convenience.  
+> We build technology to serve architecture.
+> We build architecture to serve business.
+> We build business to fulfill enterprise purpose.
+> We preserve constitutional integrity above implementation convenience.
 > We evolve continuously through governance, evidence, and disciplined engineering.
 
 The Constitution is the Supreme Source of Truth.

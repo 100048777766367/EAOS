@@ -198,4 +198,3 @@ def test_scaffold_contract_is_idempotent() -> None:
         assert len(first.created) == 6
         assert len(second.created) == 0
         assert len(second.skipped) == 6
-

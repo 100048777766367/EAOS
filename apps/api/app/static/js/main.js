@@ -710,5 +710,3 @@ function updateRuntimeTestFooter(
     tests.textContent =
         `Tests ${status}`;
 }
-
-

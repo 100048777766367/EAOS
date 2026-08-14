@@ -1,7 +1,7 @@
 from __future__ import annotations
-from dxs.adapters.compatibility import CompatibilityAdapter
 
 import pytest
+from dxs.adapters.compatibility import CompatibilityAdapter
 from dxs.application.compatibility_service import CompatibilityService
 from dxs.contracts.versioning import ContractVersion
 from dxs.domain.compatibility import CompatibilityPolicy
@@ -81,5 +81,3 @@ def test_patch_upgrade_is_supported() -> None:
     )
 
     assert result.compatible is True
-
-

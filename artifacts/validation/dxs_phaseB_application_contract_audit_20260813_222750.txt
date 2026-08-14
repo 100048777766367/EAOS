@@ -3,7 +3,7 @@ PowerShell transcript start
 Start time: 20260813222750
 Username: DESKTOP-V613H5K\admin
 RunAs User: DESKTOP-V613H5K\admin
-Configuration Name: 
+Configuration Name:
 Machine: DESKTOP-V613H5K (Microsoft Windows NT 10.0.26200.0)
 Host Application: C:\Program Files\WindowsApps\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\pwsh.dll -noexit -command try { . "d:\Microsoft VS Code\a5b5009513\resources\app\out\vs\workbench\contrib\terminal\common\scripts\shellIntegration.ps1" } catch {}
 Process ID: 21264

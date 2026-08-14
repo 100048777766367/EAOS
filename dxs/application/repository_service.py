@@ -5,22 +5,27 @@ from pathlib import Path
 from dxs.application.compatibility_service import CompatibilityService
 from dxs.application.repository_doctor import RepositoryDoctor
 from dxs.application.validate_repository import RepositoryValidator
+from dxs.contracts.scaffolding import ScaffoldResult
 from dxs.contracts.versioning import ContractVersion
 from dxs.domain.compatibility import CompatibilityResult
 from dxs.domain.repository import RepositoryContext
 from dxs.domain.validation import ValidationResult
-from dxs.ports.repository_context import RepositoryContextProvider
 from dxs.evidence.service import EvidenceService
 from dxs.health.model import HealthReport
 from dxs.health.service import HealthService
+from dxs.ports.repository_context import RepositoryContextProvider
 from dxs.remediation.model import Remediation
 from dxs.remediation.service import RemediationService
-from dxs.contracts.scaffolding import ScaffoldResult
-from dxs.scaffolding.service import scaffold_capability
+from dxs.scaffolding.service import ScaffoldingService
 
 
 class RepositoryApplication:
-    """Application facade for DXS repository operations."""
+    """
+    Application facade for DXS repository operations.
+
+    All CLI and external entrypoints should communicate
+    through this facade.
+    """
 
     def __init__(
         self,
@@ -29,14 +34,18 @@ class RepositoryApplication:
         health_service: HealthService,
         evidence_service: EvidenceService,
         remediation_service: RemediationService,
+        scaffolding_service: ScaffoldingService,
     ) -> None:
         self._context_provider = context_provider
+
         self._doctor = RepositoryDoctor()
         self._validator = RepositoryValidator()
+
         self._compatibility = compatibility_service
         self._health = health_service
         self._evidence = evidence_service
         self._remediation = remediation_service
+        self._scaffolding = scaffolding_service
 
     def discover(
         self,
@@ -49,6 +58,7 @@ class RepositoryApplication:
         root: Path,
     ) -> list[str]:
         context = self.discover(root)
+
         return self._doctor.inspect(context)
 
     def validate(
@@ -56,6 +66,7 @@ class RepositoryApplication:
         root: Path,
     ) -> list[ValidationResult]:
         context = self.discover(root)
+
         return self._validator.validate(context)
 
     def compatibility(
@@ -73,6 +84,10 @@ class RepositoryApplication:
         passed: int,
         failed: int,
     ) -> HealthReport:
+        """
+        Repository health contract.
+        """
+
         return self._health.evaluate(
             passed=passed,
             failed=failed,
@@ -84,6 +99,10 @@ class RepositoryApplication:
         value: str,
         source: str,
     ):
+        """
+        Evidence collection contract.
+        """
+
         return self._evidence.capture(
             key=key,
             value=value,
@@ -95,6 +114,10 @@ class RepositoryApplication:
         key: str,
         description: str,
     ) -> Remediation:
+        """
+        Remediation planning contract.
+        """
+
         return self._remediation.create(
             key=key,
             description=description,
@@ -105,7 +128,11 @@ class RepositoryApplication:
         root: Path,
         name: str,
     ) -> ScaffoldResult:
-        return scaffold_capability(
+        """
+        Repository scaffolding contract.
+        """
+
+        return self._scaffolding.scaffold(
             root=root,
             name=name,
         )

@@ -97,43 +97,43 @@ Baseline: D.1-R4
 
 --- D:\EAOS\.eaos\backups\phase7-evolution-20260813_163229\docs\DXS_PHASE_7.md ---
   # EAOS DXS Phase 7 — Evolution Layer
-  
+
   ## Scope
-  
+
   Phase 7 provides deterministic contract evolution primitives.
-  
+
   ### 7.1 Versioned Contracts
-  
+
   Provides:
-  
+
   - `ContractLifecycle`
   - `VersionedContract`
   - `ContractFamily`
-  
+
   Existing `ContractVersion` remains the semantic version primitive.
-  
+
   ### 7.2 Compatibility Matrix
-  
+
   Provides deterministic pairwise evaluation of current and target versions.
-  
+
   No repository mutation occurs.
-  
+
   ### 7.3 Migration Framework
-  
+
   Provides:
-  
+
   - `MigrationStep`
   - `MigrationPlan`
   - `MigrationPlanner`
-  
+
   The planner describes migration readiness only.
-  
+
   It does not modify repository files.
-  
+
   ### 7.4 Deprecation Policy
-  
+
   Provides:
-  
+
   - `DeprecationStatus`
   - `DeprecationRecord`
 
@@ -141,10 +141,10 @@ Baseline: D.1-R4
 
 --- D:\EAOS\apps\api\app\docs\ARCHITECTURE.md ---
   # EAOS Enterprise AI IDE Architecture Specification
-  
+
   ## Overview
   This document specifies the multi-layer frontend composition architecture.
-  
+
   ## Layers
   1. **Presentation Layer (`.html`)**: Modular Jinja2 layouts.
   2. **Runtime Engine (`.js`)**: ES6 modules and WebSockets.
@@ -164,60 +164,60 @@ Baseline: D.1-R4
   classification: Constitutional
   change_policy: ADR Required
   ---
-  
+
   # EAOS Architecture Constitution
-  
+
   > **Version:** 1.1\
   > **Status:** FROZEN\
   > **Authority:** Supreme Source of Truth
-  
+
   # Preamble
-  
+
   This Constitution is the supreme governing document of the Enterprise Architecture Operating System (EAOS).
-  
+
   It establishes the immutable architectural principles, governance policies, and decision-making framework that guide every engineering, architectural, operational, and AI-assisted activity within the enterprise.
-  
+
   Its primary purpose is to ensure that every architectural decision contributes to sustainable business value while preserving architectural integrity, long-term evolvability, and enterprise governance.
-  
+
   This Constitution applies equally to:
-  
+
   - Human architects
   - Software engineers
   - AI agents
   - Automated systems
   - Enterprise services
   - Repository contributors
-  
+
   All lower-level documents—including ADRs, engineering guides, project documentation, implementation plans, and source code—shall conform to this Constitution.
-  
+
   If any conflict exists between this Constitution and any other document, implementation, or engineering decision, this Constitution shall prevail.
-  
+
 
 --- D:\EAOS\assets\templates\architecture_document_template.md ---
   # EAOS Architecture Document Template
-  
+
   > **Document ID:** DOC-TEMPLATE-001
   > **Status:** DRAFT
   > **Governance:** ARCHITECTURE_CONSTITUTION.md v2.0
-  
+
   ---
-  
+
   ## 1. Context & Purpose
   Explain the business and architectural context driving this document.
-  
+
   ## 2. Hexagonal Boundaries
   - **Domain:** Pure business logic and immutable entities.
   - **Application:** Use cases and workflow orchestrators.
   - **Infrastructure:** External technology adapters.
-  
+
   ## 3. Decision & Trade-offs
   Document architectural trade-offs and consequences.
 
 --- D:\EAOS\docs\ADR_INDEX.md ---
   # Part 1 — Front Matter
-  
+
   ## Document Metadata
-  
+
   | Property | Value |
   |----------|-------|
   | Document | ADR_INDEX.md |
@@ -231,33 +231,33 @@ Baseline: D.1-R4
   | Audience | Enterprise Architects, Engineers, AI Agents, Project Maintainers |
   | Review Cycle | Continuous |
   | Last Updated | YYYY-MM-DD |
-  
+
   ---
-  
+
   # Purpose
-  
+
   `ADR_INDEX.md` is the authoritative index for all **Architecture Decision Records (ADRs)** within the EAOS project.
-  
+
   Its purpose is to provide a centralized governance mechanism for recording, organizing, tracking, and referencing architectural decisions throughout the lifecycle of the system.
-  
+
   Rather than storing the full content of each decision, this document serves as the master registry that links every approved, proposed, deprecated, or superseded ADR.
-  
+
   It enables both human contributors and AI agents to understand:
-  
+
   - what architectural decisions have been made,
   - why they were made,
   - their current status,
   - their relationships,
   - and their impact on implementation.
-  
+
   ---
-  
+
   # Scope
-  
+
 
 --- D:\EAOS\docs\adr\ADR-0042_temporary_namespace_compatibility_shims.md ---
   # ADR-0042: Temporary Namespace Compatibility Shims for Governance Migration
-  
+
   - **Status**: CLOSED (FULFILLED & REMOVED)
   - **Owner**: Architecture Review Board (ARB) & Governance Team
   - **Closure Date**: 2026-07-28
@@ -265,44 +265,44 @@ Baseline: D.1-R4
 
 --- D:\EAOS\docs\adrs\ADR-001-hexagonal-architecture.md ---
   # ADR 001: Sử Dụng Hexagonal Architecture
-  
+
   ## Status
   Status: Accepted
-  
+
   ## Context
   Chúng ta cần xây dựng một kiến trúc linh hoạt, dễ nâng cấp và thay thế công nghệ trong tương lai mà không ảnh hưởng trực tiếp đến logic nghiệp vụ lõi.
-  
+
   ## Decision
   Sử dụng kiến trúc Ports & Adapters làm nền tảng chính.
-  
+
   ## Consequences
   Logic nghiệp vụ sẽ cực kỳ độc lập, tuy nhiên số lượng code mẫu (boilerplate code) sẽ tăng nhẹ ở giai đoạn đầu.
 
 --- D:\EAOS\docs\adrs\ADR-002-database-selection.md ---
   # ADR 002: Lựa Chọn PostgreSQL Làm Kho Lưu Trữ
-  
+
   ## Status
   Status: Draft
-  
+
   ## Context
   Chúng ta cần một cơ sở dữ liệu có cấu trúc ổn định và hỗ trợ tìm kiếm vector.
-  
+
   ## Decision
   Sử dụng PostgreSQL kết hợp phần mở rộng pgvector.
-  
+
   ## Consequences
   - **Ưu điểm:** Hợp nhất dữ liệu quan hệ, dữ liệu phi cấu trúc (JSONB) và dữ liệu vector vào cùng một thực thể duy nhất. Giảm tải tối đa việc đồng bộ dữ liệu chéo.
   - **Nhược điểm:** Hiệu năng tìm kiếm vector quy mô lớn có thể chậm hơn các vector database chuyên dụng nếu không cấu hình tối ưu hóa chỉ mục HNSW.
 
 --- D:\EAOS\docs\ARCHITECTURE_CONSTITUTION.md ---
   # Hiến Pháp Kiến Trúc EAOS (Architecture Constitution)
-  
+
   Mọi thay đổi cấu trúc mã nguồn và quyết định kỹ thuật phải tuân thủ nghiêm ngặt các điều luật dưới đây:
-  
+
   ## 1. Cấu trúc Phân Lớp (Hexagonal Architecture)
   * Các Module thuộc tầng **Domain** không được phép import bất kỳ phần tử nào từ **Application** hoặc **Infrastructure**.
   * Tầng **Application** (Use Cases, Core Engines) chỉ được tương tác với **Domain**, không biết đến sự hiện diện của **Infrastructure**.
-  
+
   ## 2. Tiêu chuẩn Hồ sơ Quyết Định (ADR Template)
   Mọi tài liệu quyết định kỹ thuật (.md) nằm trong `docs/adrs/` bắt buộc phải có đầy đủ 4 đề mục:
   1. `# Status`
@@ -312,17 +312,17 @@ Baseline: D.1-R4
 
 --- D:\EAOS\docs\architecture\EAOS_META_ARCHITECTURE.md ---
   # EAOS Meta-Architecture Specification
-  
+
   > **System ID:** EAOS-META-ARCH-001
   > **Governance:** ARCHITECTURE_CONSTITUTION.md v2.0
   > **Status:** ACTIVE
-  
+
   ---
-  
+
   ## 1. System Overview
   EAOS is an AI-native Enterprise Architecture Operating System that transforms
   enterprise architecture from static documentation into executable software.
-  
+
   ## 2. Layering & Boundaries
   - **Core Kernel:** Governance, Federation (Raft/BFT), Splay RAM Cache.
   - **Platform Services:** Security, Telemetry (OTLP), Resilience, Performance.
@@ -331,41 +331,41 @@ Baseline: D.1-R4
 
 --- D:\EAOS\docs\decisions\ADR-006-executable-governance-protocol.md ---
   # PR-1002: Tối Ưu Hóa Splay Tree RAM Bằng Eviction Policy
-  
+
   | Thuộc Tính | Giá Trị |
   | :--- | :--- |
   | Proposal ID | PR-1002-SPLAY-OPTIMIZATION |
   | Proposer | CoderAgent |
   | Status | APPROVED & COMMITTED |
   | Effective Date | 2026-07-19 |
-  
+
   ---
-  
+
   ## 1. KIẾN NGHỊ (PROPOSAL)
   **Người đề xuất:** `CoderAgent`
-  
+
   ### Bối cảnh:
   Dữ liệu bộ nhớ đệm RAM đang phình to vô tội vạ khi hệ thống hoạt động liên tục, có nguy cơ gây lỗi OutOfMemory (OOM).
-  
+
   ### Đề xuất:
   Tích hợp thuật toán **LRU Cache Eviction Policy** trực tiếp vào `SplayCacheKnowledgeRepository` để tự động trục xuất các nút ít truy cập nhất khi số lượng nút vượt quá 1000.
-  
+
   ---
-  
+
   ## 2. Ý KIẾN PHẢN BIỆN (OBJECTIONS & REBUTTALS)
-  
+
   ### Ý kiến đối lập 1: `ReviewerAgent`
   * Trạng thái phản biện: **CONCERN RAISED**
   * Nội dung phản biện: Việc trục xuất nút (Eviction) có thể gây ra hiện tượng sụt giảm tạm thời điểm tương đồng ngữ nghĩa khi truy vấn Vector Search (Cache Miss).
   * Phương án khắc phục (Rebuttal): Chúng ta chỉ trục xuất các nút lá nằm ở tầng sâu nhất của cây Splay. Do bản chất Splay Tree đưa nút hot lên gốc (Root), các nút bị trục xuất chắc chắn là các cấu hình "lạnh" ít khi truy cập, giảm thiểu rủi ro xuống < 1%.
-  
+
   ### Ý kiến đối lập 2: `SecurityAgent`
   * Trạng thái phản biện: **RESOLVED**
   * Nội dung phản biện: Cần bảo đảm `Idempotency Key` được áp dụng cho thao tác ghi đệm để tránh AI Agent ghi đè trùng lặp dữ liệu trong lúc cây đang xoay.
   * Phương án khắc phục (Rebuttal): Đã tích hợp `IdempotencyService` ở tầng Platform bọc ngoài API.
-  
+
   ---
-  
+
   ## 3. PHÂN TÍCH CHỈ SỐ GIẢ LẬP (METRICS & SIMULATION)
   Chạy giả lập trên Bản sao số (Digital Twin) đạt kết quả:
   * Số lượng test cases vượt qua: **1000/1000 passed**.
@@ -373,20 +373,20 @@ Baseline: D.1-R4
 
 --- D:\EAOS\docs\DXS_PHASE_5.md ---
   # EAOS DXS Phase 5
-  
+
   ## Scope
-  
+
   Phase 5 introduces Developer Experience capabilities for:
-  
+
   - IDE inspection
   - Integration inspection
-  
+
   ## IDE
-  
+
   The IDE service inspects supported IDE configuration locations.
-  
+
   Command:
-  
+
   ```text
   python -m dxs.cli.main ide
 
@@ -394,51 +394,51 @@ Baseline: D.1-R4
 
 --- D:\EAOS\docs\DXS_PHASE_7.md ---
   # EAOS DXS Phase 7 — Evolution Layer
-  
+
   ## Scope
-  
+
   Phase 7 provides deterministic contract evolution primitives.
-  
+
   ### 7.1 Versioned Contracts
-  
+
   Provides:
-  
+
   - `ContractLifecycle`
   - `VersionedContract`
   - `ContractFamily`
-  
+
   Existing `ContractVersion` remains the semantic version primitive.
-  
+
   ### 7.2 Compatibility Matrix
-  
+
   Provides deterministic pairwise evaluation of current and target versions.
-  
+
   No repository mutation occurs.
-  
+
   ### 7.3 Migration Framework
-  
+
   Provides:
-  
+
   - `MigrationStep`
   - `MigrationPlan`
   - `MigrationPlanner`
-  
+
   The planner describes migration readiness only.
-  
+
   It does not modify repository files.
-  
+
   ### 7.4 Deprecation Policy
-  
+
   Provides:
-  
+
   - `DeprecationStatus`
   - `DeprecationRecord`
 
 --- D:\EAOS\generated\architecture\architecture_metrics.md ---
   # Báo Cáo Đo Lường Chỉ Số Kiến Trúc (Architecture Metrics)
-  
+
   **Điểm chất lượng kiến trúc EAOS:** 80/100
-  
+
   | Gói (Package) | Coupling Ca (In) | Coupling Ce (Out) | Instability (I) | Abstractness (A) | Distance (D) |
   | :--- | :---: | :---: | :---: | :---: | :---: |
   | agent | 0 | 0 | 0.0 | 0.1667 | 0.8333 |
@@ -478,30 +478,30 @@ Baseline: D.1-R4
 
 --- D:\EAOS\generated\docs\system_architecture_report.md ---
   # EAOS System Architecture Report
-  
+
   > **Generated At:** 2026-07-23T15:10:00Z
   > **Status:** PASSED
 
 --- D:\EAOS\knowledge\specifications\README.md ---
   # Sub-domain Package: specifications
-  
+
   Self-describing module boundary for EAOS Centennial Edition v3.1.
-  
+
   ## Path
   $relPath
-  
+
   ## Status
   Ratified under Architecture Constitution v3.0 (Zero Boundary Violations).
 
 --- D:\EAOS\specifications\apis\api_gateway_spec.md ---
   # API Gateway Specification
-  
+
   > **Specification ID:** SPEC-APIS-001
   > **Status:** ACTIVE
   > **Governance:** ARCHITECTURE_CONSTITUTION.md v2.0
-  
+
   ---
-  
+
   ## 1. Specification Intent
   Defines executable boundaries and rules for apis in EAOS.
 
@@ -515,13 +515,13 @@ Baseline: D.1-R4
 
 --- D:\EAOS\specifications\business\invoice_approval_spec.md ---
   # Invoice Approval Specification
-  
+
   > **Specification ID:** SPEC-BUSINESS-001
   > **Status:** ACTIVE
   > **Governance:** ARCHITECTURE_CONSTITUTION.md v2.0
-  
+
   ---
-  
+
   ## 1. Specification Intent
   Defines executable boundaries and rules for business in EAOS.
 
@@ -531,13 +531,13 @@ Baseline: D.1-R4
 
 --- D:\EAOS\specifications\capabilities\knowledge_capability_spec.md ---
   # Knowledge Capability Spec
-  
+
   > **Specification ID:** SPEC-CAPABILITIES-001
   > **Status:** ACTIVE
   > **Governance:** ARCHITECTURE_CONSTITUTION.md v2.0
-  
+
   ---
-  
+
   ## 1. Specification Intent
   Defines executable boundaries and rules for capabilities in EAOS.
 
@@ -547,20 +547,20 @@ Baseline: D.1-R4
 
 --- D:\EAOS\specifications\compiler-spec.md ---
   # compiler-spec
-  
+
   Purpose: Placeholder for future specification work.
-  
+
   TODO
 
 --- D:\EAOS\specifications\domains\identity_domain_spec.md ---
   # Identity Domain Bounded Context Spec
-  
+
   > **Specification ID:** SPEC-DOMAINS-001
   > **Status:** ACTIVE
   > **Governance:** ARCHITECTURE_CONSTITUTION.md v2.0
-  
+
   ---
-  
+
   ## 1. Specification Intent
   Defines executable boundaries and rules for domains in EAOS.
 
@@ -570,41 +570,41 @@ Baseline: D.1-R4
 
 --- D:\EAOS\specifications\fs\README.md ---
   # Sub-domain Package: fs
-  
+
   Self-describing module boundary for EAOS Centennial Edition v3.1.
-  
+
   ## Path
   $relPath
-  
+
   ## Status
   Ratified under Architecture Constitution v3.0 (Zero Boundary Violations).
 
 --- D:\EAOS\specifications\knowledge-lifecycle-spec.md ---
   # knowledge-lifecycle-spec
-  
+
   Purpose: Placeholder for future specification work.
-  
+
   TODO
 
 --- D:\EAOS\specifications\knowledge-object-spec.md ---
   # knowledge-object-spec
-  
+
   Purpose: Placeholder for future specification work.
-  
+
   TODO
 
 --- D:\EAOS\specifications\knowledge-ontology-spec.md ---
   # knowledge-ontology-spec
-  
+
   Purpose: Placeholder for future specification work.
-  
+
   TODO
 
 --- D:\EAOS\specifications\knowledge-relationship-spec.md ---
   # knowledge-relationship-spec
-  
+
   Purpose: Placeholder for future specification work.
-  
+
   TODO
 
 --- D:\EAOS\specifications\ledger\README.md ---
@@ -617,12 +617,12 @@ Baseline: D.1-R4
 
 --- D:\EAOS\specifications\README.md ---
   # Phân Hệ Đặc Tả Thực Thi Doanh Nghiệp (EAOS Specifications Engine v3.0)
-  
+
   ## 1. Mục đích Kinh doanh
   Quản trị toàn bộ các tệp đặc tả kiến trúc doanh nghiệp (Executable Specifications),
   kiểm tra tính tuân thủ của codebase theo quy định kiến trúc và ngăn ngừa
   hiện tượng trôi dạt kiến trúc (Architecture Drift).
-  
+
   ## 2. Phân lớp Kiến trúc
   - pis/: Động cơ kiểm tra đặc tả cổng giao diện API.
   - usiness/: Động cơ kiểm tra đặc tả quy trình nghiệp vụ.
@@ -636,27 +636,27 @@ Baseline: D.1-R4
 
 --- D:\EAOS\specifications\repository-spec.md ---
   # repository-spec
-  
+
   Purpose: Placeholder for future specification work.
-  
+
   TODO
 
 --- D:\EAOS\specifications\representation-spec.md ---
   # representation-spec
-  
+
   Purpose: Placeholder for future specification work.
-  
+
   TODO
 
 --- D:\EAOS\specifications\services\auth_service_spec.md ---
   # Auth Service Specification
-  
+
   > **Specification ID:** SPEC-SERVICES-001
   > **Status:** ACTIVE
   > **Governance:** ARCHITECTURE_CONSTITUTION.md v2.0
-  
+
   ---
-  
+
   ## 1. Specification Intent
   Defines executable boundaries and rules for services in EAOS.
 
@@ -666,27 +666,27 @@ Baseline: D.1-R4
 
 --- D:\EAOS\specifications\storage-spec.md ---
   # storage-spec
-  
+
   Purpose: Placeholder for future specification work.
-  
+
   TODO
 
 --- D:\EAOS\specifications\view-spec.md ---
   # view-spec
-  
+
   Purpose: Placeholder for future specification work.
-  
+
   TODO
 
 --- D:\EAOS\specifications\workflows\coder_auto_remedy_spec.md ---
   # Coder Agent Auto Remedy Workflow
-  
+
   > **Specification ID:** SPEC-WORKFLOWS-001
   > **Status:** ACTIVE
   > **Governance:** ARCHITECTURE_CONSTITUTION.md v2.0
-  
+
   ---
-  
+
   ## 1. Specification Intent
   Defines executable boundaries and rules for workflows in EAOS.
 

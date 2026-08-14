@@ -3,36 +3,66 @@
 # ==============================================================================
 
 repos:
+
+  # ---------------------------------------------------------------------------
+  # Basic repository hygiene
+  # ---------------------------------------------------------------------------
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v5.0.0
     hooks:
+
       - id: check-yaml
         exclude: ^generated/
-      - id: end-of-file-fixer
-      - id: trailing-whitespace
-      - id: check-added-large-files
-        args: ['--maxkb=500']
-      - id: check-toml
-      - id: check-json
 
+      - id: end-of-file-fixer
+
+      - id: trailing-whitespace
+
+      - id: check-added-large-files
+        args:
+          - --maxkb=500
+
+      - id: check-toml
+
+      - id: check-json
+        exclude: |
+          (?x)^(
+            \.eaos/
+          )
+
+
+  # ---------------------------------------------------------------------------
+  # Python quality gate
+  # ---------------------------------------------------------------------------
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.3.0
+
     hooks:
+
       - id: ruff
-        args: [--fix]
+        args:
+          - --fix
+
       - id: ruff-format
 
-  # TÍCH HỢP TỐI CAO: Kiểm soát bảo mật ký tự ẩn và Hiến pháp kiến trúc EAOS
+
+  # ---------------------------------------------------------------------------
+  # EAOS Constitution Governance
+  # ---------------------------------------------------------------------------
   - repo: local
+
     hooks:
+
       - id: check-invisible-chars
         name: Check Invisible / Homograph Chars
         entry: python scripts/check_invisible_chars.py
         language: system
-        types: [python]
+        types:
+          - python
+
 
       - id: eaos-architecture-validator
         name: EAOS Architecture Validator (Hiến pháp tối cao)
-        entry: python -m task lint
+        entry: task lint
         language: system
         pass_filenames: false

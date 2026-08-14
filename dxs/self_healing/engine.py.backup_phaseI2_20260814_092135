@@ -1,0 +1,68 @@
+"""Self healing execution engine."""
+
+from __future__ import annotations
+
+from dxs.self_healing.model import (
+    HealingAction,
+    HealingPlan,
+    HealingResult,
+)
+
+
+class SelfHealingEngine:
+    """
+    Controlled autonomous repair loop.
+
+    Flow:
+
+    detect
+      |
+    diagnose
+      |
+    plan
+      |
+    approve
+      |
+    repair
+      |
+    verify
+    """
+
+    def diagnose(
+        self,
+        issue: str,
+    ) -> HealingPlan:
+        return HealingPlan(
+            issue=issue,
+            action=HealingAction.REPAIR,
+        )
+
+    def approve(
+        self,
+        plan: HealingPlan,
+    ) -> bool:
+        return plan.action == HealingAction.REPAIR
+
+    def repair(
+        self,
+        plan: HealingPlan,
+    ) -> HealingResult:
+
+        if not self.approve(plan):
+            return HealingResult(
+                success=False,
+                action=str(plan.action),
+                message="Repair rejected",
+            )
+
+        return HealingResult(
+            success=True,
+            action=str(plan.action),
+            message=f"Repaired: {plan.issue}",
+        )
+
+    def verify(
+        self,
+        result: HealingResult,
+    ) -> bool:
+        return result.success

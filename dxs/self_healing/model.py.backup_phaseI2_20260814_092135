@@ -1,0 +1,37 @@
+"""Self healing domain models."""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from enum import StrEnum
+
+
+class HealingAction(StrEnum):
+    """
+    Allowed remediation actions.
+    """
+
+    REPAIR = "repair"
+    SKIP = "skip"
+    VERIFY = "verify"
+
+
+@dataclass
+class HealingPlan:
+    """
+    Planned healing operation.
+    """
+
+    issue: str
+    action: HealingAction
+
+
+@dataclass
+class HealingResult:
+    """
+    Healing execution result.
+    """
+
+    success: bool
+    action: str
+    message: str

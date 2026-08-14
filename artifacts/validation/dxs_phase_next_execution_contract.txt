@@ -1,0 +1,19 @@
+DXS NEXT PHASE EXECUTION CONTRACT
+
+Baseline:
+dxs-phase-I2
+
+Branch:
+feature/dxs-phase-next
+
+Started:
+2026-08-14
+
+Status:
+ACTIVE
+
+Previous phase:
+DXS Phase I.2 Evidence Backed Self Healing
+
+Next objective:
+Define and implement next DXS capability increment.

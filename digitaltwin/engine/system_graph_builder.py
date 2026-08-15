@@ -6,6 +6,8 @@ import ast
 import uuid
 from pathlib import Path
 
+from runtime.runtime_control_plane import RuntimeControlPlane
+
 from digitaltwin.models.canonical_graph_model import (
     GraphDomainType,
     GraphEdgeDTO,
@@ -15,7 +17,6 @@ from digitaltwin.models.canonical_graph_model import (
     ProvenanceState,
     SystemGraphTopologyDTO,
 )
-from runtime.runtime_control_plane import RuntimeControlPlane
 
 
 class SystemGraphBuilder:

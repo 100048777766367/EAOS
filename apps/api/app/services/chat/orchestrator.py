@@ -5,12 +5,16 @@ from __future__ import annotations
 from collections.abc import AsyncGenerator
 from pathlib import Path
 from typing import Any
+from uuid import uuid4
 
 from apps.api.app.adapters.llm.gemini import GeminiAdapter
 from apps.api.app.services.chat.context_manager import ContextManager
 from apps.api.app.services.chat.conversation_store import ConversationStore
 from apps.api.app.services.chat.verification.coordinator import (
     VerificationCoordinator,
+)
+from packages.evidence.enterprise_evidence import (
+    EAOSEnterpriseEvidencePackageEngine,
 )
 
 
@@ -23,6 +27,26 @@ class ChatOrchestrator:
         self.context_mgr = ContextManager(project_root)
         self.llm = GeminiAdapter()
         self.verification = VerificationCoordinator(project_root)
+        self.evidence = EAOSEnterpriseEvidencePackageEngine(project_root)
+
+    def _record_message_evidence(
+        self,
+        conversation_id: str,
+        role: str,
+        content: str,
+        turn_id: int,
+    ) -> str:
+        """Persist one chat message into the append-only evidence ledger."""
+        evidence_id = f"E-{uuid4().hex}"
+        evidence = self.evidence.record_turn_evidence(
+            evidence_id=evidence_id,
+            user_id=conversation_id,
+            session_id=conversation_id,
+            turn_id=turn_id,
+            content=content,
+            role=role,
+        )
+        return evidence.evidence_id.value
 
     async def process_goal(
         self,
@@ -39,6 +63,13 @@ class ChatOrchestrator:
             conversation_id,
             "user",
             message,
+        )
+        user_turn_id = len(self.store.get_history(conversation_id))
+        user_evidence_id = self._record_message_evidence(
+            conversation_id=conversation_id,
+            role="USER",
+            content=message,
+            turn_id=user_turn_id,
         )
 
         file_ctx = self.context_mgr.build_file_context(
@@ -78,6 +109,7 @@ class ChatOrchestrator:
         yield {
             "type": "stream_start",
             "message": "LLM stream started",
+            "user_evidence_id": user_evidence_id,
         }
 
         full_response = ""
@@ -116,16 +148,25 @@ class ChatOrchestrator:
             "assistant",
             full_response,
         )
+        assistant_turn_id = len(self.store.get_history(conversation_id))
+        assistant_evidence_id = self._record_message_evidence(
+            conversation_id=conversation_id,
+            role="ASSISTANT",
+            content=full_response,
+            turn_id=assistant_turn_id,
+        )
 
         yield {
             "type": "stream_end",
             "reply": full_response,
             "chunks": chunk_count,
+            "assistant_evidence_id": assistant_evidence_id,
         }
 
         yield {
             "type": "response_complete",
             "reply": full_response,
+            "assistant_evidence_id": assistant_evidence_id,
         }
 
         async for event in self.verification.run():

@@ -35,13 +35,16 @@ presentation, and integration layer. Consume does not imply ownership.
 | --- | --- | --- |
 | Health | `GET /health` | Probe and render observed/degraded/unavailable. |
 | Task submission | `POST /api/v1/control/execute` | Forward command requests; do not execute locally. |
-| Task status | Missing in discovered API routers | Report missing capability gap. |
-| Lifecycle/event streaming | Missing WebSocket route in this checkout | Report missing capability gap. |
+| Task status | `GET /api/v1/tasks/{task_id}` | Read Gateway-owned lifecycle state; do not derive status locally. |
+| Lifecycle/event streaming | `WS /api/v1/tasks/{task_id}/events` | Consume Gateway-owned task lifecycle events. |
 | Runtime state | `GET /v1/capabilities` | Probe capability registry through Gateway. |
 | Governance state | `POST /governance/opa/evaluate` | Consume Gateway policy evaluation contract. |
 | Evidence/result | `POST /governance/ledger/verify-merkle` | Consume Gateway ledger verification contract. |
 
-The current checkout cannot import `apps.api.app.main` because
-`prometheus_fastapi_instrumentator` is not installed in the local environment.
-AIDE therefore records Gateway HTTP failures as unavailable instead of showing
-success.
+Phase 6.5 dependency audit found `EmailStr` usage in `packages/identity`
+forced the optional `email-validator` package during Gateway startup. The
+identity package now uses Pydantic string pattern validation so Gateway core
+startup does not require that optional package. API WebSocket runtime support
+still requires an ASGI WebSocket backend from `uvicorn[standard]`; without
+`websockets` or `wsproto` installed, HTTP Gateway contracts start but runtime
+WebSocket upgrade is blocked by the server environment.

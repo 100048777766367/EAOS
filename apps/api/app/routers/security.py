@@ -25,9 +25,7 @@ async def encrypt_quantum_envelope(
             secret = str(request.get("secret_data", ""))
         if not fingerprint:
             fingerprint = str(request.get("public_key_fingerprint", ""))
-    return quantum_engine.encrypt_secret_payload(
-        secret_data=secret or "", public_key_fingerprint=fingerprint or ""
-    )
+    return quantum_engine.encrypt_secret_payload(secret_data=secret or "", public_key_fingerprint=fingerprint or "")
 
 
 @router.post("/wazuh/syslog-hmac")
@@ -44,9 +42,7 @@ async def sign_wazuh_syslog_payload(
         if not key:
             key = str(request.get("secret_key", "default_secret"))
 
-    return global_syslog_adapter.format_signed_syslog(
-        log_data=data or {}, secret_key=key or "default_secret"
-    )
+    return global_syslog_adapter.format_signed_syslog(log_data=data or {}, secret_key=key or "default_secret")
 
 
 @router.post("/cloudflare/block-cooldown")
@@ -71,9 +67,7 @@ async def block_cloudflare_ip_cooldown(
             detail="Rate limit exceeded on security endpoint.",
         )
 
-    return global_waf_driver.block_ip_with_cooldown(
-        ip=target_ip, ttl_seconds=ttl if ttl is not None else 3600
-    )
+    return global_waf_driver.block_ip_with_cooldown(ip=target_ip, ttl_seconds=ttl if ttl is not None else 3600)
 
 
 @router.post("/wazuh/stream-event")
@@ -124,6 +118,4 @@ async def generate_zkp_attest_proof(
             p_load = str(request.get("payload", "dummy_payload"))
 
     signer = PostQuantumSignerEngine()
-    return signer.generate_compliance_proof(
-        artifact_id=a_id or "artifact_1", payload_data=p_load or "dummy_payload"
-    )
+    return signer.generate_compliance_proof(artifact_id=a_id or "artifact_1", payload_data=p_load or "dummy_payload")

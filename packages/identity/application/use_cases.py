@@ -7,20 +7,20 @@ from datetime import UTC, datetime, timedelta
 
 import bcrypt
 import jwt
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, Field
 
 from packages.identity.domain.models import User
 from packages.identity.domain.ports import UserRepository
 
 
 class RegisterUserRequest(BaseModel):
-    email: EmailStr
+    email: str = Field(pattern=r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
     username: str
     password: str
 
 
 class LoginRequest(BaseModel):
-    email: EmailStr
+    email: str = Field(pattern=r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
     password: str
 
 

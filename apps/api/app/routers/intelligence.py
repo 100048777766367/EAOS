@@ -28,9 +28,7 @@ async def evaluate_model_drift(
             b_text = str(request.get("baseline", ""))
 
     guard = ModelDriftGuardAdapter()
-    report = guard.evaluate_drift(
-        prompt=p_text or "", response=r_text or "", baseline=b_text or ""
-    )
+    report = guard.evaluate_drift(prompt=p_text or "", response=r_text or "", baseline=b_text or "")
     return report.model_dump()
 
 

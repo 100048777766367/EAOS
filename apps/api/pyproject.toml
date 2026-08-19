@@ -5,7 +5,9 @@ description = "EAOS API Gateway"
 requires-python = ">=3.14"
 dependencies = [
     "fastapi>=0.139.0",
+    "uvicorn[standard]>=0.51.0",
     "pydantic>=2.13.4",
+    "prometheus-fastapi-instrumentator>=8.1.0",
     "eaos-knowledge",
 ]
 

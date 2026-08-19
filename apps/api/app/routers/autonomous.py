@@ -40,9 +40,7 @@ async def analyze_reflection_report(
     passed_checks: Annotated[bool, Body(embed=True)],
 ) -> ReflectionReport:
     use_case = AnalyzeReflectionUseCase(reflection_repo)
-    return use_case.execute(
-        subject_id=subject_id, trigger_event=trigger_event, passed_checks=passed_checks
-    )
+    return use_case.execute(subject_id=subject_id, trigger_event=trigger_event, passed_checks=passed_checks)
 
 
 @router.post("/evolution/propose", status_code=201)

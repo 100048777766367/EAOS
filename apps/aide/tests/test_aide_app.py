@@ -68,6 +68,7 @@ def test_required_aide_modules_exist_and_main_stays_bootstrap_only() -> None:
         "telemetry/telemetry.js",
         "workspace/layout.js",
         "ide/inspector.js",
+        "agent/tasks.js",
     ]
     for relative_path in expected:
         assert (root / relative_path).exists()
@@ -110,8 +111,9 @@ def test_gateway_contracts_classify_real_and_missing_capabilities() -> None:
     contracts = {item["name"]: item for item in response.json()}
     assert contracts["health"]["path"] == "/health"
     assert contracts["task-submission"]["path"] == "/api/v1/control/execute"
-    assert contracts["task-status"]["state"] == "missing"
-    assert contracts["lifecycle-event-stream"]["state"] == "missing"
+    assert contracts["task-status"]["state"] == "available"
+    assert contracts["task-status"]["path"] == "/api/v1/tasks/{task_id}"
+    assert contracts["lifecycle-event-stream"]["state"] == "available"
 
 
 def test_gateway_snapshot_preserves_unavailable_and_missing_states() -> None:
@@ -120,8 +122,6 @@ def test_gateway_snapshot_preserves_unavailable_and_missing_states() -> None:
     response = client.get("/integrations/gateway/snapshot")
     assert response.status_code == 200
     snapshot = {item["contract"]: item for item in response.json()}
-    assert snapshot["task-status"]["status"] == "missing"
-    assert snapshot["lifecycle-event-stream"]["status"] == "missing"
     assert snapshot["health"]["status"] in {"available", "degraded", "unavailable"}
 
 
@@ -133,3 +133,12 @@ def test_task_submission_requires_real_command() -> None:
     payload = response.json()
     assert payload["contract"] == "task-submission"
     assert payload["status"] == "degraded"
+
+
+def test_aide_task_modules_consume_gateway_lifecycle_contracts() -> None:
+    tasks_js = Path("apps/aide/static/js/agent/tasks.js").read_text(encoding="utf-8")
+    ws_js = Path("apps/aide/static/js/core/websocket.js").read_text(encoding="utf-8")
+    assert "COMPLETED" in tasks_js
+    assert "renderTaskState" in tasks_js
+    assert "/api/v1/tasks/${taskId}/events" in ws_js
+    assert "apps/aide/api" not in tasks_js

@@ -13,6 +13,10 @@ class HealingStatus(StrEnum):
     EXECUTING = "EXECUTING"
     COMPLETED = "COMPLETED"
     FAILED = "FAILED"
+    BLOCKED = "BLOCKED"
+    HEALED = "HEALED"
+    ROLLED_BACK = "ROLLED_BACK"
+    ESCALATED = "ESCALATED"
 
 
 class HealingAction(StrEnum):
@@ -32,6 +36,7 @@ class HealingPlan:
     target: str
     reason: str = ""
     evidence_hash: str | None = None
+    rollback_supported: bool = False
     status: HealingStatus = HealingStatus.PLANNED
     created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
 
@@ -44,8 +49,9 @@ class HealingResult:
     message: str
     evidence_hash: str | None = None
     action: HealingAction | None = None
-    status: str = "HEALED"
+    status: HealingStatus = HealingStatus.HEALED
     evidence: Path | None = None
+    rollback_supported: bool = False
 
     @property
     def hash(self) -> str | None:

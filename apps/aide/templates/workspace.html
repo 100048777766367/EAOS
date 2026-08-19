@@ -10,7 +10,7 @@
   <main class="aide-shell" data-testid="aide-shell">
     <header class="aide-header">
       <strong>EAOS</strong><span>Workspace</span><span id="active-file">main.py</span>
-      <span class="status-dot">● GATEWAY UNKNOWN</span>
+      <span id="editor-status">main.py · saved · 0 diagnostics</span><span class="status-dot">● GATEWAY UNKNOWN</span>
     </header>
     <section class="aide-grid">
       <nav class="activity-bar" aria-label="AIDE activity bar">
@@ -32,6 +32,18 @@
       <aside class="copilot-pane" data-testid="copilot-pane">
         <h2>Copilot</h2><div id="agent-status"></div><div id="chat-log"></div>
         <form id="chat-form"><input id="chat-input" placeholder="Ask EAOS agent"><button>Send</button></form>
+        <section id="task-ux" class="contract-card" aria-label="Gateway task execution UX">
+          <h3>Task Execution</h3>
+          <dl>
+            <dt>Task ID</dt><dd id="task-id">none</dd>
+            <dt>Lifecycle</dt><dd id="current-lifecycle">idle</dd>
+            <dt>Governance</dt><dd id="governance-result">unknown</dd>
+            <dt>Evidence</dt><dd id="evidence-ref">pending</dd>
+            <dt>Error</dt><dd id="task-error">none</dd>
+            <dt>Correlation</dt><dd id="correlation-id">none</dd>
+          </dl>
+          <ol id="event-timeline"></ol>
+        </section>
         <section id="inspector"><h3>Enterprise Surface</h3><ul>{% for domain in domains %}<li>{{ domain.id }} — {{ domain.name }} <small>{{ domain.mode }}</small></li>{% endfor %}</ul></section>
       </aside>
     </section>

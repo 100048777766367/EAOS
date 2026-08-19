@@ -19,7 +19,7 @@ class AideSettings(BaseSettings):
         default="http://127.0.0.1:8000",
         description="Enterprise Engineering Gateway base URL.",
     )
-    api_ws_url: str = "ws://127.0.0.1:8000/ws/chat"
+    api_ws_url: str = "ws://127.0.0.1:8000"
     web_url: AnyHttpUrl = "http://127.0.0.1:3002"
     github_url: AnyHttpUrl = "https://github.com"
 

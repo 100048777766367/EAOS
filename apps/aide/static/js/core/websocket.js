@@ -10,11 +10,34 @@ export function describeWebSocketContract(state) {
   };
 }
 
-export function connectTaskLifecycle(state, taskId, onEvent, onClose) {
+export function createLifecycleEventBuffer() {
+  const seen = new Set();
+  const events = [];
+  return {
+    events,
+    push(event) {
+      const key = `${event.task_id}:${event.event_type}:${event.timestamp}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      events.push(event);
+      events.sort((left, right) => String(left.timestamp).localeCompare(String(right.timestamp)));
+      return true;
+    },
+  };
+}
+
+export function connectTaskLifecycle(state, taskId, handlers = {}) {
   const socket = new WebSocket(taskLifecycleWebSocketUrl(state, taskId));
-  socket.addEventListener('message', (event) => onEvent(JSON.parse(event.data)));
-  socket.addEventListener('close', () => {
-    if (onClose) onClose();
+  const buffer = createLifecycleEventBuffer();
+  socket.addEventListener('open', () => handlers.onState?.('connected'));
+  socket.addEventListener('message', (event) => {
+    const payload = JSON.parse(event.data);
+    if (buffer.push(payload)) handlers.onEvent?.(payload, [...buffer.events]);
   });
-  return socket;
+  socket.addEventListener('error', (event) => handlers.onError?.(event));
+  socket.addEventListener('close', (event) => {
+    handlers.onState?.(event.code === 1000 ? 'terminal-closed' : 'disconnected');
+    handlers.onClose?.(event, [...buffer.events]);
+  });
+  return { socket, buffer };
 }

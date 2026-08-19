@@ -138,7 +138,55 @@ def test_task_submission_requires_real_command() -> None:
 def test_aide_task_modules_consume_gateway_lifecycle_contracts() -> None:
     tasks_js = Path("apps/aide/static/js/agent/tasks.js").read_text(encoding="utf-8")
     ws_js = Path("apps/aide/static/js/core/websocket.js").read_text(encoding="utf-8")
+    assert "ACCEPTED" in tasks_js
     assert "COMPLETED" in tasks_js
+    assert "QUEUED" not in tasks_js
+    assert "TIMEOUT" not in tasks_js
+    assert "CANCELLED" not in tasks_js
     assert "renderTaskState" in tasks_js
     assert "/api/v1/tasks/${taskId}/events" in ws_js
     assert "apps/aide/api" not in tasks_js
+
+
+def test_phase7_engineering_ux_surfaces_are_client_only() -> None:
+    template = Path("apps/aide/templates/workspace.html").read_text(encoding="utf-8")
+    main_js = Path("apps/aide/static/js/core/main.js").read_text(encoding="utf-8")
+    editor_js = Path("apps/aide/static/js/editor/monaco.js").read_text(encoding="utf-8")
+    explorer_js = Path("apps/aide/static/js/explorer/tree.js").read_text(encoding="utf-8")
+    git_js = Path("apps/aide/static/js/git/git.js").read_text(encoding="utf-8")
+    terminal_js = Path("apps/aide/static/js/terminal/terminal.js").read_text(encoding="utf-8")
+
+    assert 'id="task-ux"' in template
+    assert 'id="event-timeline"' in template
+    assert "mountTaskUx" in main_js
+    assert "onSelect: editor.openFile" in main_js
+    assert "markChanged" in editor_js
+    assert "markSaved" in editor_js
+    assert "loading" in explorer_js
+    assert "error" in explorer_js
+    assert "destructiveOperations: false" in git_js
+    assert "backendExecution: false" in terminal_js
+    assert "apps/aide/api" not in "".join([template, main_js, editor_js, explorer_js, git_js, terminal_js])
+
+
+def test_phase7_websocket_lifecycle_regressions_are_real_gateway_contracts() -> None:
+    ws_js = Path("apps/aide/static/js/core/websocket.js").read_text(encoding="utf-8")
+    tasks_js = Path("apps/aide/static/js/agent/tasks.js").read_text(encoding="utf-8")
+    inspector_js = Path("apps/aide/static/js/ide/inspector.js").read_text(encoding="utf-8")
+
+    assert "new WebSocket" in ws_js
+    assert "createLifecycleEventBuffer" in ws_js
+    assert "seen.has" in ws_js
+    assert "events.sort" in ws_js
+    assert "terminal-closed" in ws_js
+    assert "onError" in ws_js
+    assert "completed" in tasks_js
+    assert "failed" in tasks_js
+    assert "denied" in tasks_js
+    assert "verification" in inspector_js
+    assert "evidence_ref" in inspector_js
+    assert "correlation_id" in inspector_js
+    assert "QUEUED" not in tasks_js
+    assert "TIMEOUT" not in tasks_js
+    assert "CANCELLED" not in tasks_js
+    assert "success" not in tasks_js.lower()

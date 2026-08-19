@@ -11,7 +11,14 @@ from apps.api.app.container import knowledge_repo
 router = APIRouter(tags=["Knowledge"])
 
 VALID_KNOWLEDGE_CATEGORIES = {
-    "SERVICE", "DOMAIN", "CAPABILITY", "API", "COMPONENT", "INFRASTRUCTURE", "SECURITY", "ARCHITECTURE"
+    "SERVICE",
+    "DOMAIN",
+    "CAPABILITY",
+    "API",
+    "COMPONENT",
+    "INFRASTRUCTURE",
+    "SECURITY",
+    "ARCHITECTURE",
 }
 
 

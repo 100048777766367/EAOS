@@ -1,8 +1,8 @@
 import { observeGateway } from './gateway.js';
 import { readBootstrapState } from './state.js';
-import { describeWebSocketContract } from './websocket.js';
+import { connectTaskLifecycle, describeWebSocketContract } from './websocket.js';
 import { mountAgentStatus } from '../agent/status.js';
-import { submitGatewayTask } from '../agent/tasks.js';
+import { readGatewayTask, renderTaskState, submitGatewayTask } from '../agent/tasks.js';
 import { mountChat } from '../chat/chat.js';
 import { mountEditor } from '../editor/monaco.js';
 import { mountExplorer } from '../explorer/tree.js';
@@ -44,4 +44,4 @@ loadGatewayContracts().then((items) => {
   window.EAOS_AIDE.gatewayContracts = items;
 });
 
-window.EAOS_AIDE = { agent, chat, commands, editor, explorer, git, github, inspector, layout, runtime, telemetry, terminal, websocket, submitGatewayTask };
+window.EAOS_AIDE = { agent, chat, commands, connectTaskLifecycle, editor, explorer, git, github, inspector, layout, readGatewayTask, renderTaskState, runtime, telemetry, terminal, websocket, submitGatewayTask };

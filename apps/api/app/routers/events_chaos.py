@@ -31,9 +31,7 @@ async def verify_event_schema_compatibility(
             t_name = str(request.get("topic", "default.topic"))
         if p_data is None:
             p_data = request.get("payload", {})
-    return schema_verifier.verify_event_compatibility(
-        topic=t_name or "default.topic", payload=p_data or {}
-    )
+    return schema_verifier.verify_event_compatibility(topic=t_name or "default.topic", payload=p_data or {})
 
 
 @router.post("/events/publish/degraded-health", status_code=202)

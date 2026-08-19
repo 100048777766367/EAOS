@@ -7,6 +7,7 @@ from apps.aide.app.dependencies.settings import aide_settings
 from apps.aide.app.presenters.workspace_presenter import build_domain_surface
 from apps.aide.app.services.integration import (
     build_gateway_snapshot,
+    get_task_status,
     list_gateway_contracts,
     submit_task,
 )
@@ -87,4 +88,15 @@ async def task_submission(
             "payload": {},
         }
     result = await submit_task(settings, command, target_agent)
+    return result.model_dump()
+
+
+@router.get("/interactions/tasks/{task_id}")
+async def task_status(
+    task_id: str,
+    settings: Annotated[AideSettings, Depends(aide_settings)],
+) -> dict[str, object]:
+    """Read real task lifecycle status through the Gateway contract."""
+
+    result = await get_task_status(settings, task_id)
     return result.model_dump()

@@ -39,28 +39,28 @@ REAL_GATEWAY_CONTRACTS: Final[tuple[GatewayContract, ...]] = (
     ),
 )
 
-MISSING_GATEWAY_CONTRACTS: Final[tuple[GatewayContract, ...]] = (
+TASK_LIFECYCLE_CONTRACTS: Final[tuple[GatewayContract, ...]] = (
     GatewayContract(
         name="task-status",
         method="GET",
-        path="/tasks/{task_id}",
-        state="missing",
-        purpose="No discovered task status route in current Gateway routers.",
+        path="/api/v1/tasks/{task_id}",
+        purpose="Observe real Gateway task lifecycle state.",
     ),
     GatewayContract(
         name="lifecycle-event-stream",
         method="WEBSOCKET",
-        path="/ws/chat or lifecycle stream",
-        state="missing",
-        purpose="No discovered WebSocket route in current apps/api checkout.",
+        path="/api/v1/tasks/{task_id}/events",
+        purpose="Consume Gateway task lifecycle events.",
     ),
 )
+
+MISSING_GATEWAY_CONTRACTS: Final[tuple[GatewayContract, ...]] = ()
 
 
 def list_gateway_contracts() -> list[GatewayContract]:
     """Return real and missing Gateway contracts used by AIDE."""
 
-    return [*REAL_GATEWAY_CONTRACTS, *MISSING_GATEWAY_CONTRACTS]
+    return [*REAL_GATEWAY_CONTRACTS, *TASK_LIFECYCLE_CONTRACTS]
 
 
 async def build_gateway_snapshot(settings: AideSettings) -> list[GatewayResult]:
@@ -81,15 +81,6 @@ async def build_gateway_snapshot(settings: AideSettings) -> list[GatewayResult]:
             payload,
         )
         results.append(observed)
-    results.extend(
-        GatewayResult(
-            contract=contract.name,
-            target=contract.path,
-            status="missing",
-            detail=contract.purpose,
-        )
-        for contract in MISSING_GATEWAY_CONTRACTS
-    )
     return results
 
 
@@ -107,4 +98,15 @@ async def submit_task(
         "POST",
         "/api/v1/control/execute",
         payload,
+    )
+
+
+async def get_task_status(settings: AideSettings, task_id: str) -> GatewayResult:
+    """Read task lifecycle status from the Gateway."""
+
+    return await request_gateway_json(
+        settings,
+        "task-status",
+        "GET",
+        f"/api/v1/tasks/{task_id}",
     )

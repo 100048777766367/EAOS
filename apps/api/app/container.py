@@ -80,9 +80,7 @@ class SelfRewriteRepoAdapter(InMemorySelfRewriteRepository):
         self._sandbox = WASMSandboxRuntime()
 
     def execute_isolated_patch(self, patch_code: str, memory_limit_mb: int = 128) -> Any:
-        return self._sandbox.execute_isolated_patch(
-            patch_code=patch_code, memory_limit_mb=memory_limit_mb
-        )
+        return self._sandbox.execute_isolated_patch(patch_code=patch_code, memory_limit_mb=memory_limit_mb)
 
 
 policy_evaluator = NativeRegoCompiler()
@@ -132,12 +130,8 @@ prediction_repo = InMemoryPredictionRepository()
 simulation_repo = InMemorySimulationRepository()
 
 capability_registry = InMemoryCapabilityRegistry()
-capability_registry.register(
-    BusinessCapability(capability_type="cap-01", name="Knowledge Management")
-)
-capability_registry.register(
-    BusinessCapability(capability_type="cap-02", name="Identity Management")
-)
+capability_registry.register(BusinessCapability(capability_type="cap-01", name="Knowledge Management"))
+capability_registry.register(BusinessCapability(capability_type="cap-02", name="Identity Management"))
 
 spec_registry = InMemorySpecificationRegistry()
 workflow_registry = InMemoryWorkflowRegistry()
@@ -147,6 +141,7 @@ event_bus = EventBus()
 federation_repo = federation_registry
 
 prometheus_exporter = telemetry_service
+
 
 class TopologyUseCase:
     """Topology Use Case for Audit System."""

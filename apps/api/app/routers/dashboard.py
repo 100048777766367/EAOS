@@ -20,6 +20,7 @@ chaos_daemon: Final[AutomatedChaosDaemon] = AutomatedChaosDaemon()
 
 # --- DTOs ---
 
+
 class CapabilityResponseDTO(BaseModel):
     model_config = ConfigDict(frozen=True)
     capability_id: str
@@ -72,39 +73,36 @@ class CommandExecutionResponse(BaseModel):
 
 
 # --- TAB 1: CAPABILITIES MAP ---
-@router.get("/dashboard/capabilities-map", 
-            response_model=list[CapabilityResponseDTO])
+@router.get("/dashboard/capabilities-map", response_model=list[CapabilityResponseDTO])
 async def get_real_capabilities_map() -> list[CapabilityResponseDTO]:
     specs: list[CapabilitySpecDTO] = capability_engine.scan_all_capabilities()
     results: list[CapabilityResponseDTO] = []
-    
+
     for spec in specs:
         cap_id = spec.capability_id
         cat = "Core Business"
-        if cap_id in {"ai_agent", 
-                      "ai_gateway", 
-                      "ai_governance", 
-                       "llm_gateway", 
-                       "prompt", 
-                       "rag", 
-                       "swarm_intelligence", 
-                       "intelligence"}:
+        if cap_id in {
+            "ai_agent",
+            "ai_gateway",
+            "ai_governance",
+            "llm_gateway",
+            "prompt",
+            "rag",
+            "swarm_intelligence",
+            "intelligence",
+        }:
             cat = "AI & Intelligence"
-        elif cap_id in {"architecture_governance", 
-                        "business_architecture", 
-                        "data_architecture", 
-                        "security_architecture", 
-                        "solution_architecture", 
-                        "compliance", 
-                        "policy"}:
+        elif cap_id in {
+            "architecture_governance",
+            "business_architecture",
+            "data_architecture",
+            "security_architecture",
+            "solution_architecture",
+            "compliance",
+            "policy",
+        }:
             cat = "Governance & Architecture"
-        elif cap_id in {"identity", 
-                        "observability", 
-                        "security", 
-                        "tenancy", 
-                        "workflow", 
-                        "federation", 
-                        "knowledge"}:
+        elif cap_id in {"identity", "observability", "security", "tenancy", "workflow", "federation", "knowledge"}:
             cat = "Platform Core"
 
         results.append(
@@ -122,26 +120,45 @@ async def get_real_capabilities_map() -> list[CapabilityResponseDTO]:
 
 
 # --- TAB 2: CONSTITUTIONAL FITNESS & DRIFT ---
-@router.get("/dashboard/constitutional-fitness", 
-            response_model=ConstitutionalFitnessResponseDTO)
+@router.get("/dashboard/constitutional-fitness", response_model=ConstitutionalFitnessResponseDTO)
 async def get_real_constitutional_fitness() -> ConstitutionalFitnessResponseDTO:
     # Quét thực tế trạng thái workspace để đánh giá tính toàn vẹn
     checks = [
-        FitnessCheckItemDTO(rule_id="R4", name="Stable Core Isolation",
-         category="Layering", status="PASS", 
-         details="Domain core has zero dependencies on infrastructure/frameworks."),
-        FitnessCheckItemDTO(rule_id="R5", name="Repository Structure Conformance", 
-         category="Structure", status="PASS", 
-         details="Monorepo folders match approved capability boundaries."),
-        FitnessCheckItemDTO(rule_id="R11", name="Loose Coupling & Acyclic Check", 
-         category="Coupling", status="PASS", 
-         details="No circular dependencies detected via AST parsing."),
-        FitnessCheckItemDTO(rule_id="R15", name="Rules Over Prompts Enforcement", 
-         category="AI Governance", status="PASS", 
-         details="All agent mutations pass through OPA policy evaluation gates."),
-        FitnessCheckItemDTO(rule_id="R16", name="Security & Quantum Envelope Guard", 
-         category="Security", status="PASS", 
-         details="Post-quantum signing adapters and Vault tokens active.")
+        FitnessCheckItemDTO(
+            rule_id="R4",
+            name="Stable Core Isolation",
+            category="Layering",
+            status="PASS",
+            details="Domain core has zero dependencies on infrastructure/frameworks.",
+        ),
+        FitnessCheckItemDTO(
+            rule_id="R5",
+            name="Repository Structure Conformance",
+            category="Structure",
+            status="PASS",
+            details="Monorepo folders match approved capability boundaries.",
+        ),
+        FitnessCheckItemDTO(
+            rule_id="R11",
+            name="Loose Coupling & Acyclic Check",
+            category="Coupling",
+            status="PASS",
+            details="No circular dependencies detected via AST parsing.",
+        ),
+        FitnessCheckItemDTO(
+            rule_id="R15",
+            name="Rules Over Prompts Enforcement",
+            category="AI Governance",
+            status="PASS",
+            details="All agent mutations pass through OPA policy evaluation gates.",
+        ),
+        FitnessCheckItemDTO(
+            rule_id="R16",
+            name="Security & Quantum Envelope Guard",
+            category="Security",
+            status="PASS",
+            details="Post-quantum signing adapters and Vault tokens active.",
+        ),
     ]
 
     return ConstitutionalFitnessResponseDTO(
@@ -161,7 +178,7 @@ async def run_real_autonomous_swarm() -> dict[str, Any]:
     return {
         "status": "SUCCESS",
         "message": f"Autonomous Swarm Loop executed across {len(specs)} capability modules.",
-        "chaos_status": chaos_res.model_dump() if hasattr(chaos_res, "model_dump") else str(chaos_res)
+        "chaos_status": chaos_res.model_dump() if hasattr(chaos_res, "model_dump") else str(chaos_res),
     }
 
 
@@ -177,40 +194,20 @@ async def get_real_raft_cluster() -> list[ClusterNodeDTO]:
             role="LEADER",
             state="ACTIVE",
             term=term_val,
-            connected_peers=["node_2_edge", "node_3_ledger"]
+            connected_peers=["node_2_edge", "node_3_ledger"],
         ),
         ClusterNodeDTO(
             node_id="node_2_edge",
             role="FOLLOWER",
             state="SYNCHRONIZED",
             term=term_val,
-            connected_peers=["eaos_primary_node_1", "node_3_ledger"]
+            connected_peers=["eaos_primary_node_1", "node_3_ledger"],
         ),
         ClusterNodeDTO(
             node_id="node_3_ledger",
             role="FOLLOWER",
             state="SYNCHRONIZED",
             term=term_val,
-            connected_peers=["eaos_primary_node_1", "node_2_edge"]
-        )
+            connected_peers=["eaos_primary_node_1", "node_2_edge"],
+        ),
     ]
-
-
-# --- KERNEL CONSOLE EXECUTE ---
-@router.post("/api/v1/control/execute", 
-             response_model=CommandExecutionResponse)
-async def execute_command(payload: CommandExecutionRequest) -> CommandExecutionResponse:
-    cmd = payload.command.strip().lower()
-    if cmd == "doctor":
-        specs = capability_engine.scan_all_capabilities()
-        out = f"System Health: 100% OK. Discovered {len(specs)} capabilities on disk. Constitution v3.0 compliant."
-    elif cmd == "sync":
-        out = "Knowledge Base, ADR Index & Capabilities Catalog re-indexed successfully."
-    else:
-        out = f"Command '{payload.command}' dispatched to Agent [{payload.target_agent}]."
-
-    return CommandExecutionResponse(
-        status="SUCCESS",
-        output=out,
-        metadata={"target": payload.target_agent, "executed_by": "Operator"},
-    )

@@ -29,6 +29,7 @@ async def sync_crdt_delta(
         d_data = request.get("delta", {})
 
     from kernel.federation.cross_region_sync import CRDTStateSyncEngine
+
     engine = CRDTStateSyncEngine(node_id="node_us_east_1", region="us-east-1")
     return engine.merge_delta(d_data or {})
 

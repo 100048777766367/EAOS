@@ -14,7 +14,7 @@ from runtime.state.task_lifecycle import TaskState
 router = APIRouter(tags=["AI Studio WebSocket"])
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[5]
+PROJECT_ROOT = Path(__file__).resolve().parents[4]
 
 orchestrator = ChatOrchestrator(PROJECT_ROOT)
 

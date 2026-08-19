@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ state.app_name }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='/css/workspace.css') }}">
+</head>
+<body data-api-base-url="{{ state.api_base_url }}" data-api-ws-url="{{ state.api_ws_url }}">
+  <main class="aide-shell" data-testid="aide-shell">
+    <header class="aide-header">
+      <strong>EAOS</strong><span>Workspace</span><span id="active-file">main.py</span>
+      <span class="status-dot">● GATEWAY UNKNOWN</span>
+    </header>
+    <section class="aide-grid">
+      <nav class="activity-bar" aria-label="AIDE activity bar">
+        <button data-panel="explorer">Files</button><button data-panel="git">Git</button>
+        <button data-panel="runtime">Run</button><button data-panel="agent">AI</button>
+      </nav>
+      <aside class="explorer-pane" data-testid="explorer-pane">
+        <h2>Explorer</h2><input id="file-search" placeholder="Search files">
+        <ul id="workspace-tree"></ul>
+      </aside>
+      <section class="editor-pane" data-testid="editor-pane">
+        <div class="tabs" id="editor-tabs"></div>
+        <div id="monaco-editor" class="monaco-host" role="region" aria-label="Monaco editor"></div>
+        <section class="terminal-pane" data-testid="terminal-pane">
+          <header>Terminal <button id="new-terminal">+</button></header>
+          <pre id="terminal-output"></pre>
+        </section>
+      </section>
+      <aside class="copilot-pane" data-testid="copilot-pane">
+        <h2>Copilot</h2><div id="agent-status"></div><div id="chat-log"></div>
+        <form id="chat-form"><input id="chat-input" placeholder="Ask EAOS agent"><button>Send</button></form>
+        <section id="inspector"><h3>Enterprise Surface</h3><ul>{% for domain in domains %}<li>{{ domain.id }} — {{ domain.name }} <small>{{ domain.mode }}</small></li>{% endfor %}</ul></section>
+      </aside>
+    </section>
+    <footer class="runtime-footer" data-testid="runtime-footer">
+      <span id="health-state">● Gateway Unknown</span><span>API</span>
+      <span id="git-state">Git pending</span><span id="ws-state">WS disconnected</span>
+    </footer>
+  </main>
+  <script id="aide-state" type="application/json">{{ state.model_dump_json() }}</script>
+  <script type="module" src="{{ url_for('static', path='/js/core/main.js') }}"></script>
+</body>
+</html>

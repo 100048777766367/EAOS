@@ -1,105 +1,78 @@
-"""Evidence backed self healing engine."""
+"""Domain execution semantics for DXS self healing."""
 
 from __future__ import annotations
 
-from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any
 
-from dxs.evidence.hash import calculate_hash
-from dxs.evidence.ledger import EvidenceLedger
-from dxs.evidence.timeline import EvidenceTimeline, TimelineEvent
-
-from .model import HealingAction, HealingPlan, HealingResult
+from .model import HealingAction, HealingPlan, HealingResult, HealingStatus
 
 
 class SelfHealingEngine:
-    """Self healing engine with immutable evidence trail."""
+    """Executes healing plans without owning application workflow gates."""
 
     def __init__(
         self,
         evidence_path: Path | None = None,
-    ):
-        if evidence_path is None:
-            evidence_path = Path("runtime/evidence/self_healing")
-
-        evidence_path.mkdir(
-            parents=True,
-            exist_ok=True,
-        )
-
+    ) -> None:
         self.evidence_path = evidence_path
-        self.ledger = EvidenceLedger(evidence_path)
-        self.timeline = EvidenceTimeline(evidence_path)
 
     def diagnose(
         self,
         issue: str,
     ) -> HealingPlan:
+        """Create a deterministic plan without mutating the target system."""
+
         return HealingPlan(
             action=HealingAction.REPAIR,
             target=issue,
             reason=f"Detected issue: {issue}",
+            rollback_supported=False,
         )
 
     def repair(
         self,
         plan: HealingPlan,
     ) -> HealingResult:
+        """Execute an already planned healing action."""
+
         return self.execute(
             action=plan.action,
             context={
                 "target": plan.target,
                 "reason": plan.reason,
             },
+            rollback_supported=plan.rollback_supported,
         )
 
     def execute(
         self,
         action: HealingAction,
-        context: dict[str, Any],
+        context: dict[str, object],
+        rollback_supported: bool = False,
     ) -> HealingResult:
-        payload = {
-            "action": action.value,
-            "context": context,
-            "status": "HEALED",
-        }
+        """Execute domain healing semantics without governance decisions."""
 
-        payload["hash"] = calculate_hash(payload)
-
-        evidence_file = self.ledger.record(
-            action.value,
-            payload,
-        )
-
-        self.timeline.append(
-            TimelineEvent(
-                hash=payload["hash"],
-                action=action.value,
-                timestamp=datetime.now(UTC).isoformat(),
-                metadata={
-                    "context": context,
-                    "status": "HEALED",
-                },
+        if context.get("force_failure") is True:
+            return HealingResult(
+                success=False,
+                message="Healing execution failed",
+                action=action,
+                status=HealingStatus.FAILED,
+                rollback_supported=rollback_supported,
             )
-        )
 
-        result = HealingResult(
+        return HealingResult(
             success=True,
             message="Healing completed",
-            evidence_hash=payload["hash"],
             action=action,
-            evidence=evidence_file,
+            status=HealingStatus.HEALED,
+            rollback_supported=rollback_supported,
         )
-
-        result.status = "HEALED"
-
-        return result
 
     def verify(
         self,
         result: HealingResult,
     ) -> bool:
-        """Verify evidence backed healing result."""
+        """Verify successful domain execution semantics."""
 
-        return result.success and result.status == "HEALED" and result.evidence is not None and result.evidence.exists()
+        return result.success and result.status == HealingStatus.HEALED

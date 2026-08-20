@@ -32,19 +32,21 @@
       <aside class="copilot-pane" data-testid="copilot-pane">
         <h2>Copilot</h2><div id="agent-status"></div><div id="chat-log"></div>
         <form id="chat-form"><input id="chat-input" placeholder="Ask EAOS agent"><button>Send</button></form>
+        <form id="task-form"><input id="task-command" placeholder="Gateway command"><button>Submit Task</button></form>
         <section id="task-ux" class="contract-card" aria-label="Gateway task execution UX">
           <h3>Task Execution</h3>
           <dl>
             <dt>Task ID</dt><dd id="task-id">none</dd>
             <dt>Lifecycle</dt><dd id="current-lifecycle">idle</dd>
             <dt>Governance</dt><dd id="governance-result">unknown</dd>
+            <dt>Verification</dt><dd id="verification-result">pending</dd>
             <dt>Evidence</dt><dd id="evidence-ref">pending</dd>
             <dt>Error</dt><dd id="task-error">none</dd>
             <dt>Correlation</dt><dd id="correlation-id">none</dd>
           </dl>
           <ol id="event-timeline"></ol>
         </section>
-        <section id="inspector"><h3>Enterprise Surface</h3><ul>{% for domain in domains %}<li>{{ domain.id }} — {{ domain.name }} <small>{{ domain.mode }}</small></li>{% endfor %}</ul></section>
+        <section id="inspector"><h3>Enterprise Surface</h3><ul>{% for domain in domains %}<li>{{ domain.id }} — {{ domain.name }} <small>{{ domain.mode }}</small></li>{% endfor %}</ul><section id="capability-registry" aria-label="EAOS capability registry"><h3>EAOS Capabilities</h3><p data-capability-registry-status="unavailable">Registry unavailable</p></section></section>
       </aside>
     </section>
     <footer class="runtime-footer" data-testid="runtime-footer">

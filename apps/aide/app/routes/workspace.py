@@ -7,6 +7,7 @@ from apps.aide.app.dependencies.settings import aide_settings
 from apps.aide.app.presenters.workspace_presenter import build_domain_surface
 from apps.aide.app.services.integration import (
     build_gateway_snapshot,
+    get_capability_registry,
     get_task_status,
     list_gateway_contracts,
     submit_task,
@@ -59,6 +60,15 @@ async def gateway_contracts() -> list[dict[str, str]]:
     """List real and missing Gateway contracts discovered for AIDE."""
 
     return [contract.model_dump() for contract in list_gateway_contracts()]
+
+
+@router.get("/integrations/gateway/capabilities")
+async def gateway_capabilities(
+    settings: Annotated[AideSettings, Depends(aide_settings)],
+) -> dict[str, object]:
+    """Expose the Gateway capability registry to AIDE as a thin client adapter."""
+
+    return (await get_capability_registry(settings)).model_dump()
 
 
 @router.get("/integrations/gateway/snapshot")

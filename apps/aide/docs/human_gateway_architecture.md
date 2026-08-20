@@ -54,8 +54,8 @@ AIDE currently exposes only the minimum stable path:
 1. Observe Gateway health and capabilities.
 2. Submit a human command through `POST /interactions/tasks`, which forwards to
    Gateway `POST /api/v1/control/execute`.
-3. Render the returned real `task_id` and metadata.
-4. Connect directly to Gateway `WS /api/v1/tasks/{task_id}/events` using the
+3. Treat `status=available` with Gateway payload `status=SUCCESS` as a successful dispatch even when the control route does not return a `task_id`; render any returned metadata without inventing IDs.
+4. When the Gateway returns a real `task_id`, connect directly to Gateway `WS /api/v1/tasks/{task_id}/events` using the
    configured Gateway WebSocket base URL.
 5. Apply each real event to one presentation pipeline that updates Task UX,
    Inspector, and Runtime Footer.

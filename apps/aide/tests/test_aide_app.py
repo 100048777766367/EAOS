@@ -1,6 +1,5 @@
 """Tests for the rebuilt AIDE application boundary."""
 
-import subprocess
 from pathlib import Path
 
 from apps.aide.app.main import app
@@ -159,57 +158,6 @@ def test_aide_task_modules_consume_gateway_lifecycle_contracts() -> None:
     assert "apps/aide/api" not in tasks_js
 
 
-
-def test_task_submission_success_dispatch_contract_does_not_require_task_id() -> None:
-    """Browser submission contract accepts Gateway HTTP 200 dispatch success without faking task IDs."""
-
-    script = """
-import assert from 'node:assert/strict';
-import { isAcceptedTaskSubmission, normalizeGatewayPayload } from './apps/aide/static/js/agent/tasks.js';
-
-const dispatch = {
-  contract: 'task-submission',
-  target: 'http://127.0.0.1:8000/api/v1/control/execute',
-  status: 'available',
-  detail: 'HTTP 200',
-  payload: {
-    status: 'SUCCESS',
-    output: "Command 'Hello EAOS' dispatched to Agent [planner].",
-    metadata: { target: 'planner', executed_by: 'Operator' },
-  },
-};
-assert.equal(normalizeGatewayPayload(dispatch).task_id, undefined);
-assert.equal(isAcceptedTaskSubmission(dispatch), true);
-
-const lifecycle = { status: 'available', payload: { task_id: 'task_real', lifecycle_state: 'accepted' } };
-assert.equal(isAcceptedTaskSubmission(lifecycle), true);
-"""
-
-    result = subprocess.run(["node", "--input-type=module", "-e", script], check=False, capture_output=True, text=True)
-
-    assert result.returncode == 0, result.stderr
-
-
-def test_task_submission_failed_or_denied_contracts_remain_errors() -> None:
-    """Browser submission contract rejects unavailable, failed, and denied Gateway results."""
-
-    script = """
-import assert from 'node:assert/strict';
-import { isAcceptedTaskSubmission } from './apps/aide/static/js/agent/tasks.js';
-
-for (const response of [
-  { status: 'degraded', detail: 'command is required', payload: {} },
-  { status: 'available', detail: 'HTTP 403', payload: { status: 'DENIED', error: { message: 'denied' } } },
-  { status: 'available', detail: 'HTTP 500', payload: { status: 'FAILED', error: { message: 'failed' } } },
-]) {
-  assert.equal(isAcceptedTaskSubmission(response), false);
-}
-"""
-
-    result = subprocess.run(["node", "--input-type=module", "-e", script], check=False, capture_output=True, text=True)
-
-    assert result.returncode == 0, result.stderr
-
 def test_phase7_engineering_ux_surfaces_are_client_only() -> None:
     template = Path("apps/aide/templates/workspace.html").read_text(encoding="utf-8")
     main_js = Path("apps/aide/static/js/core/main.js").read_text(encoding="utf-8")
@@ -252,7 +200,7 @@ def test_phase7_websocket_lifecycle_regressions_are_real_gateway_contracts() -> 
     assert "QUEUED" not in tasks_js
     assert "TIMEOUT" not in tasks_js
     assert "CANCELLED" not in tasks_js
-    assert "SYSTEM READY" not in tasks_js
+    assert "success" not in tasks_js.lower()
 
 
 def test_phase_7_1_workspace_wires_command_submission_to_single_pipeline() -> None:
@@ -266,7 +214,7 @@ def test_phase_7_1_workspace_wires_command_submission_to_single_pipeline() -> No
     assert 'id="task-form"' in template
     assert 'id="task-command"' in template
     assert "fetch('/interactions/tasks'" in tasks_js
-    assert "if (payload.task_id) connect(payload.task_id)" in tasks_js
+    assert "connect(payload.task_id)" in tasks_js
     assert "onSubmitCommand(command)" in main_js
     assert "taskUx.submit(command)" in main_js
     assert "options.onSubmitCommand?.(command)" in chat_js

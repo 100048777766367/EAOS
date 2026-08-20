@@ -13,19 +13,8 @@ export const TASK_STATES = {
 export const TERMINAL_STATES = new Set(['completed', 'failed', 'denied']);
 export const RUNTIME_STATES = new Set(Object.keys(TASK_STATES));
 
-export function normalizeGatewayPayload(gatewayPayload) {
+function normalizeGatewayPayload(gatewayPayload) {
   return gatewayPayload?.payload || gatewayPayload || {};
-}
-
-export function isAcceptedTaskSubmission(result) {
-  const payload = normalizeGatewayPayload(result);
-  if (result?.status !== 'available') return false;
-  if (payload.task_id) return true;
-  return payload.status === 'SUCCESS';
-}
-
-function submissionErrorMessage(result, payload) {
-  return payload?.error?.message || result?.detail || 'Gateway submission failed';
 }
 
 function verificationText(payload) {
@@ -151,24 +140,19 @@ export function mountTaskUx(nodes, websocketConnector, bootstrapState, observers
     notify({ lifecycle_state: 'submitting', task_id: state.taskId });
     const result = await submitGatewayTask(command, targetAgent);
     const payload = normalizeGatewayPayload(result);
-    if (!isAcceptedTaskSubmission(result)) {
+    if (result.status !== 'available' || !payload.task_id) {
       state.submissionState = 'failed';
-      const errorPayload = {
-        task_id: payload.task_id || state.taskId,
-        lifecycle_state: payload.lifecycle_state || 'failed',
-        error: { message: submissionErrorMessage(result, payload) },
-      };
+      const errorPayload = { task_id: state.taskId, lifecycle_state: 'failed', error: { message: result.detail || 'Gateway submission failed' } };
       renderPayload(errorPayload);
       notify(errorPayload);
       return result;
     }
-    state.taskId = payload.task_id || state.taskId;
+    state.taskId = payload.task_id;
     state.lifecycleState = payload.lifecycle_state || 'accepted';
     state.submissionState = 'accepted';
-    const acceptedPayload = { ...payload, task_id: state.taskId, lifecycle_state: state.lifecycleState };
-    renderPayload(acceptedPayload);
-    if (payload.task_id) connect(payload.task_id);
-    notify(acceptedPayload);
+    renderPayload({ ...payload, lifecycle_state: payload.lifecycle_state || 'accepted' });
+    connect(payload.task_id);
+    notify(payload);
     return result;
   }
 

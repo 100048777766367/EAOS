@@ -110,3 +110,14 @@ async def get_task_status(settings: AideSettings, task_id: str) -> GatewayResult
         "GET",
         f"/api/v1/tasks/{task_id}",
     )
+
+
+async def get_capability_registry(settings: AideSettings) -> GatewayResult:
+    """Read the authoritative Gateway capability contract registry."""
+
+    return await request_gateway_json(
+        settings,
+        "capability-registry",
+        "GET",
+        "/v1/capabilities",
+    )

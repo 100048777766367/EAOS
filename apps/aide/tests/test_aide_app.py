@@ -177,8 +177,9 @@ def test_phase7_websocket_lifecycle_regressions_are_real_gateway_contracts() -> 
     assert "new WebSocket" in ws_js
     assert "createLifecycleEventBuffer" in ws_js
     assert "seen.has" in ws_js
-    assert "events.sort" in ws_js
-    assert "terminal-closed" in ws_js
+    assert "events.push(event)" in ws_js
+    assert "events.sort" not in ws_js
+    assert "event.code === 1000" in ws_js
     assert "onError" in ws_js
     assert "completed" in tasks_js
     assert "failed" in tasks_js
@@ -190,3 +191,221 @@ def test_phase7_websocket_lifecycle_regressions_are_real_gateway_contracts() -> 
     assert "TIMEOUT" not in tasks_js
     assert "CANCELLED" not in tasks_js
     assert "success" not in tasks_js.lower()
+
+
+def test_phase_7_1_workspace_wires_command_submission_to_single_pipeline() -> None:
+    """The browser contract submits through AIDE interaction route and then opens Gateway WS."""
+
+    template = Path("apps/aide/templates/workspace.html").read_text(encoding="utf-8")
+    main_js = Path("apps/aide/static/js/core/main.js").read_text(encoding="utf-8")
+    tasks_js = Path("apps/aide/static/js/agent/tasks.js").read_text(encoding="utf-8")
+    chat_js = Path("apps/aide/static/js/chat/chat.js").read_text(encoding="utf-8")
+
+    assert 'id="task-form"' in template
+    assert 'id="task-command"' in template
+    assert "fetch('/interactions/tasks'" in tasks_js
+    assert "connect(payload.task_id)" in tasks_js
+    assert "onSubmitCommand(command)" in main_js
+    assert "taskUx.submit(command)" in main_js
+    assert "options.onSubmitCommand?.(command)" in chat_js
+    assert "task_" not in tasks_js.replace("task_id", "")
+
+
+def test_phase_7_1_lifecycle_events_share_task_inspector_runtime_pipeline() -> None:
+    """Task panel, inspector, and runtime footer are synchronized from one event stream."""
+
+    main_js = Path("apps/aide/static/js/core/main.js").read_text(encoding="utf-8")
+    tasks_js = Path("apps/aide/static/js/agent/tasks.js").read_text(encoding="utf-8")
+    inspector_js = Path("apps/aide/static/js/ide/inspector.js").read_text(encoding="utf-8")
+    runtime_js = Path("apps/aide/static/js/runtime/runtime.js").read_text(encoding="utf-8")
+
+    assert "onTaskState(payload)" in main_js
+    assert "updateTaskInspector(inspectorNodes" in main_js
+    assert "runtimeNodes.task.textContent" in main_js
+    assert "renderPayload(event)" in tasks_js
+    assert "renderEvent(event)" in tasks_js
+    assert "verificationText" in tasks_js
+    assert "classifyTaskOutcome" in tasks_js
+    assert "payload.verification?.passed" in inspector_js
+    assert "SYSTEM READY" not in runtime_js
+
+
+def test_phase_7_1_websocket_duplicate_terminal_and_reconnect_contract() -> None:
+    """WS client ignores duplicate/unsupported events and bounds reconnect before terminal."""
+
+    ws_js = Path("apps/aide/static/js/core/websocket.js").read_text(encoding="utf-8")
+    tasks_js = Path("apps/aide/static/js/agent/tasks.js").read_text(encoding="utf-8")
+
+    assert "VALID_STATES.has" in ws_js
+    assert "seen.has" in ws_js
+    assert "events.push(event)" in ws_js
+    assert "events.sort" not in ws_js
+    assert "maxReconnects" in ws_js
+    assert "terminal || event.code === 1000" in ws_js
+    assert "clearTimeout" in ws_js
+    assert "RUNTIME_STATES.has" in tasks_js
+    assert "return false" in tasks_js
+    for prohibited_state in ("QUEUED", "TIMEOUT", "CANCELLED"):
+        assert prohibited_state not in tasks_js
+        assert prohibited_state not in ws_js
+
+
+def test_phase_7_1_gateway_lifecycle_outcomes_render_real_task_ids() -> None:
+    """The Gateway contract returns real task IDs for completed, denied, and failed outcomes."""
+
+    from apps.api.app.main import app as gateway_app
+
+    gateway_client = TestClient(gateway_app)
+    outcomes = {
+        "doctor": "completed",
+        "deny this request": "denied",
+        "fail": "failed",
+        "verify-fail": "failed",
+    }
+    for command, expected_state in outcomes.items():
+        response = gateway_client.post("/api/v1/control/execute", json={"command": command})
+        assert response.status_code == 200
+        payload = response.json()
+        assert payload["status"] == expected_state
+        assert payload["task_id"].startswith("task_")
+        assert payload["lifecycle_state"] == expected_state
+        assert payload["task_id"] == payload["metadata"]["correlation_id"]
+
+
+def test_phase_reuse_docs_define_aide_as_human_gateway_not_runtime() -> None:
+    """Architecture docs classify reuse and forbid rebuilding EAOS inside AIDE."""
+
+    matrix = Path("apps/aide/docs/eaos_reuse_matrix.md").read_text(encoding="utf-8")
+    architecture = Path("apps/aide/docs/human_gateway_architecture.md").read_text(encoding="utf-8")
+
+    assert "Capability | Existing owner | Existing contract" in matrix
+    assert "Task lifecycle events" in matrix
+    assert "WS /api/v1/tasks/{task_id}/events" in matrix
+    assert "DXS / Digital Twin Structure" in matrix
+    assert "D. CONTRACT GAP" in matrix
+    assert "AIDE does not implement DXS" in matrix
+    assert "AIDE is not EAOS" in architecture
+    assert "AIDE is not the execution engine" in architecture
+    assert "AIDE is not DXS" in architecture
+    assert "EAOS must continue to operate when AIDE is stopped" in architecture
+
+
+def test_phase_reuse_boundary_prevents_aide_from_absorbing_eaos_engines() -> None:
+    """AIDE remains a thin consumer and does not import or instantiate EAOS engines."""
+
+    source_roots = [Path("apps/aide/app"), Path("apps/aide/static"), Path("apps/aide/templates")]
+    aide_paths = [path for root in source_roots for path in root.rglob("*") if path.is_file()]
+    aide_text = "\n".join(
+        path.read_text(encoding="utf-8") for path in aide_paths if path.suffix in {".py", ".js", ".html"}
+    )
+
+    forbidden_fragments = [
+        "from engine.sandbox",
+        "WASMSandboxRuntime(",
+        "EnterpriseDigitalTwinOrchestrator(",
+        "DigitalTwinOrchestrator(",
+        "SelfHealingLoopAdapter(",
+        "MerkleLedgerVerifier(",
+        "NativeRegoCompiler(",
+        "InMemoryMemoryRepository(",
+        "task_lifecycle_service =",
+    ]
+    for fragment in forbidden_fragments:
+        assert fragment not in aide_text
+
+    assert not Path("apps/aide/api").exists()
+    assert "/api/v1/control/execute" in aide_text
+    assert "/api/v1/tasks/{task_id}" in aide_text
+    assert "/api/v1/tasks/${taskId}/events" in aide_text
+
+
+def test_phase_reuse_gateway_remains_authoritative_without_aide() -> None:
+    """The Gateway task lifecycle works directly without running through AIDE."""
+
+    from apps.api.app.main import app as gateway_app
+
+    gateway_client = TestClient(gateway_app)
+    created = gateway_client.post("/api/v1/control/execute", json={"command": "doctor"}).json()
+    task_id = created["task_id"]
+    status = gateway_client.get(f"/api/v1/tasks/{task_id}").json()
+
+    assert created["lifecycle_state"] == "completed"
+    assert status["task_id"] == task_id
+    assert status["correlation_id"] == task_id
+    assert status["evidence"]["task_id"] == task_id
+    assert status["verification"]["passed"] is True
+    assert status["governance"]["result"] in {"allowed", "denied"}
+
+
+def test_phase_reuse_task_panel_renders_verification_metadata() -> None:
+    """Task panel exposes Gateway verification metadata without local verification."""
+
+    template = Path("apps/aide/templates/workspace.html").read_text(encoding="utf-8")
+    tasks_js = Path("apps/aide/static/js/agent/tasks.js").read_text(encoding="utf-8")
+    main_js = Path("apps/aide/static/js/core/main.js").read_text(encoding="utf-8")
+
+    assert 'id="verification-result"' in template
+    assert "verificationText(payload)" in tasks_js
+    assert "nodes.verification.textContent" in tasks_js
+    assert "document.getElementById('verification-result')" in main_js
+
+
+def test_phase8_aide_consumes_gateway_capability_registry_without_backend() -> None:
+    """AIDE exposes a thin capability-registry adapter and browser renderer only."""
+
+    response = client.get("/integrations/gateway/capabilities")
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["contract"] == "capability-registry"
+    assert payload["status"] in {"available", "degraded", "unavailable"}
+
+    template = Path("apps/aide/templates/workspace.html").read_text(encoding="utf-8")
+    main_js = Path("apps/aide/static/js/core/main.js").read_text(encoding="utf-8")
+    contracts_js = Path("apps/aide/static/js/runtime/contracts.js").read_text(encoding="utf-8")
+    capabilities_js = Path("apps/aide/static/js/runtime/capabilities.js").read_text(encoding="utf-8")
+
+    assert 'id="capability-registry"' in template
+    assert "loadCapabilityRegistry" in contracts_js
+    assert "fetch('/integrations/gateway/capabilities')" in contracts_js
+    assert "renderCapabilityRegistry(capabilitiesNode, envelope)" in main_js
+    assert "data-capability-status" in capabilities_js
+    assert "contract_gap" not in capabilities_js
+
+
+def test_phase8_aide_renders_unavailable_registry_without_fake_ready_state() -> None:
+    """AIDE defaults registry presentation to unavailable, not ready/healthy/success."""
+
+    template = Path("apps/aide/templates/workspace.html").read_text(encoding="utf-8")
+    capabilities_js = Path("apps/aide/static/js/runtime/capabilities.js").read_text(encoding="utf-8")
+
+    assert 'data-capability-registry-status="unavailable"' in template
+    assert "Registry unavailable" in template
+    assert "unavailable" in capabilities_js
+    for fake_state in ("ready", "healthy", "success"):
+        assert fake_state not in capabilities_js.lower()
+
+
+def test_phase8_aide_keeps_dxs_and_engine_imports_out_of_source() -> None:
+    """AIDE consumes Gateway contracts and does not import DXS/runtime internals."""
+
+    source_roots = [Path("apps/aide/app"), Path("apps/aide/static"), Path("apps/aide/templates")]
+    source_text = "\n".join(
+        path.read_text(encoding="utf-8")
+        for root in source_roots
+        for path in root.rglob("*")
+        if path.is_file() and path.suffix in {".py", ".js", ".html"}
+    )
+
+    forbidden = [
+        "import digitaltwin",
+        "from digitaltwin",
+        "tools.digital_twin",
+        "WASMSandboxRuntime(",
+        "NativeRegoCompiler(",
+        "MerkleLedgerVerifier(",
+        "SelfHealingLoopAdapter(",
+        "InMemoryMemoryRepository(",
+    ]
+    for fragment in forbidden:
+        assert fragment not in source_text
+    assert not Path("apps/aide/api").exists()

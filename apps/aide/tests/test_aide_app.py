@@ -409,3 +409,50 @@ def test_phase8_aide_keeps_dxs_and_engine_imports_out_of_source() -> None:
     for fragment in forbidden:
         assert fragment not in source_text
     assert not Path("apps/aide/api").exists()
+
+
+def test_aide_chat_contract_targets_gateway_task_lifecycle_and_renders_responses() -> None:
+    """Copilot must render real Gateway task output/errors instead of stopping at pending."""
+
+    main_js = Path("apps/aide/static/js/core/main.js").read_text(encoding="utf-8")
+    chat_js = Path("apps/aide/static/js/chat/chat.js").read_text(encoding="utf-8")
+
+    assert "endpoint: `${state.api_base_url}/api/v1/control/execute`" in chat_js
+    assert "endpoint: `${state.api_base_url}/v1/agents/execute`" not in chat_js
+    assert "recordTaskUpdate" in chat_js
+    assert "payload?.output" in chat_js
+    assert "payload?.error?.message" in chat_js
+    assert "conversation.push({ role: 'Human'" in chat_js
+    assert "renderedTerminalTasks" in chat_js
+    assert "chat.recordTaskUpdate?.(payload.lastPayload || payload)" in main_js
+
+
+def test_aide_task_submission_uses_gateway_schema_without_secrets(monkeypatch) -> None:
+    """AIDE forwards only command and target_agent to the Gateway control route."""
+
+    from apps.aide.app.routes import workspace as workspace_routes
+    from apps.aide.app.schemas.gateway import GatewayResult
+
+    captured: dict[str, str] = {}
+
+    async def fake_submit_task(settings, command: str, target_agent: str = "planner") -> GatewayResult:  # noqa: ANN001
+        captured["command"] = command
+        captured["target_agent"] = target_agent
+        return GatewayResult(
+            contract="task-submission",
+            target="http://127.0.0.1:8000/api/v1/control/execute",
+            status="available",
+            detail="HTTP 200",
+            payload={"task_id": "task_test", "lifecycle_state": "completed", "output": "real gateway output"},
+        )
+
+    monkeypatch.setattr(workspace_routes, "submit_task", fake_submit_task)
+    response = client.post("/interactions/tasks", json={"command": "hello", "target_agent": "planner"})
+
+    assert response.status_code == 200
+    assert captured == {"command": "hello", "target_agent": "planner"}
+    payload = response.json()
+    assert payload["target"].endswith("/api/v1/control/execute")
+    assert payload["payload"]["output"] == "real gateway output"
+    assert "api_key" not in str(payload).lower()
+    assert "secret" not in str(payload).lower()

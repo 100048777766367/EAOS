@@ -69,6 +69,7 @@ const taskUx = mountTaskUx(
       runtime.task = payload.lifecycleState || payload.lifecycle_state || 'idle';
       runtimeNodes.task.textContent = `Task ${(runtime.task || 'idle').toUpperCase()}`;
       updateTaskInspector(inspectorNodes, payload.lastPayload || payload);
+      chat.recordTaskUpdate?.(payload.lastPayload || payload);
     },
     onWebSocketState(nextState) {
       runtime.websocket = nextState;

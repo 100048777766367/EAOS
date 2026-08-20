@@ -54,7 +54,7 @@
       <span id="git-state">Git pending</span><span id="task-state">Task IDLE</span><span id="ws-state">WS disconnected</span>
     </footer>
   </main>
-  <script id="aide-state" type="application/json">{{ state.model_dump_json() }}</script>
+  <script id="aide-state" type="application/json">{{ state.model_dump_json() | safe }}</script>
   <script type="module" src="{{ url_for('static', path='/js/core/main.js') }}"></script>
 </body>
 </html>

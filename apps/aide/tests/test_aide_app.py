@@ -35,6 +35,16 @@ def test_workspace_template_and_static_load() -> None:
     assert "observeGateway" in static_response.text
 
 
+def test_workspace_embeds_parseable_bootstrap_json() -> None:
+    """Runtime browser bootstrap state must not be HTML-escaped inside JSON script."""
+
+    response = client.get("/")
+
+    assert response.status_code == 200
+    assert '<script id="aide-state" type="application/json">{"app_name"' in response.text
+    assert '{&#34;app_name&#34;' not in response.text
+
+
 def test_workspace_state_declares_gateway_contracts() -> None:
     """AIDE consumes Gateway contracts without owning backend capability."""
 

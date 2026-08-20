@@ -1,239 +1,419 @@
-# ==========================================
-# EAOS ENTERPRISE .GITIGNORE
-# ==========================================
+# ============================================================
+# EAOS ENTERPRISE REPOSITORY .GITIGNORE
+# Purpose:
+# - Ignore local/runtime/generated/recovery material
+# - Preserve source, architecture, tests, docs, and contracts
+# - Apply consistently across all branches
+# ============================================================
 
-# --- 1. PYTHON / UV / HATCHLING CACHE ---
+
+# ============================================================
+# 1. PYTHON
+# ============================================================
+
 __pycache__/
 *.py[cod]
 *$py.class
+
 .venv/
 venv/
 ENV/
-.env/
-build/
-dist/
+env/
+
+.pytest_cache/
+.pytest_tmp/
+.mypy_cache/
+.ruff_cache/
+.pyre/
+.pytype/
+.pyright/
+.cache/
+
+.tox/
+.nox/
+.hypothesis/
+
+.coverage
+.coverage.*
+htmlcov/
+
 *.egg-info/
 .installed.cfg
 *.egg
-.tox/
-.cache/
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
-.uv/
-.pytest_tmp/
+build/
+dist/
 
-# --- 2. ENVIRONMENT & SECRETS (Bß║úo mß║¡t tuyß╗çt ─æß╗æi) ---
+.uv/
+uv-cache/
+pip-wheel-metadata/
+
+
+# ============================================================
+# 2. ENVIRONMENT / SECRETS
+# ============================================================
+
 .env
 .env.*
 !.env.example
+!.env.*.example
 
-# --- 3. FRONTEND (Node.js / React / TypeScript) ---
-frontend/node_modules/
-frontend/dist/
-frontend/.next/
-frontend/build/
+secrets/
+credentials/
+*.secret
+
+*.pem
+*.key
+*.crt
+*.cer
+*.pfx
+*.p12
+
+id_rsa
+id_rsa.*
+id_ed25519
+id_ed25519.*
+*.ovpn
+
+
+# ============================================================
+# 3. NODE / JAVASCRIPT / FRONTEND
+# ============================================================
+
+node_modules/
+**/node_modules/
+
 npm-debug.log*
 yarn-debug.log*
+yarn-error.log*
 pnpm-debug.log*
-.pnpm-debug.log*
+bun-debug.log*
 
-# --- 4. DATABASES, LOCAL STORAGE & DOCKER VOLUMES ---
-data/
+.npm/
+.pnpm-store/
+.yarn/
+.yarn-cache/
+
+.next/
+.nuxt/
+.svelte-kit/
+.turbo/
+.vite/
+.parcel-cache/
+.cache/
+
+**/dist/
+**/build/
+
+# Preserve explicitly versioned source directories when needed.
+!apps/**/src/
+!frontend/src/
+
+
+# ============================================================
+# 4. IDE / EDITOR
+# ============================================================
+
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+.idea/
+*.iml
+
+*.swp
+*.swo
+*~
+.history/
+
+
+# ============================================================
+# 5. OPERATING SYSTEM
+# ============================================================
+
+.DS_Store
+.DS_Store?
+._*
+
+.Spotlight-V100
+.Trashes
+
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+
+
+# ============================================================
+# 6. DATABASE / LOCAL STORAGE
+# ============================================================
+
 *.db
 *.sqlite
 *.sqlite3
+*.sqlite-shm
+*.sqlite-wal
+
+data/
+local-data/
+storage/
+tmp/
+temp/
+
 dump.rdb
+
 minio-data/
 postgres-data/
 neo4j-data/
 qdrant-data/
 
-# --- 5. EAOS RUNTIME, LOGS & TRACES ---
-runtime/logs/*
-runtime/tmp/*
-runtime/traces/*
-runtime/backups/*
-generated/architecture/time_machine/*
-generated/compiler/*
-
-# --- 6. OS & IDE FILES ---
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-
-# Giß╗» lß║íi cß║Ñu h├¼nh extension/settings chung cß╗ºa VSCode, ß║⌐n c├íc file r├íc c├í nh├ón
-.vscode/*
-!.vscode/settings.json
-!.vscode/extensions.json
-.idea/
+qdrant_storage/
+chroma_db/
+milvus_data/
+weaviate_data/
 
 
-# =====================================================================
-# EAOS ULTIMATE ENTERPRISE-GRADE .GITIGNORE (Future-Proof & Secure)
-# =====================================================================
+# ============================================================
+# 7. DOCKER / LOCAL INFRASTRUCTURE
+# ============================================================
 
-# --- 1. PYTHON & PACKAGE MANAGERS (UV, Hatch, Poetry, Pipenv, Conda) ---
-__pycache__/
-*.py[cod]
-*$py.class
-.venv/
-venv/
-ENV/
-.env/
-build/
-dist/
-*.egg-info/
-.installed.cfg
-*.egg
-.tox/
-.cache/
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
-.uv/
-.pytest_tmp/
-conda-meta/
-.conda/
+.docker/
+docker-data/
+docker-volumes/
 
-# --- 2. ENVIRONMENT VARIABLES & SECRETS (Bß║úo mß║¡t tß╗æi th╞░ß╗úng) ---
-.env
-.env.*
-!.env.example
-secrets/
-*.pem
-*.key
-*.pfx
-*.p12
-id_rsa*
-*.pub
-credentials
-*.secret
-*.ovpn
+# Local compose overrides.
+docker-compose.override.yml
+compose.override.yml
 
-# --- 3. FRONTEND, NODE.JS & WEB ECOSYSTEM (Next, React, Vue, Vite, Turbopack) ---
-frontend/node_modules/
-frontend/dist/
-frontend/.next/
-frontend/build/
-frontend/.turbo/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-.pnpm-debug.log*
-.vite/
-.parcel-cache/
 
-# --- 4. MULTI-LANGUAGE COMPILED BINARIES & BUILD ARTIFACTS ---
-# Go
-*.exe
+# ============================================================
+# 8. CLOUD / INFRASTRUCTURE LOCAL STATE
+# ============================================================
+
+.terraform/
+.terraform.lock.hcl.local
+
+*.tfstate
+*.tfstate.*
+crash.log
+
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+.kube/
+kubeconfig
+kubeconfig.*
+.aws/
+.azure/
+.gcp/
+.serverless/
+
+
+# ============================================================
+# 9. COMPILED / GENERATED BUILD OUTPUT
+# ============================================================
+
+*.o
+*.obj
+*.a
+*.lib
 *.dll
 *.so
 *.dylib
-*.test
-*.out
-bin/
-pkg/
 
-# Rust / Cargo
-target/
-**/*.rs.bk
-
-# C / C++ / Objective-C
-*.o
-*.obj
-*.lib
-*.a
-*.out
-*.app
-
-# Java / Kotlin / Scala
 *.class
 *.jar
 *.war
 *.ear
-*.nar
-.gradle/
 
-# C# / .NET
+.gradle/
+target/
+
 obj/
 *.suo
 *.user
 *.userosscache
 *.sln.docstates
 
-# --- 5. AI, ML, VECTOR DB & LLM HEAVY ARTIFACTS ---
-# Model weights, checkpoints & tensors
-*.h5
-*.ckpt
-*.pkl
-*.safetensors
-*.onnx
-*.pt
-*.pth
-*.bin
-*.weights
+
+# ============================================================
+# 10. MACHINE LEARNING / MODEL CACHE
+# ============================================================
+
 models/cache/
 ollama_models/
 
-# Local Vector DB & Graph DB Storage directories
-qdrant_storage/
-neo4j/data/
-chroma_db/
-milvus_data/
-weaviate_data/
+*.ckpt
+*.safetensors
+*.onnx
+*.h5
+*.weights
 
-# --- 6. DATABASES & LOCAL STORAGE (MinIO, Postgres, SQLite) ---
-data/
-*.db
-*.sqlite
-*.sqlite3
-*.db-shm
-*.db-wal
-dump.rdb
-minio-data/
-postgres-data/
+# Large model binaries are local artifacts unless explicitly tracked.
+*.pt
+*.pth
 
-# --- 7. CLOUD, INFRASTRUCTURE, TERRAFORM & KUBERNETES ---
-.terraform/
-*.tfstate
-*.tfstate.*
-crash.log
-override.tf
-override.tf.json
-*_override.tf
-*_override.tf.json
-.kube/
-kubeconfig
-.serverless/
-.aws/
-.azure/
-.gcp/
-
-# --- 8. EAOS RUNTIME, SANDBOXES & AUDIT TRACES ---
-runtime/logs/*
-runtime/tmp/*
-runtime/traces/*
-runtime/backups/*
-generated/architecture/time_machine/*
 
 # ============================================================
-# EAOS INTERNAL RECOVERY / EPHEMERAL ARTIFACTS
+# 11. EAOS RUNTIME / LOGS / TRACES
 # ============================================================
 
-# Historical backups ΓÇö local recovery material
-.eaos/backups/
+/runtime/logs/
+/runtime/tmp/
+/runtime/traces/
+/runtime/backups/
 
-# Build/recovery checkpoints ΓÇö local recovery material
-.eaos/checkpoints/
+# Generated architecture/compiler output.
+/generated/architecture/time_machine/
+/generated/compiler/
 
-# Generated repair snapshots
-.eaos/repairs/
 
-# Live runtime state ΓÇö never commit mutable runtime state
-.eaos/runtime/
+# ============================================================
+# 12. EAOS LOCAL STATE
+# ============================================================
+#
+# These are machine-local mutable state.
+# They must never be committed to Git.
+#
+
+/.eaos/
+/.eaos-backups/
+/.eaos_ledger/
+
+
+# Future EAOS root-level local state/recovery artifacts.
+#
+# Covers:
+#   .eaos_p03_...
+#   .eaos_p07_...
+#   .eaos_restore_...
+#   .eaos_runtime_...
+#   .eaos_*_backup_...
+#   .eaos_runtime_forensics/
+#
+/.eaos_*/
+
+
+# ============================================================
+# 13. EAOS RECOVERY / SNAPSHOT MATERIAL
+# ============================================================
+#
+# Covers future recovery material below .eaos/ if a component
+# creates it using a nested structure.
+#
+
+/.eaos/backups/
+/.eaos/checkpoints/
+/.eaos/repairs/
+/.eaos/runtime/
+/.eaos/snapshots/
+/.eaos/recovery/
+
+
+# ============================================================
+# 14. EAOS GENERATED LOCAL ARTIFACTS
+# ============================================================
+#
+# Only explicitly designated generated/local locations are
+# ignored. Source directories such as apps/, agents/, packages/
+# remain trackable.
+#
+
+/artifacts/local/
+/artifacts/generated/
+/artifacts/runtime/
+
+/generated/local/
+/generated/runtime/
+/generated/tmp/
+
+
+# ============================================================
+# 15. LOGS / REPORTS GENERATED LOCALLY
+# ============================================================
+
+*.log
+*.trace
+*.tmp
+*.temp
+
+/logs/
+/reports/local/
+/reports/generated/
+
+
+# ============================================================
+# 16. BACKUP FILES
+# ============================================================
+#
+# General backup suffixes are ignored to prevent accidental
+# commits of local recovery copies.
+#
+
+*.bak
+*.backup
+*.old
+*.orig
+*.rej
+
+# Timestamped EAOS recovery copies.
+*.backup_*
+*.bak_*
+*.restore_*
+
+
+# ============================================================
+# 17. ARCHIVE / EXPORT ARTIFACTS
+# ============================================================
+#
+# Do NOT ignore normal source archives globally.
+# Only local/export locations are ignored.
+#
+
+/exports/local/
+/exports/generated/
+/packages/local/
+
+
+# ============================================================
+# 18. COVERAGE / TEST ARTIFACTS
+# ============================================================
+
+coverage.xml
+coverage.json
+.pytest_cache/
+test-results/
+test-results-local/
+junit.xml
+
+
+# ============================================================
+# 19. OS / TOOL TEMPORARY FILES
+# ============================================================
+
+*.pid
+*.lock
+*.pid.lock
+
+.DS_Store
+Thumbs.db
+
+
+# ============================================================
+# 20. EAOS FUTURE LOCAL-ONLY NAMING CONVENTIONS
+# ============================================================
+#
+# Reserved local-only root namespaces.
+#
+# IMPORTANT:
+# Do not create production source under these prefixes.
+#
+
+/.local-*
+/.local_*
+
+/.eaos-local-*
+/.eaos-local_*

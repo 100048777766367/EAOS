@@ -9,9 +9,11 @@ Hệ thống kiến trúc doanh nghiệp tự động hóa, quản trị bởi m
 - `/docs`: Tài liệu kiến trúc và quản trị.
 
 ## Bắt đầu (Quick Start)
-1. Cài đặt `uv`: `curl -LsSf https://astral.sh/uv/install.sh | sh`
-2. Khởi tạo môi trường: `make setup`
-3. Chạy kiểm thử: `make test`
+1. Cài đặt phụ thuộc Python: `python -m pip install -r requirements.txt`
+2. Chạy kiểm thử: `make test`
+3. Khởi chạy web (local): `make run-web`
+
+Thực hiện kiểm tra chất lượng: `make lint`
 
 ## Quản trị (Governance)
 Mọi thay đổi kiến trúc phải tuân thủ `ARCHITECTURE_CONSTITUTION.md` và `ADR_INDEX.md`.

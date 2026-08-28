@@ -1,0 +1,12 @@
+# Minimal labeler configuration to satisfy actions/labeler
+# Map labels to file path patterns. Adjust as needed by maintainers.
+
+docs:
+  - "README.md"
+  - "docs/**"
+
+python:
+  - "src/**.py"
+
+ci:
+  - ".github/**"
